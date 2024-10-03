@@ -1,6 +1,5 @@
-
 .navbarlight {
-    position: fixed; 
+    position: fixed;
     top: 0;
     left: 0; /* Add left: 0 */
     bottom: 0;
@@ -10,13 +9,17 @@
     /* min-height:48px; */
     display: flex;
     align-items: center;
-    background-color: rgb(32, 33, 32);
+    background-image: url(.././media/0d0f67e8663f4b1b9824053fadc2300f_sw-1500_sh-1506.jpg);
+    /* background-color: rgb(32, 33, 32); */
+    background-size: 100vw auto; /* Width is 100vw, height adjusts automatically */
+    background-position: center;
+    background-repeat: no-repeat;
     justify-content: space-between;
     padding: 0;
 }
 
 .navbardark {
-    position: fixed; 
+    position: fixed;
     top: 0;
     left: 0; /* Add left: 0 */
     bottom: 0;
@@ -30,9 +33,8 @@
     justify-content: space-between;
     padding: 0;
 }
- 
- 
-.questionmark-container{
+
+.questionmark-container {
     display: flex;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -41,10 +43,9 @@
     width: 30px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-   
 }
 
-.theme-container{
+.theme-container {
     display: flex;
     flex-direction: column;
     /* margin-top: 20px;
@@ -58,96 +59,85 @@
     -webkit-transform: scaleX(-1);
     -o-transform: scaleX(-1);
     transform: scaleX(-1);
-    -ms-filter: fliph; 
+    -ms-filter: fliph;
     filter: fliph;  */
-   
-}
- 
-.searchboxicon span svg path {
-    color: rgb(210,210,210); /* Change 'red' to your desired color */
-  }
- 
-.searchboxinputtext input{
-    color: rgb(255,255,255);
 }
 
-.searchboxinputplaceholder input::placeholder{
-    color: rgb(173,173,173);
+.searchboxicon span svg path {
+    color: rgb(210, 210, 210); /* Change 'red' to your desired color */
 }
- 
+
+.searchboxinputtext input {
+    color: rgb(255, 255, 255);
+}
+
+.searchboxinputplaceholder input::placeholder {
+    color: rgb(173, 173, 173);
+}
+
 .menu-item {
-   
-    font-size:15px;
+    font-size: 15px;
     /* background-color: red; */
     background-color: transparent;
-  }
-.selectMenuItem{
+}
+.selectMenuItem {
     background-color: transparent;
 }
- 
- 
- 
- 
+
 .left-part {
     display: flex;
     align-items: center;
     padding: 10px;
     box-sizing: border-box;
 }
- 
-.focusr-logo{
-   
+
+.focusr-logo {
     display: flex;
     align-items: center;
-   
 }
- 
-.focusr-logo-img{
+
+.focusr-logo-img {
     width: 30px;
-    height: 30px;  
+    height: 30px;
 }
- 
-.focusR-text{
-    color:white;
+
+.focusR-text {
+    color: white;
     font-size: 20px;
     padding: 10px;
 }
- 
-.center{
+
+.center {
     display: flex;
     /* width:50%;
     display: flex;
     align-items: center;
     /* border-radius: 20%; */
     /* background-color: #ffffff  */
-   
-   
 }
- 
-.right-part{
+
+.right-part {
     display: flex;
     align-items: center;
     padding: 10px;
 }
- 
-.notification-container{
+
+.notification-container {
     display: flex;
     margin: 20px;
     height: 30px;
     width: 30px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-   
 }
- 
-.notification-icon{
+
+.notification-icon {
     color: #ffffff;
     font-size: 20px;
     cursor: pointer;
-   
 }
- 
-.logout-user-icon{
+
+.logout-user-icon {
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -159,8 +149,8 @@
     color: white;
     cursor: pointer;
 }
- 
-.logout-user-icon-pop{
+
+.logout-user-icon-pop {
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -172,7 +162,7 @@
     color: rgb(0, 0, 0);
     cursor: pointer;
 }
- 
+
 /* @media (max-width: 768px) {
     .left-part {
         display: none;
@@ -183,19 +173,19 @@
         display: none;
     }
 } */
- 
-@media (max-width: 768px){
+
+@media (max-width: 768px) {
     .focusR-text {
         display: none;
     }
 }
- 
+
 @media (max-width: 350px) {
     .center {
         display: none;
     }
 }
- 
+
 @media (max-width: 238px) {
     .notification-container {
         display: none;
