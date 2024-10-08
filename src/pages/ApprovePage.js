@@ -105,10 +105,6 @@ const UserApprove = () => {
       <div>
         <TagCounters />
       </div>
-      <div className="search">
-        
-        <Search placeholder="Search Invoice or PO" disabled={false} /> 
-      </div>
       <div>
         <ApproveTable />
       </div>
