@@ -484,6 +484,7 @@ import {
 } from "@fluentui/react-icons";
 
 import {
+<<<<<<< HEAD
   Button,
   Caption1Strong,
   Label,
@@ -496,6 +497,22 @@ import {
   Tooltip,
 } from "@fluentui/react-components";
 
+=======
+    Button,
+    Caption1Strong,
+    Label,
+    Radio,
+    RadioGroup,
+    makeStyles,
+    shorthands,
+    tokens,
+    useId,
+    Tooltip
+  } from "@fluentui/react-components";
+import { CiSettings } from "react-icons/ci";
+import { useEffect } from "react";
+import {jwtDecode} from 'jwt-decode';
+>>>>>>> 3975edb236db4623abe12db58bf0814d3d458d99
 const useStyles = makeStyles({
   root: {
     // ...shorthands.border("2px", "solid", "#ccc"),
@@ -518,7 +535,6 @@ const useStyles = makeStyles({
     display: "grid",
     justifyContent: "flex-start",
     alignItems: "flex-start",
-
     gridRowGap: tokens.spacingVerticalXXL,
     gridAutoRows: "max-content",
 
@@ -633,11 +649,52 @@ const NavDrawerDefault = (props) => {
 
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
+<<<<<<< HEAD
 
   const someClickHandler = () => {
     navigate("/employee");
   };
 
+=======
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [empId, setEmpId] = useState('');
+  const someClickHandler = () => {
+    navigate("/employee");
+  };
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');// Fetch username from localStorage
+    // const storedrole = localStorage.getItem('role')
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+
+  }, []);
+
+
+  useEffect(() => {
+
+    const token = localStorage.getItem('access_token');
+    console.log(typeof(token));
+    if (token) {
+      try {
+
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        const emailFromToken = decodedToken.email;
+        const empIdFromToken = decodedToken.empId;
+
+
+
+        setEmail(emailFromToken);
+        setEmpId(empIdFromToken);
+
+      } catch (error) {
+        console.error('Invalid token:', error);
+      }
+    }
+  }, []);
+>>>>>>> 3975edb236db4623abe12db58bf0814d3d458d99
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
       {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
@@ -659,6 +716,7 @@ const NavDrawerDefault = (props) => {
             : { transition: "width 0.5s", borderRightStyle: "none" }
         }
       >
+<<<<<<< HEAD
         {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
 
         <NavDrawerHeader
@@ -1053,6 +1111,186 @@ const NavDrawerDefault = (props) => {
             // </NavItem>
           )}
           {/* <NavItem
+=======
+
+      </NavItem>
+      </Tooltip>
+
+      <Tooltip content={'Employee'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
+      <NavItem
+        target="_blank"
+        icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={someClickHandler}
+        value="2"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+      >
+
+      </NavItem>
+      </Tooltip>
+
+
+
+      <Tooltip content={'Manager'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
+      <NavItem
+        target="_blank"
+        icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={someClickHandler}
+        value="3"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+      >
+
+      </NavItem>
+      </Tooltip>
+
+
+      <Tooltip content={'Reviewer'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
+      <NavItem
+        target="_blank"
+        icon={<PremiumPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={someClickHandler}
+        value="4"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+      >
+
+      </NavItem>
+      </Tooltip>
+
+
+      <Tooltip content={'Summary'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
+      <NavItem
+        target="_blank"
+        icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={someClickHandler}
+        value="5"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+      >
+
+      </NavItem>
+      </Tooltip>
+    </NavDrawerBody>
+  ) : (
+    <NavDrawerBody
+    style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer",WebkitTapHighlightColor: 'transparent'}:{cursor:"pointer",WebkitTapHighlightColor: 'transparent'}}
+    >
+      {/* DETAILS OF USER  */}
+      <div style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"0",marginLeft:"-2em"}}>
+         <h3 >{username}</h3>
+         <h4 style={{marginTop:"-1em",padding:"5px",fontWeight:"normal"}}>{empId}</h4>
+         <h4 style={{marginTop:"-1.5em",padding:"5px",fontWeight:"normal"}}>Invoice Page</h4>
+      </div>
+      <div style={{width:'100%'}}>
+      <NavItem
+        target="_blank"
+        icon={<Dashboard style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={someClickHandler}
+        value="1"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={{ marginTop: "10px", fontSize:"17px"}}
+        >
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Home</div>
+      </NavItem>
+      </div>
+      <div style={{width:'100%'} }>
+      <NavItem
+        target="_blank"
+        icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={()=>{navigate("/approve")}}
+        value="2"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={{ marginTop: "10px", fontSize:"17px"}}
+        >
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Approve</div>
+
+      </NavItem>
+      </div>
+      <div style={{width:'100%'}}>
+      <NavItem
+        target="_blank"
+        icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={someClickHandler}
+        value="3"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={{ marginTop: "10px", fontSize:"17px"}}
+        >
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Pending</div>
+
+      </NavItem>
+      </div>
+      <div style={{width:'100%'}}>
+      <NavItem
+        target="_blank"
+        icon={<PremiumPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={someClickHandler}
+        value="4"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={{ marginTop: "10px", fontSize:"17px"}}
+      >
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Test Invoice</div>
+
+      </NavItem>
+      </div>
+      <div style={{width:'100%'}}>
+      <NavItem
+        target="_blank"
+        icon={<CiSettings style={themestate ? {color: darktheme.fontcolordark, fontSize: '30px'} : {color: lighttheme.fontcolorlight, fontSize: '30px'}} />}
+
+        onClick={someClickHandler}
+        value="5"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={themestate?{ marginTop: "10px", fontSize:"17px", color:darktheme.fontcolordark}:{ marginTop: "10px", fontSize:"17px",color:lighttheme.fontcolorlight}}
+      >
+        <div style={{marginTop:"2px"}}>Settings</div>
+
+      </NavItem>
+      {/* Newly added  */}
+      <NavItem
+        target="_blank"
+        icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={someClickHandler}
+        value="5"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={themestate?{ marginTop: "10px", fontSize:"17px", color:darktheme.fontcolordark}:{ marginTop: "10px", fontSize:"17px",color:lighttheme.fontcolorlight}}
+      >
+        <div style={{marginTop:"2px"}}>Purchase Order</div>
+
+      </NavItem>
+      <NavItem
+        target="_blank"
+        icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={someClickHandler}
+        value="5"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={themestate?{ marginTop: "10px", fontSize:"17px", color:darktheme.fontcolordark}:{ marginTop: "10px", fontSize:"17px",color:lighttheme.fontcolorlight}}
+      >
+        <div style={{marginTop:"2px"}}>Usage</div>
+
+      </NavItem>
+      </div>
+    </NavDrawerBody>
+  )}
+
+
+  <NavDrawerFooter style={themestate?{backgroundColor:darktheme.sidebarcolordark}:{}} >
+
+    {!collapse&&(
+    // <NavItem
+    //   value="21"
+    //   target="_blank"
+    // //   onClick={someClickHandler}
+    //   className={styles.navfooter}
+    // //   style={{color:"#E9E9E9"}}
+    // //   icon={<Person />}
+    // >
+    <div style={{width:"100%", display:"flex", flexDirection:"column", alignItems:"center"}}>
+
+      <p style={themestate?{marginBottom:"30px", color:darktheme.fontcolordark}:{marginBottom:"30px",color:lighttheme.fontcolorlight}}>by FocusR AI</p>
+      <p style={themestate?{marginTop:"-20px",color:darktheme.fontcolordark}:{marginTop:"-20px",color:lighttheme.fontcolorlight}}>V 0.0.1</p>
+    </div>
+    // </NavItem>
+    )
+    }
+    {/* <NavItem
+>>>>>>> 3975edb236db4623abe12db58bf0814d3d458d99
       icon={<Settings />}
       target="_blank"
       onClick={someClickHandler}

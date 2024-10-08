@@ -120,8 +120,15 @@ export const {
   resetError,
 } = authSlice.actions;
 
+
+
+//Popover
+
 // Selector
 export const getIsLoadingFromAuth = (state) => state.auth.isLoading;
 export const getIsAuthenticatedFromAuth = (state) => state.auth.isAuthenticated;
 export const getErrorFromAuth = (state) => state.auth.error;
 export const getUserDetailsFromAuth = (state) => state.auth.userDetails;
+
+
+
