@@ -4,76 +4,90 @@ import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, notification } from "antd";
 import { EyeOutlined } from '@ant-design/icons';
+import axios from 'axios';  
 import useIsMountedRef from "../hooks/useIsMountedRef";
 import "./login.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLoginDetailsAsync, getIsAuthenticatedFromAuth, getIsLoadingFromAuth, getErrorFromAuth } from '../Store/authSlice';
+// import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const isMountedRef = useIsMountedRef();
-  const isLoading = useSelector(getIsLoadingFromAuth);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector(getIsAuthenticatedFromAuth);
   const isError = useSelector(getErrorFromAuth);
-  const [showPassword, setShowPassword] = useState(false);
-
   const LoginSchema = Yup.object({
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
   });
-
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
-
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
+      setIsLoading(true); 
       try {
-        await dispatch(fetchLoginDetailsAsync(values));
+        const response = await axios.post("https://invoicezapi.focusrtech.com:57/user/signin", {
+          username: values.username, 
+          password: values.password,
+        });
+
+        const { role,username,useremail,empcode } = response.data; 
+        localStorage.setItem("username",username)
+        localStorage.setItem("role", role);
+
+        const tokens = response.data.tokens;
+        localStorage.setItem("access_token", tokens.access_token);
+
+       
+        
+
+        switch (role) {
+          case "ROLE_ADMIN":
+            navigate("/admin-page");
+            break;
+          case "ROLE_RECRUITER":
+            navigate("/kanban-recruit");
+            break;
+          case "ROLE_INTERVIEWER":
+            navigate("/kanban-interviewer");
+            break;
+          default:
+            navigate("/dashboard");
+        }
+
+        notification.success({
+          message: "Login Successful",
+          description: "You have successfully logged in.",
+        });
       } catch (error) {
         console.error("Login failed:", error);
-        setErrors({ auth: isError || "An error occurred during login." });
-        setSubmitting(false);
-        if (isMountedRef.current) {
-          notification.error({
-            message: "Login Failed",
-            description: isError || "An error occurred during login.",
-          });
+        if (error.response) {
+          console.error("Error data:", error.response.data);
+          console.error("Error status:", error.response.status);
+        } else if (error.request) {
+          console.error("No response received:", error.request);
+        } else {
+          console.error("Error setting up request:", error.message);
         }
+
+        notification.error({
+          message: "Login Failed",
+          description: error.response?.data?.message || "An error occurred during login.",
+        });
+
+        setErrors({ auth: error.response?.data?.message || "An error occurred during login." });
+      } finally {
+        setIsLoading(false); 
+        setSubmitting(false); 
       }
     },
   });
-
-  useEffect(() => {
-    if (isAuthenticated === 2) {
-      const role = localStorage.getItem("role");
-      switch (role) {
-        case "ROLE_ADMIN":
-          navigate("/admin-page");
-          break;
-        case "ROLE_RECRUITER":
-          navigate("/kanban-recruit");
-          break;
-        case "ROLE_INTERVIEWER":
-          navigate("/kanban-interviewer");
-          break;
-        default:
-          navigate("/dashboard");
-      }
-      notification.success({
-        message: "Login Successful",
-        description: "You have successfully logged in.",
-      });
-    } else if (isAuthenticated === 3) {
-      notification.error({
-        message: "Login Failed",
-        description: isError || "An error occurred during login.",
-      });
-    }
-  }, [isAuthenticated, navigate, isError]);
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -130,7 +144,7 @@ const Login = () => {
               className="log-button"
               type="primary"
               htmlType="submit"
-              loading={isLoading}
+              loading={isLoading || formik.isSubmitting}  
               disabled={formik.isSubmitting}
             >
               Login
@@ -143,3 +157,5 @@ const Login = () => {
 };
 
 export default Login;
+
+

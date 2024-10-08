@@ -38,7 +38,8 @@ import {
 import { themeActions } from "../Store/Store";
 import { calc } from "antd/es/theme/internal";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
-
+// import { useNavigate } from "react-router-dom";
+import {jwtDecode} from 'jwt-decode';
 const { Header, Content, Footer, Sider } = Layout;
 const useStyles = makeStyles({
   contentHeader: {
@@ -56,13 +57,47 @@ const useStyles = makeStyles({
     display: "flex",
   },
 });
+ 
+
 
 const ExampleContent = () => {
   const styles = useStyles();
   const lighttheme = useSelector((state) => state.theme.light);
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [empId, setEmpId] = useState('');
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    console.log(storedUsername)
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }  
+  }, []);
+  useEffect(() => {
+    
+    const token = localStorage.getItem('access_token'); 
+    console.log(typeof(token));
+    if (token) {
+      try {
+       
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        const emailFromToken = decodedToken.email;
+        const empIdFromToken = decodedToken.empId;
 
+       
+
+        setEmail(emailFromToken);
+        setEmpId(empIdFromToken);
+
+      } catch (error) {
+        console.error('Invalid token:', error);
+      }
+    }
+  }, []);
   return (
     <div style={{ marginBottom: "20px" }}>
       <div
@@ -83,34 +118,43 @@ const ExampleContent = () => {
               : { width: "75%" }
           }
         >
-          FocusR Consultancy and Technologies pvt ltd.
+          FocusR Consultancy and Technologies Pvt Ltd.
         </Text>
         <Link
-          appearance="subtle"
-          href="http://localhost:3000/"
-          style={
-            themestate
-              ? {
-                  width: "25%",
-                  textAlign: "right",
-                  color: darktheme.fontcolordark,
-                  WebkitTapHighlightColor: "transparent",
-                }
-              : {
-                  width: "25%",
-                  textAlign: "right",
-                  WebkitTapHighlightColor: "transparent",
-                }
-          }
-        >
-          Sign out
-        </Link>
+  appearance="subtle"
+  href="http://localhost:3000/"
+  onClick={() => {
+    // Clear tokens from local storage
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("username");
+
+    // Navigate to the login page
+    navigate("");
+  }}
+  style={
+    themestate
+      ? {
+          width: "25%",
+          textAlign: "right",
+          color: darktheme.fontcolordark,
+          WebkitTapHighlightColor: "transparent",
+        }
+      : {
+          width: "25%",
+          textAlign: "right",
+          WebkitTapHighlightColor: "transparent",
+        }
+  }
+>
+  Sign out
+</Link>
       </div>
-      <div style={{ display: "flex", width: "320px", marginBottom: "10px" }}>
+      <div style={{ display: "flex", width: "370px", marginBottom: "10px" }}>
         <Avatar
           active="active"
           color="colorful"
-          name="Gokilavani K"
+          name={username} 
           size={96}
           style={{ marginLeft: "5%" }}
         />
@@ -135,10 +179,10 @@ const ExampleContent = () => {
                     marginBottom: "10px",
                     color: darktheme.fontcolordark,
                   }
-                : { fontSize: "20px", width: "100%", marginBottom: "10px" }
+                : { fontSize: "1.5 em", width: "100%", marginBottom: "10px" }
             }
           >
-            Gokilavani K
+            {username} {/* Use the dynamically fetched username */}
           </Text>
           <Text
             truncate
@@ -159,7 +203,7 @@ const ExampleContent = () => {
                   }
             }
           >
-            Gokilavani.k@focusrtech.com
+            {email} {/* Dynamically generate email based on username */}
           </Text>
           <Text
             truncate
@@ -175,7 +219,7 @@ const ExampleContent = () => {
                 : { fontSize: "14px", width: "100%" }
             }
           >
-            M1432
+           {empId}{/* Replace this with dynamic data if needed */}
           </Text>
         </div>
       </div>
@@ -183,10 +227,13 @@ const ExampleContent = () => {
   );
 };
 
+// export default ExampleContent;
+
+ 
 const CustomLayout = ({ children }) => {
   const [isDarkMode, setDarkMode] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+ 
   const [logoutPopoverVisible, setLogoutPopoverVisible] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState("Dashboard");
   const navigate = useNavigate();
@@ -194,29 +241,35 @@ const CustomLayout = ({ children }) => {
   const lighttheme = useSelector((state) => state.theme.light);
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
-
+  const [username, setUsername] = useState('');  // Add username state
   const toggleDarkMode = (checked) => {
     setDarkMode(checked);
   };
-
+ 
   const handleTheme = () => {
     dispatch(themeActions.toggletheme());
   };
 
   useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+  useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
       console.log(window.innerWidth);
     };
-
+ 
     window.addEventListener("resize", handleResize);
-
+ 
     // Clean up the event listener on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
+ 
   const getSearchBoxStyle = () => {
     if (windowWidth < 500) {
       return {
@@ -238,7 +291,7 @@ const CustomLayout = ({ children }) => {
       };
     }
   };
-
+ 
   return (
     <div style={{}}>
       <div>
@@ -327,7 +380,8 @@ const CustomLayout = ({ children }) => {
                     WebkitTapHighlightColor: "transparent",
                   }}
                 >
-                  <Avatar color="colorful" name="Gokilavani K" size={36} />
+                 
+                  <Avatar color="colorful" name={username} size={36} />
                 </div>
               </PopoverTrigger>
               <PopoverSurface tabIndex={-5}>
@@ -341,5 +395,8 @@ const CustomLayout = ({ children }) => {
     </div>
   );
 };
-
+ 
 export default CustomLayout;
+ 
+ 
+ 
