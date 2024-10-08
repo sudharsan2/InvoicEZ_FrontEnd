@@ -180,6 +180,15 @@ input:hover {
 
 }
 
+.buttoncolor{
+  background-color: #1f90d1;
+  color:white;
+}
+
+.buttoncolor:hover{
+  background-color: #1b6b9a;
+}
+
 @media (max-width: 1130px) {
   .login-container {
     width: 50vw; 

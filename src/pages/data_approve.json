@@ -1,0 +1,202 @@
+[
+  {
+      "PO_line_id": 1,
+      "name": "Office Supplies",
+      "description": "Various office supplies including pens and paper.",
+      "invoice_item_name": "Stationery Kit",
+      "unit_price": 15.00,
+      "quantity": 10,
+      "invoice_quantity": 10,
+      "final_po_quantity": 10
+  },
+  {
+      "PO_line_id": 2,
+      "name": "Electronics",
+      "description": "Laptops for the IT department.",
+      "invoice_item_name": "Laptop",
+      "unit_price": 1200.00,
+      "quantity": 5,
+      "invoice_quantity": 5,
+      "final_po_quantity": 5
+  },
+  {
+      "PO_line_id": 3,
+      "name": "Furniture",
+      "description": "Desks and chairs for the new office.",
+      "invoice_item_name": "Office Desk",
+      "unit_price": 250.00,
+      "quantity": 7,
+      "invoice_quantity": 7,
+      "final_po_quantity": 7
+  },
+  {
+      "PO_line_id": 4,
+      "name": "Cleaning Supplies",
+      "description": "Cleaning materials for office maintenance.",
+      "invoice_item_name": "Cleaning Kit",
+      "unit_price": 50.00,
+      "quantity": 20,
+      "invoice_quantity": 20,
+      "final_po_quantity": 20
+  },
+  {
+      "PO_line_id": 5,
+      "name": "Software",
+      "description": "Licenses for productivity software.",
+      "invoice_item_name": "Software License",
+      "unit_price": 100.00,
+      "quantity": 15,
+      "invoice_quantity": 15,
+      "final_po_quantity": 15
+  },
+  {
+      "PO_line_id": 6,
+      "name": "Networking Equipment",
+      "description": "Routers and switches for network setup.",
+      "invoice_item_name": "Network Switch",
+      "unit_price": 300.00,
+      "quantity": 4,
+      "invoice_quantity": 4,
+      "final_po_quantity": 4
+  },
+  {
+      "PO_line_id": 7,
+      "name": "Office Furniture",
+      "description": "Conference room furniture.",
+      "invoice_item_name": "Conference Table",
+      "unit_price": 800.00,
+      "quantity": 2,
+      "invoice_quantity": 2,
+      "final_po_quantity": 2
+  },
+  {
+      "PO_line_id": 8,
+      "name": "IT Accessories",
+      "description": "Various IT accessories.",
+      "invoice_item_name": "USB Hub",
+      "unit_price": 25.00,
+      "quantity": 12,
+      "invoice_quantity": 12,
+      "final_po_quantity": 12
+  },
+  {
+      "PO_line_id": 9,
+      "name": "Lighting",
+      "description": "LED lights for office lighting.",
+      "invoice_item_name": "LED Bulb",
+      "unit_price": 5.00,
+      "quantity": 50,
+      "invoice_quantity": 50,
+      "final_po_quantity": 50
+  },
+  {
+      "PO_line_id": 10,
+      "name": "Software Development",
+      "description": "Development tools and software.",
+      "invoice_item_name": "IDE License",
+      "unit_price": 200.00,
+      "quantity": 8,
+      "invoice_quantity": 8,
+      "final_po_quantity": 8
+  },
+  {
+      "PO_line_id": 11,
+      "name": "Health & Safety",
+      "description": "Health and safety equipment.",
+      "invoice_item_name": "First Aid Kit",
+      "unit_price": 45.00,
+      "quantity": 6,
+      "invoice_quantity": 6,
+      "final_po_quantity": 6
+  },
+  {
+      "PO_line_id": 12,
+      "name": "Promotional Items",
+      "description": "Branded promotional merchandise.",
+      "invoice_item_name": "Mug",
+      "unit_price": 10.00,
+      "quantity": 100,
+      "invoice_quantity": 100,
+      "final_po_quantity": 100
+  },
+  {
+      "PO_line_id": 13,
+      "name": "Catering",
+      "description": "Catering services for company events.",
+      "invoice_item_name": "Catering Service",
+      "unit_price": 500.00,
+      "quantity": 3,
+      "invoice_quantity": 3,
+      "final_po_quantity": 3
+  },
+  {
+      "PO_line_id": 14,
+      "name": "Training Materials",
+      "description": "Materials for employee training sessions.",
+      "invoice_item_name": "Training Manual",
+      "unit_price": 30.00,
+      "quantity": 25,
+      "invoice_quantity": 25,
+      "final_po_quantity": 25
+  },
+  {
+      "PO_line_id": 15,
+      "name": "Travel",
+      "description": "Travel expenses for business trips.",
+      "invoice_item_name": "Flight Ticket",
+      "unit_price": 600.00,
+      "quantity": 10,
+      "invoice_quantity": 10,
+      "final_po_quantity": 10
+  },
+  {
+      "PO_line_id": 16,
+      "name": "Maintenance",
+      "description": "Maintenance services for office equipment.",
+      "invoice_item_name": "Maintenance Service",
+      "unit_price": 150.00,
+      "quantity": 4,
+      "invoice_quantity": 4,
+      "final_po_quantity": 4
+  },
+  {
+      "PO_line_id": 17,
+      "name": "Telecommunications",
+      "description": "Telecommunication services.",
+      "invoice_item_name": "Monthly Plan",
+      "unit_price": 80.00,
+      "quantity": 12,
+      "invoice_quantity": 12,
+      "final_po_quantity": 12
+  },
+  {
+      "PO_line_id": 18,
+      "name": "Subscriptions",
+      "description": "Online service subscriptions.",
+      "invoice_item_name": "Subscription Fee",
+      "unit_price": 120.00,
+      "quantity": 5,
+      "invoice_quantity": 5,
+      "final_po_quantity": 5
+  },
+  {
+      "PO_line_id": 19,
+      "name": "Office Decor",
+      "description": "Decorations for the office.",
+      "invoice_item_name": "Wall Art",
+      "unit_price": 75.00,
+      "quantity": 8,
+      "invoice_quantity": 8,
+      "final_po_quantity": 8
+  },
+  {
+      "PO_line_id": 20,
+      "name": "Consulting Services",
+      "description": "Professional consulting services.",
+      "invoice_item_name": "Consulting Fee",
+      "unit_price": 2000.00,
+      "quantity": 1,
+      "invoice_quantity": 1,
+      "final_po_quantity": 1
+  }
+]
