@@ -511,7 +511,9 @@ import {
     useId,
     Tooltip
   } from "@fluentui/react-components";
- 
+import { CiSettings } from "react-icons/ci";
+import { useEffect } from "react";
+import {jwtDecode} from 'jwt-decode';
 const useStyles = makeStyles({
   root: {
     // ...shorthands.border("2px", "solid", "#ccc"),
@@ -536,6 +538,8 @@ const useStyles = makeStyles({
     display: "grid",
     justifyContent: "flex-start",
     alignItems: "flex-start",
+    gridTemplateColumns: "1fr", 
+    width: "100%",
    
     gridRowGap: tokens.spacingVerticalXXL,
     gridAutoRows: "max-content",
@@ -651,11 +655,44 @@ const NavDrawerDefault = (props) => {
  
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
- 
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [empId, setEmpId] = useState('');  
   const someClickHandler = () => {
     navigate("/employee");
   };
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');// Fetch username from localStorage
+    // const storedrole = localStorage.getItem('role')
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+    
+  }, []);
  
+
+  useEffect(() => {
+    
+    const token = localStorage.getItem('access_token'); 
+    console.log(typeof(token));
+    if (token) {
+      try {
+       
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        const emailFromToken = decodedToken.email;
+        const empIdFromToken = decodedToken.empId;
+
+       
+
+        setEmail(emailFromToken);
+        setEmpId(empIdFromToken);
+
+      } catch (error) {
+        console.error('Invalid token:', error);
+      }
+    }
+  }, []);
   return (
    
     <div className={styles.root} style={{height: 'calc(100vh - 48px)'}}>
@@ -768,6 +805,12 @@ const NavDrawerDefault = (props) => {
     <NavDrawerBody
     style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer",WebkitTapHighlightColor: 'transparent'}:{cursor:"pointer",WebkitTapHighlightColor: 'transparent'}}
     >
+      {/* DETAILS OF USER  */}
+      <div style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"0",marginLeft:"-2em"}}>
+         <h3 >{username}</h3>
+         <h4 style={{marginTop:"-1em",padding:"5px",fontWeight:"normal"}}>{empId}</h4>
+         <h4 style={{marginTop:"-1.5em",padding:"5px",fontWeight:"normal"}}>Invoice Page</h4>
+      </div>
       <div style={{width:'100%'}}>
       <NavItem
         target="_blank"
@@ -777,19 +820,19 @@ const NavDrawerDefault = (props) => {
         className={themestate? styles.navItemdark : styles.navItemlight}
         style={{ marginTop: "10px", fontSize:"17px"}}      
         >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Dashboard</div>
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Home</div>
       </NavItem>
       </div>
       <div style={{width:'100%'} }>
       <NavItem
         target="_blank"
         icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
+        onClick={()=>{navigate("/approve")}}
         value="2"
         className={themestate? styles.navItemdark : styles.navItemlight}
         style={{ marginTop: "10px", fontSize:"17px"}}  
         >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Employee</div>
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Approve</div>
        
       </NavItem>
       </div>
@@ -802,7 +845,7 @@ const NavDrawerDefault = (props) => {
         className={themestate? styles.navItemdark : styles.navItemlight}
         style={{ marginTop: "10px", fontSize:"17px"}}  
         >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Manager</div>
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Pending</div>
        
       </NavItem>
       </div>
@@ -815,11 +858,24 @@ const NavDrawerDefault = (props) => {
         className={themestate? styles.navItemdark : styles.navItemlight}
         style={{ marginTop: "10px", fontSize:"17px"}}
       >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Reviewer</div>
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Test Invoice</div>
        
       </NavItem>
       </div>
       <div style={{width:'100%'}}>
+      <NavItem
+        target="_blank"
+        icon={<CiSettings style={themestate ? {color: darktheme.fontcolordark, fontSize: '30px'} : {color: lighttheme.fontcolorlight, fontSize: '30px'}} />}
+
+        onClick={someClickHandler}
+        value="5"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={themestate?{ marginTop: "10px", fontSize:"17px", color:darktheme.fontcolordark}:{ marginTop: "10px", fontSize:"17px",color:lighttheme.fontcolorlight}}
+      >
+        <div style={{marginTop:"2px"}}>Settings</div>
+       
+      </NavItem>
+      {/* Newly added  */}
       <NavItem
         target="_blank"
         icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
@@ -828,8 +884,19 @@ const NavDrawerDefault = (props) => {
         className={themestate? styles.navItemdark : styles.navItemlight}
         style={themestate?{ marginTop: "10px", fontSize:"17px", color:darktheme.fontcolordark}:{ marginTop: "10px", fontSize:"17px",color:lighttheme.fontcolorlight}}
       >
-        <div style={{marginTop:"2px"}}>Summary</div>
+        <div style={{marginTop:"2px"}}>Purchase Order</div>
        
+      </NavItem>
+      <NavItem
+        target="_blank"
+        icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={someClickHandler}
+        value="5"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={themestate?{ marginTop: "10px", fontSize:"17px", color:darktheme.fontcolordark}:{ marginTop: "10px", fontSize:"17px",color:lighttheme.fontcolorlight}}
+      >
+        <div style={{marginTop:"2px"}}>Usage</div>
+      
       </NavItem>
       </div>
     </NavDrawerBody>
