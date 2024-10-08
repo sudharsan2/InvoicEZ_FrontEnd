@@ -193,7 +193,7 @@ const columns = [
 ];
  
 // ApproveTable component
-const ApproveTable = ({ items }) => {
+const ApproveTable = () => {
   return (
     <DataGrid
             items={items}
