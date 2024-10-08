@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/dashboard';
 import Employee from './pages/Employee';
 import EmployeeForm from './pages/employeeform';
+import ApprovePage from './pages/ApproveDetails'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         {/* <Route path='dashboard'  element={<CustomLayout><Dashboard/></CustomLayout>}/> */}
         <Route path='dashboard'  element={<CustomLayout><NavDrawerDefault><Dashboard/></NavDrawerDefault></CustomLayout>}/>
         <Route path='employee' element={<CustomLayout><NavDrawerDefault><Employee/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='approve' element={<CustomLayout><NavDrawerDefault><ApprovePage/></NavDrawerDefault></CustomLayout>}/>
         <Route path='form/:token' element={<EmployeeForm/>}/>
         
 

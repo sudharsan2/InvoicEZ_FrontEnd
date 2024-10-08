@@ -91,7 +91,7 @@ const useStyles = makeStyles({
   },
 });
 
-const PurchaseOrderPage = () => {
+const ApprovePage = () => {
   const styles = useStyles();
   const themestate = false;
   const [selectedtab, setSelectedTab] = React.useState('tab1');
@@ -330,9 +330,10 @@ const PurchaseOrderPage = () => {
       backgroundColor: themestate ? '#383838' : 'white', // background to ensure it's visible
       zIndex: 1, // to ensure it stays above the content
       color: themestate ? 'white' : 'black',
+      
     }}
   >
-    <TableRow style={themestate ? { color: 'white', borderBottomColor: '#383838' } : {}}>
+    <TableRow style={themestate ? { color: 'white', borderBottomColor: '#383838' } : { }}>
       {/* Update the header labels */}
       <TableHeaderCell style={{ fontWeight: 'bold', cursor: 'pointer' }} {...headerSortProps('PO_line_id')}>
         PO Line ID
@@ -361,7 +362,7 @@ const PurchaseOrderPage = () => {
     </TableRow>
   </TableHeader>
 
-  <TableBody>
+  <TableBody   style={themestate ? { color: 'white' } : {}}>
     {sortedData.map((item) => (
       <TableRow
         key={item.PO_line_id}
@@ -468,4 +469,4 @@ const PurchaseOrderPage = () => {
   );
 };
 
-export default PurchaseOrderPage;
+export default ApprovePage;
