@@ -12,6 +12,7 @@ import EmployeeForm from "./pages/employeeform";
 import ForgotPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import UserApprove from "./pages/ApprovePage";
+import ApprovePage from "./pages/ApproveDetails";
 function App() {
   return (
     <Router basename="">
@@ -47,7 +48,7 @@ function App() {
           }
         />
         <Route
-          path="/resetPassword/:token"
+          path="/resetPassword/resetPwd/:token"
           element={
             <CustomLayout>
               <ResetPassword />
@@ -73,6 +74,7 @@ function App() {
           }
         />
         <Route path="form/:token" element={<EmployeeForm />} />
+        <Route path="/approvepage" element={<CustomLayout><NavDrawerDefault><ApprovePage/></NavDrawerDefault></CustomLayout>}/>
       </Routes>
     </Router>
   );

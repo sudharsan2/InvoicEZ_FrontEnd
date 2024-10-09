@@ -299,7 +299,6 @@ const useStyles = makeStyles({
     alignItems: 'center',
     minHeight: '100vh',
     width: '100vw',
-    backgroundImage: 'url("../media/Dusk.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
@@ -404,7 +403,7 @@ const ResetPassword = () => {
       <div className={styles.formWrapper}>
         <h2 className={styles.title}>Reset Your Password</h2>
         <form onSubmit={handleSubmit} className={styles.field}>
-          <Input
+          <input
             id="new-password"
             type="password"
             placeholder="New Password"
@@ -413,7 +412,7 @@ const ResetPassword = () => {
             required
             className={styles.input}
           />
-          <Input
+          <input
             id="confirm-password"
             type="password"
             value={confirmPassword}
