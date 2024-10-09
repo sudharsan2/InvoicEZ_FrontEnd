@@ -290,6 +290,7 @@ import React, { useState } from 'react';
 import axios from 'axios'; // Import axios
 import { makeStyles, tokens, Input, Button } from '@fluentui/react-components';
 import { useParams, useNavigate } from 'react-router-dom';
+import "./Forget.css";
 
 // Styles for centering and enhancing the appearance
 const useStyles = makeStyles({
@@ -399,6 +400,9 @@ const ResetPassword = () => {
   };
 
   return (
+    <div className='Forget'>
+
+   
     <div className={styles.pageWrapper}>
       <div className={styles.formWrapper}>
         <h2 className={styles.title}>Reset Your Password</h2>
@@ -425,6 +429,7 @@ const ResetPassword = () => {
         </form>
 
         {message && <p className={styles.message}>{message}</p>}
+      </div>
       </div>
     </div>
   );
