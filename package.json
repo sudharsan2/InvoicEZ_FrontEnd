@@ -6,7 +6,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fluentui/react": "^8.118.2",
-    "@fluentui/react-components": "^9.50.0",
+    "@fluentui/react-components": "^9.54.17",
     "@fluentui/react-nav-preview": "^0.1.0",
     "@mui/material": "^5.15.16",
     "@reduxjs/toolkit": "^2.2.4",
