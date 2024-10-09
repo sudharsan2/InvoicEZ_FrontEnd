@@ -638,7 +638,7 @@ const NavDrawerDefault = (props) => {
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
   const someClickHandler = () => {
-    navigate("/employee");
+    navigate("/dashboard");
   };
   useEffect(() => {
     const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
