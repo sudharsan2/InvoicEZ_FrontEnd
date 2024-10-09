@@ -13,6 +13,11 @@ import ForgotPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import UserApprove from "./pages/ApprovePage";
 import ApprovePage from "./pages/ApproveDetails";
+import NavDrawerDefaultAdmin from "./components/admindrawer";
+import Admin from "./pages/UsagePage";
+import LLMPage from "./pages/LLMPage";
+import DocumentPage from "./pages/Document";
+import BlobPage from "./pages/BlobPage";
 function App() {
   return (
     <Router basename="">
@@ -75,6 +80,10 @@ function App() {
         />
         <Route path="form/:token" element={<EmployeeForm />} />
         <Route path="/approvepage" element={<CustomLayout><NavDrawerDefault><ApprovePage/></NavDrawerDefault></CustomLayout>}/>
+        <Route path="/admin" element={<CustomLayout><NavDrawerDefaultAdmin><Admin/></NavDrawerDefaultAdmin></CustomLayout>}/>
+        <Route path="/llm" element={<CustomLayout><NavDrawerDefaultAdmin><LLMPage/></NavDrawerDefaultAdmin></CustomLayout>}/>
+        <Route path="/document" element={<CustomLayout><NavDrawerDefaultAdmin><DocumentPage/></NavDrawerDefaultAdmin></CustomLayout>}/>
+        <Route path="/blob" element={<CustomLayout><NavDrawerDefaultAdmin><BlobPage/></NavDrawerDefaultAdmin></CustomLayout>}/>
       </Routes>
     </Router>
   );

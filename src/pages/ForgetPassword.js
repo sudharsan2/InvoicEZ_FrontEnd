@@ -145,7 +145,7 @@ const useStyles = makeStyles({
     alignItems: 'center',
     minHeight: '100vh',
     width: '100vw',
-    backgroundImage: 'url("..\media\Forgetpawd.jpg")', 
+    // backgroundImage: 'url("..\media\Forgetpawd.jpg")', 
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover', 
@@ -220,6 +220,7 @@ const ForgotPassword = () => {
   };
 
   return (
+    <div className='Forget'>
     <div className={styles.pageWrapper}>
       <div className={styles.formWrapper}>
         <h2 className={styles.title}>Forget Password</h2>
@@ -239,6 +240,7 @@ const ForgotPassword = () => {
 
         {message && <p className={styles.message}>{message}</p>}
       </div>
+    </div>
     </div>
   );
 };
