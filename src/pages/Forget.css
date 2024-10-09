@@ -1,7 +1,17 @@
-body {
-    background-image: url('../media/Forgetpawd.jpg');
+.Forget {
+    background-image: url('../media/Dusk.jpg');
     background-size: cover;
     background-position: center;
-    background-repeat: repeat;
-    width: 100%;
-}
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+  }   
