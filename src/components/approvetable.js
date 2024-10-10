@@ -1,4 +1,4 @@
-// API connection 
+// API connection
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowClockwise28Regular, Delete28Regular, TasksApp28Regular } from "@fluentui/react-icons";
@@ -15,7 +15,7 @@ import {
 } from "@fluentui/react-components";
 import Search from "./Search"; // Assuming your search component is imported here
 import { Button, notification } from "antd"; // Import Ant Design components
-
+ 
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({
@@ -71,20 +71,20 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.status || "N/A"}</TableCellLayout>,
   }),
 ];
-
+ 
 const ApproveTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
   const navigate = useNavigate();
-
+ 
   // Fetch data from the API when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/get-poheader");
         const fetchedItems = response.data; // Assuming data is in response.data
-
+ 
         // Map fetched data to the format expected by DataGrid
         const mappedItems = fetchedItems.map((item) => ({
           po_number: item.po_number,
@@ -98,23 +98,23 @@ const ApproveTable = () => {
           total_amount: item.total_amount,
           status: item.status,
         }));
-
+ 
         setItems(mappedItems);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+ 
     fetchData();
   }, []);
-
+ 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
-
+ 
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
-
+ 
     return (
       item.po_number?.toString().toLowerCase().includes(searchLower) ||
       item.po_type?.toLowerCase().includes(searchLower) ||
@@ -128,17 +128,17 @@ const ApproveTable = () => {
       item.status?.toLowerCase().includes(searchLower)
     );
   });
-
+ 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
       navigate(`/approvepage`, { state: { poNumber: item.po_number } });
     }
   };
-
+ 
   const handleSelectionChange = (event, data) => {
     setSelectedRows(data.selectedItems);
   };
-
+ 
   const handleDeleteSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
     if (selectedItemsArray.length === 0) {
@@ -148,19 +148,19 @@ const ApproveTable = () => {
       });
       return;
     }
-
+ 
     try {
       const supplierNames = selectedItemsArray.map(item => item.supplier_name).join(", ");
+     
       
-      // Make API call to delete selected POs
       await Promise.all(selectedItemsArray.map(item =>
         axios.delete(`https://invoicezapi.focusrtech.com:57/user/delete-poheader/${item.po_number}`)
       ));
-
-      // Remove deleted items from the state
+ 
+      
       setItems(items.filter(item => !selectedItemsArray.includes(item)));
-
-      // Show success notification
+ 
+     
       notification.success({
         message: "Successfully deleted",
         description: `You have successfully deleted: ${supplierNames}`,
@@ -173,10 +173,10 @@ const ApproveTable = () => {
       });
     }
   };
-
-
+ 
+ 
   // Approve API
-
+ 
   const handleApproveSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
     if (selectedItemsArray.length === 0) {
@@ -186,18 +186,18 @@ const ApproveTable = () => {
       });
       return;
     }
-
+ 
     try {
       const supplierNames = selectedItemsArray.map(item => item.supplier_name).join(", ");
-      
+     
       // Make API call to delete selected POs
       await Promise.all(selectedItemsArray.map(item =>
         axios.delete(`https://invoicezapi.focusrtech.com:57/user/approve-status/<int:pk>/${item.po_number}`)
       ));
-
+ 
       // Remove deleted items from the state
       setItems(items.filter(item => !selectedItemsArray.includes(item)));
-
+ 
       // Show success notification
       notification.success({
         message: "Successfully Approved",
@@ -211,7 +211,7 @@ const ApproveTable = () => {
       });
     }
   };
-
+ 
   return (
     <>
       <div
@@ -239,7 +239,7 @@ const ApproveTable = () => {
           <Delete28Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
         </button>
-
+ 
         <button
           style={{
             display: "flex",
@@ -256,8 +256,8 @@ const ApproveTable = () => {
           <TasksApp28Regular style={{ color: "#1281d7" }} />
           <span>Approve</span>
         </button>
-
-
+ 
+ 
         <button
           style={{
             display: "flex",
@@ -274,13 +274,13 @@ const ApproveTable = () => {
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
-
+ 
         <Search
           placeholder="Search PO or Supplier"
           onSearchChange={handleSearchChange}
         />
       </div>
-
+ 
       <DataGrid
         items={filteredItems}
         columns={columns}
@@ -313,5 +313,5 @@ const ApproveTable = () => {
     </>
   );
 };
-
+ 
 export default ApproveTable;
