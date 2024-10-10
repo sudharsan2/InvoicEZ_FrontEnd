@@ -468,19 +468,21 @@ import {
   PersonSearch20Regular,
   PreviewLink20Filled,
   PreviewLink20Regular,
-  Settings20Filled,
-  Settings20Regular,
+  Settings24Filled,
+  Settings24Regular,
   bundleIcon,
-  LayerDiagonalPerson24Filled,
-  LayerDiagonalPerson24Regular,
-  PersonStar24Filled,
-  PersonStar24Regular,
-  PremiumPerson24Filled,
-  PremiumPerson24Regular,
-  DocumentTableSearch24Filled,
-  DocumentTableSearch24Regular,
+  BoxMultipleCheckmark24Regular,
+  BoxMultipleCheckmark24Filled,
+  ClockBill24Regular,
+  ClockBill24Filled,
+  BeakerEdit24Filled,
+  BeakerEdit24Regular,
+  Cart24Filled,
+  Cart24Regular,
   Navigation24Filled,
   Navigation24Regular,
+  DocumentCatchUp24Filled,
+  DocumentCatchUp24Regular,
 } from "@fluentui/react-icons";
 
 import {
@@ -584,18 +586,16 @@ const EmployeeSpotlight = bundleIcon(
 );
 
 const LayerDiagonalPersonRegular = bundleIcon(
-  LayerDiagonalPerson24Filled,
-  LayerDiagonalPerson24Regular,
+  BoxMultipleCheckmark24Filled,
+  BoxMultipleCheckmark24Regular,
 );
-const PersonStarRegular = bundleIcon(PersonStar24Filled, PersonStar24Regular);
+const PersonStarRegular = bundleIcon(ClockBill24Filled, ClockBill24Regular);
 const PremiumPersonRegular = bundleIcon(
-  PremiumPerson24Filled,
-  PremiumPerson24Regular,
+  BeakerEdit24Filled,
+  BeakerEdit24Regular,
 );
-const TableSearchRegular = bundleIcon(
-  DocumentTableSearch24Filled,
-  DocumentTableSearch24Regular,
-);
+const TableSearchRegular = bundleIcon(Cart24Filled, Cart24Regular);
+const Usage = bundleIcon(DocumentCatchUp24Filled, DocumentCatchUp24Regular);
 const Navi = bundleIcon(Navigation24Filled, Navigation24Regular);
 
 const Search = bundleIcon(PersonSearch20Filled, PersonSearch20Regular);
@@ -613,7 +613,7 @@ const Reports = bundleIcon(
   DocumentBulletListMultiple20Filled,
   DocumentBulletListMultiple20Regular,
 );
-const Settings = bundleIcon(Settings20Filled, Settings20Regular);
+const Settings = bundleIcon(Settings24Filled, Settings24Regular);
 
 const NavDrawerDefault = (props) => {
   const navigate = useNavigate();
@@ -638,7 +638,7 @@ const NavDrawerDefault = (props) => {
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
   const someClickHandler = () => {
-    navigate("/employee");
+    navigate("/dashboard");
   };
   useEffect(() => {
     const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
@@ -843,7 +843,32 @@ const NavDrawerDefault = (props) => {
             </Tooltip>
 
             <Tooltip
-              content={"Summary"}
+              content={"Settings"}
+              positioning="after"
+              withArrow={true}
+              appearance={themestate ? "inverted" : "normal"}
+            >
+              <NavItem
+                target="_blank"
+                icon={
+                  <Settings
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={someClickHandler}
+                value="5"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+              ></NavItem>
+            </Tooltip>
+
+            <Tooltip
+              content={"Purchase Order"}
               positioning="after"
               withArrow={true}
               appearance={themestate ? "inverted" : "normal"}
@@ -860,7 +885,32 @@ const NavDrawerDefault = (props) => {
                   />
                 }
                 onClick={someClickHandler}
-                value="5"
+                value="6"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+              ></NavItem>
+            </Tooltip>
+
+            <Tooltip
+              content={"Usage"}
+              positioning="after"
+              withArrow={true}
+              appearance={themestate ? "inverted" : "normal"}
+            >
+              <NavItem
+                target="_blank"
+                icon={
+                  <Usage
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={someClickHandler}
+                value="7"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
                 }
@@ -1035,7 +1085,7 @@ const NavDrawerDefault = (props) => {
               <NavItem
                 target="_blank"
                 icon={
-                  <CiSettings
+                  <Settings
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark, fontSize: "30px" }
@@ -1100,7 +1150,7 @@ const NavDrawerDefault = (props) => {
               <NavItem
                 target="_blank"
                 icon={
-                  <TableSearchRegular
+                  <Usage
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark }
