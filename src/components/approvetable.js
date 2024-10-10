@@ -1,4 +1,6 @@
-import * as React from "react";
+// API connection 
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { ArrowClockwise28Regular, Delete28Regular, TasksApp28Regular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,137 +14,202 @@ import {
   createTableColumn,
 } from "@fluentui/react-components";
 import Search from "./Search"; // Assuming your search component is imported here
-import { useState } from "react";
+import { Button, notification } from "antd"; // Import Ant Design components
 
-const items = [
-  {
-    file: { label: "13456" },
-    author: { label: "Bluetech" },
-    lastUpdated: { label: "chennai", timestamp: 1 },
-    lastUpdate: { label: "12/03/2024" },
-    TotalAmount: { label: "15000 INR" },
-    InvoiceDate: { label: "12/03/2024" },
-  },
-  {
-    file: { label: "13459" },
-    author: { label: "Facebook" },
-    lastUpdated: { label: "chennai", timestamp: 2 },
-    lastUpdate: { label: "17/04/2024" },
-    TotalAmount: { label: "15000 INR" },
-    InvoiceDate: { label: "12/03/2024" },
-  },
-  {
-    file: { label: "13465" },
-    author: { label: "Intel" },
-    lastUpdated: { label: "coimbatore", timestamp: 2 },
-    lastUpdate: { label: "17/05/2024" },
-    TotalAmount: { label: "16000 INR" },
-    InvoiceDate: { label: "12/03/2024" },
-  },
-  {
-    file: { label: "13466" },
-    author: { label: "Shar_Supplier" },
-    lastUpdated: { label: "Salem", timestamp: 3 },
-    lastUpdate: { label: "27/06/2024" },
-    TotalAmount: { label: "18000 INR" },
-    InvoiceDate: { label: "12/03/2024" },
-  },
-  {
-    file: { label: "13472" },
-    author: { label: "Google" },
-    lastUpdated: { label: "Madurai", timestamp: 3 },
-    lastUpdate: { label: "7/04/2024" },
-    TotalAmount: { label: "25000 INR" },
-    InvoiceDate: { label: "12/03/2024" },
-  },
-  {
-    file: { label: "13477" },
-    author: { label: "Levin Technologies" },
-    lastUpdated: { label: "Coimbatore", timestamp: 3 },
-    lastUpdate: { label: "27/08/2024" },
-    TotalAmount: { label: "45000 INR" },
-    InvoiceDate: { label: "12/03/2024" },
-  },
-  {
-    file: { label: "13489" },
-    author: { label: "Jane Doe" },
-    lastUpdated: { label: "Chennai", timestamp: 3 },
-    lastUpdate: { label: "17/10/2024" },
-    TotalAmount: { label: "35000 INR" },
-    InvoiceDate: { label: "12/03/2024" },
-  },
-];
-
-
-
+// Define columns for the DataGrid
 const columns = [
   createTableColumn({
-    columnId: "file",
+    columnId: "po_number",
     renderHeaderCell: () => "PO Number",
-    renderCell: (item) => <TableCellLayout>{item.file.label}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.po_number}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "author",
-    renderHeaderCell: () => "Supplier",
-    renderCell: (item) => <TableCellLayout>{item.author.label}</TableCellLayout>,
+    columnId: "po_type",
+    renderHeaderCell: () => "PO Type",
+    renderCell: (item) => <TableCellLayout>{item.po_type}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "lastUpdated",
-    renderHeaderCell: () => "Site",
-    renderCell: (item) => item.lastUpdated.label,
+    columnId: "po_status",
+    renderHeaderCell: () => "PO Status",
+    renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "lastUpdate",
-    renderHeaderCell: () => "PO Date",
-    renderCell: (item) => (
-      <TableCellLayout>{item.lastUpdate.label}</TableCellLayout>
-    ),
+    columnId: "supplier_name",
+    renderHeaderCell: () => "Supplier Name",
+    renderCell: (item) => <TableCellLayout>{item.supplier_name}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "TotalAmount",
+    columnId: "location",
+    renderHeaderCell: () => "Location",
+    renderCell: (item) => <TableCellLayout>{item.location}</TableCellLayout>,
+  }),
+  createTableColumn({
+    columnId: "ship_to",
+    renderHeaderCell: () => "Ship To",
+    renderCell: (item) => <TableCellLayout>{item.ship_to}</TableCellLayout>,
+  }),
+  createTableColumn({
+    columnId: "bill_to",
+    renderHeaderCell: () => "Bill To",
+    renderCell: (item) => <TableCellLayout>{item.bill_to}</TableCellLayout>,
+  }),
+  createTableColumn({
+    columnId: "buyer_name",
+    renderHeaderCell: () => "Buyer Name",
+    renderCell: (item) => <TableCellLayout>{item.buyer_name}</TableCellLayout>,
+  }),
+  createTableColumn({
+    columnId: "total_amount",
     renderHeaderCell: () => "Total Amount",
     renderCell: (item) => (
-      <TableCellLayout>{item.TotalAmount.label}</TableCellLayout>
+      <TableCellLayout>{item.total_amount !== null ? item.total_amount : "N/A"}</TableCellLayout>
     ),
   }),
   createTableColumn({
-    columnId: "InvoiceDate",
-    renderHeaderCell: () => "InvoiceDate",
-    renderCell: (item) => (
-      <TableCellLayout>{item.InvoiceDate.label}</TableCellLayout>
-    ),
+    columnId: "status",
+    renderHeaderCell: () => "Status",
+    renderCell: (item) => <TableCellLayout>{item.status || "N/A"}</TableCellLayout>,
   }),
 ];
 
 const ApproveTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedRows, setSelectedRows] = useState(new Set()); // Store selected row IDs
+  const [items, setItems] = useState([]); // State to hold API data
+  const [selectedRows, setSelectedRows] = useState(new Set());
   const navigate = useNavigate();
+
+  // Fetch data from the API when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/get-poheader");
+        const fetchedItems = response.data; // Assuming data is in response.data
+
+        // Map fetched data to the format expected by DataGrid
+        const mappedItems = fetchedItems.map((item) => ({
+          po_number: item.po_number,
+          po_type: item.po_type,
+          po_status: item.po_status,
+          supplier_name: item.supplier_name,
+          location: item.location,
+          ship_to: item.ship_to,
+          bill_to: item.bill_to,
+          buyer_name: item.buyer_name,
+          total_amount: item.total_amount,
+          status: item.status,
+        }));
+
+        setItems(mappedItems);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
 
   const filteredItems = items.filter((item) => {
+    const searchLower = searchQuery?.trim().toLowerCase() || "";
+
     return (
-      item.file.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.author.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.lastUpdated.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.lastUpdate.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.TotalAmount.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.InvoiceDate.label.toLowerCase().includes(searchQuery.toLowerCase())
+      item.po_number?.toString().toLowerCase().includes(searchLower) ||
+      item.po_type?.toLowerCase().includes(searchLower) ||
+      item.po_status?.toLowerCase().includes(searchLower) ||
+      item.supplier_name?.toLowerCase().includes(searchLower) ||
+      item.location?.toLowerCase().includes(searchLower) ||
+      item.ship_to?.toLowerCase().includes(searchLower) ||
+      item.bill_to?.toLowerCase().includes(searchLower) ||
+      item.buyer_name?.toLowerCase().includes(searchLower) ||
+      item.total_amount?.toString().toLowerCase().includes(searchLower) ||
+      item.status?.toLowerCase().includes(searchLower)
     );
   });
 
   const handleRowClick = (e, item) => {
-    
     if (e.target.type !== "checkbox") {
-      navigate(`/approvepage`, { state: { poNumber: item.file.label } });
+      navigate(`/approvepage`, { state: { poNumber: item.po_number } });
     }
   };
 
   const handleSelectionChange = (event, data) => {
     setSelectedRows(data.selectedItems);
+  };
+
+  const handleDeleteSelectedRows = async () => {
+    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
+    if (selectedItemsArray.length === 0) {
+      notification.warning({
+        message: "No PO Selected",
+        description: "Please select at least one PO to delete.",
+      });
+      return;
+    }
+
+    try {
+      const supplierNames = selectedItemsArray.map(item => item.supplier_name).join(", ");
+      
+      // Make API call to delete selected POs
+      await Promise.all(selectedItemsArray.map(item =>
+        axios.delete(`https://invoicezapi.focusrtech.com:57/user/delete-poheader/${item.po_number}`)
+      ));
+
+      // Remove deleted items from the state
+      setItems(items.filter(item => !selectedItemsArray.includes(item)));
+
+      // Show success notification
+      notification.success({
+        message: "Successfully deleted",
+        description: `You have successfully deleted: ${supplierNames}`,
+      });
+    } catch (error) {
+      const supplierNames = selectedItemsArray.map(item => item.supplier_name).join(", ");
+      notification.error({
+        message: "Deletion Failed",
+        description: `Deletion Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
+      });
+    }
+  };
+
+
+  // Approve API
+
+  const handleApproveSelectedRows = async () => {
+    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
+    if (selectedItemsArray.length === 0) {
+      notification.warning({
+        message: "No PO Selected",
+        description: "Please select at least one PO to Approve.",
+      });
+      return;
+    }
+
+    try {
+      const supplierNames = selectedItemsArray.map(item => item.supplier_name).join(", ");
+      
+      // Make API call to delete selected POs
+      await Promise.all(selectedItemsArray.map(item =>
+        axios.delete(`https://invoicezapi.focusrtech.com:57/user/approve-status/<int:pk>/${item.po_number}`)
+      ));
+
+      // Remove deleted items from the state
+      setItems(items.filter(item => !selectedItemsArray.includes(item)));
+
+      // Show success notification
+      notification.success({
+        message: "Successfully Approved",
+        description: `You have successfully approved: ${supplierNames}`,
+      });
+    } catch (error) {
+      const supplierNames = selectedItemsArray.map(item => item.supplier_name).join(", ");
+      notification.error({
+        message: "Approval Failed",
+        description: `Approval Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
+      });
+    }
   };
 
   return (
@@ -164,29 +231,12 @@ const ApproveTable = () => {
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
-            gap: "8px", // space between icon and text
+            gap: "8px",
             marginLeft: "2em",
           }}
-          onClick={() => alert("Update")}
+          onClick={handleDeleteSelectedRows} // Call delete function
         >
-          <TasksApp28Regular style={{color:"#1281d7"}}/>
-          <span>Approve</span>
-        </button>
-
-        <button
-          style={{
-            display: "flex",
-            alignItems: "center",
-            backgroundColor: "transparent",
-            border: "1px solid #fff",
-            padding: "6px 12px",
-            cursor: "pointer",
-            gap: "8px", // space between icon and text
-            marginLeft: "2em",
-          }}
-          onClick={() => alert("Delete")}
-        >
-          <Delete28Regular style={{color:"#1281d7"}}/>
+          <Delete28Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
         </button>
 
@@ -197,19 +247,36 @@ const ApproveTable = () => {
             backgroundColor: "transparent",
             border: "1px solid #fff",
             padding: "6px 12px",
-            borderRadius: "5px",
+            cursor: "pointer",
+            gap: "8px",
+            marginLeft: "2em",
+          }}
+          onClick={handleApproveSelectedRows}
+        >
+          <TasksApp28Regular style={{ color: "#1281d7" }} />
+          <span>Approve</span>
+        </button>
+
+
+        <button
+          style={{
+            display: "flex",
+            alignItems: "center",
+            backgroundColor: "transparent",
+            border: "1px solid #fff",
+            padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
           }}
           onClick={() => alert("Refresh")}
         >
-          <ArrowClockwise28Regular style={{color:"#1281d7"}}/>
+          <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
 
         <Search
-          placeholder="Search Invoice or PO"
+          placeholder="Search PO or Supplier"
           onSearchChange={handleSearchChange}
         />
       </div>
@@ -219,8 +286,8 @@ const ApproveTable = () => {
         columns={columns}
         sortable
         selectionMode="multiselect"
-        onSelectionChange={handleSelectionChange} // Handle row selection
-        getRowId={(item) => item.file.label}
+        onSelectionChange={handleSelectionChange}
+        getRowId={(item) => item.po_number}
         focusMode="composite"
         style={{ minWidth: "550px" }}
       >
@@ -235,12 +302,10 @@ const ApproveTable = () => {
           {({ item, rowId }) => (
             <DataGridRow
               key={rowId}
-              onClick={(e) => handleRowClick(e, item)} // Handle row click
-              selected={selectedRows.has(item.file.label)} // Handle row selection visually
+              onClick={(e) => handleRowClick(e, item)}
+              selected={selectedRows.has(item.po_number)}
             >
-              {({ renderCell }) => (
-                <DataGridCell>{renderCell(item)}</DataGridCell>
-              )}
+              {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
             </DataGridRow>
           )}
         </DataGridBody>
@@ -250,220 +315,3 @@ const ApproveTable = () => {
 };
 
 export default ApproveTable;
-
-
-// API connection 
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import { ArrowClockwise28Regular, Delete28Regular, TasksApp28Regular } from "@fluentui/react-icons";
-// import { useNavigate } from "react-router-dom";
-// import {
-//   DataGrid,
-//   DataGridBody,
-//   DataGridRow,
-//   DataGridHeader,
-//   DataGridHeaderCell,
-//   DataGridCell,
-//   TableCellLayout,
-//   createTableColumn,
-// } from "@fluentui/react-components";
-// import Search from "./Search"; // Assuming your search component is imported here
-
-// // Define columns for the DataGrid
-// const columns = [
-//   createTableColumn({
-//     columnId: "file",
-//     renderHeaderCell: () => "PO Number",
-//     renderCell: (item) => <TableCellLayout>{item.file.label}</TableCellLayout>,
-//   }),
-//   createTableColumn({
-//     columnId: "author",
-//     renderHeaderCell: () => "Supplier",
-//     renderCell: (item) => <TableCellLayout>{item.author.label}</TableCellLayout>,
-//   }),
-//   createTableColumn({
-//     columnId: "lastUpdated",
-//     renderHeaderCell: () => "Site",
-//     renderCell: (item) => item.lastUpdated.label,
-//   }),
-//   createTableColumn({
-//     columnId: "lastUpdate",
-//     renderHeaderCell: () => "PO Date",
-//     renderCell: (item) => (
-//       <TableCellLayout>{item.lastUpdate.label}</TableCellLayout>
-//     ),
-//   }),
-//   createTableColumn({
-//     columnId: "TotalAmount",
-//     renderHeaderCell: () => "Total Amount",
-//     renderCell: (item) => (
-//       <TableCellLayout>{item.TotalAmount.label}</TableCellLayout>
-//     ),
-//   }),
-//   createTableColumn({
-//     columnId: "InvoiceDate",
-//     renderHeaderCell: () => "Invoice Date",
-//     renderCell: (item) => (
-//       <TableCellLayout>{item.InvoiceDate.label}</TableCellLayout>
-//     ),
-//   }),
-// ];
-
-// const ApproveTable = () => {
-//   const [searchQuery, setSearchQuery] = useState("");
-//   const [items, setItems] = useState([]); // State to hold API data
-//   const [selectedRows, setSelectedRows] = useState(new Set());
-//   const navigate = useNavigate();
-
-//   // Fetch data from the API when the component mounts
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const response = await axios.get("YOUR_API_ENDPOINT_HERE"); // Replace with your API URL
-//         const fetchedItems = response.data; // Assuming data is in response.data
-//         // Map fetched data to the format expected by DataGrid
-//         const mappedItems = fetchedItems.map((item) => ({
-//           file: { label: item.poNumber },
-//           author: { label: item.supplier },
-//           lastUpdated: { label: item.site },
-//           lastUpdate: { label: item.poDate },
-//           TotalAmount: { label: item.totalAmount },
-//           InvoiceDate: { label: item.invoiceDate },
-//         }));
-//         setItems(mappedItems);
-//       } catch (error) {
-//         console.error("Error fetching data:", error);
-//       }
-//     };
-
-//     fetchData();
-//   }, []);
-
-//   const handleSearchChange = (value) => {
-//     setSearchQuery(value);
-//   };
-
-//   const filteredItems = items.filter((item) => {
-//     return (
-//       item.file.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       item.author.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       item.lastUpdated.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       item.lastUpdate.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       item.TotalAmount.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       item.InvoiceDate.label.toLowerCase().includes(searchQuery.toLowerCase())
-//     );
-//   });
-
-//   const handleRowClick = (e, item) => {
-//     if (e.target.type !== "checkbox") {
-//       navigate(`/approvepage`, { state: { poNumber: item.file.label } });
-//     }
-//   };
-
-//   const handleSelectionChange = (event, data) => {
-//     setSelectedRows(data.selectedItems);
-//   };
-
-//   return (
-//     <>
-//       <div
-//         style={{
-//           display: "flex",
-//           alignItems: "center",
-//           gap: "20px",
-//           fontWeight: "bold",
-//           marginLeft: "-3em",
-//         }}
-//       >
-//         <button
-//           style={{
-//             display: "flex",
-//             alignItems: "center",
-//             backgroundColor: "transparent",
-//             border: "1px solid #fff",
-//             padding: "6px 12px",
-//             cursor: "pointer",
-//             gap: "8px",
-//             marginLeft: "2em",
-//           }}
-//           onClick={() => alert("Approve")}
-//         >
-//           <TasksApp28Regular style={{ color: "#1281d7" }} />
-//           <span>Approve</span>
-//         </button>
-
-//         <button
-//           style={{
-//             display: "flex",
-//             alignItems: "center",
-//             backgroundColor: "transparent",
-//             border: "1px solid #fff",
-//             padding: "6px 12px",
-//             cursor: "pointer",
-//             gap: "8px",
-//             marginLeft: "2em",
-//           }}
-//           onClick={() => alert("Delete")}
-//         >
-//           <Delete28Regular style={{ color: "#1281d7" }} />
-//           <span>Delete</span>
-//         </button>
-
-//         <button
-//           style={{
-//             display: "flex",
-//             alignItems: "center",
-//             backgroundColor: "transparent",
-//             border: "1px solid #fff",
-//             padding: "6px 12px",
-//             borderRadius: "5px",
-//             cursor: "pointer",
-//             gap: "8px",
-//             marginLeft: "2em",
-//           }}
-//           onClick={() => alert("Refresh")}
-//         >
-//           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
-//           <span>Refresh</span>
-//         </button>
-
-//         <Search
-//           placeholder="Search Invoice or PO"
-//           onSearchChange={handleSearchChange}
-//         />
-//       </div>
-
-//       <DataGrid
-//         items={filteredItems}
-//         columns={columns}
-//         sortable
-//         selectionMode="multiselect"
-//         onSelectionChange={handleSelectionChange}
-//         getRowId={(item) => item.file.label}
-//         focusMode="composite"
-//         style={{ minWidth: "550px" }}
-//       >
-//         <DataGridHeader>
-//           <DataGridRow>
-//             {({ renderHeaderCell }) => (
-//               <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-//             )}
-//           </DataGridRow>
-//         </DataGridHeader>
-//         <DataGridBody>
-//           {({ item, rowId }) => (
-//             <DataGridRow
-//               key={rowId}
-//               onClick={(e) => handleRowClick(e, item)}
-//               selected={selectedRows.has(item.file.label)}
-//             >
-//               {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-//             </DataGridRow>
-//           )}
-//         </DataGridBody>
-//       </DataGrid>
-//     </>
-//   );
-// };
-
-// export default ApproveTable;
