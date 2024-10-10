@@ -1,7 +1,11 @@
-// API connection 
+// API connection
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { ArrowClockwise28Regular, Delete28Regular, TasksApp28Regular } from "@fluentui/react-icons";
+import {
+  ArrowClockwise28Regular,
+  Delete28Regular,
+  TasksApp28Regular,
+} from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -36,7 +40,9 @@ const columns = [
   createTableColumn({
     columnId: "supplier_name",
     renderHeaderCell: () => "Supplier Name",
-    renderCell: (item) => <TableCellLayout>{item.supplier_name}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.supplier_name}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "location",
@@ -62,13 +68,17 @@ const columns = [
     columnId: "total_amount",
     renderHeaderCell: () => "Total Amount",
     renderCell: (item) => (
-      <TableCellLayout>{item.total_amount !== null ? item.total_amount : "N/A"}</TableCellLayout>
+      <TableCellLayout>
+        {item.total_amount !== null ? item.total_amount : "N/A"}
+      </TableCellLayout>
     ),
   }),
   createTableColumn({
     columnId: "status",
     renderHeaderCell: () => "Status",
-    renderCell: (item) => <TableCellLayout>{item.status || "N/A"}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.status || "N/A"}</TableCellLayout>
+    ),
   }),
 ];
 
@@ -82,7 +92,9 @@ const ApproveTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/get-poheader");
+        const response = await axios.get(
+          "https://invoicezapi.focusrtech.com:57/user/get-poheader",
+        );
         const fetchedItems = response.data; // Assuming data is in response.data
 
         // Map fetched data to the format expected by DataGrid
@@ -136,6 +148,7 @@ const ApproveTable = () => {
   };
 
   const handleSelectionChange = (event, data) => {
+    console.log("handleSelectionChange", data.selectedItems);
     setSelectedRows(data.selectedItems);
   };
 
@@ -150,15 +163,22 @@ const ApproveTable = () => {
     }
 
     try {
-      const supplierNames = selectedItemsArray.map(item => item.supplier_name).join(", ");
-      
+      const supplierNames = selectedItemsArray
+        .map((item) => item.supplier_name)
+        .join(", ");
+
       // Make API call to delete selected POs
-      await Promise.all(selectedItemsArray.map(item =>
-        axios.delete(`https://invoicezapi.focusrtech.com:57/user/delete-poheader/${item.po_number}`)
-      ));
+      await Promise.all(
+        selectedItemsArray.map(
+          (item) => console.log("deleteItems", filteredItems[item].po_number),
+          // axios.delete(
+          //   `https://invoicezapi.focusrtech.com:57/user/delete-poheader/${filteredItems[item].po_number}`,
+          // ),
+        ),
+      );
 
       // Remove deleted items from the state
-      setItems(items.filter(item => !selectedItemsArray.includes(item)));
+      setItems(items.filter((item) => !selectedItemsArray.includes(item)));
 
       // Show success notification
       notification.success({
@@ -166,14 +186,15 @@ const ApproveTable = () => {
         description: `You have successfully deleted: ${supplierNames}`,
       });
     } catch (error) {
-      const supplierNames = selectedItemsArray.map(item => item.supplier_name).join(", ");
+      const supplierNames = selectedItemsArray
+        .map((item) => item.supplier_name)
+        .join(", ");
       notification.error({
         message: "Deletion Failed",
         description: `Deletion Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
       });
     }
   };
-
 
   // Approve API
 
@@ -188,15 +209,21 @@ const ApproveTable = () => {
     }
 
     try {
-      const supplierNames = selectedItemsArray.map(item => item.supplier_name).join(", ");
-      
+      const supplierNames = selectedItemsArray
+        .map((item) => item.supplier_name)
+        .join(", ");
+
       // Make API call to delete selected POs
-      await Promise.all(selectedItemsArray.map(item =>
-        axios.delete(`https://invoicezapi.focusrtech.com:57/user/approve-status/<int:pk>/${item.po_number}`)
-      ));
+      await Promise.all(
+        selectedItemsArray.map((item) =>
+          axios.delete(
+            `https://invoicezapi.focusrtech.com:57/user/approve-status/<int:pk>/${item.po_number}`,
+          ),
+        ),
+      );
 
       // Remove deleted items from the state
-      setItems(items.filter(item => !selectedItemsArray.includes(item)));
+      setItems(items.filter((item) => !selectedItemsArray.includes(item)));
 
       // Show success notification
       notification.success({
@@ -204,7 +231,9 @@ const ApproveTable = () => {
         description: `You have successfully approved: ${supplierNames}`,
       });
     } catch (error) {
-      const supplierNames = selectedItemsArray.map(item => item.supplier_name).join(", ");
+      const supplierNames = selectedItemsArray
+        .map((item) => item.supplier_name)
+        .join(", ");
       notification.error({
         message: "Approval Failed",
         description: `Approval Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
@@ -257,7 +286,6 @@ const ApproveTable = () => {
           <span>Approve</span>
         </button>
 
-
         <button
           style={{
             display: "flex",
@@ -287,7 +315,7 @@ const ApproveTable = () => {
         sortable
         selectionMode="multiselect"
         onSelectionChange={handleSelectionChange}
-        getRowId={(item) => item.po_number}
+        getRowId={(_, index) => index}
         focusMode="composite"
         style={{ minWidth: "550px" }}
       >
@@ -303,9 +331,11 @@ const ApproveTable = () => {
             <DataGridRow
               key={rowId}
               onClick={(e) => handleRowClick(e, item)}
-              selected={selectedRows.has(item.po_number)}
+              selected={selectedRows.has(rowId)}
             >
-              {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+              {({ renderCell }) => (
+                <DataGridCell>{renderCell(item)}</DataGridCell>
+              )}
             </DataGridRow>
           )}
         </DataGridBody>
