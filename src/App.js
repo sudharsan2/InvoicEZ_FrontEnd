@@ -18,6 +18,8 @@ import Admin from "./pages/UsagePage";
 import LLMPage from "./pages/LLMPage";
 import DocumentPage from "./pages/Document";
 import BlobPage from "./pages/BlobPage";
+import AIPage from "./pages/AIindentified";
+import AIDetailPage from "./pages/AIindentifieddetails";
 function App() {
   return (
     <Router basename="">
@@ -84,6 +86,10 @@ function App() {
         <Route path="/llm" element={<CustomLayout><NavDrawerDefaultAdmin><LLMPage/></NavDrawerDefaultAdmin></CustomLayout>}/>
         <Route path="/document" element={<CustomLayout><NavDrawerDefaultAdmin><DocumentPage/></NavDrawerDefaultAdmin></CustomLayout>}/>
         <Route path="/blob" element={<CustomLayout><NavDrawerDefaultAdmin><BlobPage/></NavDrawerDefaultAdmin></CustomLayout>}/>
+        <Route path="/ai" element={<CustomLayout><NavDrawerDefault><AIPage/></NavDrawerDefault></CustomLayout>}/>
+        <Route path="/aidetail" element={<CustomLayout><NavDrawerDefault>< AIDetailPage/></NavDrawerDefault></CustomLayout>}/>
+
+
       </Routes>
     </Router>
   );

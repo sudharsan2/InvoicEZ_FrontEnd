@@ -500,6 +500,8 @@ import {
 import { CiSettings } from "react-icons/ci";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { Dropdown, Option} from "@fluentui/react-components";
+import  { DropdownProps } from "@fluentui/react-components";
 const useStyles = makeStyles({
   root: {
     // ...shorthands.border("2px", "solid", "#ccc"),
@@ -575,6 +577,35 @@ const useStyles = makeStyles({
       backgroundColor: "#f0f0f0", // Change background color on hover
     },
   },
+
+  navbar: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "10px 20px",
+    backgroundColor: "#282c34",
+    color: "white",
+  },
+  brand: {
+    fontSize: "24px",
+    fontWeight: "bold",
+  },
+  dropdown: {
+    minWidth: "200px", // Adjust as per your design
+  },
+  linkContainer: {
+    display: "flex",
+    gap: "20px",
+    alignItems: "center",
+  },
+  link: {
+    color: "white",
+    textDecoration: "none",
+    fontSize: "16px",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
 });
 
 const Person = bundleIcon(PersonFilled, PersonRegular);
@@ -637,6 +668,9 @@ const NavDrawerDefault = (props) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
+  const dropdownId = useId("dropdown");
+  // const styles = useStyles();
+ 
   const someClickHandler = () => {
     navigate("/dashboard");
   };
@@ -1047,7 +1081,22 @@ const NavDrawerDefault = (props) => {
                       : { marginTop: "2px", color: lighttheme.fontcolorlight }
                   }
                 >
-                  Pending
+                  Issue
+                  {/* <div className={styles.dropdown}>
+          <label id={`${dropdownId}-underline`} style={{ color: "white" }}>
+            Select an option
+          </label>
+          <Dropdown
+            aria-labelledby={`${dropdownId}-underline`}
+            placeholder="-"
+            appearance="underline"
+            {...props}
+          >
+            <Option>Option 1</Option>
+            <Option>Option 2</Option>
+            <Option>Option 3</Option>
+          </Dropdown>
+        </div> */}
                 </div>
               </NavItem>
             </div>

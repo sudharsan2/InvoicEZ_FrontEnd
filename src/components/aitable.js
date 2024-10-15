@@ -23,65 +23,65 @@ import { Button, notification } from "antd";
 const columns = [
   createTableColumn({
     columnId: "po_number",
-    renderHeaderCell: () => "PO Number",
+    renderHeaderCell: () => "Invoice No",
     renderCell: (item) => <TableCellLayout>{item.po_number}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "po_type",
-    renderHeaderCell: () => "PO Type",
+    renderHeaderCell: () => "Supplier",
     renderCell: (item) => <TableCellLayout>{item.po_type}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "po_status",
-    renderHeaderCell: () => "PO Status",
+    renderHeaderCell: () => "Site",
     renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "supplier_name",
-    renderHeaderCell: () => "Supplier Name",
+    renderHeaderCell: () => "Invoice Date",
     renderCell: (item) => (
       <TableCellLayout>{item.supplier_name}</TableCellLayout>
     ),
   }),
   createTableColumn({
     columnId: "location",
-    renderHeaderCell: () => "Location",
+    renderHeaderCell: () => "Total Amount",
     renderCell: (item) => <TableCellLayout>{item.location}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "ship_to",
-    renderHeaderCell: () => "Ship To",
+    renderHeaderCell: () => "Number of Lines",
     renderCell: (item) => <TableCellLayout>{item.ship_to}</TableCellLayout>,
   }),
-  createTableColumn({
-    columnId: "bill_to",
-    renderHeaderCell: () => "Bill To",
-    renderCell: (item) => <TableCellLayout>{item.bill_to}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "buyer_name",
-    renderHeaderCell: () => "Buyer Name",
-    renderCell: (item) => <TableCellLayout>{item.buyer_name}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "total_amount",
-    renderHeaderCell: () => "Total Amount",
-    renderCell: (item) => (
-      <TableCellLayout>
-        {item.total_amount !== null ? item.total_amount : "N/A"}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "status",
-    renderHeaderCell: () => "Status",
-    renderCell: (item) => (
-      <TableCellLayout>{item.status || "N/A"}</TableCellLayout>
-    ),
-  }),
+//   createTableColumn({
+//     columnId: "bill_to",
+//     renderHeaderCell: () => "Bill To",
+//     renderCell: (item) => <TableCellLayout>{item.bill_to}</TableCellLayout>,
+//   }),
+//   createTableColumn({
+//     columnId: "buyer_name",
+//     renderHeaderCell: () => "Buyer Name",
+//     renderCell: (item) => <TableCellLayout>{item.buyer_name}</TableCellLayout>,
+//   }),
+//   createTableColumn({
+//     columnId: "total_amount",
+//     renderHeaderCell: () => "Total Amount",
+//     renderCell: (item) => (
+//       <TableCellLayout>
+//         {item.total_amount !== null ? item.total_amount : "N/A"}
+//       </TableCellLayout>
+//     ),
+  
+//   createTableColumn({
+//     columnId: "status",
+//     renderHeaderCell: () => "Status",
+//     renderCell: (item) => (
+//       <TableCellLayout>{item.status || "N/A"}</TableCellLayout>
+//     ),
+//   }),
 ];
  
-const ApproveTable = () => {
+const AITable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]);
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -170,7 +170,7 @@ useEffect(() => {
  
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/approvepage`, { state: { poNumber: item.po_number } });
+      navigate(`/aidetail`, { state: { poNumber: item.po_number } });
     }
   };
  
@@ -296,7 +296,7 @@ useEffect(() => {
           <span>Delete</span>
         </button>
  
-        <button
+        {/* <button
           style={{
             display: "flex",
             alignItems: "center",
@@ -312,7 +312,7 @@ useEffect(() => {
         >
           <TasksApp28Regular style={{ color: "#1281d7" }} />
           <span>Approve</span>
-        </button>
+        </button> */}
  
         <button
           style={{
@@ -372,4 +372,4 @@ useEffect(() => {
   );
 };
  
-export default ApproveTable;
+export default AITable;

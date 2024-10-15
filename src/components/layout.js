@@ -40,6 +40,11 @@ import { calc } from "antd/es/theme/internal";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 // import { useNavigate } from "react-router-dom";
 import {jwtDecode} from 'jwt-decode';
+import { ShareIos24Filled } from '@fluentui/react-icons';
+import axios from 'axios';
+import InvoiceUpload from "./UploadInvoice";
+import  { useRef } from 'react';
+import { notification } from "antd";
 const { Header, Content, Footer, Sider } = Layout;
 const useStyles = makeStyles({
   contentHeader: {
@@ -69,6 +74,10 @@ const ExampleContent = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [empId, setEmpId] = useState('');
+
+  
+
+   
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     console.log(storedUsername)
@@ -241,7 +250,59 @@ const CustomLayout = ({ children }) => {
   const lighttheme = useSelector((state) => state.theme.light);
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
-  const [username, setUsername] = useState('');  // Add username state
+  const [username, setUsername] = useState('');  
+
+
+ 
+
+  // const fileInputRef = useRef(null);
+
+  // const handleButtonClick = () => {
+  //     if (fileInputRef.current) {
+  //         fileInputRef.current.click();
+  //     }
+  // };
+
+
+  const fileInputRef = useRef(null);
+
+  const handleButtonClick = () => {
+      // Trigger the file input click
+      if (fileInputRef.current) {
+          fileInputRef.current.click();
+      }
+  };
+
+  const handleFileChange = async (event) => {
+      const file = event.target.files[0]; 
+      if (file) {
+          console.log("12")
+          const formData = new FormData();
+          formData.append('file', file); 
+
+          try {
+              const response = await axios.post('https://invoicezapi.focusrtech.com:57/user/invoice-upload', formData, {
+                  headers: {
+                      'Content-Type': 'multipart/form-data',
+                  },
+              });
+              
+              // Show success notification
+              notification.success({
+                  message: 'Upload Successful',
+                  description: `File ${file.name} uploaded successfully!`,
+              });
+          } catch (error) {
+              // Handle error (you can also show an error notification)
+              console.error('Upload failed:', error);
+              notification.error({
+                  message: 'Upload Failed',
+                  description: 'There was an error uploading the file. Please try again.',
+              });
+          }
+      }
+  };
+
   const toggleDarkMode = (checked) => {
     setDarkMode(checked);
   };
@@ -264,7 +325,7 @@ const CustomLayout = ({ children }) => {
  
     window.addEventListener("resize", handleResize);
  
-    // Clean up the event listener on component unmount
+    
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -291,6 +352,9 @@ const CustomLayout = ({ children }) => {
       };
     }
   };
+
+  
+
  
   return (
     <div style={{}}>
@@ -346,6 +410,38 @@ const CustomLayout = ({ children }) => {
                 size={26}
               />
             </div> */}
+            {/* <input type="file" onChange={handleFileChange} /> */}
+            <div>
+            {/* The button that triggers file selection */}
+            {/* <div
+                style={{ color: "#fff", cursor: "pointer", height: "100%",
+                  width: "100%", }}
+                onClick={handleButtonClick}
+            >
+                <ShareIos24Filled />
+                <InvoiceUpload fileInputRef={fileInputRef} />
+            </div> */}
+          <div
+            style={{
+                color: "#fff",
+                cursor: "pointer",
+                height: "100%",
+                width: "100%",
+                position: 'relative', // To position the hidden input
+            }}
+            onClick={handleButtonClick}
+        >
+            <ShareIos24Filled />
+            <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: 'none' }} // Hide the file input
+                onChange={handleFileChange} // Add the onChange prop to handle file input changes
+            />
+        </div>
+            
+            
+        </div>
             <div className="notification-container">
               <AlertBadgeRegular
                 style={{

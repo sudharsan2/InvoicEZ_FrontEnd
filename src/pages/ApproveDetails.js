@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import {
   makeStyles,
@@ -22,6 +22,11 @@ import {
   useTableSort,
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { CgLayoutGrid } from "react-icons/cg";
+
+/*eslint-disabled*/
 
 const path = "/approve";
 const path1 = "http://localhost:3000/";
@@ -96,17 +101,39 @@ const useStyles = makeStyles({
 const ApprovePage = () => {
   const styles = useStyles();
   const themestate = false;
+  const [fetchedItems, setFetchedItems] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const location = useLocation();
+  const { poNumber } = location.state || {}
+  console.log("765", poNumber)
+  const [poDate, setPoDate] = useState();
+  const [postatus, setPoStatus] = useState();
+  const [buyer, setBuyer] = useState();
+  const [total, setTotal] = useState();
+  const [status, setStatus] = useState();
+  const[supplier,setSupplier]=useState();
+  const [vendor, setVendor] = useState();
+  const [customer, setCustomer] = useState();
+  const [invoiceid, setInvoiceId] = useState();
+  const [invoicedate, setInvoiceDate] = useState();
+  const [invoicetot, setInvoicetot] = useState();
+  const [closedcode,setClosedCode] = useState();
+
+  // console.log("vendor", setVendor);
+
+
   const [selectedtab, setSelectedTab] = React.useState("tab1");
   const purchaseOrder = {
-    poNumber: "13466",
-    poDate: "09 May 2023",
+    poNumber: poNumber,
+    // poDate: "09 May 2023",
     poTotalAmount: "95090",
     poCurrency: "INR",
     poStatus: "Open",
     lineMatching: "FULL / Partial Line Items",
-    vendorAddress: "VendorAddress",
+    // vendorAddress: "VendorAddress",
     customerAddress: "CustomerAddress",
-    invoiceId: "InvoiceId",
+    // invoiceId: "InvoiceId",
     invoiceDate: "InvoiceDate",
     invoiceTotal: "InvoiceTotal",
     invoiceCurrency: "Invoice Currency",
@@ -116,19 +143,23 @@ const ApprovePage = () => {
     sortDirection: "ascending",
     sortColumn: "empid",
   });
-  //  const [data, setData] = useState([])
+ 
+  const [data, setData] = useState("");
+  // console.log("data", data);
+
+  
+
 
   const handleTabSelect2 = (event, data) => {
     // console.log({"currentmonth":currentMonthEmployees})
     setSelectedTab(data.value);
   };
 
-  const [data, setData] = useState(line_data);
 
   const columns = [
     createTableColumn({
-      columnId: "PO_line_id",
-      compare: (a, b) => a.PO_line_id - b.PO_line_id,
+      columnId: "id",
+      compare: (a, b) => a.id - b.id,
     }),
     createTableColumn({
       columnId: "name",
@@ -180,6 +211,118 @@ const ApprovePage = () => {
     sortDirection: getSortDirection(columnId),
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://invoicezapi.focusrtech.com:57/user/po-details/${poNumber}/`
+        );
+        const fetchedItems = response.data;
+
+       
+
+        
+        const normalizedPoLineItems = fetchedItems.po_lineitems.map(poItem => {
+          const matchingInvoiceItem = fetchedItems.invoice_info.items.find(
+            invoiceItem => invoiceItem.Quantity
+          );
+
+          // console.log("cc", matchingInvoiceItem)
+
+          return {
+            id: poItem.id,
+            item_name: poItem.item_name,
+            item_description: poItem.item_description,
+            quantity: poItem.quantity,
+            // Quantity: poItem.Quantity,
+            unit_price: poItem.unit_price,
+            Quantity: matchingInvoiceItem ? matchingInvoiceItem.Quantity : null, // Set final_po_quantity if match found
+          };
+        });
+
+        // Log or process the combined data as needed
+        console.log(normalizedPoLineItems);
+
+
+        setData(normalizedPoLineItems);
+        setTotal(fetchedItems.po_header.total_amount);
+        setPoDate(fetchedItems.po_lineitems[0]?.promised_date || "N/A"); // Assuming the first date is used
+        setPoStatus(fetchedItems.po_header.po_status);
+        setVendor(fetchedItems.invoice_info.VendorAddress);
+        setCustomer(fetchedItems.invoice_info.CustomerAddress);
+        setInvoiceId(fetchedItems.invoice_info.InvoiceId);
+        setInvoiceDate(fetchedItems.invoice_info.InvoiceDate);
+        setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
+        setSupplier(fetchedItems.po_header.supplier_name);
+        fetchedItems.po_lineitems.forEach((item) => {
+          
+          setClosedCode(item.closed_code);
+          
+        });
+        // vendor address
+        const vendorAddressObj = fetchedItems.invoice_info.VendorAddress;
+        console.log("obj1",vendorAddressObj)
+
+if (vendorAddressObj) {
+   
+    const formattedVendorAddress = `
+        ${vendorAddressObj.street_address || ''} 
+        ${vendorAddressObj.city || ''}, 
+        ${vendorAddressObj.postal_code || ''}, 
+        ${vendorAddressObj.country_region || ''}
+    `
+    .trim() 
+    .replace(/\s+/g, ' ') 
+    .replace(/,$/, ''); 
+
+   
+    setVendor(formattedVendorAddress);
+   
+} else {
+  setVendor();
+    console.error('VendorAddress is missing');
+}
+     
+const vendorCustomerObj = fetchedItems.invoice_info.CustomerAddress;
+        console.log("obj",vendorAddressObj)
+
+if (vendorCustomerObj) {
+   
+    const formattedCustomerAddress = `
+        ${vendorAddressObj.street_address || ''} 
+        ${vendorAddressObj.city || ''}, 
+        ${vendorAddressObj.postal_code || ''}, 
+        ${vendorAddressObj.country_region || ''}
+    `
+    .trim()
+    .replace(/\s+/g, ' ') 
+    .replace(/,$/, ''); 
+
+   
+    setVendor(formattedCustomerAddress);
+    console.log(formattedCustomerAddress); 
+} else {
+  setVendor();
+    console.error('CustomerAddress is missing');
+}
+     
+
+
+
+      } catch (error) {
+        setError("Error fetching data. Please try again.");
+        console.error("Error fetching data:", error.response ? error.response.data : error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (poNumber) {
+      fetchData();
+    }
+  }, [poNumber]);
+
+  // Sorting function for the table
   const sortedData = [...data].sort((a, b) => {
     const aValue = a[sortState.sortColumn];
     const bValue = b[sortState.sortColumn];
@@ -190,9 +333,7 @@ const ApprovePage = () => {
         : bValue.localeCompare(aValue);
     }
 
-    return sortState.sortDirection === "ascending"
-      ? aValue - bValue
-      : bValue - aValue;
+    return sortState.sortDirection === "ascending" ? aValue - bValue : bValue - aValue;
   });
 
   return (
@@ -244,7 +385,9 @@ const ApprovePage = () => {
               style={{ borderLeft: "5px solid #342d7c", paddingLeft: "10px" }}
             >
               <p>Supplier</p>
-              <h2>Levin Technologies</h2>
+              <h2>{supplier}</h2>  
+              {/* <h2>Levin</h2> */}
+
             </div>
             <div
               style={{
@@ -264,7 +407,7 @@ const ApprovePage = () => {
               }}
             >
               <p>Line Matching</p>
-              <h2>Full</h2>
+              <h2>{closedcode}</h2>
             </div>
           </div>
 
@@ -309,7 +452,6 @@ const ApprovePage = () => {
             </Tab>
           </TabList>
         </div>
-
         {selectedtab === "tab1" && (
           <div className={styles.content1}>
             <div className={`${styles.container} ${styles.gridTemplate1}`}>
@@ -327,7 +469,8 @@ const ApprovePage = () => {
                   className={styles.content}
                   style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                 >
-                  {purchaseOrder.poNumber}
+                  {/* {purchaseOrder.poNumber} */}
+                  {poNumber}
                 </div>
               </div>
 
@@ -345,7 +488,11 @@ const ApprovePage = () => {
                   className={styles.content}
                   style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                 >
-                  {purchaseOrder.vendorAddress}
+                  {/* {purchaseOrder.vendorAddress} */}
+                  {vendor}
+                  
+                  {/* {formattedVendorAddress} */}
+
                 </div>
               </div>
 
@@ -363,7 +510,8 @@ const ApprovePage = () => {
                   className={styles.content}
                   style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                 >
-                  {purchaseOrder.poDate}
+                  {/* {purchaseOrder.poDate} */}
+                  {poDate}
                 </div>
               </div>
 
@@ -381,7 +529,8 @@ const ApprovePage = () => {
                   className={styles.content}
                   style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                 >
-                  {purchaseOrder.customerAddress}
+                  {/* {purchaseOrder.customerAddress} */}
+                  {customer}
                 </div>
               </div>
 
@@ -399,7 +548,7 @@ const ApprovePage = () => {
                   className={styles.content}
                   style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                 >
-                  {purchaseOrder.poTotalAmount}
+                  {total}
                 </div>
               </div>
 
@@ -417,7 +566,8 @@ const ApprovePage = () => {
                   className={styles.content}
                   style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                 >
-                  {purchaseOrder.invoiceId}
+                  {/* {purchaseOrder.invoiceId} */}
+                  {invoiceid}
                 </div>
               </div>
 
@@ -452,7 +602,8 @@ const ApprovePage = () => {
                   className={styles.content}
                   style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                 >
-                  {purchaseOrder.invoiceDate}
+                  {/* {purchaseOrder.invoiceDate} */}
+                  {invoicedate}
                 </div>
               </div>
 
@@ -470,7 +621,7 @@ const ApprovePage = () => {
                   className={styles.content}
                   style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                 >
-                  {purchaseOrder.poStatus}
+                  {postatus}
                 </div>
               </div>
 
@@ -488,7 +639,8 @@ const ApprovePage = () => {
                   className={styles.content}
                   style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                 >
-                  {purchaseOrder.invoiceTotal}
+                  {/* {purchaseOrder.invoiceTotal} */}
+                  {invoicetot}
                 </div>
               </div>
 
@@ -506,7 +658,7 @@ const ApprovePage = () => {
                   className={styles.content}
                   style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                 >
-                  {purchaseOrder.lineMatching}
+                  {closedcode}
                 </div>
               </div>
 
@@ -613,257 +765,46 @@ const ApprovePage = () => {
                   >
                     Invoice Quantity
                   </TableHeaderCell>
-                  <TableHeaderCell
+                  {/* <TableHeaderCell
                     style={{ fontWeight: "bold", cursor: "pointer" }}
                     {...headerSortProps("final_po_quantity")}
                   >
                     Final PO Quantity
-                  </TableHeaderCell>
+                  </TableHeaderCell> */}
                 </TableRow>
               </TableHeader>
 
               <TableBody style={themestate ? { color: "white" } : {}}>
                 {sortedData.map((item) => (
+
                   <TableRow
-                    key={item.PO_line_id}
+                    key={item.id}
                     style={themestate ? { color: "white" } : {}}
                     className={themestate ? "hovereffect dark" : "hovereffect"}
+
+
                   >
-                    {/* Map the updated fields to the corresponding cells */}
-                    <TableCell>{item.PO_line_id}</TableCell>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.description}</TableCell>
-                    <TableCell>{item.invoice_item_name}</TableCell>
+                    <TableCell>{item.id}</TableCell>
+                    <TableCell>{item.item_name}</TableCell>
+                    <TableCell>{item.item_description}</TableCell>
+                    <TableCell>{item.item_name}</TableCell>
                     <TableCell>{item.unit_price}</TableCell>
                     <TableCell>{item.quantity}</TableCell>
-                    <TableCell>{item.invoice_quantity}</TableCell>
+                    <TableCell>{item.Quantity}</TableCell>
                     <TableCell>{item.final_po_quantity}</TableCell>
                   </TableRow>
                 ))}
+
               </TableBody>
             </Table>
           </div>
         )}
 
-        {selectedtab === "tab3" && (
-          <div className={styles.content1}>
-            <h2>Purchase Order Details</h2>
-            <ul>
-              <li>
-                <strong>PO Number:</strong> Unique identifier for the purchase
-                order.
-              </li>
-              <li>
-                <strong>PO Type:</strong> Type of PO (Standard, Blanket,
-                Contract, Planned).
-              </li>
-              <li>
-                <strong>Supplier Name and Number:</strong> Information on the
-                supplier.
-              </li>
-              <li>
-                <strong>Supplier Site:</strong> Specific supplier site linked to
-                the PO.
-              </li>
-              <li>
-                <strong>Buyer:</strong> Person responsible for the PO.
-              </li>
-              <li>
-                <strong>Document Status:</strong> (Approved, In Process, Closed,
-                Cancelled, etc.).
-              </li>
-              <li>
-                <strong>Creation Date and Last Updated Date:</strong> Important
-                timestamps.
-              </li>
-              <li>
-                <strong>Currency:</strong> Currency in which the PO is made.
-              </li>
-              <li>
-                <strong>Terms and Conditions:</strong> Standard terms like
-                payment terms, freight, etc.
-              </li>
-              <li>
-                <strong>Approval Information:</strong> Approver details and
-                approval date.
-              </li>
-              <li>
-                <strong>Total Amount:</strong> Total value of the PO (sum of all
-                lines).
-              </li>
-              <li>
-                <strong>Description:</strong> Description or comments about the
-                purchase order.
-              </li>
-            </ul>
 
-            <h2>Line Item Details</h2>
-            <ul>
-              <li>
-                <strong>Line Number:</strong> Sequential line number within the
-                PO.
-              </li>
-              <li>
-                <strong>Item:</strong> Item being purchased, with description
-                and item code.
-              </li>
-              <li>
-                <strong>Category:</strong> Category of the item, used for
-                classification.
-              </li>
-              <li>
-                <strong>Quantity Ordered:</strong> Quantity of the item
-                requested.
-              </li>
-              <li>
-                <strong>Unit Price:</strong> Price per unit of the item.
-              </li>
-              <li>
-                <strong>Amount:</strong> Line total (Quantity × Unit Price).
-              </li>
-              <li>
-                <strong>Need-By Date:</strong> Date by which the goods/services
-                are required.
-              </li>
-              <li>
-                <strong>Promised Date:</strong> Supplier's promised delivery
-                date.
-              </li>
-              <li>
-                <strong>Tax Codes:</strong> Taxes associated with the item line.
-              </li>
-              <li>
-                <strong>Price Breaks:</strong> If there are quantity-based price
-                discounts.
-              </li>
-              <li>
-                <strong>Destination Type:</strong> Whether the item is for
-                Inventory, Expense, or a Shop Floor.
-              </li>
-              <li>
-                <strong>Location:</strong> Delivery location or site for the
-                item.
-              </li>
-            </ul>
-          </div>
-        )}
-
-        {selectedtab === "tab4" && (
-          <div className={styles.content1}>
-            <h2>1. Supplier Header Information</h2>
-            <ul>
-              <li>
-                <strong>Supplier Name:</strong> The legal name of the supplier.
-              </li>
-              <li>
-                <strong>Supplier Number:</strong> Unique identifier assigned to
-                the supplier.
-              </li>
-              <li>
-                <strong>Supplier Type:</strong> Classification of the supplier
-                (e.g., Individual, Corporation, etc.).
-              </li>
-              <li>
-                <strong>Taxpayer ID / VAT Number:</strong> Supplier’s tax
-                identification or VAT registration number.
-              </li>
-              <li>
-                <strong>DUNS Number:</strong> Data Universal Numbering System
-                identifier for the supplier.
-              </li>
-              <li>
-                <strong>Creation Date:</strong> Date the supplier was created in
-                the system.
-              </li>
-              <li>
-                <strong>Last Update Date:</strong> Last modification date of
-                supplier information.
-              </li>
-              <li>
-                <strong>Status:</strong> Active, Inactive, or Suspended.
-              </li>
-              <li>
-                <strong>Parent Supplier:</strong> If the supplier is part of a
-                larger organization, the parent supplier is mentioned.
-              </li>
-              <li>
-                <strong>Business Classification:</strong> E.g., Small Business,
-                Minority-Owned Business, Women-Owned Business.
-              </li>
-              <li>
-                <strong>Procurement BU:</strong> Procurement Business Unit
-                associated with the supplier.
-              </li>
-              <li>
-                <strong>Approval Status:</strong> Whether the supplier is
-                approved or pending approval.
-              </li>
-              <li>
-                <strong>Supplier Risk Level:</strong> Risk category assigned to
-                the supplier (based on risk management).
-              </li>
-              <li>
-                <strong>Supplier Management Contacts:</strong> Internal buyers
-                or contacts responsible for managing the supplier relationship.
-              </li>
-            </ul>
-
-            <h2>2. Supplier Sites (Addresses)</h2>
-            <ul>
-              <li>
-                <strong>Site Code:</strong> Unique code representing the
-                supplier site.
-              </li>
-              <li>
-                <strong>Site Name:</strong> Name of the specific supplier
-                location.
-              </li>
-              <li>
-                <strong>Address:</strong> Full address (street, city, state,
-                country, zip code).
-              </li>
-              <li>
-                <strong>Site Type:</strong> Specifies the site’s role:
-                Purchasing, Payment, or RFQ (Request for Quotation).
-              </li>
-              <li>
-                <strong>Payment Terms:</strong> Default payment terms applicable
-                to this site.
-              </li>
-              <li>
-                <strong>Ship-To Location:</strong> Default shipping location for
-                orders associated with this site.
-              </li>
-              <li>
-                <strong>Bill-To Location:</strong> Billing address for this
-                site.
-              </li>
-              <li>
-                <strong>Primary Contact Information:</strong> Main contact
-                person for the site (name, phone, email).
-              </li>
-              <li>
-                <strong>Payment Method:</strong> Default method of payment
-                (e.g., Check, EFT, Wire Transfer).
-              </li>
-              <li>
-                <strong>Invoice Currency:</strong> Default currency for invoices
-                associated with this site.
-              </li>
-              <li>
-                <strong>Bank Account:</strong> Supplier’s bank account
-                information (for EFT payments).
-              </li>
-              <li>
-                <strong>Tax Reporting Site:</strong> Indicates whether the site
-                is used for tax reporting.
-              </li>
-            </ul>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
 export default ApprovePage;
+

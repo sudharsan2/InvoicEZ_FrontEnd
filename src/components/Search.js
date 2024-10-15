@@ -11,11 +11,14 @@ const Search = ({ label = "", onSearchChange, ...props }) => {
         marginTop: "2em",
         marginBottom: "2em",
         padding: "20px",
+        textDecoration:"none"
+
     };
 
     const handleSearchChange = (event) => {
         const searchValue = event.target.value;
         onSearchChange(searchValue); 
+        
     };
 
     return (
