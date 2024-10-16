@@ -148,7 +148,7 @@ const AIPage = () => {
         </Breadcrumb>
       </div>
       <div style={{ display: "flex", justifyContent: "flexStart", padding: "1px" }}>
-        <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Approve</h3>
+        <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>AI Identified</h3>
       </div>
  
 

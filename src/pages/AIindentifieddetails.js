@@ -23,9 +23,21 @@ import {
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
 import { useLocation } from "react-router-dom";
- 
+import AiNav from "../components/ainavbar";
+import { SettingOutlined } from '@ant-design/icons';
+import { Cascader, Input, Select, Space } from 'antd';
+import {tokens, Divider } from "@fluentui/react-components";
+const { Option } = Select;
 const path = "/aidetail";
 const path1 = "http://localhost:3000/";
+const selectAfter = (
+  <Select defaultValue="">
+    <Option value="PO1822">PO1822</Option>
+    <Option value="PO1823">PO1823</Option>
+    <Option value="PO1824">PO1824</Option>
+    <Option value="PO1825">PO1825</Option>
+  </Select>
+);
  
 const useStyles = makeStyles({
   root: {
@@ -33,6 +45,16 @@ const useStyles = makeStyles({
     height: "100vh",
     display: "flex",
     flexDirection: "column",
+  },
+  example: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyItems: "flex-start",
+    minHeight: "96px",
+    backgroundColor: tokens.colorNeutralBackground1,
+    marginLeft: "-26em"
+    
   },
   header: {
     padding: "20px",
@@ -100,7 +122,7 @@ const useStyles = makeStyles({
 const AIDetailPage = () => {
   const styles = useStyles();
   const themestate = false;
-  const [selectedtab, setSelectedTab] = React.useState("tab1");
+  const [selectedtab, setSelectedTab] = React.useState("tab3");
   const location = useLocation();
   const { poNumber } = location.state || {}
   console.log("765", poNumber)
@@ -231,14 +253,18 @@ const AIDetailPage = () => {
               marginTop: "0px",
             }}
           >
-            <div style={{ right: "5%", display: "flex", gap: "10px" }}>
-              <Button>Review</Button>
-              <Button
-                className=" buttoncolor"
-                style={{ backgroundColor: "#3570c3", color: "white" }}
-              >
-                Approve
-              </Button>
+            <div style={{ right: "5%", display: "flex", gap: "10px" ,flexDirection:"column"}}>
+             
+              <Input  addonAfter={selectAfter} defaultValue="Select or Enter PO" />
+              <Button appearance="subtle" style={{
+      color: "#0078d4",
+      backgroundColor: "#fff", 
+      alignSelf: "flex-end", 
+      width: "auto", 
+      
+    }} className={styles.wrapper}>
+       Submit
+      </Button>
             </div>
           </div>
  
@@ -276,7 +302,7 @@ const AIDetailPage = () => {
           </div>
  
           <TabList
-            defaultSelectedValue="tab1"
+            defaultSelectedValue="tab3"
             appearance="subtle"
             onTabSelect={handleTabSelect2}
             style={{
@@ -305,6 +331,7 @@ const AIDetailPage = () => {
  
         {selectedtab === "tab3" && (
           <div className={styles.content1}>
+           
             <div>
             <h2>Invoice Information</h2>
             <ul>
@@ -372,116 +399,43 @@ const AIDetailPage = () => {
  
         {selectedtab === "tab4" && (
           <div className={styles.content1}>
-            <h2>1. Supplier Header Information</h2>
-            <ul>
-              <li>
-                <strong>Supplier Name:</strong> The legal name of the supplier.
-              </li>
-              <li>
-                <strong>Supplier Number:</strong> Unique identifier assigned to
-                the supplier.
-              </li>
-              <li>
-                <strong>Supplier Type:</strong> Classification of the supplier
-                (e.g., Individual, Corporation, etc.).
-              </li>
-              <li>
-                <strong>Taxpayer ID / VAT Number:</strong> Supplier’s tax
-                identification or VAT registration number.
-              </li>
-              <li>
-                <strong>DUNS Number:</strong> Data Universal Numbering System
-                identifier for the supplier.
-              </li>
-              <li>
-                <strong>Creation Date:</strong> Date the supplier was created in
-                the system.
-              </li>
-              <li>
-                <strong>Last Update Date:</strong> Last modification date of
-                supplier information.
-              </li>
-              <li>
-                <strong>Status:</strong> Active, Inactive, or Suspended.
-              </li>
-              <li>
-                <strong>Parent Supplier:</strong> If the supplier is part of a
-                larger organization, the parent supplier is mentioned.
-              </li>
-              <li>
-                <strong>Business Classification:</strong> E.g., Small Business,
-                Minority-Owned Business, Women-Owned Business.
-              </li>
-              <li>
-                <strong>Procurement BU:</strong> Procurement Business Unit
-                associated with the supplier.
-              </li>
-              <li>
-                <strong>Approval Status:</strong> Whether the supplier is
-                approved or pending approval.
-              </li>
-              <li>
-                <strong>Supplier Risk Level:</strong> Risk category assigned to
-                the supplier (based on risk management).
-              </li>
-              <li>
-                <strong>Supplier Management Contacts:</strong> Internal buyers
-                or contacts responsible for managing the supplier relationship.
-              </li>
-            </ul>
- 
-            <h2>2. Supplier Sites (Addresses)</h2>
-            <ul>
-              <li>
-                <strong>Site Code:</strong> Unique code representing the
-                supplier site.
-              </li>
-              <li>
-                <strong>Site Name:</strong> Name of the specific supplier
-                location.
-              </li>
-              <li>
-                <strong>Address:</strong> Full address (street, city, state,
-                country, zip code).
-              </li>
-              <li>
-                <strong>Site Type:</strong> Specifies the site’s role:
-                Purchasing, Payment, or RFQ (Request for Quotation).
-              </li>
-              <li>
-                <strong>Payment Terms:</strong> Default payment terms applicable
-                to this site.
-              </li>
-              <li>
-                <strong>Ship-To Location:</strong> Default shipping location for
-                orders associated with this site.
-              </li>
-              <li>
-                <strong>Bill-To Location:</strong> Billing address for this
-                site.
-              </li>
-              <li>
-                <strong>Primary Contact Information:</strong> Main contact
-                person for the site (name, phone, email).
-              </li>
-              <li>
-                <strong>Payment Method:</strong> Default method of payment
-                (e.g., Check, EFT, Wire Transfer).
-              </li>
-              <li>
-                <strong>Invoice Currency:</strong> Default currency for invoices
-                associated with this site.
-              </li>
-              <li>
-                <strong>Bank Account:</strong> Supplier’s bank account
-                information (for EFT payments).
-              </li>
-              <li>
-                <strong>Tax Reporting Site:</strong> Indicates whether the site
-                is used for tax reporting.
-              </li>
-            </ul>
-          </div>
+             <div><AiNav/></div>
+             
+             <div className={styles.example}>
+        <Divider vertical style={{ height: "100%" }} />
+      </div>
+      <div style={{display:"flex",justifyContent:"flex-start",marginLeft:"-10em"}}>
+  <ul>
+    <li>PO Number: Unique identifier for the purchase order.</li>
+    <li>PO Type: Type of PO (Standard, Blanket, Contract, Planned).</li>
+    <li>Supplier Name and Number: Information on the supplier.</li>
+    <li>Supplier Site: Specific supplier site linked to the PO.</li>
+    <li>Buyer: Person responsible for the PO.</li>
+    <li>Document Status: (Approved, In Process, Closed, Cancelled, etc.).</li>
+    <li>Creation Date and Last Updated Date: Important timestamps.</li>
+    <li>Currency: Currency in which the PO is made.</li>
+    <li>Terms and Conditions: Standard terms like payment terms, freight, etc.</li>
+    <li>Approval Information: Approver details and approval date.</li>
+    <li>Total Amount: Total value of the PO (sum of all lines).</li>
+    <li>Description: Description or comments about the purchase order.</li>
+    <li>Line Number: Sequential line number within the PO.</li>
+    <li>Item: Item being purchased, with description and item code.</li>
+    <li>Category: Category of the item, used for classification.</li>
+    <li>Quantity Ordered: Quantity of the item requested.</li>
+    <li>Unit Price: Price per unit of the item.</li>
+    <li>Amount: Line total (Quantity × Unit Price).</li>
+    <li>Need-By Date: Date by which the goods/services are required.</li>
+    <li>Promised Date: Supplier's promised delivery date.</li>
+    <li>Tax Codes: Taxes associated with the item line.</li>
+    <li>Price Breaks: If there are quantity-based price discounts.</li>
+    <li>Destination Type: Whether the item is for Inventory, Expense, or a Shop Floor.</li>
+    <li>Location: Delivery location or site for the item.</li>
+  </ul>
+</div>
+
+              </div>
+            
+           
         )}
       </div>
     </div>
