@@ -136,11 +136,11 @@ const AIDetailPage = () => {
     { value: '1013', label: '1013' },
   ]);
   const [selectedOption, setSelectedOption] = useState(null);
-  const handleCreate = (inputValue) => {
-    const newOption = { value: inputValue, label: inputValue };
-    setColourOptions((prevOptions) => [...prevOptions, newOption]);
-    setSelectedOption(newOption);
-  };
+  // const handleCreate = (inputValue) => {
+  //   const newOption = { value: inputValue, label: inputValue };
+  //   setColourOptions((prevOptions) => [...prevOptions, newOption]);
+  //   setSelectedOption(newOption);
+  // };
  
   const styles = useStyles();
   const themestate = false;
@@ -252,31 +252,41 @@ const AIDetailPage = () => {
 
   // Invoice Details
   const [invoiceData, setInvoiceData] = useState(null);
+  
   // const [items, setItems] = useState([]);
   const location2 = useLocation();
   const [items, setItems] = useState([]);
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState(null); 
-
-
+  const[dataitem,setDataItem]=useState();
+  const[poheader,setPoHeader]=useState();
+  // const [selectedOption, setSelectedOption] = useState(null);
+  const [invoiceId, setInvoiceId] = useState(null); // Placeholder for dynamically fetched invoice ID
+  // const colourOptions = [];
   const handlePoNumberClick = async (poNumber) => {
+    console.log("test function called")
     setSelectedInvoiceNumber(poNumber); 
     try {
-      const response = await axios.get(`http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`);
-      const fetchedData = response.data;
+      // const response = await axios.get(`http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`);
+      // const fetchedData = response.data;
 
-     
-      const selectedPoDetails = fetchedData.po_headers.find(po => po.po_number === poNumber);
-      console.log("selectedPO",selectedPoDetails);
-      setInvoiceData(selectedPoDetails || {});
+      
+      const selectedPoDetails = poheader.find(po => po.po_number === poNumber);
+      console.log("SELECTED PO",selectedPoDetails)
+      // console.log("selectedPO",selectedPoDetails);
+      setDataItem(selectedPoDetails || {});
       setItems(selectedPoDetails?.po_items || []);
-      console.log("Fetched Invoice Details:", fetchedData);
+      // console.log("Fetched Invoice Details:", fetchedData);
 console.log("Selected PO Details:", selectedPoDetails); 
+console.log("Po",items);
+
     } catch (error) {
       console.error("Error fetching invoice details:", error);
     }
   };
   const { invoiceNumber }   =  location2.state || {}
   console.log("inn",invoiceNumber)
+  
+
   const fetchInvoiceDetails = async () => {
     if (invoiceNumber) {
       try {
@@ -285,7 +295,8 @@ console.log("Selected PO Details:", selectedPoDetails);
         console.log("R", fetchedItem);
 
         setInvoiceData(fetchedItem); 
-        setItems(fetchedItem.po_headers || []);
+        setPoHeader(fetchedItem.po_headers)
+        setDataItem(fetchedItem.po_headers[0])
       } catch (error) {
         console.error("Error fetching invoice data", error);
       }
@@ -310,15 +321,10 @@ console.log("Selected PO Details:", selectedPoDetails);
     { label: "Currency", value: invoiceData.Currency || "N/A" },
   ];
 
- 
-  // const vendorInfo = [
-  //   { label: "Vendor Name", value: invoiceData.invoice_info.VendorName },
-  //   { label: "Vendor Address", value: invoiceData.invoice_info.VendorAddress?.city || "N/A" },
-  //   { label: "Vendor Contact Information", value: invoiceData.VendorContact || "N/A" },
-  //   { label: "Vendor Tax ID", value: invoiceData.VendorTaxId || "N/A" },
-  // ];
-  console.log("PO",invoiceData.po_headers.po_number);
-
+  const inv_id=invoiceData.invoice_info.id;
+  // const inv_id = invoiceData.InvoiceId;
+  console.log("---",inv_id)
+  
   const formatAddress = (address) => {
     if (!address) return "N/A";
   
@@ -354,9 +360,70 @@ console.log("Selected PO Details:", selectedPoDetails);
     ProductCode: item.ProductCode || "N/A",
   }));
   
-
+  const handleCreate = (inputValue) => {
+    const newOption = { value: inputValue, label: inputValue };
   
- 
+    // Add the new option to the list of existing options
+    setColourOptions((prevOptions) => [...prevOptions, newOption]);
+    setSelectedOption(newOption); // Set the newly created option as the selected one
+  
+    // Optionally, you can call your API to save the new PO number here
+    // Uncomment the following block if you want to save the PO number immediately when created.
+    /*
+    try {
+      const response = await fetch('http://10.10.15.15:5719/user/po-number', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ po_number: inputValue }),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('PO number added successfully:', data);
+      } else {
+        console.error('Error adding PO number:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+    */
+  };
+
+
+  const handlePostApi = async () => {
+    console.log("Button clicked!");
+  
+    // Check if PO number and invoice ID are provided
+    if (!selectedOption || !selectedOption.value) {
+      console.error("PO number not selected or entered.");
+      return;
+    }
+  
+    if (!inv_id) {
+      console.error("Invoice ID is required.");
+      return;
+    }
+  
+    const payload = {
+      po_number: selectedOption.value,
+      invoice_id: inv_id,
+    };
+  
+    try {
+      const response = await axios.post("http://10.10.15.15:5719/user/po-number", payload);
+  
+      if (response.status === 200) {
+        console.log("POST request successful!", response.data);
+      } else {
+        console.error(`POST request failed with status code ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error in POST request", error);
+    }
+  };
+  
   return (
     <div>
       <div className="Approvebreadcrump">
@@ -393,17 +460,17 @@ console.log("Selected PO Details:", selectedPoDetails);
            
  
             <CreatableSelect
-      className="basic-single"
-      classNamePrefix="select"
-      value={selectedOption}
-      onChange={setSelectedOption}
-      name="color"
-      options={colourOptions}
-      styles={{ container: (provided) => ({ ...provided, width: 200 }) }}
-      onCreateOption={handleCreate}
-      placeholder="Select or Enter PO..."
-      isClearable
-    />
+        className="basic-single"
+        classNamePrefix="select"
+        value={selectedOption}
+        onChange={setSelectedOption}
+        name="po_number"
+        options={colourOptions}
+        styles={{ container: (provided) => ({ ...provided, width: 200 }) }}
+        onCreateOption={handleCreate}
+        placeholder="Select or Enter PO..."
+        isClearable
+      />
  
               <Button appearance="subtle" style={{
       color: "#0078d4",
@@ -411,7 +478,7 @@ console.log("Selected PO Details:", selectedPoDetails);
       alignSelf: "flex-end",
       width: "auto",
      
-    }} className={styles.wrapper}>
+    }} className={styles.wrapper} onClick={handlePostApi}>
        Submit
       </Button>
             </div>
@@ -522,7 +589,7 @@ console.log("Selected PO Details:", selectedPoDetails);
       {lineItems.map((info, index) => (
         <li key={index} style={{ marginBottom: "15px" }}>
           <strong>Description: {info.Description}</strong>
-          <ul style={{ marginLeft: "20px", listStyleType: "disc" }}>
+           <ul style={{ marginLeft: "20px", listStyleType: "disc" }}>
             <li><strong>Quantity:</strong> {info.Quantity}</li>
             <li><strong>Amount:</strong> {info.Amount}</li>
             <li><strong>Discount:</strong> {info.Discount}</li>
@@ -551,21 +618,24 @@ console.log("Selected PO Details:", selectedPoDetails);
               {invoiceData && (
                 <>
                   <li>PO Number: {selectedInvoiceNumber}</li>
-                  <li>PO Type: {invoiceData.po_headers.po_type}</li>
-                  <li>Supplier Name: {invoiceData.supplier_name}</li>
-                  <li>Buyer: {invoiceData.buyer_name}</li>
-                  <li>Status: {invoiceData.po_status}</li>
-                  <li>Total Amount: {invoiceData.total_amount}</li>
-                  <li>Invoice Date: {invoiceData.invoice_info.InvoiceDate }</li>
-                  <li>Shipping Address: {invoiceData.ShippingAddress?.city}</li>
-                  <li>Billing Address: {invoiceData.BillingAddress?.city}</li>
-                  {/* Add more fields as needed */}
+                  <li>PO Type: {dataitem.po_type}</li>
+                  <li>Supplier Name: {dataitem.supplier_name}</li>
+                  <li>Site: {dataitem.location}</li>
+                  <li>Status: {dataitem.po_status}</li>
+                  <li>Total Amount: {dataitem.total_amount}</li>
+                  <li>Buyer Name: {dataitem.buyer_name}</li>
+                  <li>Invoice Detail: {dataitem.invoice_detail}</li>
+                  {/* <li>InvoiceDate: {invoiceData.InvoiceDate}</li>
+                  <li>Invoice Date: {items.invoice_info.InvoiceDate }</li>  */}
+                  <li>Shipping Address: {dataitem.ship_to}</li>
+                  <li>Billing Address: {dataitem.ship_to}</li>
+                  
                 </>
               )}
             </ul>
 
             {/* Displaying items in a separate list */}
-            {items.length > 0 && (
+             {/* {items.length > 0 && (
               <div>
                 <h3>Items:</h3>
                 <ul>
@@ -578,7 +648,7 @@ console.log("Selected PO Details:", selectedPoDetails);
                   ))}
                 </ul>
               </div>
-            )}
+            )}  */}
           </div>
         </div>
       )}

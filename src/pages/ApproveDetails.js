@@ -211,6 +211,25 @@ const ApprovePage = () => {
     sortDirection: getSortDirection(columnId),
   });
 
+
+
+  const handleViewInvoice = async () => {
+    try {
+      const response = await fetch(`http://10.10.15.15:5719/user/invoices-file/${invoiceid}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+ 
+      const blob = await response.blob();
+      const fileURL = URL.createObjectURL(blob);
+     
+     
+      window.open(fileURL, '_blank');
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  };
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -242,7 +261,6 @@ const ApprovePage = () => {
 
         // Log or process the combined data as needed
         console.log(normalizedPoLineItems);
-
 
         setData(normalizedPoLineItems);
         setTotal(fetchedItems.po_header.total_amount);
@@ -436,7 +454,7 @@ if (vendorCustomerObj) {
             >
               Line Item
             </Tab>
-            <Tab
+            {/* <Tab
               value="tab3"
               className={themestate ? "tab dark drawer" : "tab"}
               style={{ border: "1px solid transparent" }}
@@ -449,7 +467,7 @@ if (vendorCustomerObj) {
               style={{ border: "1px solid transparent" }}
             >
               Supplier
-            </Tab>
+            </Tab> */}
             <div style={{
     display: "flex",
     justifyContent: "flex-end",
@@ -460,7 +478,7 @@ if (vendorCustomerObj) {
     cursor:"pointer" 
   }}>
           
-          <ArrowDownload28Regular style={{ color: "#1281d7" }}/> <span > View Invoice</span>
+          <ArrowDownload28Regular style={{ color: "#1281d7" }} onClick={handleViewInvoice}/> <span onClick={handleViewInvoice} > View Invoice</span>
           </div>
           </TabList>
         </div>

@@ -1,22 +1,406 @@
-{
-    "invoice_info": {
+# {
+#     "invoice_info": {
+#         "id": 110,
+#         "VendorAddress": {
+#             "id": 328,
+#             "house_number": null,
+#             "po_box": null,
+#             "road": null,
+#             "city": null,
+#             "state": null,
+#             "postal_code": null,
+#             "country_region": null,
+#             "street_address": null,
+#             "unit": null,
+#             "city_district": null,
+#             "suburb": null,
+#             "house": null,
+#             "level": null,
+#             "state_district": null
+#         },
+#         "CustomerAddress": null,
+#         "BillingAddress": {
+#             "id": 329,
+#             "house_number": null,
+#             "po_box": null,
+#             "road": null,
+#             "city": null,
+#             "state": null,
+#             "postal_code": null,
+#             "country_region": null,
+#             "street_address": null,
+#             "unit": null,
+#             "city_district": null,
+#             "suburb": null,
+#             "house": null,
+#             "level": null,
+#             "state_district": null
+#         },
+#         "ShippingAddress": {
+#             "id": 330,
+#             "house_number": null,
+#             "po_box": null,
+#             "road": null,
+#             "city": "Madurai",
+#             "state": null,
+#             "postal_code": null,
+#             "country_region": null,
+#             "street_address": "",
+#             "unit": null,
+#             "city_district": null,
+#             "suburb": null,
+#             "house": null,
+#             "level": null,
+#             "state_district": null
+#         },
+#         "items": [
+#             {
+#                 "id": 364,
+#                 "Description": "100161-E3GRID LIG",
+#                 "Quantity": "10.0",
+#                 "Unit": null,
+#                 "UnitPrice": "1000.0",
+#                 "ProductCode": null,
+#                 "Amount": "10000.0",
+#                 "SubTotal": null,
+#                 "TotalTax": null,
+#                 "Date": null,
+#                 "Tax": null,
+#                 "PreviousUnpaidBalance": null,
+#                 "AmountDue": null,
+#                 "ServiceStartDate": null,
+#                 "ServiceEndDate": null,
+#                 "ServiceAddressRecipient": null,
+#                 "RemittanceAddressRecipient": null,
+#                 "invoice": 110,
+#                 "ServiceAddrress": null,
+#                 "RemittanceAddress": null
+#             },
+#             {
+#                 "id": 365,
+#                 "Description": "100012-E13 Exhauster",
+#                 "Quantity": "20.0",
+#                 "Unit": null,
+#                 "UnitPrice": "900.0",
+#                 "ProductCode": null,
+#                 "Amount": "18000.0",
+#                 "SubTotal": null,
+#                 "TotalTax": null,
+#                 "Date": null,
+#                 "Tax": null,
+#                 "PreviousUnpaidBalance": null,
+#                 "AmountDue": null,
+#                 "ServiceStartDate": null,
+#                 "ServiceEndDate": null,
+#                 "ServiceAddressRecipient": null,
+#                 "RemittanceAddressRecipient": null,
+#                 "invoice": 110,
+#                 "ServiceAddrress": null,
+#                 "RemittanceAddress": null
+#             },
+#             {
+#                 "id": 366,
+#                 "Description": "100161-E8100Watts",
+#                 "Quantity": "10.0",
+#                 "Unit": null,
+#                 "UnitPrice": "2000.0",
+#                 "ProductCode": null,
+#                 "Amount": "20000.0",
+#                 "SubTotal": null,
+#                 "TotalTax": null,
+#                 "Date": null,
+#                 "Tax": null,
+#                 "PreviousUnpaidBalance": null,
+#                 "AmountDue": null,
+#                 "ServiceStartDate": null,
+#                 "ServiceEndDate": null,
+#                 "ServiceAddressRecipient": null,
+#                 "RemittanceAddressRecipient": null,
+#                 "invoice": 110,
+#                 "ServiceAddrress": null,
+#                 "RemittanceAddress": null
+#             }
+#         ],
+#         "po_headers": [
+#             {
+#                 "id": 94,
+#                 "po_items": [
+#                     {
+#                         "id": 915,
+#                         "item_name": "RIZ RM 001",
+#                         "line_num": "1",
+#                         "quantity": "5",
+#                         "unit_price": "500",
+#                         "amount_billed": null,
+#                         "order_type_lookup_code": "QUANTITY",
+#                         "purchase_basis": "GOODS",
+#                         "category_name": "General.General",
+#                         "closed_code": "OPEN",
+#                         "item_description": "100102 - D6JUTE PLANTER-12Inch",
+#                         "need_by_date": null,
+#                         "promised_date": "2024-10-16",
+#                         "header": 94
+#                     },
+#                     {
+#                         "id": 916,
+#                         "item_name": "RIZ RM 001",
+#                         "line_num": "2",
+#                         "quantity": "10",
+#                         "unit_price": "7000",
+#                         "amount_billed": null,
+#                         "order_type_lookup_code": "QUANTITY",
+#                         "purchase_basis": "GOODS",
+#                         "category_name": "General.General",
+#                         "closed_code": "OPEN",
+#                         "item_description": "100050 - ElWater DisPenser",
+#                         "need_by_date": null,
+#                         "promised_date": "2024-10-16",
+#                         "header": 94
+#                     },
+#                     {
+#                         "id": 917,
+#                         "item_name": "RIZ RM 001",
+#                         "line_num": "3",
+#                         "quantity": "1",
+#                         "unit_price": "2000",
+#                         "amount_billed": null,
+#                         "order_type_lookup_code": "QUANTITY",
+#                         "purchase_basis": "GOODS",
+#                         "category_name": "General.General",
+#                         "closed_code": "OPEN",
+#                         "item_description": "100079 - G2 Wall MountAngles",
+#                         "need_by_date": null,
+#                         "promised_date": "2024-10-16",
+#                         "header": 94
+#                     },
+#                     {
+#                         "id": 918,
+#                         "item_name": "RIZ RM 001",
+#                         "line_num": "4",
+#                         "quantity": "20",
+#                         "unit_price": "900",
+#                         "amount_billed": null,
+#                         "order_type_lookup_code": "QUANTITY",
+#                         "purchase_basis": "GOODS",
+#                         "category_name": "General.General",
+#                         "closed_code": "OPEN",
+#                         "item_description": "100012 - E13 ExhaustFan",
+#                         "need_by_date": null,
+#                         "promised_date": "2024-10-16",
+#                         "header": 94
+#                     }
+#                 ],
+#                 "po_number": "1019",
+#                 "po_type": "STANDARD",
+#                 "po_status": "APPROVED",
+#                 "supplier_name": "AJ Manufactoring Co",
+#                 "location": "Madurai",
+#                 "ship_to": "MADURAI",
+#                 "bill_to": "MADURAI",
+#                 "buyer_name": "Ajay",
+#                 "total_amount": "92500",
+#                 "status": null,
+#                 "approve": false,
+#                 "invoice_detail": 110
+#             },
+#             {
+#                 "id": 96,
+#                 "po_items": [
+#                     {
+#                         "id": 921,
+#                         "item_name": "RIZ RM 001",
+#                         "line_num": "1",
+#                         "quantity": "10",
+#                         "unit_price": "100",
+#                         "amount_billed": null,
+#                         "order_type_lookup_code": "QUANTITY",
+#                         "purchase_basis": "GOODS",
+#                         "category_name": "General.General",
+#                         "closed_code": "OPEN",
+#                         "item_description": "Raw Material",
+#                         "need_by_date": "2023-06-07",
+#                         "promised_date": null,
+#                         "header": 96
+#                     }
+#                 ],
+#                 "po_number": "1008",
+#                 "po_type": "STANDARD",
+#                 "po_status": null,
+#                 "supplier_name": "AJ Manufactoring Co",
+#                 "location": "Madurai",
+#                 "ship_to": "RIZ LOCATION",
+#                 "bill_to": "RIZ LOCATION",
+#                 "buyer_name": "Ajay",
+#                 "total_amount": "1000",
+#                 "status": null,
+#                 "approve": false,
+#                 "invoice_detail": 110
+#             }
+#         ],
+#         "VendorName": "AJ manufacturing co & private limited",
+#         "VendorAddressRecipient": null,
+#         "CustomerName": "focusrtech",
+#         "CustomerAddressRecipient": null,
+#         "CustomerId": null,
+#         "InvoiceId": "12345",
+#         "InvoiceDate": "2024-10-17",
+#         "InvoiceTotal": "48000.0",
+#         "BillingAddressRecipient": null,
+#         "ShippingAddressRecipient": null,
+#         "DueDate": null,
+#         "PurchaseOrder": null,
+#         "InvoiceFile": "/media/invoices/PO-1018__Aj_manufacturing__less_line_items_1.pdf"
+#     },
+#     "po_headers": [
+#         {
+#             "id": 94,
+#             "po_items": [
+#                 {
+#                     "id": 915,
+#                     "item_name": "RIZ RM 001",
+#                     "line_num": "1",
+#                     "quantity": "5",
+#                     "unit_price": "500",
+#                     "amount_billed": null,
+#                     "order_type_lookup_code": "QUANTITY",
+#                     "purchase_basis": "GOODS",
+#                     "category_name": "General.General",
+#                     "closed_code": "OPEN",
+#                     "item_description": "100102 - D6JUTE PLANTER-12Inch",
+#                     "need_by_date": null,
+#                     "promised_date": "2024-10-16",
+#                     "header": 94
+#                 },
+#                 {
+#                     "id": 916,
+#                     "item_name": "RIZ RM 001",
+#                     "line_num": "2",
+#                     "quantity": "10",
+#                     "unit_price": "7000",
+#                     "amount_billed": null,
+#                     "order_type_lookup_code": "QUANTITY",
+#                     "purchase_basis": "GOODS",
+#                     "category_name": "General.General",
+#                     "closed_code": "OPEN",
+#                     "item_description": "100050 - ElWater DisPenser",
+#                     "need_by_date": null,
+#                     "promised_date": "2024-10-16",
+#                     "header": 94
+#                 },
+#                 {
+#                     "id": 917,
+#                     "item_name": "RIZ RM 001",
+#                     "line_num": "3",
+#                     "quantity": "1",
+#                     "unit_price": "2000",
+#                     "amount_billed": null,
+#                     "order_type_lookup_code": "QUANTITY",
+#                     "purchase_basis": "GOODS",
+#                     "category_name": "General.General",
+#                     "closed_code": "OPEN",
+#                     "item_description": "100079 - G2 Wall MountAngles",
+#                     "need_by_date": null,
+#                     "promised_date": "2024-10-16",
+#                     "header": 94
+#                 },
+#                 {
+#                     "id": 918,
+#                     "item_name": "RIZ RM 001",
+#                     "line_num": "4",
+#                     "quantity": "20",
+#                     "unit_price": "900",
+#                     "amount_billed": null,
+#                     "order_type_lookup_code": "QUANTITY",
+#                     "purchase_basis": "GOODS",
+#                     "category_name": "General.General",
+#                     "closed_code": "OPEN",
+#                     "item_description": "100012 - E13 ExhaustFan",
+#                     "need_by_date": null,
+#                     "promised_date": "2024-10-16",
+#                     "header": 94
+#                 }
+#             ],
+#             "po_number": "1019",
+#             "po_type": "STANDARD",
+#             "po_status": "APPROVED",
+#             "supplier_name": "AJ Manufactoring Co",
+#             "location": "Madurai",
+#             "ship_to": "MADURAI",
+#             "bill_to": "MADURAI",
+#             "buyer_name": "Ajay",
+#             "total_amount": "92500",
+#             "status": null,
+#             "approve": false,
+#             "invoice_detail": 110
+#         },
+#         {
+#             "id": 96,
+#             "po_items": [
+#                 {
+#                     "id": 921,
+#                     "item_name": "RIZ RM 001",
+#                     "line_num": "1",
+#                     "quantity": "10",
+#                     "unit_price": "100",
+#                     "amount_billed": null,
+#                     "order_type_lookup_code": "QUANTITY",
+#                     "purchase_basis": "GOODS",
+#                     "category_name": "General.General",
+#                     "closed_code": "OPEN",
+#                     "item_description": "Raw Material",
+#                     "need_by_date": "2023-06-07",
+#                     "promised_date": null,
+#                     "header": 96
+#                 }
+#             ],
+#             "po_number": "1008",
+#             "po_type": "STANDARD",
+#             "po_status": null,
+#             "supplier_name": "AJ Manufactoring Co",
+#             "location": "Madurai",
+#             "ship_to": "RIZ LOCATION",
+#             "bill_to": "RIZ LOCATION",
+#             "buyer_name": "Ajay",
+#             "total_amount": "1000",
+#             "status": null,
+#             "approve": false,
+#             "invoice_detail": 110
+#         }
+#     ]
+# }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[
+    {
         "id": 110,
         "VendorAddress": {
             "id": 328,
-            "house_number": null,
-            "po_box": null,
-            "road": null,
-            "city": null,
-            "state": null,
-            "postal_code": null,
-            "country_region": null,
-            "street_address": null,
-            "unit": null,
-            "city_district": null,
-            "suburb": null,
-            "house": null,
-            "level": null,
-            "state_district": null
+            "house_number": "190/26",
+            "po_box": "abcdr",
+            "road": "Gandhi Road",
+            "city": "salem",
+            "state": "TamilNadu",
+            "postal_code": "636000",
+            "country_region": "India",
+            "street_address": "first gate",
+            "unit": "5",
+            "city_district": "salem",
+            "suburb": "salem",
+            "house": "Salem",
+            "level": "5",
+            "state_district": "Tamilnadu salem"
         },
         "CustomerAddress": null,
         "BillingAddress": {
@@ -204,10 +588,10 @@
                 "invoice_detail": 110
             },
             {
-                "id": 96,
+                "id": 99,
                 "po_items": [
                     {
-                        "id": 921,
+                        "id": 926,
                         "item_name": "RIZ RM 001",
                         "line_num": "1",
                         "quantity": "10",
@@ -218,12 +602,28 @@
                         "category_name": "General.General",
                         "closed_code": "OPEN",
                         "item_description": "Raw Material",
-                        "need_by_date": "2023-06-07",
+                        "need_by_date": "2023-06-08",
                         "promised_date": null,
-                        "header": 96
+                        "header": 99
+                    },
+                    {
+                        "id": 927,
+                        "item_name": "RIZ_RM 002",
+                        "line_num": "2",
+                        "quantity": "10",
+                        "unit_price": "100",
+                        "amount_billed": null,
+                        "order_type_lookup_code": "QUANTITY",
+                        "purchase_basis": "GOODS",
+                        "category_name": "General.General",
+                        "closed_code": "OPEN",
+                        "item_description": "Raw material",
+                        "need_by_date": "2023-06-08",
+                        "promised_date": null,
+                        "header": 99
                     }
                 ],
-                "po_number": "1008",
+                "po_number": "1013",
                 "po_type": "STANDARD",
                 "po_status": null,
                 "supplier_name": "AJ Manufactoring Co",
@@ -231,7 +631,7 @@
                 "ship_to": "RIZ LOCATION",
                 "bill_to": "RIZ LOCATION",
                 "buyer_name": "Ajay",
-                "total_amount": "1000",
+                "total_amount": "2000",
                 "status": null,
                 "approve": false,
                 "invoice_detail": 110
@@ -250,121 +650,5 @@
         "DueDate": null,
         "PurchaseOrder": null,
         "InvoiceFile": "/media/invoices/PO-1018__Aj_manufacturing__less_line_items_1.pdf"
-    },
-    "po_headers": [
-        {
-            "id": 94,
-            "po_items": [
-                {
-                    "id": 915,
-                    "item_name": "RIZ RM 001",
-                    "line_num": "1",
-                    "quantity": "5",
-                    "unit_price": "500",
-                    "amount_billed": null,
-                    "order_type_lookup_code": "QUANTITY",
-                    "purchase_basis": "GOODS",
-                    "category_name": "General.General",
-                    "closed_code": "OPEN",
-                    "item_description": "100102 - D6JUTE PLANTER-12Inch",
-                    "need_by_date": null,
-                    "promised_date": "2024-10-16",
-                    "header": 94
-                },
-                {
-                    "id": 916,
-                    "item_name": "RIZ RM 001",
-                    "line_num": "2",
-                    "quantity": "10",
-                    "unit_price": "7000",
-                    "amount_billed": null,
-                    "order_type_lookup_code": "QUANTITY",
-                    "purchase_basis": "GOODS",
-                    "category_name": "General.General",
-                    "closed_code": "OPEN",
-                    "item_description": "100050 - ElWater DisPenser",
-                    "need_by_date": null,
-                    "promised_date": "2024-10-16",
-                    "header": 94
-                },
-                {
-                    "id": 917,
-                    "item_name": "RIZ RM 001",
-                    "line_num": "3",
-                    "quantity": "1",
-                    "unit_price": "2000",
-                    "amount_billed": null,
-                    "order_type_lookup_code": "QUANTITY",
-                    "purchase_basis": "GOODS",
-                    "category_name": "General.General",
-                    "closed_code": "OPEN",
-                    "item_description": "100079 - G2 Wall MountAngles",
-                    "need_by_date": null,
-                    "promised_date": "2024-10-16",
-                    "header": 94
-                },
-                {
-                    "id": 918,
-                    "item_name": "RIZ RM 001",
-                    "line_num": "4",
-                    "quantity": "20",
-                    "unit_price": "900",
-                    "amount_billed": null,
-                    "order_type_lookup_code": "QUANTITY",
-                    "purchase_basis": "GOODS",
-                    "category_name": "General.General",
-                    "closed_code": "OPEN",
-                    "item_description": "100012 - E13 ExhaustFan",
-                    "need_by_date": null,
-                    "promised_date": "2024-10-16",
-                    "header": 94
-                }
-            ],
-            "po_number": "1019",
-            "po_type": "STANDARD",
-            "po_status": "APPROVED",
-            "supplier_name": "AJ Manufactoring Co",
-            "location": "Madurai",
-            "ship_to": "MADURAI",
-            "bill_to": "MADURAI",
-            "buyer_name": "Ajay",
-            "total_amount": "92500",
-            "status": null,
-            "approve": false,
-            "invoice_detail": 110
-        },
-        {
-            "id": 96,
-            "po_items": [
-                {
-                    "id": 921,
-                    "item_name": "RIZ RM 001",
-                    "line_num": "1",
-                    "quantity": "10",
-                    "unit_price": "100",
-                    "amount_billed": null,
-                    "order_type_lookup_code": "QUANTITY",
-                    "purchase_basis": "GOODS",
-                    "category_name": "General.General",
-                    "closed_code": "OPEN",
-                    "item_description": "Raw Material",
-                    "need_by_date": "2023-06-07",
-                    "promised_date": null,
-                    "header": 96
-                }
-            ],
-            "po_number": "1008",
-            "po_type": "STANDARD",
-            "po_status": null,
-            "supplier_name": "AJ Manufactoring Co",
-            "location": "Madurai",
-            "ship_to": "RIZ LOCATION",
-            "bill_to": "RIZ LOCATION",
-            "buyer_name": "Ajay",
-            "total_amount": "1000",
-            "status": null,
-            "approve": false,
-            "invoice_detail": 110
-        }
-    ]
-}
+    }
+]

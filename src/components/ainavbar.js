@@ -281,7 +281,9 @@ const AiNav = ({ onPoNumberClick }) => {
 
       if (fetchedItem && fetchedItem.po_headers) {
         const poNumbers = fetchedItem.po_headers.map(header => header.po_number);
-        setPoNumbers(poNumbers); // Store the PO numbers
+        console.log("poNumbers",poNumbers)
+        setPoNumbers(poNumbers); 
+        onPoNumberClick(poNumbers[0]);
       }
     } catch (error) {
       console.error("Error fetching invoice data", error);
@@ -303,7 +305,7 @@ const AiNav = ({ onPoNumberClick }) => {
   return (
     <div className={styles.root}>
       <NavDrawer
-        defaultSelectedValue="2"
+        
         defaultSelectedCategoryValue=""
         open={isOpen}
         style={{ backgroundColor: "#fff" }}

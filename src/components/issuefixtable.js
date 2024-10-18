@@ -62,7 +62,7 @@ const IssuefixTable = () => {
   // Fetch data from the API
   // Fetch data from the API
 useEffect(() => {
-  fetch("http://172.235.21.99:5729/user/no-invoice-list")
+  fetch("http://10.10.15.15:5719/user/no-invoice-list")
     .then((response) => response.json())
     .then((data) => {
       // Format data to match the table columns
@@ -98,7 +98,7 @@ useEffect(() => {
       const deletePromises = idsToDelete.map((id) => {
         if (id) { // Check if id is defined
           console.log(`Deleting item with ID: ${id}`);
-          return fetch(`http://172.235.21.99:5729/user/delete-poheader/${id}`, {
+          return fetch(`http://10.10.15.15:5719/user/delete-poheader/${id}`, {
             method: 'DELETE',
           });
         } else {
@@ -145,16 +145,24 @@ useEffect(() => {
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/issuefixdetails`, { state: { invoiceNo: item.invoiceNo } });
+      navigate(`/issuefixdetails`, { state: { invoiceNo: item.invid } });
     }
   };
 
   const handleSelectionChange = (event, data) => {
     const newSelectedRows = new Set(selectedRows); // Create a copy of the selected rows
-    data.selectedItems.forEach((item) => newSelectedRows.add(item.invid)); // Add selected items to the set
+    data.selectedItems.forEach((item) => {
+        if (item.invid) { // Ensure invid is defined
+            newSelectedRows.add(item.invid); // Store item.invid instead of item.invoiceNo
+        } else {
+            console.warn("Selected item does not have an invid:", item);
+        }
+    });
     setSelectedRows(newSelectedRows); // Update state
-    console.log(data.selectedItems)
-  };
+    console.log("Selected IDs:", Array.from(newSelectedRows)); // Log selected IDs for debugging
+};
+
+  
 
   return (
     <>
@@ -209,36 +217,37 @@ useEffect(() => {
       </div>
 
       <DataGrid
-        items={filteredItems}
-        columns={columns}
-        sortable
-        selectionMode="multiselect"
-        onSelectionChange={handleSelectionChange}
-        getRowId={(item) => item.invoiceNo}
-        focusMode="composite"
-        style={{ minWidth: "550px" }}
+  items={filteredItems}
+  columns={columns}
+  sortable
+  selectionMode="multiselect"
+  onSelectionChange={handleSelectionChange}
+  getRowId={(item) => item.id} // Use item.id for unique identification
+  focusMode="composite"
+  style={{ minWidth: "550px" }}
+>
+  <DataGridHeader>
+    <DataGridRow>
+      {({ renderHeaderCell }) => (
+        <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+      )}
+    </DataGridRow>
+  </DataGridHeader>
+  <DataGridBody>
+    {({ item, rowId }) => (
+      <DataGridRow
+        key={rowId}
+        onClick={(e) => handleRowClick(e, item)}
+        selected={selectedRows.has(item.invid)} // Check selectedRows based on item.id
       >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody>
-          {({ item, rowId }) => (
-            <DataGridRow
-              key={rowId}
-              onClick={(e) => handleRowClick(e, item)}
-              selected={selectedRows.has(item.id)}
-            >
-              {({ renderCell }) => (
-                <DataGridCell>{renderCell(item)}</DataGridCell>
-              )}
-            </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
+        {({ renderCell }) => (
+          <DataGridCell>{renderCell(item)}</DataGridCell>
+        )}
+      </DataGridRow>
+    )}
+  </DataGridBody>
+</DataGrid>
+
     </>
   );
 };
