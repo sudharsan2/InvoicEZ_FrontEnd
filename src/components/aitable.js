@@ -74,7 +74,6 @@ const AITable = () => {
         );
         const fetchedItems = response.data; // Assuming data is in response.data
         const  inv = fetchedItems.InvoiceId;
-        console.log("iii",inv);
         const mappedItems = fetchedItems.map((item) => ({
           InvoiceId: item.InvoiceId || "NULL",
           supplier_name: item.po_headers?.[0]?.supplier_name || "NULL",  

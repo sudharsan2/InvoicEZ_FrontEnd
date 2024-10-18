@@ -252,9 +252,29 @@ const AIDetailPage = () => {
 
   // Invoice Details
   const [invoiceData, setInvoiceData] = useState(null);
+  // const [items, setItems] = useState([]);
   const location2 = useLocation();
   const [items, setItems] = useState([]);
-  // Extract the invoiceId from the URL
+  const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState(null); 
+
+
+  const handlePoNumberClick = async (poNumber) => {
+    setSelectedInvoiceNumber(poNumber); 
+    try {
+      const response = await axios.get(`http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`);
+      const fetchedData = response.data;
+
+     
+      const selectedPoDetails = fetchedData.po_headers.find(po => po.po_number === poNumber);
+      console.log("selectedPO",selectedPoDetails);
+      setInvoiceData(selectedPoDetails || {});
+      setItems(selectedPoDetails?.po_items || []);
+      console.log("Fetched Invoice Details:", fetchedData);
+console.log("Selected PO Details:", selectedPoDetails); 
+    } catch (error) {
+      console.error("Error fetching invoice details:", error);
+    }
+  };
   const { invoiceNumber }   =  location2.state || {}
   console.log("inn",invoiceNumber)
   const fetchInvoiceDetails = async () => {
@@ -264,8 +284,8 @@ const AIDetailPage = () => {
         const fetchedItem = response.data;
         console.log("R", fetchedItem);
 
-        setInvoiceData(fetchedItem); // Store the full invoice data
-        setItems(fetchedItem.items || []); // Store only the items from the response
+        setInvoiceData(fetchedItem); 
+        setItems(fetchedItem.po_headers || []);
       } catch (error) {
         console.error("Error fetching invoice data", error);
       }
@@ -291,21 +311,48 @@ const AIDetailPage = () => {
   ];
 
  
+  // const vendorInfo = [
+  //   { label: "Vendor Name", value: invoiceData.invoice_info.VendorName },
+  //   { label: "Vendor Address", value: invoiceData.invoice_info.VendorAddress?.city || "N/A" },
+  //   { label: "Vendor Contact Information", value: invoiceData.VendorContact || "N/A" },
+  //   { label: "Vendor Tax ID", value: invoiceData.VendorTaxId || "N/A" },
+  // ];
+  console.log("PO",invoiceData.po_headers.po_number);
+
+  const formatAddress = (address) => {
+    if (!address) return "N/A";
+  
+    const { house_number, street_address, city, state, postal_code, country_region } = address;
+  
+    const addressParts = [
+      house_number,
+      street_address,
+      city,
+      state,
+      postal_code,
+      country_region,
+    ].filter(part => part); 
+  
+    return addressParts.length > 0 ? addressParts.join(", ") : "N/A";
+  };
+  
+ 
   const vendorInfo = [
-    { label: "Vendor Name", value: invoiceData.invoice_info.VendorName },
-    { label: "Vendor Address", value: invoiceData.invoice_info.VendorAddress?.city || "N/A" },
+    { label: "Vendor Name", value: invoiceData.invoice_info.VendorName || "N/A" },
+    { label: "Vendor Address", value: formatAddress(invoiceData.invoice_info.VendorAddress) },
     { label: "Vendor Contact Information", value: invoiceData.VendorContact || "N/A" },
     { label: "Vendor Tax ID", value: invoiceData.VendorTaxId || "N/A" },
   ];
 
-  const lineInfo = [
-    { label: "Description", value: invoiceData.invoice_info.VendorName },
-    { label: "Quantity", value: invoiceData.invoice_info.VendorAddress?.city || "N/A" },
-    { label: "Amount", value: invoiceData.VendorContact || "N/A" },
-    { label: "Discount", value: invoiceData.VendorTaxId || "N/A" },
-    { label: "ProductCode", value: invoiceData.VendorTaxId || "N/A" },
-  ];
+  
 
+  const lineItems = invoiceData.invoice_info.items.map((item) => ({
+    Description: item.Description || "N/A",
+    Quantity: item.Quantity || "N/A",
+    Amount: item.Amount || "N/A",
+    Discount: item.Discount || "N/A", 
+    ProductCode: item.ProductCode || "N/A",
+  }));
   
 
   
@@ -338,7 +385,7 @@ const AIDetailPage = () => {
               width: "100%",
               marginTop: "0px",
               gap: "10px",
-              marginLeft: "auto", // Pushes the content to the right corner
+              marginLeft: "auto", 
    
             }}
           >
@@ -458,73 +505,84 @@ const AIDetailPage = () => {
         </ul>
       </div>
       <div>
-        <h2>Vendor/Supplier Information</h2>
-        <ul>
-          {vendorInfo.map((info, index) => (
-            <li key={index}>
-              <strong>{info.label}:</strong> {info.value}
-            </li>
-          ))}
-        </ul>
+      <h2>Vendor/Supplier Information</h2>
+    <ul>
+      {vendorInfo.map((info, index) => (
+        <li key={index}>
+          <strong>{info.label}:</strong> {info.value}
+        </li>
+      ))}
+    </ul>
 
         
 
         {/* Line Items */}
         <h2>Line Items</h2>
-        
-        <ul>
-          {lineInfo.map((info, index) => (
-            <li key={index}>
-              <strong>{info.label}:</strong> {info.value}
-            </li>
-          ))}
-        </ul>
-        
+    <ol>
+      {lineItems.map((info, index) => (
+        <li key={index} style={{ marginBottom: "15px" }}>
+          <strong>Description: {info.Description}</strong>
+          <ul style={{ marginLeft: "20px", listStyleType: "disc" }}>
+            <li><strong>Quantity:</strong> {info.Quantity}</li>
+            <li><strong>Amount:</strong> {info.Amount}</li>
+            <li><strong>Discount:</strong> {info.Discount}</li>
+            <li><strong>ProductCode:</strong> {info.ProductCode}</li>
+          </ul>
+        </li>
+      ))}
+    </ol>
       </div>
         </div>
           
           )}
  
-        {selectedtab === "tab4" && (
-          <div className={styles.content1}>
-             <div><AiNav/></div>
-             
-             <div className={styles.example}>
-        <Divider vertical style={{ height: "100%" }} />
-      </div>
-      <div style={{display:"flex",justifyContent:"flex-start",marginLeft:"-10em"}}>
-  <ul>
-    <li>PO Number: Unique identifier for the purchase order.</li>
-    <li>PO Type: Type of PO (Standard, Blanket, Contract, Planned).</li>
-    <li>Supplier Name and Number: Information on the supplier.</li>
-    <li>Supplier Site: Specific supplier site linked to the PO.</li>
-    <li>Buyer: Person responsible for the PO.</li>
-    <li>Document Status: (Approved, In Process, Closed, Cancelled, etc.).</li>
-    <li>Creation Date and Last Updated Date: Important timestamps.</li>
-    <li>Currency: Currency in which the PO is made.</li>
-    <li>Terms and Conditions: Standard terms like payment terms, freight, etc.</li>
-    <li>Approval Information: Approver details and approval date.</li>
-    <li>Total Amount: Total value of the PO (sum of all lines).</li>
-    <li>Description: Description or comments about the purchase order.</li>
-    <li>Line Number: Sequential line number within the PO.</li>
-    <li>Item: Item being purchased, with description and item code.</li>
-    <li>Category: Category of the item, used for classification.</li>
-    <li>Quantity Ordered: Quantity of the item requested.</li>
-    <li>Unit Price: Price per unit of the item.</li>
-    <li>Amount: Line total (Quantity × Unit Price).</li>
-    <li>Need-By Date: Date by which the goods/services are required.</li>
-    <li>Promised Date: Supplier's promised delivery date.</li>
-    <li>Tax Codes: Taxes associated with the item line.</li>
-    <li>Price Breaks: If there are quantity-based price discounts.</li>
-    <li>Destination Type: Whether the item is for Inventory, Expense, or a Shop Floor.</li>
-    <li>Location: Delivery location or site for the item.</li>
-  </ul>
-</div>
- 
+ {selectedtab === "tab4" && (
+        <div className={styles.content1}>
+          <div>
+            <AiNav onPoNumberClick={handlePoNumberClick} />
+          </div>
+
+          <div className={styles.example}>
+            <Divider vertical style={{ height: "100%" }} />
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "flex-start", marginLeft: "-10em" }}>
+            <ul>
+              {invoiceData && (
+                <>
+                  <li>PO Number: {selectedInvoiceNumber}</li>
+                  <li>PO Type: {invoiceData.po_headers.po_type}</li>
+                  <li>Supplier Name: {invoiceData.supplier_name}</li>
+                  <li>Buyer: {invoiceData.buyer_name}</li>
+                  <li>Status: {invoiceData.po_status}</li>
+                  <li>Total Amount: {invoiceData.total_amount}</li>
+                  <li>Invoice Date: {invoiceData.invoice_info.InvoiceDate }</li>
+                  <li>Shipping Address: {invoiceData.ShippingAddress?.city}</li>
+                  <li>Billing Address: {invoiceData.BillingAddress?.city}</li>
+                  {/* Add more fields as needed */}
+                </>
+              )}
+            </ul>
+
+            {/* Displaying items in a separate list */}
+            {items.length > 0 && (
+              <div>
+                <h3>Items:</h3>
+                <ul>
+                  {items.map((item) => (
+                    <li key={item.id}>
+                      <div>
+                        <strong>{item.item_description}</strong> - Quantity: {item.quantity}, Unit Price: {item.unit_price}, Total Amount: {item.amount}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </div>
-           
-           
-        )}
+            )}
+          </div>
+        </div>
+      )}
+
       </div>
     </div>
   );

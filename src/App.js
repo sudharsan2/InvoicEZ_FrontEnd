@@ -20,6 +20,8 @@ import DocumentPage from "./pages/Document";
 import BlobPage from "./pages/BlobPage";
 import AIPage from "./pages/AIindentified";
 import AIDetailPage from "./pages/AIindentifieddetails";
+import IssuefixPage from "./pages/IssueFixPage";
+import IssuefixDetails from "./pages/IssueFixDetails";
 function App() {
   return (
     <Router basename="">
@@ -88,7 +90,9 @@ function App() {
         <Route path="/blob" element={<CustomLayout><NavDrawerDefaultAdmin><BlobPage/></NavDrawerDefaultAdmin></CustomLayout>}/>
         <Route path="/ai" element={<CustomLayout><NavDrawerDefault><AIPage/></NavDrawerDefault></CustomLayout>}/>
         <Route path="/aidetail" element={<CustomLayout><NavDrawerDefault>< AIDetailPage/></NavDrawerDefault></CustomLayout>}/>
-
+        
+        <Route path="/issuefix" element={<CustomLayout><NavDrawerDefault><IssuefixPage/></NavDrawerDefault></CustomLayout>}/>
+        <Route path="/issuefixdetails" element={<CustomLayout><NavDrawerDefault><IssuefixDetails/></NavDrawerDefault></CustomLayout>}/>
 
       </Routes>
     </Router>

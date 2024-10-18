@@ -751,7 +751,9 @@ const NavDrawerDefault = (props) => {
                 }}>
                AI Identified
               </NavSubItem>
-              <NavSubItem  value="5" style={{ marginTop: "10px", fontSize: "17px" }}>
+              <NavSubItem  value="5" style={{ marginTop: "10px", fontSize: "17px" }} onClick={() => {
+                  navigate("/issuefix");
+                }}>
                 Fix
               </NavSubItem>
             </NavSubItemGroup>
