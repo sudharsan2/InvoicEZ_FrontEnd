@@ -18,7 +18,7 @@ import {
 } from "@fluentui/react-components";
 import Search from "./Search"; 
 import { Button, notification } from "antd"; 
- 
+import { ArrowDownload28Regular } from "@fluentui/react-icons";
 
 const columns = [
   createTableColumn({
@@ -27,26 +27,24 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.po_number}</TableCellLayout>,
   }),
   createTableColumn({
+    columnId: "InvoiceId",
+    renderHeaderCell: () => "Invoice Number",
+    renderCell: (item) => <TableCellLayout>{item.invoice_number}</TableCellLayout>,
+  }),
+  createTableColumn({
     columnId: "po_type",
     renderHeaderCell: () => "PO Type",
     renderCell: (item) => <TableCellLayout>{item.po_type}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "po_status",
-    renderHeaderCell: () => "PO Status",
-    renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
+    columnId: "VendorName",
+    renderHeaderCell: () => "Vendor Name",
+    renderCell: (item) => <TableCellLayout>{item.VendorName}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "supplier_name",
     renderHeaderCell: () => "Supplier Name",
-    renderCell: (item) => (
-      <TableCellLayout>{item.supplier_name}</TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "location",
-    renderHeaderCell: () => "Location",
-    renderCell: (item) => <TableCellLayout>{item.location}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.supplier_name}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "ship_to",
@@ -54,32 +52,27 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.ship_to}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "bill_to",
-    renderHeaderCell: () => "Bill To",
-    renderCell: (item) => <TableCellLayout>{item.bill_to}</TableCellLayout>,
+    columnId: "InvoiceDate",
+    renderHeaderCell: () => "Invoice Date",
+    renderCell: (item) => <TableCellLayout>{item.InvoiceDate}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "buyer_name",
-    renderHeaderCell: () => "Buyer Name",
-    renderCell: (item) => <TableCellLayout>{item.buyer_name}</TableCellLayout>,
+    columnId: "promised_date",
+    renderHeaderCell: () => "PO Date",
+    renderCell: (item) => <TableCellLayout>{item.promised_date}</TableCellLayout>,
+  }),
+  createTableColumn({
+    columnId: "InvoiceTotal",
+    renderHeaderCell: () => "Invoice Total",
+    renderCell: (item) => <TableCellLayout>{item.InvoiceTotal}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "total_amount",
     renderHeaderCell: () => "Total Amount",
-    renderCell: (item) => (
-      <TableCellLayout>
-        {item.total_amount !== null ? item.total_amount : "N/A"}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "status",
-    renderHeaderCell: () => "Status",
-    renderCell: (item) => (
-      <TableCellLayout>{item.status || "N/A"}</TableCellLayout>
-    ),
+    renderCell: (item) => <TableCellLayout>{item.total_amount}</TableCellLayout>,
   }),
 ];
+
  
 const ApproveTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -88,55 +81,30 @@ const ApproveTable = () => {
   const navigate = useNavigate();
  
  
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "https://invoicezapi.focusrtech.com:57/user/get-poheader",
-  //       );
-  //       const fetchedItems = response.data; // Assuming data is in response.data
- 
-       
-  //       const mappedItems = fetchedItems.map((item) => ({
-  //         po_number: item.po_number,
-  //         po_type: item.po_type,
-  //         po_status: item.po_status,
-  //         supplier_name: item.supplier_name,
-  //         location: item.location,
-  //         ship_to: item.ship_to,
-  //         bill_to: item.bill_to,
-  //         buyer_name: item.buyer_name,
-  //         total_amount: item.total_amount,
-  //         status: item.status,
-  //       }));
- 
-  //       setItems(mappedItems);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
- 
-  //   fetchData();
-  // }, []);
+  
   const fetchData = async () => {
     try {
         const response = await axios.get(
-            "https://invoicezapi.focusrtech.com:57/user/get-poheader"
+            "http://10.10.15.15:5719/user/one-invoice-list"
         );
         const fetchedItems = response.data; // Assuming data is in response.data
+        console.log("12345678",response.data);
+        
 
         const mappedItems = fetchedItems.map((item) => ({
-            po_number: item.po_number,
-            po_type: item.po_type,
-            po_status: item.po_status,
-            supplier_name: item.supplier_name,
-            location: item.location,
-            ship_to: item.ship_to,
-            bill_to: item.bill_to,
-            buyer_name: item.buyer_name,
-            total_amount: item.total_amount,
-            status: item.status,
-        }));
+          po_number: item.po_headers?.[0]?.po_number || "NULL", // Accessing the first element of the po_headers array
+          invoice_number: item.InvoiceId || "NULL", 
+          po_type: item.po_headers?.[0]?.po_type || "NULL", // Accessing the first element of the po_headers array
+          VendorName: item.VendorName || "NULL",
+          supplier_name: item.po_headers?.[0]?.supplier_name || "NULL", // Accessing the first element of the po_headers array
+          ship_to: item.po_headers?.[0]?.ship_to || "NULL", // Accessing the first element of the po_headers array
+          InvoiceDate: item.InvoiceDate || "NULL",
+          promised_date: item.po_headers?.[0]?.po_items?.[0]?.promised_date || "NULL",
+          InvoiceTotal: item.InvoiceTotal || "NULL",
+          total_amount: item.po_headers?.[0]?.total_amount || "NULL" // Accessing the first element of the po_headers array
+      }));
+      
+      
 
         setItems(mappedItems);
     } catch (error) {
@@ -153,18 +121,19 @@ useEffect(() => {
  
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
- 
+    const poHeader = item.po_headers?.[0];
+    console.log("1233445",poHeader)
     return (
       item.po_number?.toString().toLowerCase().includes(searchLower) ||
+      item.invoice_number?.toLowerCase().includes(searchLower) ||
       item.po_type?.toLowerCase().includes(searchLower) ||
-      item.po_status?.toLowerCase().includes(searchLower) ||
+      item. VendorName?.toLowerCase().includes(searchLower) ||
       item.supplier_name?.toLowerCase().includes(searchLower) ||
-      item.location?.toLowerCase().includes(searchLower) ||
       item.ship_to?.toLowerCase().includes(searchLower) ||
-      item.bill_to?.toLowerCase().includes(searchLower) ||
-      item.buyer_name?.toLowerCase().includes(searchLower) ||
-      item.total_amount?.toString().toLowerCase().includes(searchLower) ||
-      item.status?.toLowerCase().includes(searchLower)
+      item.InvoiceDate?.toLowerCase().includes(searchLower) ||
+      item.promised_date?.toLowerCase().includes(searchLower) ||
+      item.InvoiceTotal?.toString().toLowerCase().includes(searchLower) ||
+      item.total_amount?.toLowerCase().includes(searchLower)
     );
   });
  
@@ -198,7 +167,7 @@ useEffect(() => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.delete(
-            `https://invoicezapi.focusrtech.com:57/user/delete-poheader/${filteredItems[item].po_number}`
+            `http://10.10.15.15:5719/user/delete-poheader/${filteredItems[item].po_number}`
 ,
           ),
         ),
@@ -245,7 +214,7 @@ useEffect(() => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `https://invoicezapi.focusrtech.com:57/user/approve-status/${filteredItems[item].po_number}`
+            `http://10.10.15.15:5719/user/approve-status/${filteredItems[item].po_number}`
           ),
         ),
       );
@@ -330,11 +299,20 @@ useEffect(() => {
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
+
+       
+
+
+        
  
         <Search
           placeholder="Search PO or Supplier"
           onSearchChange={handleSearchChange}
         />
+       
+          
+          
+          
       </div>
  
       <DataGrid

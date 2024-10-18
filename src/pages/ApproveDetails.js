@@ -25,7 +25,7 @@ import line_data from "./data_approve";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { CgLayoutGrid } from "react-icons/cg";
-
+import { ArrowDownload28Regular } from '@fluentui/react-icons';
 /*eslint-disabled*/
 
 const path = "/approve";
@@ -215,7 +215,7 @@ const ApprovePage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://invoicezapi.focusrtech.com:57/user/po-details/${poNumber}/`
+          `http://10.10.15.15:5719/user/po-details/${poNumber}/`
         );
         const fetchedItems = response.data;
 
@@ -450,6 +450,18 @@ if (vendorCustomerObj) {
             >
               Supplier
             </Tab>
+            <div style={{
+    display: "flex",
+    justifyContent: "flex-end",
+    gap: "10px",
+    fontSize: "17px",
+    marginLeft: "auto", 
+    alignItems: "center",
+    cursor:"pointer" 
+  }}>
+          
+          <ArrowDownload28Regular style={{ color: "#1281d7" }}/> <span > View Invoice</span>
+          </div>
           </TabList>
         </div>
         {selectedtab === "tab1" && (

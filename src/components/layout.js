@@ -281,7 +281,7 @@ const CustomLayout = ({ children }) => {
           formData.append('file', file); 
 
           try {
-              const response = await axios.post('https://invoicezapi.focusrtech.com:57/user/invoice-upload', formData, {
+              const response = await axios.post('http://10.10.15.15:5719/user/invoice-upload', formData, {
                   headers: {
                       'Content-Type': 'multipart/form-data',
                   },

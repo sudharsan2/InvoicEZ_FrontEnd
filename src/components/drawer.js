@@ -746,7 +746,9 @@ const NavDrawerDefault = (props) => {
               Issue
             </NavCategoryItem>
             <NavSubItemGroup>
-              <NavSubItem  value="4" style={{ marginTop: "10px", fontSize: "17px" }}>
+              <NavSubItem  value="4" style={{ marginTop: "10px", fontSize: "17px" }} onClick={() => {
+                  navigate("/ai");
+                }}>
                AI Identified
               </NavSubItem>
               <NavSubItem  value="5" style={{ marginTop: "10px", fontSize: "17px" }}>

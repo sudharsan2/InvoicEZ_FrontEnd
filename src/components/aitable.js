@@ -5,6 +5,7 @@ import {
   Delete28Regular,
   TasksApp28Regular,
 } from "@fluentui/react-icons";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -22,63 +23,38 @@ import { Button, notification } from "antd";
 
 const columns = [
   createTableColumn({
-    columnId: "po_number",
+    columnId: "InvoiceId",
     renderHeaderCell: () => "Invoice No",
-    renderCell: (item) => <TableCellLayout>{item.po_number}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "po_type",
-    renderHeaderCell: () => "Supplier",
-    renderCell: (item) => <TableCellLayout>{item.po_type}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "po_status",
-    renderHeaderCell: () => "Site",
-    renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.InvoiceId}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "supplier_name",
+    renderHeaderCell: () => "Supplier",
+    renderCell: (item) => <TableCellLayout>{item.supplier_name}</TableCellLayout>,
+  }),
+  createTableColumn({
+    columnId: "city",
+    renderHeaderCell: () => "Site",
+    renderCell: (item) => <TableCellLayout>{item.city}</TableCellLayout>,
+  }),
+  createTableColumn({
+    columnId: "InvoiceDate",
     renderHeaderCell: () => "Invoice Date",
     renderCell: (item) => (
-      <TableCellLayout>{item.supplier_name}</TableCellLayout>
+      <TableCellLayout>{item.InvoiceDate}</TableCellLayout>
     ),
   }),
   createTableColumn({
-    columnId: "location",
+    columnId: "InvoiceTotal",
     renderHeaderCell: () => "Total Amount",
-    renderCell: (item) => <TableCellLayout>{item.location}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.InvoiceTotal}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "ship_to",
     renderHeaderCell: () => "Number of Lines",
     renderCell: (item) => <TableCellLayout>{item.ship_to}</TableCellLayout>,
   }),
-//   createTableColumn({
-//     columnId: "bill_to",
-//     renderHeaderCell: () => "Bill To",
-//     renderCell: (item) => <TableCellLayout>{item.bill_to}</TableCellLayout>,
-//   }),
-//   createTableColumn({
-//     columnId: "buyer_name",
-//     renderHeaderCell: () => "Buyer Name",
-//     renderCell: (item) => <TableCellLayout>{item.buyer_name}</TableCellLayout>,
-//   }),
-//   createTableColumn({
-//     columnId: "total_amount",
-//     renderHeaderCell: () => "Total Amount",
-//     renderCell: (item) => (
-//       <TableCellLayout>
-//         {item.total_amount !== null ? item.total_amount : "N/A"}
-//       </TableCellLayout>
-//     ),
-  
-//   createTableColumn({
-//     columnId: "status",
-//     renderHeaderCell: () => "Status",
-//     renderCell: (item) => (
-//       <TableCellLayout>{item.status || "N/A"}</TableCellLayout>
-//     ),
-//   }),
+
 ];
  
 const AITable = () => {
@@ -87,56 +63,27 @@ const AITable = () => {
   const [selectedRows, setSelectedRows] = useState(new Set());
   const navigate = useNavigate();
  
- 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "https://invoicezapi.focusrtech.com:57/user/get-poheader",
-  //       );
-  //       const fetchedItems = response.data; // Assuming data is in response.data
- 
-       
-  //       const mappedItems = fetchedItems.map((item) => ({
-  //         po_number: item.po_number,
-  //         po_type: item.po_type,
-  //         po_status: item.po_status,
-  //         supplier_name: item.supplier_name,
-  //         location: item.location,
-  //         ship_to: item.ship_to,
-  //         bill_to: item.bill_to,
-  //         buyer_name: item.buyer_name,
-  //         total_amount: item.total_amount,
-  //         status: item.status,
-  //       }));
- 
-  //       setItems(mappedItems);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
- 
-  //   fetchData();
-  // }, []);
+  const location2 = useLocation();
+  const { invoiceNumber }   =  location2.state || {}
+  console.log("inn2",invoiceNumber)
+  
   const fetchData = async () => {
     try {
         const response = await axios.get(
-            "https://invoicezapi.focusrtech.com:57/user/get-poheader"
+            "http://10.10.15.15:5719/user/morethanone-invoice-list"
         );
         const fetchedItems = response.data; // Assuming data is in response.data
-
+        const  inv = fetchedItems.InvoiceId;
+        console.log("iii",inv);
         const mappedItems = fetchedItems.map((item) => ({
-            po_number: item.po_number,
-            po_type: item.po_type,
-            po_status: item.po_status,
-            supplier_name: item.supplier_name,
-            location: item.location,
-            ship_to: item.ship_to,
-            bill_to: item.bill_to,
-            buyer_name: item.buyer_name,
-            total_amount: item.total_amount,
-            status: item.status,
-        }));
+          InvoiceId: item.InvoiceId || "NULL",
+          supplier_name: item.po_headers?.[0]?.supplier_name || "NULL",  
+          city: item.po_headers?.[0]?.location || "NULL",  
+          InvoiceDate: item.InvoiceDate || "NULL",  
+          InvoiceTotal: item.InvoiceTotal || "NULL",  
+          ship_to: item.po_headers?.[0]?.ship_to || "NULL"  
+      }));
+      
 
         setItems(mappedItems);
     } catch (error) {
@@ -155,22 +102,19 @@ useEffect(() => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
  
     return (
-      item.po_number?.toString().toLowerCase().includes(searchLower) ||
-      item.po_type?.toLowerCase().includes(searchLower) ||
-      item.po_status?.toLowerCase().includes(searchLower) ||
+      item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
       item.supplier_name?.toLowerCase().includes(searchLower) ||
-      item.location?.toLowerCase().includes(searchLower) ||
-      item.ship_to?.toLowerCase().includes(searchLower) ||
-      item.bill_to?.toLowerCase().includes(searchLower) ||
-      item.buyer_name?.toLowerCase().includes(searchLower) ||
-      item.total_amount?.toString().toLowerCase().includes(searchLower) ||
-      item.status?.toLowerCase().includes(searchLower)
+      item.city?.toLowerCase().includes(searchLower) ||
+      item.InvoiceDate?.toLowerCase().includes(searchLower) ||
+      item. InvoiceTotal?.toLowerCase().includes(searchLower) ||
+      item. ship_to?.toLowerCase().includes(searchLower) 
+      
     );
   });
  
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/aidetail`, { state: { poNumber: item.po_number } });
+      navigate(`/aidetail`, { state: { invoiceNumber: item.InvoiceId } });
     }
   };
  
@@ -188,6 +132,7 @@ useEffect(() => {
       });
       return;
     }
+  
  
     try {
       const supplierNames = selectedItemsArray
@@ -198,7 +143,7 @@ useEffect(() => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.delete(
-            `https://invoicezapi.focusrtech.com:57/user/delete-poheader/${filteredItems[item].po_number}`
+            `http://10.10.15.15:5719/user/delete-poheader/${filteredItems[item].po_number}`
 ,
           ),
         ),
@@ -245,7 +190,7 @@ useEffect(() => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `https://invoicezapi.focusrtech.com:57/user/approve-status/${filteredItems[item].po_number}`
+            `http://10.10.15.15:5719/user/approve-status/${filteredItems[item].po_number}`
           ),
         ),
       );
@@ -296,24 +241,7 @@ useEffect(() => {
           <span>Delete</span>
         </button>
  
-        {/* <button
-          style={{
-            display: "flex",
-            alignItems: "center",
-            backgroundColor: "transparent",
-            border: "1px solid #fff",
-            padding: "6px 12px",
-            cursor: "pointer",
-            gap: "8px",
-            marginLeft: "2em",
-          }}
-          onClick={handleApproveSelectedRows}
-         
-        >
-          <TasksApp28Regular style={{ color: "#1281d7" }} />
-          <span>Approve</span>
-        </button> */}
- 
+        
         <button
           style={{
             display: "flex",
@@ -332,7 +260,7 @@ useEffect(() => {
         </button>
  
         <Search
-          placeholder="Search PO or Supplier"
+          placeholder="Search Invoice"
           onSearchChange={handleSearchChange}
         />
       </div>

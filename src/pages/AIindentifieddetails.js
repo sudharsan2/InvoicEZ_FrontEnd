@@ -1,5 +1,5 @@
-import { useState } from "react";
-import React from "react";
+// import { useState } from "react";
+// import React from "react";
 import {
   makeStyles,
   Button,
@@ -22,22 +22,26 @@ import {
   useTableSort,
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
-import { useLocation } from "react-router-dom";
+ 
 import AiNav from "../components/ainavbar";
 import { SettingOutlined } from '@ant-design/icons';
-import { Cascader, Input, Select, Space } from 'antd';
+import { ArrowDownload28Regular } from '@fluentui/react-icons';
+import { useLocation } from "react-router-dom";
 import {tokens, Divider } from "@fluentui/react-components";
-const { Option } = Select;
+import CreatableSelect from 'react-select/creatable';
+import React, { useState } from 'react';
+import  { useEffect} from 'react';
+
+import axios from 'axios';
 const path = "/aidetail";
 const path1 = "http://localhost:3000/";
-const selectAfter = (
-  <Select defaultValue="">
-    <Option value="PO1822">PO1822</Option>
-    <Option value="PO1823">PO1823</Option>
-    <Option value="PO1824">PO1824</Option>
-    <Option value="PO1825">PO1825</Option>
-  </Select>
+const Checkbox = ({ children, ...props }) => (
+  <label style={{ marginRight: '1em' }}>
+    <input type="checkbox" {...props} />
+    {children}
+  </label>
 );
+ 
  
 const useStyles = makeStyles({
   root: {
@@ -54,7 +58,7 @@ const useStyles = makeStyles({
     minHeight: "96px",
     backgroundColor: tokens.colorNeutralBackground1,
     marginLeft: "-26em"
-    
+   
   },
   header: {
     padding: "20px",
@@ -119,28 +123,32 @@ const useStyles = makeStyles({
   },
 });
  
+ 
+ 
+ 
 const AIDetailPage = () => {
+ 
+  const [colourOptions, setColourOptions] = useState([
+    { value: '1009', label: '1009' },
+    { value: '1010', label: '1010' },
+    { value: '1011', label: '1011' },
+    { value: '1012', label: '1012' },
+    { value: '1013', label: '1013' },
+  ]);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const handleCreate = (inputValue) => {
+    const newOption = { value: inputValue, label: inputValue };
+    setColourOptions((prevOptions) => [...prevOptions, newOption]);
+    setSelectedOption(newOption);
+  };
+ 
   const styles = useStyles();
   const themestate = false;
   const [selectedtab, setSelectedTab] = React.useState("tab3");
-  const location = useLocation();
-  const { poNumber } = location.state || {}
-  console.log("765", poNumber)
-  const purchaseOrder = {
-    poNumber: "13466",
-    poDate: "09 May 2023",
-    poTotalAmount: "95090",
-    poCurrency: "INR",
-    poStatus: "Open",
-    lineMatching: "FULL / Partial Line Items",
-    vendorAddress: "VendorAddress",
-    customerAddress: "CustomerAddress",
-    invoiceId: "InvoiceId",
-    invoiceDate: "InvoiceDate",
-    invoiceTotal: "InvoiceTotal",
-    invoiceCurrency: "Invoice Currency",
-    purchaseOrderNumberInInvoice: "PurchaseOrder Number in Invoice",
-  };
+ 
+  
+ 
+
   const [sortState, setSortState] = useState({
     sortDirection: "ascending",
     sortColumn: "empid",
@@ -223,6 +231,84 @@ const AIDetailPage = () => {
       ? aValue - bValue
       : bValue - aValue;
   });
+
+  const handleViewInvoice = async () => {
+    try {
+      const response = await fetch(`http://10.10.15.15:5719/user/invoices-file/${invoiceNumber}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+ 
+      const blob = await response.blob();
+      const fileURL = URL.createObjectURL(blob);
+     
+     
+      window.open(fileURL, '_blank');
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  };
+ 
+
+  // Invoice Details
+  const [invoiceData, setInvoiceData] = useState(null);
+  const location2 = useLocation();
+  const [items, setItems] = useState([]);
+  // Extract the invoiceId from the URL
+  const { invoiceNumber }   =  location2.state || {}
+  console.log("inn",invoiceNumber)
+  const fetchInvoiceDetails = async () => {
+    if (invoiceNumber) {
+      try {
+        const response = await axios.get(`http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`);
+        const fetchedItem = response.data;
+        console.log("R", fetchedItem);
+
+        setInvoiceData(fetchedItem); // Store the full invoice data
+        setItems(fetchedItem.items || []); // Store only the items from the response
+      } catch (error) {
+        console.error("Error fetching invoice data", error);
+      }
+    }
+  };
+  console.log("Data",invoiceData);
+  useEffect(() => {
+    fetchInvoiceDetails();
+  }, [invoiceNumber]);
+
+  
+  if (!invoiceData) {
+    return <div>Loading...</div>;
+  }
+  
+  const invoiceInfo = [
+    { label: "Invoice Number", value: invoiceNumber },
+    { label: "Invoice Date", value: invoiceData.invoice_info.InvoiceDate },
+    { label: "Invoice Due Date", value: invoiceData.invoice_info.DueDate || "Null" },
+    { label: "Invoice Total Amount", value: invoiceData.invoice_info.InvoiceTotal },
+    { label: "Tax Amount", value: invoiceData.Tax || "N/A" },
+    { label: "Currency", value: invoiceData.Currency || "N/A" },
+  ];
+
+ 
+  const vendorInfo = [
+    { label: "Vendor Name", value: invoiceData.invoice_info.VendorName },
+    { label: "Vendor Address", value: invoiceData.invoice_info.VendorAddress?.city || "N/A" },
+    { label: "Vendor Contact Information", value: invoiceData.VendorContact || "N/A" },
+    { label: "Vendor Tax ID", value: invoiceData.VendorTaxId || "N/A" },
+  ];
+
+  const lineInfo = [
+    { label: "Description", value: invoiceData.invoice_info.VendorName },
+    { label: "Quantity", value: invoiceData.invoice_info.VendorAddress?.city || "N/A" },
+    { label: "Amount", value: invoiceData.VendorContact || "N/A" },
+    { label: "Discount", value: invoiceData.VendorTaxId || "N/A" },
+    { label: "ProductCode", value: invoiceData.VendorTaxId || "N/A" },
+  ];
+
+  
+
+  
  
   return (
     <div>
@@ -236,9 +322,9 @@ const AIDetailPage = () => {
             <BreadcrumbButton href={path}>Issue</BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
-          <BreadcrumbItem>
+          {/* <BreadcrumbItem>
             <BreadcrumbButton href={path}>{ poNumber }</BreadcrumbButton>
-          </BreadcrumbItem>
+          </BreadcrumbItem> */}
         </Breadcrumb>
       </div>
  
@@ -251,17 +337,33 @@ const AIDetailPage = () => {
               alignItems: "center",
               width: "100%",
               marginTop: "0px",
+              gap: "10px",
+              marginLeft: "auto", // Pushes the content to the right corner
+   
             }}
           >
             <div style={{ right: "5%", display: "flex", gap: "10px" ,flexDirection:"column"}}>
-             
-              <Input  addonAfter={selectAfter} defaultValue="Select or Enter PO" />
+           
+ 
+            <CreatableSelect
+      className="basic-single"
+      classNamePrefix="select"
+      value={selectedOption}
+      onChange={setSelectedOption}
+      name="color"
+      options={colourOptions}
+      styles={{ container: (provided) => ({ ...provided, width: 200 }) }}
+      onCreateOption={handleCreate}
+      placeholder="Select or Enter PO..."
+      isClearable
+    />
+ 
               <Button appearance="subtle" style={{
       color: "#0078d4",
-      backgroundColor: "#fff", 
-      alignSelf: "flex-end", 
-      width: "auto", 
-      
+      backgroundColor: "#fff",
+      alignSelf: "flex-end",
+      width: "auto",
+     
     }} className={styles.wrapper}>
        Submit
       </Button>
@@ -269,7 +371,7 @@ const AIDetailPage = () => {
           </div>
  
           <h2 style={{ margin: "20px 0 20px 0" }}>
-            PO:{poNumber}
+            Invoice:
           </h2>
  
           <div style={{ display: "flex", marginBottom: "20px" }}>
@@ -326,76 +428,62 @@ const AIDetailPage = () => {
             >
               PO
             </Tab>
+          <div style={{
+    display: "flex",
+    justifyContent: "flex-end",
+    gap: "10px",
+    fontSize: "17px",
+    marginLeft: "auto",
+    alignItems: "center",
+    cursor:"pointer"
+  }}>
+         
+          <ArrowDownload28Regular style={{ color: "#1281d7" }} onClick={handleViewInvoice} /> <span onClick={handleViewInvoice} > View Invoice</span>
+          </div>
           </TabList>
+         
         </div>
  
         {selectedtab === "tab3" && (
           <div className={styles.content1}>
            
-            <div>
-            <h2>Invoice Information</h2>
-            <ul>
-              <li>
-                <strong>Invoice Number:</strong> 
-              </li>
-              <li>
-                <strong>Invoice Date</strong> 
-              </li>
-              <li>
-                <strong>Invoice Due Date</strong> 
-                
-              </li>
-              <li>
-                <strong>Invoice Total Amount</strong> 
-              </li>
-              <li>
-                <strong>Tax Amount</strong>
-              </li>
-              <li>
-                <strong>Currency</strong> 
-              </li>
-             
-            </ul>
-            </div>
-            <div>
-            <h2>Vendor/Supplier information</h2>
-            <ul>
-              <li>
-                <strong>Vendor Name:</strong> 
-              </li>
-              <li>
-                <strong>Vendor Address:</strong> 
-              </li>
-              <li>
-                <strong>Vendor Contact Information:</strong> 
-              </li>
-              <li>
-                <strong>Vendor Tax ID</strong> 
-              </li>
-              <h2>Line Items</h2>
-              <li>
-                <strong>Item Service Description:</strong>
-              </li>
-              <li>
-                <strong>Quantity:</strong> 
-              </li>
-              <li>
-                <strong>Unit Price</strong> 
-              </li>
-              <li>
-                <strong>Line Item Total:</strong> 
-              </li>
-              <li>
-                <strong>Discounts</strong> 
-              </li>
-              <li>
-                <strong>Items/Service</strong> 
-              </li>
-              
-            </ul>
-            </div>
-          </div>
-        )}
+           <div>
+        <h2>Invoice Information</h2>
+        <ul>
+          {invoiceInfo.map((info, index) => (
+            <li key={index}>
+              <strong>{info.label}:</strong> {info.value}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2>Vendor/Supplier Information</h2>
+        <ul>
+          {vendorInfo.map((info, index) => (
+            <li key={index}>
+              <strong>{info.label}:</strong> {info.value}
+            </li>
+          ))}
+        </ul>
+
+        
+
+        {/* Line Items */}
+        <h2>Line Items</h2>
+        
+        <ul>
+          {lineInfo.map((info, index) => (
+            <li key={index}>
+              <strong>{info.label}:</strong> {info.value}
+            </li>
+          ))}
+        </ul>
+        
+      </div>
+        </div>
+          
+          )}
  
         {selectedtab === "tab4" && (
           <div className={styles.content1}>
@@ -432,9 +520,9 @@ const AIDetailPage = () => {
     <li>Location: Delivery location or site for the item.</li>
   </ul>
 </div>
-
+ 
               </div>
-            
+           
            
         )}
       </div>
@@ -443,5 +531,3 @@ const AIDetailPage = () => {
 };
  
 export default AIDetailPage;
- 
- 

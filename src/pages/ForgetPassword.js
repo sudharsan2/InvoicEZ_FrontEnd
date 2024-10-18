@@ -208,7 +208,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://invoicezapi.focusrtech.com:57/user/forgot-password', {
+      const response = await axios.post('http://10.10.15.15:5719/user/forgot-password', {
         email,
       });
 
