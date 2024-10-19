@@ -306,7 +306,7 @@ const AiNav = ({ onPoNumberClick }) => {
   return (
     <div className={styles.root}>
       <NavDrawer
-        defaultSelectedCategoryValue=""
+        defaultSelectedCategoryValue={1}
         open={isOpen}
         style={{ backgroundColor: "#fff" }}
       >
@@ -318,7 +318,11 @@ const AiNav = ({ onPoNumberClick }) => {
               <NavItem
                 key={index}
                 value={poNumber}
-                style={{ backgroundColor: "#fff", cursor: "pointer" }}
+                style={{
+                  backgroundColor: "#fff",
+                  cursor: "pointer",
+                  maxWidth: "200px",
+                }}
                 onClick={() => onPoNumberClick(poNumber)} // Call the prop function here
               >
                 PO-{poNumber}

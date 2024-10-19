@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   makeStyles,
   Button,
@@ -27,6 +28,8 @@ import axios from "axios";
 import { CgLayoutGrid } from "react-icons/cg";
 import { ArrowDownload28Regular } from "@fluentui/react-icons";
 /*eslint-disabled*/
+import CreatableSelect from "react-select/creatable";
+import { message } from "antd";
 
 const path = "/approve";
 const path1 = "http://localhost:3000/";
@@ -99,14 +102,31 @@ const useStyles = makeStyles({
 });
 
 const ApprovePage = () => {
+  const [selectedOption, setSelectedOption] = useState(null);
+  const navigate = useNavigate();
+
+  const [PONumberOPtions, setPONumberOPtions] = useState([]);
+
+  const handleCreate = (inputValue) => {
+    const newOption = { value: inputValue, label: inputValue };
+
+    setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
+    setSelectedOption(newOption); // Set the newly created option as the selected one
+  };
+
+  const handleChange = (option) => {
+    setSelectedOption(option);
+    // console.log("Selected PO Number:", option ? option.value : null);
+  };
+
   const styles = useStyles();
   const themestate = false;
   const [fetchedItems, setFetchedItems] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
-  const { poNumber } = location.state || {};
-  console.log("765", poNumber);
+  const { poNumber, Id } = location.state || {};
+  console.log("ID", Id);
   const [poDate, setPoDate] = useState();
   const [postatus, setPoStatus] = useState();
   const [buyer, setBuyer] = useState();
@@ -120,7 +140,47 @@ const ApprovePage = () => {
   const [invoicetot, setInvoicetot] = useState();
   const [closedcode, setClosedCode] = useState();
 
+  const [inv_id, setInv_id] = useState();
+
   // console.log("vendor", setVendor);
+
+  const handlePostApi = async () => {
+    console.log("Button clicked!");
+
+    // Check if PO number and invoice ID are provided
+    if (!selectedOption || !selectedOption.value) {
+      message.warning("PO number not selected or entered.");
+      return;
+    }
+
+    if (!inv_id) {
+      message.error("Invoice ID is required.");
+      return;
+    }
+
+    const payload = {
+      po_number: selectedOption.value,
+      invoice_id: inv_id,
+    };
+
+    console.log("payload", payload);
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/user/po-number",
+        payload,
+      );
+
+      if (response.status === 201) {
+        message.success("PO successfully Updated");
+        navigate(`/approve`);
+      } else {
+        message.error(`Operation Unsuccessfully Please try again`);
+      }
+    } catch (error) {
+      message.error(error);
+    }
+  };
 
   const [selectedtab, setSelectedTab] = React.useState("tab1");
   const purchaseOrder = {
@@ -228,9 +288,12 @@ const ApprovePage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/user/po-details/${poNumber}/`,
+          `http://127.0.0.1:8000/user/po-details/${Id}/`,
         );
         const fetchedItems = response.data;
+
+        setInv_id(fetchedItems.invoice_info.id);
+        console.log("InvoiceId", fetchedItems.invoice_info.id);
 
         const normalizedPoLineItems = fetchedItems.po_lineitems.map(
           (poItem) => {
@@ -381,6 +444,46 @@ const ApprovePage = () => {
                 Approve
               </Button>
             </div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              alignItems: "center",
+              width: "100%",
+              marginTop: "20px",
+            }}
+          >
+            <CreatableSelect
+              className="basic-single"
+              classNamePrefix="select"
+              value={selectedOption}
+              onChange={handleChange}
+              name="po_number"
+              options={PONumberOPtions}
+              styles={{
+                container: (provided) => ({ ...provided, width: 200 }),
+                marginTop: "20px",
+              }}
+              onCreateOption={handleCreate}
+              placeholder="Select or Enter PO..."
+              isClearable
+            />
+
+            <Button
+              appearance="subtle"
+              style={{
+                color: "#0078d4",
+                backgroundColor: "#fff",
+                alignSelf: "flex-end",
+                width: "auto",
+              }}
+              className={styles.wrapper}
+              onClick={handlePostApi}
+            >
+              Submit
+            </Button>
           </div>
 
           <h2 style={{ margin: "20px 0 20px 0" }}>

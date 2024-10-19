@@ -99,16 +99,17 @@ const ApproveTable = () => {
 
         // Map fetched data to the format expected by DataGrid
         const mappedItems = fetchedItems.map((item) => ({
-          po_number: item.po_number,
-          po_type: item.po_type,
-          po_status: item.po_status,
-          supplier_name: item.supplier_name,
-          location: item.location,
-          ship_to: item.ship_to,
-          bill_to: item.bill_to,
-          buyer_name: item.buyer_name,
-          total_amount: item.total_amount,
-          status: item.status,
+          Id: item.po_headers[0].id,
+          po_number: item.po_headers[0].po_number,
+          po_type: item.po_headers[0].po_type,
+          po_status: item.po_headers[0].po_status,
+          supplier_name: item.po_headers[0].supplier_name,
+          location: item.po_headers[0].location,
+          ship_to: item.po_headers[0].ship_to,
+          bill_to: item.po_headers[0].bill_to,
+          buyer_name: item.po_headers[0].buyer_name,
+          total_amount: item.po_headers[0].total_amount,
+          status: item.po_headers[0].status,
         }));
 
         setItems(mappedItems);
@@ -143,7 +144,10 @@ const ApproveTable = () => {
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/approvepage`, { state: { poNumber: item.po_number } });
+      navigate(`/approvepage`, {
+        state: { poNumber: item.po_number, Id: item.Id },
+      });
+      console.log("ItemId", item.Id);
     }
   };
 

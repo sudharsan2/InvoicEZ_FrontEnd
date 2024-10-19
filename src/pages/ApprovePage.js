@@ -1,8 +1,4 @@
-
-
-
-
-import React from "react";
+import React, { useState } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,7 +12,7 @@ import {
 } from "@fluentui/react-icons";
 import TagCounters from "../components/gridapprove";
 import ApproveTable from "../components/approvetable";
-import Search from "../components/Search"; 
+import Search from "../components/Search";
 
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/approve";
@@ -37,11 +33,12 @@ const UserApprove = () => {
           <BreadcrumbDivider />
         </Breadcrumb>
       </div>
-      <div style={{ display: "flex", justifyContent: "flexStart", padding: "1px" }}>
+      <div
+        style={{ display: "flex", justifyContent: "flexStart", padding: "1px" }}
+      >
         <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Approve</h3>
       </div>
 
-      
       <div>
         <TagCounters />
       </div>

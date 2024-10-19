@@ -1,5 +1,6 @@
 // import { useState } from "react";
 // import React from "react";
+import { message } from "antd";
 import {
   makeStyles,
   Button,
@@ -22,6 +23,7 @@ import {
   useTableSort,
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
+import { useNavigate } from "react-router-dom";
 
 import AiNav from "../components/ainavbar";
 import { SettingOutlined } from "@ant-design/icons";
@@ -122,6 +124,7 @@ const useStyles = makeStyles({
 });
 
 const AIDetailPage = () => {
+  const navigate = useNavigate();
   const [colourOptions, setColourOptions] = useState([
     { value: "1009", label: "1009" },
     { value: "1010", label: "1010" },
@@ -129,6 +132,15 @@ const AIDetailPage = () => {
     { value: "1012", label: "1012" },
     { value: "1013", label: "1013" },
   ]);
+
+  const [PONumberOPtions, setPONumberOPtions] = useState([
+    { value: "1009", label: "1009" },
+    { value: "1010", label: "1010" },
+    { value: "1011", label: "1011" },
+    { value: "1012", label: "1012" },
+    { value: "1013", label: "1013" },
+  ]);
+
   const [selectedOption, setSelectedOption] = useState(null);
   // const handleCreate = (inputValue) => {
   //   const newOption = { value: inputValue, label: inputValue };
@@ -252,7 +264,7 @@ const AIDetailPage = () => {
   const [poheader, setPoHeader] = useState();
   // const [selectedOption, setSelectedOption] = useState(null);
   const [invoiceId, setInvoiceId] = useState(null); // Placeholder for dynamically fetched invoice ID
-  // const colourOptions = [];
+
   const handlePoNumberClick = async (poNumber) => {
     console.log("test function called");
     setSelectedInvoiceNumber(poNumber);
@@ -288,7 +300,17 @@ const AIDetailPage = () => {
 
         setInvoiceData(fetchedItem);
         setPoHeader(fetchedItem.po_headers);
+
+        const poOptions = fetchedItem.po_headers.map((header) => ({
+          value: header.po_number,
+          label: header.po_number,
+        }));
+        // console.log("poHEADERS", poOptions);
+        setPONumberOPtions(poOptions);
+
         setDataItem(fetchedItem.po_headers[0]);
+
+        setColourOptions();
       } catch (error) {
         console.error("Error fetching invoice data", error);
       }
@@ -374,7 +396,7 @@ const AIDetailPage = () => {
     const newOption = { value: inputValue, label: inputValue };
 
     // Add the new option to the list of existing options
-    setColourOptions((prevOptions) => [...prevOptions, newOption]);
+    setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
     setSelectedOption(newOption); // Set the newly created option as the selected one
 
     // Optionally, you can call your API to save the new PO number here
@@ -406,12 +428,12 @@ const AIDetailPage = () => {
 
     // Check if PO number and invoice ID are provided
     if (!selectedOption || !selectedOption.value) {
-      console.error("PO number not selected or entered.");
+      message.warning("PO number not selected or entered.");
       return;
     }
 
     if (!inv_id) {
-      console.error("Invoice ID is required.");
+      message.error("Invoice ID is required.");
       return;
     }
 
@@ -420,22 +442,28 @@ const AIDetailPage = () => {
       invoice_id: inv_id,
     };
 
+    console.log("payload", payload);
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/user/po-number",
         payload,
       );
 
-      if (response.status === 200) {
-        console.log("POST request successful!", response.data);
+      if (response.status === 201) {
+        message.success("PO successfully Updated");
+        navigate(`/approve`);
       } else {
-        console.error(
-          `POST request failed with status code ${response.status}`,
-        );
+        message.error(`Operation Unsuccessfully Please try again`);
       }
     } catch (error) {
-      console.error("Error in POST request", error);
+      message.error("Unknown error Occured");
     }
+  };
+
+  const handleChange = (option) => {
+    setSelectedOption(option);
+    // console.log("Selected PO Number:", option ? option.value : null);
   };
 
   return (
@@ -481,9 +509,9 @@ const AIDetailPage = () => {
                 className="basic-single"
                 classNamePrefix="select"
                 value={selectedOption}
-                onChange={setSelectedOption}
+                onChange={handleChange}
                 name="po_number"
-                options={colourOptions}
+                options={PONumberOPtions}
                 styles={{
                   container: (provided) => ({ ...provided, width: 200 }),
                 }}
@@ -634,40 +662,70 @@ const AIDetailPage = () => {
         )}
 
         {selectedtab === "tab4" && (
-          <div className={styles.content1}>
-            <div>
+          <div style={{ width: "100%", display: "flex", overflowY: "auto" }}>
+            {/* Left Div (1/4 of the total width) */}
+            <div style={{ flex: 1, borderRight: "2px solid rgb(240,240,240)" }}>
               <AiNav onPoNumberClick={handlePoNumberClick} />
             </div>
 
-            <div className={styles.example}>
-              <Divider vertical style={{ height: "100%" }} />
-            </div>
-
+            {/* Right Div (3/4 of the total width) */}
             <div
               style={{
+                flex: 3, // Three times the width of the left div
                 display: "flex",
-                justifyContent: "flex-start",
-                marginLeft: "-10em",
+                justifyContent: "center", // Aligns content to the left
+                paddingLeft: "2em", // Padding for spacing
               }}
             >
-              <ul>
-                {invoiceData && (
-                  <>
-                    <li>PO Number: {selectedInvoiceNumber}</li>
-                    <li>PO Type: {dataitem.po_type}</li>
-                    <li>Supplier Name: {dataitem.supplier_name}</li>
-                    <li>Site: {dataitem.location}</li>
-                    <li>Status: {dataitem.po_status}</li>
-                    <li>Total Amount: {dataitem.total_amount}</li>
-                    <li>Buyer Name: {dataitem.buyer_name}</li>
-                    <li>Invoice Detail: {dataitem.invoice_detail}</li>
-                    {/* <li>InvoiceDate: {invoiceData.InvoiceDate}</li>
+              <div
+                style={{
+                  width: "90%",
+                  display: "flex",
+                  justifyContent: "space-between", // Aligns content to the left
+                  paddingLeft: "2em", // Padding for spacing
+                }}
+              >
+                <ul>
+                  {invoiceData && (
+                    <>
+                      <li>PO Number: {selectedInvoiceNumber}</li>
+                      <li>PO Type: {dataitem.po_type}</li>
+                      <li>Supplier Name: {dataitem.supplier_name}</li>
+                      <li>Site: {dataitem.location}</li>
+                      <li>Status: {dataitem.po_status}</li>
+                      <li>Total Amount: {dataitem.total_amount}</li>
+                      <li>Buyer Name: {dataitem.buyer_name}</li>
+                      <li>Invoice Detail: {dataitem.invoice_detail}</li>
+                      {/* <li>InvoiceDate: {invoiceData.InvoiceDate}</li>
                   <li>Invoice Date: {items.invoice_info.InvoiceDate }</li>  */}
-                    <li>Shipping Address: {dataitem.ship_to}</li>
-                    <li>Billing Address: {dataitem.ship_to}</li>
-                  </>
-                )}
-              </ul>
+                      <li>Shipping Address: {dataitem.ship_to}</li>
+                      <li>Billing Address: {dataitem.ship_to}</li>
+                    </>
+                  )}
+                </ul>
+
+                <div>
+                  {dataitem.po_items.map((item, index) => (
+                    <ul key={item.id}>
+                      <h3>Item {index + 1}</h3>
+                      <ul>
+                        <li>Item Name: {item.item_name}</li>
+                        <li>Line Number: {item.line_num}</li>
+                        <li>Quantity: {item.quantity}</li>
+                        <li>Unit Price: {item.unit_price}</li>
+                        <li>Amount Billed: {item.amount_billed || "N/A"}</li>
+                        <li>Order Type: {item.order_type_lookup_code}</li>
+                        <li>Purchase Basis: {item.purchase_basis}</li>
+                        <li>Category: {item.category_name}</li>
+                        <li>Status: {item.closed_code}</li>
+                        <li>Description: {item.item_description}</li>
+                        <li>Need By Date: {item.need_by_date || "N/A"}</li>
+                        <li>Promised Date: {item.promised_date}</li>
+                      </ul>
+                    </ul>
+                  ))}
+                </div>
+              </div>
 
               {/* Displaying items in a separate list */}
               {/* {items.length > 0 && (

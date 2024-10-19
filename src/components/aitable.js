@@ -75,6 +75,7 @@ const AITable = () => {
       const fetchedItems = response.data; // Assuming data is in response.data
       const inv = fetchedItems.InvoiceId;
       const mappedItems = fetchedItems.map((item) => ({
+        Id: item.id || "NULL",
         InvoiceId: item.InvoiceId || "NULL",
         supplier_name: item.po_headers?.[0]?.supplier_name || "NULL",
         city: item.po_headers?.[0]?.location || "NULL",
@@ -111,7 +112,7 @@ const AITable = () => {
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/aidetail`, { state: { invoiceNumber: item.InvoiceId } });
+      navigate(`/aidetail`, { state: { invoiceNumber: item.Id } });
     }
   };
 
