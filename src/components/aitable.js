@@ -17,9 +17,8 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import Search from "./Search"; 
-import { Button, notification } from "antd"; 
- 
+import Search from "./Search";
+import { Button, notification } from "antd";
 
 const columns = [
   createTableColumn({
@@ -30,7 +29,9 @@ const columns = [
   createTableColumn({
     columnId: "supplier_name",
     renderHeaderCell: () => "Supplier",
-    renderCell: (item) => <TableCellLayout>{item.supplier_name}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.supplier_name}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "city",
@@ -40,88 +41,85 @@ const columns = [
   createTableColumn({
     columnId: "InvoiceDate",
     renderHeaderCell: () => "Invoice Date",
-    renderCell: (item) => (
-      <TableCellLayout>{item.InvoiceDate}</TableCellLayout>
-    ),
+    renderCell: (item) => <TableCellLayout>{item.InvoiceDate}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "InvoiceTotal",
     renderHeaderCell: () => "Total Amount",
-    renderCell: (item) => <TableCellLayout>{item.InvoiceTotal}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.InvoiceTotal}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "ship_to",
     renderHeaderCell: () => "Number of Lines",
     renderCell: (item) => <TableCellLayout>{item.ship_to}</TableCellLayout>,
   }),
-
 ];
- 
+
 const AITable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]);
   const [selectedRows, setSelectedRows] = useState(new Set());
   const navigate = useNavigate();
- 
+
   const location2 = useLocation();
-  const { invoiceNumber }   =  location2.state || {}
-  console.log("inn2",invoiceNumber)
-  
+  const { invoiceNumber } = location2.state || {};
+  console.log("inn2", invoiceNumber);
+
   const fetchData = async () => {
     try {
-        const response = await axios.get(
-            "http://10.10.15.15:5719/user/morethanone-invoice-list"
-        );
-        const fetchedItems = response.data; // Assuming data is in response.data
-        const  inv = fetchedItems.InvoiceId;
-        const mappedItems = fetchedItems.map((item) => ({
-          InvoiceId: item.InvoiceId || "NULL",
-          supplier_name: item.po_headers?.[0]?.supplier_name || "NULL",  
-          city: item.po_headers?.[0]?.location || "NULL",  
-          InvoiceDate: item.InvoiceDate || "NULL",  
-          InvoiceTotal: item.InvoiceTotal || "NULL",  
-          ship_to: item.po_headers?.[0]?.ship_to || "NULL"  
+      const response = await axios.get(
+        "http://127.0.0.1:8000/user/morethanone-invoice-list",
+      );
+      const fetchedItems = response.data; // Assuming data is in response.data
+      const inv = fetchedItems.InvoiceId;
+      const mappedItems = fetchedItems.map((item) => ({
+        InvoiceId: item.InvoiceId || "NULL",
+        supplier_name: item.po_headers?.[0]?.supplier_name || "NULL",
+        city: item.po_headers?.[0]?.location || "NULL",
+        InvoiceDate: item.InvoiceDate || "NULL",
+        InvoiceTotal: item.InvoiceTotal || "NULL",
+        ship_to: item.po_headers?.[0]?.ship_to || "NULL",
       }));
-      
 
-        setItems(mappedItems);
+      setItems(mappedItems);
     } catch (error) {
-        console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error);
     }
-};
-useEffect(() => {
-  fetchData();
-}, []);
- 
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
- 
+
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
- 
+
     return (
       item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
       item.supplier_name?.toLowerCase().includes(searchLower) ||
       item.city?.toLowerCase().includes(searchLower) ||
       item.InvoiceDate?.toLowerCase().includes(searchLower) ||
-      item. InvoiceTotal?.toLowerCase().includes(searchLower) ||
-      item. ship_to?.toLowerCase().includes(searchLower) 
-      
+      item.InvoiceTotal?.toLowerCase().includes(searchLower) ||
+      item.ship_to?.toLowerCase().includes(searchLower)
     );
   });
- 
+
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
       navigate(`/aidetail`, { state: { invoiceNumber: item.InvoiceId } });
     }
   };
- 
+
   const handleSelectionChange = (event, data) => {
     console.log("handleSelectionChange", data.selectedItems);
     setSelectedRows(data.selectedItems);
   };
- 
+
   const handleDeleteSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
     if (selectedItemsArray.length === 0) {
@@ -131,30 +129,24 @@ useEffect(() => {
       });
       return;
     }
-  
- 
+
     try {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
         .join(", ");
- 
-      
+
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.delete(
-            `http://10.10.15.15:5719/user/delete-poheader/${filteredItems[item].po_number}`
-,
+            `http://127.0.0.1:8000/user/delete-poheader/${filteredItems[item].po_number}`,
           ),
         ),
       );
- 
-   
+
       setItems(items.filter((item) => !selectedItemsArray.includes(item)));
- 
-   
+
       notification.success({
         message: "Successfully deleted",
-       
       });
     } catch (error) {
       const supplierNames = selectedItemsArray
@@ -162,16 +154,12 @@ useEffect(() => {
         .join(", ");
       notification.error({
         message: "Deletion Failed",
-       
       });
     }
   };
- 
- 
- 
- 
+
   const handleApproveSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows); 
+    const selectedItemsArray = Array.from(selectedRows);
     if (selectedItemsArray.length === 0) {
       notification.warning({
         message: "No PO Selected",
@@ -179,25 +167,22 @@ useEffect(() => {
       });
       return;
     }
- 
+
     try {
       const poNumbers = selectedItemsArray
         .map((item) => item.po_number)
         .join(", ");
- 
-      
+
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `http://10.10.15.15:5719/user/approve-status/${filteredItems[item].po_number}`
+            `http://127.0.0.1:8000/user/approve-status/${filteredItems[item].po_number}`,
           ),
         ),
       );
- 
-     
+
       notification.success({
         message: "Successfully approved",
-       
       });
     } catch (error) {
       const poNumbers = selectedItemsArray
@@ -205,13 +190,10 @@ useEffect(() => {
         .join(", ");
       notification.error({
         message: "Approval Failed",
-       
       });
     }
   };
- 
- 
- 
+
   return (
     <>
       <div
@@ -239,8 +221,7 @@ useEffect(() => {
           <Delete28Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
         </button>
- 
-        
+
         <button
           style={{
             display: "flex",
@@ -257,13 +238,13 @@ useEffect(() => {
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
- 
+
         <Search
           placeholder="Search Invoice"
           onSearchChange={handleSearchChange}
         />
       </div>
- 
+
       <DataGrid
         items={filteredItems}
         columns={columns}
@@ -298,5 +279,5 @@ useEffect(() => {
     </>
   );
 };
- 
+
 export default AITable;

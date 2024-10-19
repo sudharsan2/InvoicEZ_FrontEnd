@@ -113,8 +113,6 @@
 //   const [type, setType] = React.useState("inline");
 //   const [isMultiple, setIsMultiple] = React.useState(true);
 
-  
-
 //   const renderHamburgerWithToolTip = () => {
 //     return (
 //       <Tooltip content="Navigation" relationship="label">
@@ -166,7 +164,7 @@
 //           >
 //             PO-81234
 //           </NavItem>
-         
+
 //         </NavDrawerBody>
 //       </NavDrawer>
 //     </div>
@@ -174,7 +172,6 @@
 // };
 
 // export default AiNav;
-
 
 import React from "react";
 import { DrawerProps } from "@fluentui/react-components";
@@ -232,7 +229,7 @@ import {
   bundleIcon,
   PersonCircle32Regular,
 } from "@fluentui/react-icons";
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 const useStyles = makeStyles({
@@ -270,19 +267,23 @@ const AiNav = ({ onPoNumberClick }) => {
   const location2 = useLocation();
   const [items, setItems] = useState([]);
   // Extract the invoiceId from the URL
-  const { invoiceNumber }   =  location2.state || {}
-  console.log("AI",invoiceNumber)
+  const { invoiceNumber } = location2.state || {};
+  console.log("AI", invoiceNumber);
   const fetchInvoiceDetails = async () => {
     // const invoiceNumber = "110"; // Replace with dynamic invoice number if available
     try {
-      const response = await axios.get(`http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`);
+      const response = await axios.get(
+        `http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`,
+      );
       const fetchedItem = response.data;
       console.log("Fetched Invoice Details:", fetchedItem);
 
       if (fetchedItem && fetchedItem.po_headers) {
-        const poNumbers = fetchedItem.po_headers.map(header => header.po_number);
-        console.log("poNumbers",poNumbers)
-        setPoNumbers(poNumbers); 
+        const poNumbers = fetchedItem.po_headers.map(
+          (header) => header.po_number,
+        );
+        console.log("poNumbers", poNumbers);
+        setPoNumbers(poNumbers);
         onPoNumberClick(poNumbers[0]);
       }
     } catch (error) {
@@ -305,7 +306,6 @@ const AiNav = ({ onPoNumberClick }) => {
   return (
     <div className={styles.root}>
       <NavDrawer
-        
         defaultSelectedCategoryValue=""
         open={isOpen}
         style={{ backgroundColor: "#fff" }}
@@ -325,7 +325,10 @@ const AiNav = ({ onPoNumberClick }) => {
               </NavItem>
             ))
           ) : (
-            <NavItem value="no-data" style={{ backgroundColor: "#fff", cursor: "pointer" }}>
+            <NavItem
+              value="no-data"
+              style={{ backgroundColor: "#fff", cursor: "pointer" }}
+            >
               No PO Numbers Available
             </NavItem>
           )}
@@ -336,4 +339,3 @@ const AiNav = ({ onPoNumberClick }) => {
 };
 
 export default AiNav;
-

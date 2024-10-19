@@ -3,12 +3,17 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, notification } from "antd";
-import { EyeOutlined } from '@ant-design/icons';
-import axios from 'axios';  
+import { EyeOutlined } from "@ant-design/icons";
+import axios from "axios";
 import useIsMountedRef from "../hooks/useIsMountedRef";
 import "./login.css";
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchLoginDetailsAsync, getIsAuthenticatedFromAuth, getIsLoadingFromAuth, getErrorFromAuth } from '../Store/authSlice';
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchLoginDetailsAsync,
+  getIsAuthenticatedFromAuth,
+  getIsLoadingFromAuth,
+  getErrorFromAuth,
+} from "../Store/authSlice";
 // import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
@@ -30,22 +35,19 @@ const Login = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
-      setIsLoading(true); 
+      setIsLoading(true);
       try {
-        const response = await axios.post("http://10.10.15.15:5719/user/signin", {
-          username: values.username, 
+        const response = await axios.post("http://127.0.0.1:8000/user/signin", {
+          username: values.username,
           password: values.password,
         });
 
-        const { role,username,useremail,empcode } = response.data; 
-        localStorage.setItem("username",username)
+        const { role, username, useremail, empcode } = response.data;
+        localStorage.setItem("username", username);
         localStorage.setItem("role", role);
 
         const tokens = response.data.tokens;
         localStorage.setItem("access_token", tokens.access_token);
-
-       
-        
 
         switch (role) {
           case "ROLE_ADMIN":
@@ -78,13 +80,17 @@ const Login = () => {
 
         notification.error({
           message: "Login Failed",
-          description: error.response?.data?.message || "An error occurred during login.",
+          description:
+            error.response?.data?.message || "An error occurred during login.",
         });
 
-        setErrors({ auth: error.response?.data?.message || "An error occurred during login." });
+        setErrors({
+          auth:
+            error.response?.data?.message || "An error occurred during login.",
+        });
       } finally {
-        setIsLoading(false); 
-        setSubmitting(false); 
+        setIsLoading(false);
+        setSubmitting(false);
       }
     },
   });
@@ -115,7 +121,7 @@ const Login = () => {
             <div className="form-group">
               <div className="password-input">
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
                   placeholder="Enter your password"
@@ -144,7 +150,7 @@ const Login = () => {
               className="log-button"
               type="primary"
               htmlType="submit"
-              loading={isLoading || formik.isSubmitting}  
+              loading={isLoading || formik.isSubmitting}
               disabled={formik.isSubmitting}
             >
               Login
@@ -157,5 +163,3 @@ const Login = () => {
 };
 
 export default Login;
-
-

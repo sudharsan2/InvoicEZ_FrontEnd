@@ -1,5 +1,8 @@
 import * as React from "react";
-import { ArrowClockwise28Regular, Delete28Regular } from "@fluentui/react-icons";
+import {
+  ArrowClockwise28Regular,
+  Delete28Regular,
+} from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -28,7 +31,9 @@ const columns = [
   createTableColumn({
     columnId: "numberOfLines",
     renderHeaderCell: () => "Number of Lines",
-    renderCell: (item) => <TableCellLayout>{item.numberOfLines}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.numberOfLines}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "invoiceDate",
@@ -43,7 +48,9 @@ const columns = [
   createTableColumn({
     columnId: "statusVerified",
     renderHeaderCell: () => "Status Verified",
-    renderCell: (item) => <TableCellLayout>{item.statusVerified}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.statusVerified}</TableCellLayout>
+    ),
   }),
 ];
 
@@ -53,65 +60,63 @@ const IssuefixTable = () => {
   const [selectedRows, setSelectedRows] = useState(new Set());
   const navigate = useNavigate();
 
-
   const getNumberOfLines = (invoice) => {
     return invoice.items ? invoice.items.length : 0;
   };
 
-  
   // Fetch data from the API
   // Fetch data from the API
-useEffect(() => {
-  fetch("http://10.10.15.15:5719/user/no-invoice-list")
-    .then((response) => response.json())
-    .then((data) => {
-      // Format data to match the table columns
-      const formattedItems = data.map((invoice) => ({
-        invid: invoice.id,  // Use the "id" field from the response
-        invoiceNo: invoice.InvoiceId, // Use "InvoiceId" for invoice number
-        supplier: invoice.VendorName,
-        numberOfLines: getNumberOfLines(invoice),
-        invoiceDate: invoice.InvoiceDate,
-        totalAmount: invoice.InvoiceTotal,
-        statusVerified: invoice.statusVerified,
-      }));
-      console.log("Formatted Items:", formattedItems); // Debugging log
-      setItems(formattedItems);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-}, []);
-
-  
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/user/no-invoice-list")
+      .then((response) => response.json())
+      .then((data) => {
+        // Format data to match the table columns
+        const formattedItems = data.map((invoice) => ({
+          invid: invoice.id, // Use the "id" field from the response
+          invoiceNo: invoice.InvoiceId, // Use "InvoiceId" for invoice number
+          supplier: invoice.VendorName,
+          numberOfLines: getNumberOfLines(invoice),
+          invoiceDate: invoice.InvoiceDate,
+          totalAmount: invoice.InvoiceTotal,
+          statusVerified: invoice.statusVerified,
+        }));
+        console.log("Formatted Items:", formattedItems); // Debugging log
+        setItems(formattedItems);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
 
-
   const handleDelete = () => {
     const idsToDelete = [...selectedRows]; // Convert Set to array
     console.log("IDs to delete:", idsToDelete);
-  
+
     if (idsToDelete.length > 0) {
       const deletePromises = idsToDelete.map((id) => {
-        if (id) { // Check if id is defined
+        if (id) {
+          // Check if id is defined
           console.log(`Deleting item with ID: ${id}`);
-          return fetch(`http://10.10.15.15:5719/user/delete-poheader/${id}`, {
-            method: 'DELETE',
+          return fetch(`http://127.0.0.1:8000/user/delete-poheader/${id}`, {
+            method: "DELETE",
           });
         } else {
           console.warn("Attempting to delete an undefined ID");
           return Promise.resolve(); // Skip undefined IDs
         }
       });
-  
+
       Promise.all(deletePromises)
         .then((responses) => {
-          const allDeleted = responses.every(response => response.ok);
+          const allDeleted = responses.every((response) => response.ok);
           if (allDeleted) {
-            const updatedItems = items.filter(item => !idsToDelete.includes(item.id)); // Use item.id here
+            const updatedItems = items.filter(
+              (item) => !idsToDelete.includes(item.id),
+            ); // Use item.id here
             setItems(updatedItems);
             setSelectedRows(new Set());
           } else {
@@ -125,23 +130,23 @@ useEffect(() => {
       console.warn("No rows selected for deletion");
     }
   };
-  
-  
-
 
   const filteredItems = items.filter((item) => {
     return (
-      item.invoiceNo?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.invoiceNo
+        ?.toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
       item.supplier?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.numberOfLines?.toString().toLowerCase().includes(searchQuery.toLowerCase()) || // Convert numberOfLines to string
+      item.numberOfLines
+        ?.toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) || // Convert numberOfLines to string
       item.invoiceDate?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.totalAmount?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.statusVerified?.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
-
-  
-  
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
@@ -152,17 +157,16 @@ useEffect(() => {
   const handleSelectionChange = (event, data) => {
     const newSelectedRows = new Set(selectedRows); // Create a copy of the selected rows
     data.selectedItems.forEach((item) => {
-        if (item.invid) { // Ensure invid is defined
-            newSelectedRows.add(item.invid); // Store item.invid instead of item.invoiceNo
-        } else {
-            console.warn("Selected item does not have an invid:", item);
-        }
+      if (item.invid) {
+        // Ensure invid is defined
+        newSelectedRows.add(item.invid); // Store item.invid instead of item.invoiceNo
+      } else {
+        console.warn("Selected item does not have an invid:", item);
+      }
     });
     setSelectedRows(newSelectedRows); // Update state
     console.log("Selected IDs:", Array.from(newSelectedRows)); // Log selected IDs for debugging
-};
-
-  
+  };
 
   return (
     <>
@@ -217,37 +221,36 @@ useEffect(() => {
       </div>
 
       <DataGrid
-  items={filteredItems}
-  columns={columns}
-  sortable
-  selectionMode="multiselect"
-  onSelectionChange={handleSelectionChange}
-  getRowId={(item) => item.id} // Use item.id for unique identification
-  focusMode="composite"
-  style={{ minWidth: "550px" }}
->
-  <DataGridHeader>
-    <DataGridRow>
-      {({ renderHeaderCell }) => (
-        <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-      )}
-    </DataGridRow>
-  </DataGridHeader>
-  <DataGridBody>
-    {({ item, rowId }) => (
-      <DataGridRow
-        key={rowId}
-        onClick={(e) => handleRowClick(e, item)}
-        selected={selectedRows.has(item.invid)} // Check selectedRows based on item.id
+        items={filteredItems}
+        columns={columns}
+        sortable
+        selectionMode="multiselect"
+        onSelectionChange={handleSelectionChange}
+        getRowId={(item) => item.id} // Use item.id for unique identification
+        focusMode="composite"
+        style={{ minWidth: "550px" }}
       >
-        {({ renderCell }) => (
-          <DataGridCell>{renderCell(item)}</DataGridCell>
-        )}
-      </DataGridRow>
-    )}
-  </DataGridBody>
-</DataGrid>
-
+        <DataGridHeader>
+          <DataGridRow>
+            {({ renderHeaderCell }) => (
+              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+            )}
+          </DataGridRow>
+        </DataGridHeader>
+        <DataGridBody>
+          {({ item, rowId }) => (
+            <DataGridRow
+              key={rowId}
+              onClick={(e) => handleRowClick(e, item)}
+              selected={selectedRows.has(item.invid)} // Check selectedRows based on item.id
+            >
+              {({ renderCell }) => (
+                <DataGridCell>{renderCell(item)}</DataGridCell>
+              )}
+            </DataGridRow>
+          )}
+        </DataGridBody>
+      </DataGrid>
     </>
   );
 };

@@ -25,7 +25,7 @@ import line_data from "./data_approve";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { CgLayoutGrid } from "react-icons/cg";
-import { ArrowDownload28Regular } from '@fluentui/react-icons';
+import { ArrowDownload28Regular } from "@fluentui/react-icons";
 /*eslint-disabled*/
 
 const path = "/approve";
@@ -101,27 +101,26 @@ const useStyles = makeStyles({
 const ApprovePage = () => {
   const styles = useStyles();
   const themestate = false;
-  const [fetchedItems, setFetchedItems] = useState('');
+  const [fetchedItems, setFetchedItems] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
-  const { poNumber } = location.state || {}
-  console.log("765", poNumber)
+  const { poNumber } = location.state || {};
+  console.log("765", poNumber);
   const [poDate, setPoDate] = useState();
   const [postatus, setPoStatus] = useState();
   const [buyer, setBuyer] = useState();
   const [total, setTotal] = useState();
   const [status, setStatus] = useState();
-  const[supplier,setSupplier]=useState();
+  const [supplier, setSupplier] = useState();
   const [vendor, setVendor] = useState();
   const [customer, setCustomer] = useState();
   const [invoiceid, setInvoiceId] = useState();
   const [invoicedate, setInvoiceDate] = useState();
   const [invoicetot, setInvoicetot] = useState();
-  const [closedcode,setClosedCode] = useState();
+  const [closedcode, setClosedCode] = useState();
 
   // console.log("vendor", setVendor);
-
 
   const [selectedtab, setSelectedTab] = React.useState("tab1");
   const purchaseOrder = {
@@ -143,18 +142,14 @@ const ApprovePage = () => {
     sortDirection: "ascending",
     sortColumn: "empid",
   });
- 
+
   const [data, setData] = useState("");
   // console.log("data", data);
-
-  
-
 
   const handleTabSelect2 = (event, data) => {
     // console.log({"currentmonth":currentMonthEmployees})
     setSelectedTab(data.value);
   };
-
 
   const columns = [
     createTableColumn({
@@ -211,53 +206,53 @@ const ApprovePage = () => {
     sortDirection: getSortDirection(columnId),
   });
 
-
-
   const handleViewInvoice = async () => {
     try {
-      const response = await fetch(`http://10.10.15.15:5719/user/invoices-file/${invoiceid}`);
+      const response = await fetch(
+        `http://127.0.0.1:8000/user/invoices-file/${invoiceid}`,
+      );
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
- 
+
       const blob = await response.blob();
       const fileURL = URL.createObjectURL(blob);
-     
-     
-      window.open(fileURL, '_blank');
+
+      window.open(fileURL, "_blank");
     } catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
+      console.error("There was a problem with the fetch operation:", error);
     }
   };
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://10.10.15.15:5719/user/po-details/${poNumber}/`
+          `http://127.0.0.1:8000/user/po-details/${poNumber}/`,
         );
         const fetchedItems = response.data;
 
-       
+        const normalizedPoLineItems = fetchedItems.po_lineitems.map(
+          (poItem) => {
+            const matchingInvoiceItem = fetchedItems.invoice_info.items.find(
+              (invoiceItem) => invoiceItem.Quantity,
+            );
 
-        
-        const normalizedPoLineItems = fetchedItems.po_lineitems.map(poItem => {
-          const matchingInvoiceItem = fetchedItems.invoice_info.items.find(
-            invoiceItem => invoiceItem.Quantity
-          );
+            // console.log("cc", matchingInvoiceItem)
 
-          // console.log("cc", matchingInvoiceItem)
-
-          return {
-            id: poItem.id,
-            item_name: poItem.item_name,
-            item_description: poItem.item_description,
-            quantity: poItem.quantity,
-            // Quantity: poItem.Quantity,
-            unit_price: poItem.unit_price,
-            Quantity: matchingInvoiceItem ? matchingInvoiceItem.Quantity : null, // Set final_po_quantity if match found
-          };
-        });
+            return {
+              id: poItem.id,
+              item_name: poItem.item_name,
+              item_description: poItem.item_description,
+              quantity: poItem.quantity,
+              // Quantity: poItem.Quantity,
+              unit_price: poItem.unit_price,
+              Quantity: matchingInvoiceItem
+                ? matchingInvoiceItem.Quantity
+                : null, // Set final_po_quantity if match found
+            };
+          },
+        );
 
         // Log or process the combined data as needed
         console.log(normalizedPoLineItems);
@@ -273,63 +268,55 @@ const ApprovePage = () => {
         setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
         setSupplier(fetchedItems.po_header.supplier_name);
         fetchedItems.po_lineitems.forEach((item) => {
-          
           setClosedCode(item.closed_code);
-          
         });
         // vendor address
         const vendorAddressObj = fetchedItems.invoice_info.VendorAddress;
-        console.log("obj1",vendorAddressObj)
+        console.log("obj1", vendorAddressObj);
 
-if (vendorAddressObj) {
-   
-    const formattedVendorAddress = `
-        ${vendorAddressObj.street_address || ''} 
-        ${vendorAddressObj.city || ''}, 
-        ${vendorAddressObj.postal_code || ''}, 
-        ${vendorAddressObj.country_region || ''}
+        if (vendorAddressObj) {
+          const formattedVendorAddress = `
+        ${vendorAddressObj.street_address || ""}
+        ${vendorAddressObj.city || ""},
+        ${vendorAddressObj.postal_code || ""},
+        ${vendorAddressObj.country_region || ""}
     `
-    .trim() 
-    .replace(/\s+/g, ' ') 
-    .replace(/,$/, ''); 
+            .trim()
+            .replace(/\s+/g, " ")
+            .replace(/,$/, "");
 
-   
-    setVendor(formattedVendorAddress);
-   
-} else {
-  setVendor();
-    console.error('VendorAddress is missing');
-}
-     
-const vendorCustomerObj = fetchedItems.invoice_info.CustomerAddress;
-        console.log("obj",vendorAddressObj)
+          setVendor(formattedVendorAddress);
+        } else {
+          setVendor();
+          console.error("VendorAddress is missing");
+        }
 
-if (vendorCustomerObj) {
-   
-    const formattedCustomerAddress = `
-        ${vendorAddressObj.street_address || ''} 
-        ${vendorAddressObj.city || ''}, 
-        ${vendorAddressObj.postal_code || ''}, 
-        ${vendorAddressObj.country_region || ''}
+        const vendorCustomerObj = fetchedItems.invoice_info.CustomerAddress;
+        console.log("obj", vendorAddressObj);
+
+        if (vendorCustomerObj) {
+          const formattedCustomerAddress = `
+        ${vendorAddressObj.street_address || ""}
+        ${vendorAddressObj.city || ""},
+        ${vendorAddressObj.postal_code || ""},
+        ${vendorAddressObj.country_region || ""}
     `
-    .trim()
-    .replace(/\s+/g, ' ') 
-    .replace(/,$/, ''); 
+            .trim()
+            .replace(/\s+/g, " ")
+            .replace(/,$/, "");
 
-   
-    setVendor(formattedCustomerAddress);
-    console.log(formattedCustomerAddress); 
-} else {
-  setVendor();
-    console.error('CustomerAddress is missing');
-}
-     
-
-
-
+          setVendor(formattedCustomerAddress);
+          console.log(formattedCustomerAddress);
+        } else {
+          setVendor();
+          console.error("CustomerAddress is missing");
+        }
       } catch (error) {
         setError("Error fetching data. Please try again.");
-        console.error("Error fetching data:", error.response ? error.response.data : error.message);
+        console.error(
+          "Error fetching data:",
+          error.response ? error.response.data : error.message,
+        );
       } finally {
         setLoading(false);
       }
@@ -351,7 +338,9 @@ if (vendorCustomerObj) {
         : bValue.localeCompare(aValue);
     }
 
-    return sortState.sortDirection === "ascending" ? aValue - bValue : bValue - aValue;
+    return sortState.sortDirection === "ascending"
+      ? aValue - bValue
+      : bValue - aValue;
   });
 
   return (
@@ -403,9 +392,8 @@ if (vendorCustomerObj) {
               style={{ borderLeft: "5px solid #342d7c", paddingLeft: "10px" }}
             >
               <p>Supplier</p>
-              <h2>{supplier}</h2>  
+              <h2>{supplier}</h2>
               {/* <h2>Levin</h2> */}
-
             </div>
             <div
               style={{
@@ -468,18 +456,23 @@ if (vendorCustomerObj) {
             >
               Supplier
             </Tab> */}
-            <div style={{
-    display: "flex",
-    justifyContent: "flex-end",
-    gap: "10px",
-    fontSize: "17px",
-    marginLeft: "auto", 
-    alignItems: "center",
-    cursor:"pointer" 
-  }}>
-          
-          <ArrowDownload28Regular style={{ color: "#1281d7" }} onClick={handleViewInvoice}/> <span onClick={handleViewInvoice} > View Invoice</span>
-          </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "10px",
+                fontSize: "17px",
+                marginLeft: "auto",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              <ArrowDownload28Regular
+                style={{ color: "#1281d7" }}
+                onClick={handleViewInvoice}
+              />{" "}
+              <span onClick={handleViewInvoice}> View Invoice</span>
+            </div>
           </TabList>
         </div>
         {selectedtab === "tab1" && (
@@ -520,9 +513,8 @@ if (vendorCustomerObj) {
                 >
                   {/* {purchaseOrder.vendorAddress} */}
                   {vendor}
-                  
-                  {/* {formattedVendorAddress} */}
 
+                  {/* {formattedVendorAddress} */}
                 </div>
               </div>
 
@@ -806,13 +798,10 @@ if (vendorCustomerObj) {
 
               <TableBody style={themestate ? { color: "white" } : {}}>
                 {sortedData.map((item) => (
-
                   <TableRow
                     key={item.id}
                     style={themestate ? { color: "white" } : {}}
                     className={themestate ? "hovereffect dark" : "hovereffect"}
-
-
                   >
                     <TableCell>{item.id}</TableCell>
                     <TableCell>{item.item_name}</TableCell>
@@ -824,17 +813,13 @@ if (vendorCustomerObj) {
                     <TableCell>{item.final_po_quantity}</TableCell>
                   </TableRow>
                 ))}
-
               </TableBody>
             </Table>
           </div>
         )}
-
-
       </div>
     </div>
   );
 };
 
 export default ApprovePage;
-

@@ -22,27 +22,26 @@ import {
   useTableSort,
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
- 
-import AiNav from "../components/ainavbar";
-import { SettingOutlined } from '@ant-design/icons';
-import { ArrowDownload28Regular } from '@fluentui/react-icons';
-import { useLocation } from "react-router-dom";
-import {tokens, Divider } from "@fluentui/react-components";
-import CreatableSelect from 'react-select/creatable';
-import React, { useState } from 'react';
-import  { useEffect} from 'react';
 
-import axios from 'axios';
+import AiNav from "../components/ainavbar";
+import { SettingOutlined } from "@ant-design/icons";
+import { ArrowDownload28Regular } from "@fluentui/react-icons";
+import { useLocation } from "react-router-dom";
+import { tokens, Divider } from "@fluentui/react-components";
+import CreatableSelect from "react-select/creatable";
+import React, { useState } from "react";
+import { useEffect } from "react";
+
+import axios from "axios";
 const path = "/aidetail";
 const path1 = "http://localhost:3000/";
 const Checkbox = ({ children, ...props }) => (
-  <label style={{ marginRight: '1em' }}>
+  <label style={{ marginRight: "1em" }}>
     <input type="checkbox" {...props} />
     {children}
   </label>
 );
- 
- 
+
 const useStyles = makeStyles({
   root: {
     width: "77vw",
@@ -57,21 +56,20 @@ const useStyles = makeStyles({
     justifyItems: "flex-start",
     minHeight: "96px",
     backgroundColor: tokens.colorNeutralBackground1,
-    marginLeft: "-26em"
-   
+    marginLeft: "-26em",
   },
   header: {
     padding: "20px",
   },
   content1: {
-    display: 'flex', // Arrange items in a row
-    flexWrap: 'wrap', // Allow items to wrap to the next line if necessary
-    overflowY: 'auto',
-    paddingTop: '3vh',
-    padding: '0 20px',
-    maxHeight: '48vh',
-    columnGap:'30%',
-    rowGap:'30%'
+    display: "flex", // Arrange items in a row
+    flexWrap: "wrap", // Allow items to wrap to the next line if necessary
+    overflowY: "auto",
+    paddingTop: "3vh",
+    padding: "0 20px",
+    maxHeight: "48vh",
+    columnGap: "30%",
+    rowGap: "30%",
   },
   content2: {
     width: "77vw",
@@ -122,18 +120,14 @@ const useStyles = makeStyles({
     marginLeft: "10px",
   },
 });
- 
- 
- 
- 
+
 const AIDetailPage = () => {
- 
   const [colourOptions, setColourOptions] = useState([
-    { value: '1009', label: '1009' },
-    { value: '1010', label: '1010' },
-    { value: '1011', label: '1011' },
-    { value: '1012', label: '1012' },
-    { value: '1013', label: '1013' },
+    { value: "1009", label: "1009" },
+    { value: "1010", label: "1010" },
+    { value: "1011", label: "1011" },
+    { value: "1012", label: "1012" },
+    { value: "1013", label: "1013" },
   ]);
   const [selectedOption, setSelectedOption] = useState(null);
   // const handleCreate = (inputValue) => {
@@ -141,27 +135,24 @@ const AIDetailPage = () => {
   //   setColourOptions((prevOptions) => [...prevOptions, newOption]);
   //   setSelectedOption(newOption);
   // };
- 
+
   const styles = useStyles();
   const themestate = false;
   const [selectedtab, setSelectedTab] = React.useState("tab3");
- 
-  
- 
 
   const [sortState, setSortState] = useState({
     sortDirection: "ascending",
     sortColumn: "empid",
   });
   //  const [data, setData] = useState([])
- 
+
   const handleTabSelect2 = (event, data) => {
     // console.log({"currentmonth":currentMonthEmployees})
     setSelectedTab(data.value);
   };
- 
+
   const [data, setData] = useState(line_data);
- 
+
   const columns = [
     createTableColumn({
       columnId: "PO_line_id",
@@ -196,7 +187,7 @@ const AIDetailPage = () => {
       compare: (a, b) => a.final_po_quantity - b.final_po_quantity,
     }),
   ];
- 
+
   const {
     sort: { getSortDirection, toggleColumnSort },
   } = useTableFeatures(
@@ -211,22 +202,22 @@ const AIDetailPage = () => {
       }),
     ],
   );
- 
+
   const headerSortProps = (columnId) => ({
     onClick: (e) => toggleColumnSort(e, columnId),
     sortDirection: getSortDirection(columnId),
   });
- 
+
   const sortedData = [...data].sort((a, b) => {
     const aValue = a[sortState.sortColumn];
     const bValue = b[sortState.sortColumn];
- 
+
     if (typeof aValue === "string" && typeof bValue === "string") {
       return sortState.sortDirection === "ascending"
         ? aValue.localeCompare(bValue)
         : bValue.localeCompare(aValue);
     }
- 
+
     return sortState.sortDirection === "ascending"
       ? aValue - bValue
       : bValue - aValue;
@@ -234,102 +225,115 @@ const AIDetailPage = () => {
 
   const handleViewInvoice = async () => {
     try {
-      const response = await fetch(`http://10.10.15.15:5719/user/invoices-file/${invoiceNumber}`);
+      const response = await fetch(
+        `http://127.0.0.1:8000/user/invoices-file/${invoiceNumber}`,
+      );
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
- 
+
       const blob = await response.blob();
       const fileURL = URL.createObjectURL(blob);
-     
-     
-      window.open(fileURL, '_blank');
+
+      window.open(fileURL, "_blank");
     } catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
+      console.error("There was a problem with the fetch operation:", error);
     }
   };
- 
 
   // Invoice Details
   const [invoiceData, setInvoiceData] = useState(null);
-  
+
   // const [items, setItems] = useState([]);
   const location2 = useLocation();
   const [items, setItems] = useState([]);
-  const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState(null); 
-  const[dataitem,setDataItem]=useState();
-  const[poheader,setPoHeader]=useState();
+  const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState(null);
+  const [dataitem, setDataItem] = useState();
+  const [poheader, setPoHeader] = useState();
   // const [selectedOption, setSelectedOption] = useState(null);
   const [invoiceId, setInvoiceId] = useState(null); // Placeholder for dynamically fetched invoice ID
   // const colourOptions = [];
   const handlePoNumberClick = async (poNumber) => {
-    console.log("test function called")
-    setSelectedInvoiceNumber(poNumber); 
+    console.log("test function called");
+    setSelectedInvoiceNumber(poNumber);
     try {
-      // const response = await axios.get(`http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`);
+      // const response = await axios.get(`http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`);
       // const fetchedData = response.data;
 
-      
-      const selectedPoDetails = poheader.find(po => po.po_number === poNumber);
-      console.log("SELECTED PO",selectedPoDetails)
+      const selectedPoDetails = poheader.find(
+        (po) => po.po_number === poNumber,
+      );
+      console.log("SELECTED PO", selectedPoDetails);
       // console.log("selectedPO",selectedPoDetails);
       setDataItem(selectedPoDetails || {});
       setItems(selectedPoDetails?.po_items || []);
       // console.log("Fetched Invoice Details:", fetchedData);
-console.log("Selected PO Details:", selectedPoDetails); 
-console.log("Po",items);
-
+      console.log("Selected PO Details:", selectedPoDetails);
+      console.log("Po", items);
     } catch (error) {
       console.error("Error fetching invoice details:", error);
     }
   };
-  const { invoiceNumber }   =  location2.state || {}
-  console.log("inn",invoiceNumber)
-  
+  const { invoiceNumber } = location2.state || {};
+  console.log("inn", invoiceNumber);
 
   const fetchInvoiceDetails = async () => {
     if (invoiceNumber) {
       try {
-        const response = await axios.get(`http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`);
+        const response = await axios.get(
+          `http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`,
+        );
         const fetchedItem = response.data;
         console.log("R", fetchedItem);
 
-        setInvoiceData(fetchedItem); 
-        setPoHeader(fetchedItem.po_headers)
-        setDataItem(fetchedItem.po_headers[0])
+        setInvoiceData(fetchedItem);
+        setPoHeader(fetchedItem.po_headers);
+        setDataItem(fetchedItem.po_headers[0]);
       } catch (error) {
         console.error("Error fetching invoice data", error);
       }
     }
   };
-  console.log("Data",invoiceData);
+  console.log("Data", invoiceData);
   useEffect(() => {
     fetchInvoiceDetails();
   }, [invoiceNumber]);
 
-  
   if (!invoiceData) {
     return <div>Loading...</div>;
   }
-  
+
   const invoiceInfo = [
     { label: "Invoice Number", value: invoiceNumber },
     { label: "Invoice Date", value: invoiceData.invoice_info.InvoiceDate },
-    { label: "Invoice Due Date", value: invoiceData.invoice_info.DueDate || "Null" },
-    { label: "Invoice Total Amount", value: invoiceData.invoice_info.InvoiceTotal },
+    {
+      label: "Invoice Due Date",
+      value: invoiceData.invoice_info.DueDate || "Null",
+    },
+    {
+      label: "Invoice Total Amount",
+      value: invoiceData.invoice_info.InvoiceTotal,
+    },
     { label: "Tax Amount", value: invoiceData.Tax || "N/A" },
     { label: "Currency", value: invoiceData.Currency || "N/A" },
   ];
 
-  const inv_id=invoiceData.invoice_info.id;
+  const inv_id = invoiceData.invoice_info.id;
   // const inv_id = invoiceData.InvoiceId;
-  console.log("---",inv_id)
-  
+  console.log("---", inv_id);
+
   const formatAddress = (address) => {
     if (!address) return "N/A";
-  
-    const { house_number, street_address, city, state, postal_code, country_region } = address;
-  
+
+    const {
+      house_number,
+      street_address,
+      city,
+      state,
+      postal_code,
+      country_region,
+    } = address;
+
     const addressParts = [
       house_number,
       street_address,
@@ -337,48 +341,54 @@ console.log("Po",items);
       state,
       postal_code,
       country_region,
-    ].filter(part => part); 
-  
+    ].filter((part) => part);
+
     return addressParts.length > 0 ? addressParts.join(", ") : "N/A";
   };
-  
- 
+
   const vendorInfo = [
-    { label: "Vendor Name", value: invoiceData.invoice_info.VendorName || "N/A" },
-    { label: "Vendor Address", value: formatAddress(invoiceData.invoice_info.VendorAddress) },
-    { label: "Vendor Contact Information", value: invoiceData.VendorContact || "N/A" },
+    {
+      label: "Vendor Name",
+      value: invoiceData.invoice_info.VendorName || "N/A",
+    },
+    {
+      label: "Vendor Address",
+      value: formatAddress(invoiceData.invoice_info.VendorAddress),
+    },
+    {
+      label: "Vendor Contact Information",
+      value: invoiceData.VendorContact || "N/A",
+    },
     { label: "Vendor Tax ID", value: invoiceData.VendorTaxId || "N/A" },
   ];
-
-  
 
   const lineItems = invoiceData.invoice_info.items.map((item) => ({
     Description: item.Description || "N/A",
     Quantity: item.Quantity || "N/A",
     Amount: item.Amount || "N/A",
-    Discount: item.Discount || "N/A", 
+    Discount: item.Discount || "N/A",
     ProductCode: item.ProductCode || "N/A",
   }));
-  
+
   const handleCreate = (inputValue) => {
     const newOption = { value: inputValue, label: inputValue };
-  
+
     // Add the new option to the list of existing options
     setColourOptions((prevOptions) => [...prevOptions, newOption]);
     setSelectedOption(newOption); // Set the newly created option as the selected one
-  
+
     // Optionally, you can call your API to save the new PO number here
     // Uncomment the following block if you want to save the PO number immediately when created.
     /*
     try {
-      const response = await fetch('http://10.10.15.15:5719/user/po-number', {
+      const response = await fetch('http://127.0.0.1:8000/user/po-number', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ po_number: inputValue }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         console.log('PO number added successfully:', data);
@@ -391,39 +401,43 @@ console.log("Po",items);
     */
   };
 
-
   const handlePostApi = async () => {
     console.log("Button clicked!");
-  
+
     // Check if PO number and invoice ID are provided
     if (!selectedOption || !selectedOption.value) {
       console.error("PO number not selected or entered.");
       return;
     }
-  
+
     if (!inv_id) {
       console.error("Invoice ID is required.");
       return;
     }
-  
+
     const payload = {
       po_number: selectedOption.value,
       invoice_id: inv_id,
     };
-  
+
     try {
-      const response = await axios.post("http://10.10.15.15:5719/user/po-number", payload);
-  
+      const response = await axios.post(
+        "http://127.0.0.1:8000/user/po-number",
+        payload,
+      );
+
       if (response.status === 200) {
         console.log("POST request successful!", response.data);
       } else {
-        console.error(`POST request failed with status code ${response.status}`);
+        console.error(
+          `POST request failed with status code ${response.status}`,
+        );
       }
     } catch (error) {
       console.error("Error in POST request", error);
     }
   };
-  
+
   return (
     <div>
       <div className="Approvebreadcrump">
@@ -441,7 +455,7 @@ console.log("Po",items);
           </BreadcrumbItem> */}
         </Breadcrumb>
       </div>
- 
+
       <div className={styles.root}>
         <div className={styles.header}>
           <div
@@ -452,42 +466,50 @@ console.log("Po",items);
               width: "100%",
               marginTop: "0px",
               gap: "10px",
-              marginLeft: "auto", 
-   
+              marginLeft: "auto",
             }}
           >
-            <div style={{ right: "5%", display: "flex", gap: "10px" ,flexDirection:"column"}}>
-           
- 
-            <CreatableSelect
-        className="basic-single"
-        classNamePrefix="select"
-        value={selectedOption}
-        onChange={setSelectedOption}
-        name="po_number"
-        options={colourOptions}
-        styles={{ container: (provided) => ({ ...provided, width: 200 }) }}
-        onCreateOption={handleCreate}
-        placeholder="Select or Enter PO..."
-        isClearable
-      />
- 
-              <Button appearance="subtle" style={{
-      color: "#0078d4",
-      backgroundColor: "#fff",
-      alignSelf: "flex-end",
-      width: "auto",
-     
-    }} className={styles.wrapper} onClick={handlePostApi}>
-       Submit
-      </Button>
+            <div
+              style={{
+                right: "5%",
+                display: "flex",
+                gap: "10px",
+                flexDirection: "column",
+              }}
+            >
+              <CreatableSelect
+                className="basic-single"
+                classNamePrefix="select"
+                value={selectedOption}
+                onChange={setSelectedOption}
+                name="po_number"
+                options={colourOptions}
+                styles={{
+                  container: (provided) => ({ ...provided, width: 200 }),
+                }}
+                onCreateOption={handleCreate}
+                placeholder="Select or Enter PO..."
+                isClearable
+              />
+
+              <Button
+                appearance="subtle"
+                style={{
+                  color: "#0078d4",
+                  backgroundColor: "#fff",
+                  alignSelf: "flex-end",
+                  width: "auto",
+                }}
+                className={styles.wrapper}
+                onClick={handlePostApi}
+              >
+                Submit
+              </Button>
             </div>
           </div>
- 
-          <h2 style={{ margin: "20px 0 20px 0" }}>
-            Invoice:
-          </h2>
- 
+
+          <h2 style={{ margin: "20px 0 20px 0" }}>Invoice:</h2>
+
           <div style={{ display: "flex", marginBottom: "20px" }}>
             <div
               style={{ borderLeft: "5px solid #342d7c", paddingLeft: "10px" }}
@@ -516,7 +538,7 @@ console.log("Po",items);
               <h2>3</h2>
             </div>
           </div>
- 
+
           <TabList
             defaultSelectedValue="tab3"
             appearance="subtle"
@@ -542,100 +564,113 @@ console.log("Po",items);
             >
               PO
             </Tab>
-          <div style={{
-    display: "flex",
-    justifyContent: "flex-end",
-    gap: "10px",
-    fontSize: "17px",
-    marginLeft: "auto",
-    alignItems: "center",
-    cursor:"pointer"
-  }}>
-         
-          <ArrowDownload28Regular style={{ color: "#1281d7" }} onClick={handleViewInvoice} /> <span onClick={handleViewInvoice} > View Invoice</span>
-          </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "10px",
+                fontSize: "17px",
+                marginLeft: "auto",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              <ArrowDownload28Regular
+                style={{ color: "#1281d7" }}
+                onClick={handleViewInvoice}
+              />{" "}
+              <span onClick={handleViewInvoice}> View Invoice</span>
+            </div>
           </TabList>
-         
         </div>
- 
+
         {selectedtab === "tab3" && (
           <div className={styles.content1}>
-           
-           <div>
-        <h2>Invoice Information</h2>
-        <ul>
-          {invoiceInfo.map((info, index) => (
-            <li key={index}>
-              <strong>{info.label}:</strong> {info.value}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-      <h2>Vendor/Supplier Information</h2>
-    <ul>
-      {vendorInfo.map((info, index) => (
-        <li key={index}>
-          <strong>{info.label}:</strong> {info.value}
-        </li>
-      ))}
-    </ul>
+            <div>
+              <h2>Invoice Information</h2>
+              <ul>
+                {invoiceInfo.map((info, index) => (
+                  <li key={index}>
+                    <strong>{info.label}:</strong> {info.value}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2>Vendor/Supplier Information</h2>
+              <ul>
+                {vendorInfo.map((info, index) => (
+                  <li key={index}>
+                    <strong>{info.label}:</strong> {info.value}
+                  </li>
+                ))}
+              </ul>
 
-        
-
-        {/* Line Items */}
-        <h2>Line Items</h2>
-    <ol>
-      {lineItems.map((info, index) => (
-        <li key={index} style={{ marginBottom: "15px" }}>
-          <strong>Description: {info.Description}</strong>
-           <ul style={{ marginLeft: "20px", listStyleType: "disc" }}>
-            <li><strong>Quantity:</strong> {info.Quantity}</li>
-            <li><strong>Amount:</strong> {info.Amount}</li>
-            <li><strong>Discount:</strong> {info.Discount}</li>
-            <li><strong>ProductCode:</strong> {info.ProductCode}</li>
-          </ul>
-        </li>
-      ))}
-    </ol>
-      </div>
-        </div>
-          
-          )}
- 
- {selectedtab === "tab4" && (
-        <div className={styles.content1}>
-          <div>
-            <AiNav onPoNumberClick={handlePoNumberClick} />
+              {/* Line Items */}
+              <h2>Line Items</h2>
+              <ol>
+                {lineItems.map((info, index) => (
+                  <li key={index} style={{ marginBottom: "15px" }}>
+                    <strong>Description: {info.Description}</strong>
+                    <ul style={{ marginLeft: "20px", listStyleType: "disc" }}>
+                      <li>
+                        <strong>Quantity:</strong> {info.Quantity}
+                      </li>
+                      <li>
+                        <strong>Amount:</strong> {info.Amount}
+                      </li>
+                      <li>
+                        <strong>Discount:</strong> {info.Discount}
+                      </li>
+                      <li>
+                        <strong>ProductCode:</strong> {info.ProductCode}
+                      </li>
+                    </ul>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
+        )}
 
-          <div className={styles.example}>
-            <Divider vertical style={{ height: "100%" }} />
-          </div>
+        {selectedtab === "tab4" && (
+          <div className={styles.content1}>
+            <div>
+              <AiNav onPoNumberClick={handlePoNumberClick} />
+            </div>
 
-          <div style={{ display: "flex", justifyContent: "flex-start", marginLeft: "-10em" }}>
-            <ul>
-              {invoiceData && (
-                <>
-                  <li>PO Number: {selectedInvoiceNumber}</li>
-                  <li>PO Type: {dataitem.po_type}</li>
-                  <li>Supplier Name: {dataitem.supplier_name}</li>
-                  <li>Site: {dataitem.location}</li>
-                  <li>Status: {dataitem.po_status}</li>
-                  <li>Total Amount: {dataitem.total_amount}</li>
-                  <li>Buyer Name: {dataitem.buyer_name}</li>
-                  <li>Invoice Detail: {dataitem.invoice_detail}</li>
-                  {/* <li>InvoiceDate: {invoiceData.InvoiceDate}</li>
+            <div className={styles.example}>
+              <Divider vertical style={{ height: "100%" }} />
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-start",
+                marginLeft: "-10em",
+              }}
+            >
+              <ul>
+                {invoiceData && (
+                  <>
+                    <li>PO Number: {selectedInvoiceNumber}</li>
+                    <li>PO Type: {dataitem.po_type}</li>
+                    <li>Supplier Name: {dataitem.supplier_name}</li>
+                    <li>Site: {dataitem.location}</li>
+                    <li>Status: {dataitem.po_status}</li>
+                    <li>Total Amount: {dataitem.total_amount}</li>
+                    <li>Buyer Name: {dataitem.buyer_name}</li>
+                    <li>Invoice Detail: {dataitem.invoice_detail}</li>
+                    {/* <li>InvoiceDate: {invoiceData.InvoiceDate}</li>
                   <li>Invoice Date: {items.invoice_info.InvoiceDate }</li>  */}
-                  <li>Shipping Address: {dataitem.ship_to}</li>
-                  <li>Billing Address: {dataitem.ship_to}</li>
-                  
-                </>
-              )}
-            </ul>
+                    <li>Shipping Address: {dataitem.ship_to}</li>
+                    <li>Billing Address: {dataitem.ship_to}</li>
+                  </>
+                )}
+              </ul>
 
-            {/* Displaying items in a separate list */}
-             {/* {items.length > 0 && (
+              {/* Displaying items in a separate list */}
+              {/* {items.length > 0 && (
               <div>
                 <h3>Items:</h3>
                 <ul>
@@ -649,13 +684,12 @@ console.log("Po",items);
                 </ul>
               </div>
             )}  */}
+            </div>
           </div>
-        </div>
-      )}
-
+        )}
       </div>
     </div>
   );
 };
- 
+
 export default AIDetailPage;

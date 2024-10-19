@@ -39,11 +39,11 @@ import { themeActions } from "../Store/Store";
 import { calc } from "antd/es/theme/internal";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 // import { useNavigate } from "react-router-dom";
-import {jwtDecode} from 'jwt-decode';
-import { ShareIos24Filled } from '@fluentui/react-icons';
-import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
+import { ShareIos24Filled } from "@fluentui/react-icons";
+import axios from "axios";
 import InvoiceUpload from "./UploadInvoice";
-import  { useRef } from 'react';
+import { useRef } from "react";
 import { notification } from "antd";
 const { Header, Content, Footer, Sider } = Layout;
 const useStyles = makeStyles({
@@ -62,8 +62,6 @@ const useStyles = makeStyles({
     display: "flex",
   },
 });
- 
-
 
 const ExampleContent = () => {
   const styles = useStyles();
@@ -71,39 +69,31 @@ const ExampleContent = () => {
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [empId, setEmpId] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [empId, setEmpId] = useState("");
 
-  
-
-   
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    console.log(storedUsername)
+    const storedUsername = localStorage.getItem("username");
+    console.log(storedUsername);
     if (storedUsername) {
       setUsername(storedUsername);
-    }  
+    }
   }, []);
   useEffect(() => {
-    
-    const token = localStorage.getItem('access_token'); 
-    console.log(typeof(token));
+    const token = localStorage.getItem("access_token");
+    console.log(typeof token);
     if (token) {
       try {
-       
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
         const emailFromToken = decodedToken.email;
         const empIdFromToken = decodedToken.empId;
 
-       
-
         setEmail(emailFromToken);
         setEmpId(empIdFromToken);
-
       } catch (error) {
-        console.error('Invalid token:', error);
+        console.error("Invalid token:", error);
       }
     }
   }, []);
@@ -130,40 +120,40 @@ const ExampleContent = () => {
           FocusR Consultancy and Technologies Pvt Ltd.
         </Text>
         <Link
-  appearance="subtle"
-  href="http://localhost:3000/"
-  onClick={() => {
-    // Clear tokens from local storage
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("username");
+          appearance="subtle"
+          href="http://localhost:3000/"
+          onClick={() => {
+            // Clear tokens from local storage
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("username");
 
-    // Navigate to the login page
-    navigate("");
-  }}
-  style={
-    themestate
-      ? {
-          width: "25%",
-          textAlign: "right",
-          color: darktheme.fontcolordark,
-          WebkitTapHighlightColor: "transparent",
-        }
-      : {
-          width: "25%",
-          textAlign: "right",
-          WebkitTapHighlightColor: "transparent",
-        }
-  }
->
-  Sign out
-</Link>
+            // Navigate to the login page
+            navigate("");
+          }}
+          style={
+            themestate
+              ? {
+                  width: "25%",
+                  textAlign: "right",
+                  color: darktheme.fontcolordark,
+                  WebkitTapHighlightColor: "transparent",
+                }
+              : {
+                  width: "25%",
+                  textAlign: "right",
+                  WebkitTapHighlightColor: "transparent",
+                }
+          }
+        >
+          Sign out
+        </Link>
       </div>
       <div style={{ display: "flex", width: "370px", marginBottom: "10px" }}>
         <Avatar
           active="active"
           color="colorful"
-          name={username} 
+          name={username}
           size={96}
           style={{ marginLeft: "5%" }}
         />
@@ -228,7 +218,8 @@ const ExampleContent = () => {
                 : { fontSize: "14px", width: "100%" }
             }
           >
-           {empId}{/* Replace this with dynamic data if needed */}
+            {empId}
+            {/* Replace this with dynamic data if needed */}
           </Text>
         </div>
       </div>
@@ -238,11 +229,10 @@ const ExampleContent = () => {
 
 // export default ExampleContent;
 
- 
 const CustomLayout = ({ children }) => {
   const [isDarkMode, setDarkMode] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
- 
+
   const [logoutPopoverVisible, setLogoutPopoverVisible] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState("Dashboard");
   const navigate = useNavigate();
@@ -250,10 +240,7 @@ const CustomLayout = ({ children }) => {
   const lighttheme = useSelector((state) => state.theme.light);
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
-  const [username, setUsername] = useState('');  
-
-
- 
+  const [username, setUsername] = useState("");
 
   // const fileInputRef = useRef(null);
 
@@ -263,56 +250,60 @@ const CustomLayout = ({ children }) => {
   //     }
   // };
 
-
   const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
-      // Trigger the file input click
-      if (fileInputRef.current) {
-          fileInputRef.current.click();
-      }
+    // Trigger the file input click
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const handleFileChange = async (event) => {
-      const file = event.target.files[0]; 
-      if (file) {
-          console.log("12")
-          const formData = new FormData();
-          formData.append('file', file); 
+    const file = event.target.files[0];
+    if (file) {
+      console.log("12");
+      const formData = new FormData();
+      formData.append("file", file);
 
-          try {
-              const response = await axios.post('http://10.10.15.15:5719/user/invoice-upload', formData, {
-                  headers: {
-                      'Content-Type': 'multipart/form-data',
-                  },
-              });
-              
-              // Show success notification
-              notification.success({
-                  message: 'Upload Successful',
-                  description: `File ${file.name} uploaded successfully!`,
-              });
-          } catch (error) {
-              // Handle error (you can also show an error notification)
-              console.error('Upload failed:', error);
-              notification.error({
-                  message: 'Upload Failed',
-                  description: 'There was an error uploading the file. Please try again.',
-              });
-          }
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:8000/user/invoice-upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        );
+
+        // Show success notification
+        notification.success({
+          message: "Upload Successful",
+          description: `File ${file.name} uploaded successfully!`,
+        });
+      } catch (error) {
+        // Handle error (you can also show an error notification)
+        console.error("Upload failed:", error);
+        notification.error({
+          message: "Upload Failed",
+          description:
+            "There was an error uploading the file. Please try again.",
+        });
       }
+    }
   };
 
   const toggleDarkMode = (checked) => {
     setDarkMode(checked);
   };
- 
+
   const handleTheme = () => {
     dispatch(themeActions.toggletheme());
   };
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
+    const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
       setUsername(storedUsername);
     }
@@ -322,15 +313,14 @@ const CustomLayout = ({ children }) => {
       setWindowWidth(window.innerWidth);
       console.log(window.innerWidth);
     };
- 
+
     window.addEventListener("resize", handleResize);
- 
-    
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
- 
+
   const getSearchBoxStyle = () => {
     if (windowWidth < 500) {
       return {
@@ -353,9 +343,6 @@ const CustomLayout = ({ children }) => {
     }
   };
 
-  
-
- 
   return (
     <div style={{}}>
       <div>
@@ -412,8 +399,8 @@ const CustomLayout = ({ children }) => {
             </div> */}
             {/* <input type="file" onChange={handleFileChange} /> */}
             <div>
-            {/* The button that triggers file selection */}
-            {/* <div
+              {/* The button that triggers file selection */}
+              {/* <div
                 style={{ color: "#fff", cursor: "pointer", height: "100%",
                   width: "100%", }}
                 onClick={handleButtonClick}
@@ -421,27 +408,25 @@ const CustomLayout = ({ children }) => {
                 <ShareIos24Filled />
                 <InvoiceUpload fileInputRef={fileInputRef} />
             </div> */}
-          <div
-            style={{
-                color: "#fff",
-                cursor: "pointer",
-                height: "100%",
-                width: "100%",
-                position: 'relative', // To position the hidden input
-            }}
-            onClick={handleButtonClick}
-        >
-            <ShareIos24Filled />
-            <input
-                type="file"
-                ref={fileInputRef}
-                style={{ display: 'none' }} // Hide the file input
-                onChange={handleFileChange} // Add the onChange prop to handle file input changes
-            />
-        </div>
-            
-            
-        </div>
+              <div
+                style={{
+                  color: "#fff",
+                  cursor: "pointer",
+                  height: "100%",
+                  width: "100%",
+                  position: "relative", // To position the hidden input
+                }}
+                onClick={handleButtonClick}
+              >
+                <ShareIos24Filled />
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  style={{ display: "none" }} // Hide the file input
+                  onChange={handleFileChange} // Add the onChange prop to handle file input changes
+                />
+              </div>
+            </div>
             <div className="notification-container">
               <AlertBadgeRegular
                 style={{
@@ -476,7 +461,6 @@ const CustomLayout = ({ children }) => {
                     WebkitTapHighlightColor: "transparent",
                   }}
                 >
-                 
                   <Avatar color="colorful" name={username} size={36} />
                 </div>
               </PopoverTrigger>
@@ -491,8 +475,5 @@ const CustomLayout = ({ children }) => {
     </div>
   );
 };
- 
+
 export default CustomLayout;
- 
- 
- 

@@ -1,3 +1,4 @@
+// API connection
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -16,10 +17,10 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import Search from "./Search"; 
-import { Button, notification } from "antd"; 
-import { ArrowDownload28Regular } from "@fluentui/react-icons";
+import Search from "./Search"; // Assuming your search component is imported here
+import { Button, notification } from "antd"; // Import Ant Design components
 
+// Define columns for the DataGrid
 const columns = [
   createTableColumn({
     columnId: "po_number",
@@ -27,24 +28,26 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.po_number}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "InvoiceId",
-    renderHeaderCell: () => "Invoice Number",
-    renderCell: (item) => <TableCellLayout>{item.invoice_number}</TableCellLayout>,
-  }),
-  createTableColumn({
     columnId: "po_type",
     renderHeaderCell: () => "PO Type",
     renderCell: (item) => <TableCellLayout>{item.po_type}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "VendorName",
-    renderHeaderCell: () => "Vendor Name",
-    renderCell: (item) => <TableCellLayout>{item.VendorName}</TableCellLayout>,
+    columnId: "po_status",
+    renderHeaderCell: () => "PO Status",
+    renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "supplier_name",
     renderHeaderCell: () => "Supplier Name",
-    renderCell: (item) => <TableCellLayout>{item.supplier_name}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.supplier_name}</TableCellLayout>
+    ),
+  }),
+  createTableColumn({
+    columnId: "location",
+    renderHeaderCell: () => "Location",
+    renderCell: (item) => <TableCellLayout>{item.location}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "ship_to",
@@ -52,102 +55,103 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.ship_to}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "InvoiceDate",
-    renderHeaderCell: () => "Invoice Date",
-    renderCell: (item) => <TableCellLayout>{item.InvoiceDate}</TableCellLayout>,
+    columnId: "bill_to",
+    renderHeaderCell: () => "Bill To",
+    renderCell: (item) => <TableCellLayout>{item.bill_to}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "promised_date",
-    renderHeaderCell: () => "PO Date",
-    renderCell: (item) => <TableCellLayout>{item.promised_date}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "InvoiceTotal",
-    renderHeaderCell: () => "Invoice Total",
-    renderCell: (item) => <TableCellLayout>{item.InvoiceTotal}</TableCellLayout>,
+    columnId: "buyer_name",
+    renderHeaderCell: () => "Buyer Name",
+    renderCell: (item) => <TableCellLayout>{item.buyer_name}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "total_amount",
     renderHeaderCell: () => "Total Amount",
-    renderCell: (item) => <TableCellLayout>{item.total_amount}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>
+        {item.total_amount !== null ? item.total_amount : "N/A"}
+      </TableCellLayout>
+    ),
+  }),
+  createTableColumn({
+    columnId: "status",
+    renderHeaderCell: () => "Status",
+    renderCell: (item) => (
+      <TableCellLayout>{item.status || "N/A"}</TableCellLayout>
+    ),
   }),
 ];
 
- 
 const ApproveTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
   const navigate = useNavigate();
- 
- 
-  
-  const fetchData = async () => {
-    try {
+
+  // Fetch data from the API when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
         const response = await axios.get(
-            "http://10.10.15.15:5719/user/one-invoice-list"
+          "http://127.0.0.1:8000/user/one-invoice-list",
         );
         const fetchedItems = response.data; // Assuming data is in response.data
-        console.log("12345678",response.data);
-        
 
+        // Map fetched data to the format expected by DataGrid
         const mappedItems = fetchedItems.map((item) => ({
-          po_number: item.po_headers?.[0]?.po_number || "NULL", // Accessing the first element of the po_headers array
-          invoice_number: item.InvoiceId || "NULL", 
-          po_type: item.po_headers?.[0]?.po_type || "NULL", // Accessing the first element of the po_headers array
-          VendorName: item.VendorName || "NULL",
-          supplier_name: item.po_headers?.[0]?.supplier_name || "NULL", // Accessing the first element of the po_headers array
-          ship_to: item.po_headers?.[0]?.ship_to || "NULL", // Accessing the first element of the po_headers array
-          InvoiceDate: item.InvoiceDate || "NULL",
-          promised_date: item.po_headers?.[0]?.po_items?.[0]?.promised_date || "NULL",
-          InvoiceTotal: item.InvoiceTotal || "NULL",
-          total_amount: item.po_headers?.[0]?.total_amount || "NULL" // Accessing the first element of the po_headers array
-      }));
-      
-      
+          po_number: item.po_number,
+          po_type: item.po_type,
+          po_status: item.po_status,
+          supplier_name: item.supplier_name,
+          location: item.location,
+          ship_to: item.ship_to,
+          bill_to: item.bill_to,
+          buyer_name: item.buyer_name,
+          total_amount: item.total_amount,
+          status: item.status,
+        }));
 
         setItems(mappedItems);
-    } catch (error) {
+      } catch (error) {
         console.error("Error fetching data:", error);
-    }
-};
-useEffect(() => {
-  fetchData();
-}, []);
- 
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
- 
+
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
-    const poHeader = item.po_headers?.[0];
-    console.log("1233445",poHeader)
+
     return (
       item.po_number?.toString().toLowerCase().includes(searchLower) ||
-      item.invoice_number?.toLowerCase().includes(searchLower) ||
       item.po_type?.toLowerCase().includes(searchLower) ||
-      item. VendorName?.toLowerCase().includes(searchLower) ||
+      item.po_status?.toLowerCase().includes(searchLower) ||
       item.supplier_name?.toLowerCase().includes(searchLower) ||
+      item.location?.toLowerCase().includes(searchLower) ||
       item.ship_to?.toLowerCase().includes(searchLower) ||
-      item.InvoiceDate?.toLowerCase().includes(searchLower) ||
-      item.promised_date?.toLowerCase().includes(searchLower) ||
-      item.InvoiceTotal?.toString().toLowerCase().includes(searchLower) ||
-      item.total_amount?.toLowerCase().includes(searchLower)
+      item.bill_to?.toLowerCase().includes(searchLower) ||
+      item.buyer_name?.toLowerCase().includes(searchLower) ||
+      item.total_amount?.toString().toLowerCase().includes(searchLower) ||
+      item.status?.toLowerCase().includes(searchLower)
     );
   });
- 
+
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
       navigate(`/approvepage`, { state: { poNumber: item.po_number } });
     }
   };
- 
+
   const handleSelectionChange = (event, data) => {
     console.log("handleSelectionChange", data.selectedItems);
     setSelectedRows(data.selectedItems);
   };
- 
+
   const handleDeleteSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
     if (selectedItemsArray.length === 0) {
@@ -157,29 +161,28 @@ useEffect(() => {
       });
       return;
     }
- 
+
     try {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
         .join(", ");
- 
-      
+
+      // Make API call to delete selected POs
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.delete(
-            `http://10.10.15.15:5719/user/delete-poheader/${filteredItems[item].po_number}`
-,
+            `http://127.0.0.1:8000/user/delete-poheader/${filteredItems[item].po_number}`,
           ),
         ),
       );
- 
-   
+
+      // Remove deleted items from the state
       setItems(items.filter((item) => !selectedItemsArray.includes(item)));
- 
-   
+
+      // Show success notification
       notification.success({
         message: "Successfully deleted",
-       
+        description: `You have successfully deleted: ${supplierNames}`,
       });
     } catch (error) {
       const supplierNames = selectedItemsArray
@@ -187,56 +190,56 @@ useEffect(() => {
         .join(", ");
       notification.error({
         message: "Deletion Failed",
-       
+        description: `Deletion Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
       });
     }
   };
- 
- 
- 
- 
+
+  // Approve API
+
   const handleApproveSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows); 
+    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
     if (selectedItemsArray.length === 0) {
       notification.warning({
         message: "No PO Selected",
-        description: "Please select at least one PO to approve.",
+        description: "Please select at least one PO to Approve.",
       });
       return;
     }
- 
+
     try {
-      const poNumbers = selectedItemsArray
-        .map((item) => item.po_number)
+      const supplierNames = selectedItemsArray
+        .map((item) => item.supplier_name)
         .join(", ");
- 
-      
+
+      // Make API call to delete selected POs
       await Promise.all(
         selectedItemsArray.map((item) =>
-          axios.post(
-            `http://10.10.15.15:5719/user/approve-status/${filteredItems[item].po_number}`
+          axios.delete(
+            `http://127.0.0.1:8000/user/approve-status/<int:pk>/${item.po_number}`,
           ),
         ),
       );
- 
-     
+
+      // Remove deleted items from the state
+      setItems(items.filter((item) => !selectedItemsArray.includes(item)));
+
+      // Show success notification
       notification.success({
-        message: "Successfully approved",
-       
+        message: "Successfully Approved",
+        description: `You have successfully approved: ${supplierNames}`,
       });
     } catch (error) {
-      const poNumbers = selectedItemsArray
-        .map((item) => item.po_number)
+      const supplierNames = selectedItemsArray
+        .map((item) => item.supplier_name)
         .join(", ");
       notification.error({
         message: "Approval Failed",
-       
+        description: `Approval Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
       });
     }
   };
- 
- 
- 
+
   return (
     <>
       <div
@@ -259,12 +262,12 @@ useEffect(() => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          onClick={handleDeleteSelectedRows}
+          onClick={handleDeleteSelectedRows} // Call delete function
         >
           <Delete28Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
         </button>
- 
+
         <button
           style={{
             display: "flex",
@@ -277,12 +280,11 @@ useEffect(() => {
             marginLeft: "2em",
           }}
           onClick={handleApproveSelectedRows}
-         
         >
           <TasksApp28Regular style={{ color: "#1281d7" }} />
           <span>Approve</span>
         </button>
- 
+
         <button
           style={{
             display: "flex",
@@ -294,27 +296,18 @@ useEffect(() => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          onClick={fetchData}
+          onClick={() => alert("Refresh")}
         >
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
 
-       
-
-
-        
- 
         <Search
           placeholder="Search PO or Supplier"
           onSearchChange={handleSearchChange}
         />
-       
-          
-          
-          
       </div>
- 
+
       <DataGrid
         items={filteredItems}
         columns={columns}
@@ -349,5 +342,5 @@ useEffect(() => {
     </>
   );
 };
- 
+
 export default ApproveTable;
