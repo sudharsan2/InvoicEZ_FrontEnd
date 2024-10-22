@@ -125,6 +125,7 @@ const useStyles = makeStyles({
 
 const AIDetailPage = () => {
   const navigate = useNavigate();
+
   const [colourOptions, setColourOptions] = useState([
     { value: "1009", label: "1009" },
     { value: "1010", label: "1010" },
@@ -238,7 +239,7 @@ const AIDetailPage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/user/invoices-file/${invoiceNumber}`,
+        `http://127.0.0.1:8000/user/invoices-file/${invoiceId}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -297,7 +298,7 @@ const AIDetailPage = () => {
         );
         const fetchedItem = response.data;
         console.log("R", fetchedItem);
-
+        setInvoiceId(fetchedItem.invoice_info.id);
         setInvoiceData(fetchedItem);
         setPoHeader(fetchedItem.po_headers);
 
