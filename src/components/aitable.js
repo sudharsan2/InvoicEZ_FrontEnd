@@ -57,7 +57,7 @@ const columns = [
   }),
 ];
 
-const AITable = () => {
+const AITable = ({ setTableLength }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]);
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -70,9 +70,9 @@ const AITable = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/user/morethanone-invoice-list",
+        "http://10.10.15.15:5719/user/morethanone-invoice-list",
       );
-      const fetchedItems = response.data; // Assuming data is in response.data
+      const fetchedItems = response.data;
       const inv = fetchedItems.InvoiceId;
       const mappedItems = fetchedItems.map((item) => ({
         Id: item.id || "NULL",
@@ -85,6 +85,7 @@ const AITable = () => {
       }));
 
       setItems(mappedItems);
+      setTableLength(mappedItems.length);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -139,7 +140,7 @@ const AITable = () => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.delete(
-            `http://127.0.0.1:8000/user/delete-poheader/${filteredItems[item].po_number}`,
+            `http://10.10.15.15:5719/user/delete-poheader/${filteredItems[item].po_number}`,
           ),
         ),
       );
@@ -177,7 +178,7 @@ const AITable = () => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `http://127.0.0.1:8000/user/approve-status/${filteredItems[item].po_number}`,
+            `http://10.10.15.15:5719/user/approve-status/${filteredItems[item].po_number}`,
           ),
         ),
       );
@@ -245,7 +246,12 @@ const AITable = () => {
           onSearchChange={handleSearchChange}
         />
       </div>
-
+      <div
+       style={{
+        height: "400px", 
+        overflowY: "auto",
+        marginTop: "20px",
+      }}>
       <DataGrid
         items={filteredItems}
         columns={columns}
@@ -277,6 +283,10 @@ const AITable = () => {
           )}
         </DataGridBody>
       </DataGrid>
+
+      </div>
+
+      
     </>
   );
 };

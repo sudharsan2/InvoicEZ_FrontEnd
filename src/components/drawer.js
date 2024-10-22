@@ -592,7 +592,7 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                // onClick={someClickHandler}
                 value="1"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -742,7 +742,7 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                // onClick={someClickHandler}
                 value="6"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -775,7 +775,7 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                // onClick={someClickHandler}
                 value="7"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -807,7 +807,7 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                // onClick={someClickHandler}
                 value="8"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight

@@ -20,14 +20,16 @@ import { FilterRegular, DismissCircleRegular } from "@fluentui/react-icons"; // 
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/approve";
 const path1 = "http://localhost:3000/";
+const path2 = "/issuefix";
+
 
 const IssuefixPage = () => {
-  const counters = [
-    { label: "To Do", value: 15, color: "#00bfbf" }, // Cyan
-    { label: "AI Identified", value: 2, color: "#d62727" }, // Red
-    { label: "User Resolved", value: 9, color: "#1f497d" }, // Dark Blue
-    { label: "Refix", value: 4, color: "#d21994" }, // Magenta
-  ];
+  // const counters = [
+  //   { label: "To Do", value: 15, color: "#00bfbf" }, // Cyan
+  //   { label: "AI Identified", value: 2, color: "#d62727" }, // Red
+  //   { label: "User Resolved", value: 9, color: "#1f497d" }, // Dark Blue
+  //   { label: "Refix", value: 4, color: "#d21994" }, // Magenta
+  // ];
   return (
     <div>
       <div className="Approvebreadcrump">
@@ -40,6 +42,9 @@ const IssuefixPage = () => {
             <BreadcrumbButton href={path}>Issue</BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
+          <BreadcrumbItem>
+            <BreadcrumbButton href={path}>Fix</BreadcrumbButton>
+          </BreadcrumbItem>
         </Breadcrumb>
       </div>
       <div
@@ -47,10 +52,13 @@ const IssuefixPage = () => {
       >
         <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Fix</h3>
       </div>
+      <div style={{height:"10vh"}}>
+
+      
 
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ width: "65vw" }}>
-          <TagCounters counters={counters} />
+          <TagCounters type="fix"/>
         </div>
         {/* <div style={{display:'flex', flexDirection:'column'}} */}
         <div
@@ -59,6 +67,7 @@ const IssuefixPage = () => {
             flexDirection: "column",
             gap: "10px",
             justifyContent: "space-around",
+            
           }}
         >
           {/* New Filter Button */}
@@ -77,6 +86,7 @@ const IssuefixPage = () => {
             Clear Filter
           </Button>
         </div>
+      </div>
       </div>
       <div>
         <IssuefixTable />
