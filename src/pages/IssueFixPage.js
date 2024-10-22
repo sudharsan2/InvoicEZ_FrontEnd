@@ -22,7 +22,6 @@ const path = "/approve";
 const path1 = "http://localhost:3000/";
 const path2 = "/issuefix";
 
-
 const IssuefixPage = () => {
   // const counters = [
   //   { label: "To Do", value: 15, color: "#00bfbf" }, // Cyan
@@ -52,41 +51,37 @@ const IssuefixPage = () => {
       >
         <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Fix</h3>
       </div>
-      <div style={{maxHeight:"10vh"}}>
-
-      
-
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div style={{ width: "65vw" }}>
-          <TagCounters type="approve"/>
-        </div>
-        {/* <div style={{display:'flex', flexDirection:'column'}} */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            justifyContent: "space-around",
-            
-          }}
-        >
-          {/* New Filter Button */}
-          {/* <Button
+      <div style={{ maxHeight: "10vh", height: "10vh" }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ width: "65vw" }}>
+            <TagCounters type="approve" />
+          </div>
+          {/* <div style={{display:'flex', flexDirection:'column'}} */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              justifyContent: "space-around",
+            }}
+          >
+            {/* New Filter Button */}
+            {/* <Button
             icon={<FilterRegular />}
             appearance="primary" // Gives it a highlighted primary style
           >
             New Filter
           </Button> */}
 
-          {/* Clear Filter Button */}
-          {/* <Button
+            {/* Clear Filter Button */}
+            {/* <Button
             icon={<DismissCircleRegular />}
             appearance="outline" // Gives it an outlined style
           >
             Clear Filter
           </Button> */}
+          </div>
         </div>
-      </div>
       </div>
       <div>
         <IssuefixTable />

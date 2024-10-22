@@ -101,7 +101,7 @@ const IssuefixTable = () => {
         if (id) {
           // Check if id is defined
           console.log(`Deleting item with ID: ${id}`);
-          return fetch(`http://10.10.15.15:5719/user/delete-poheader/${id}`, {
+          return fetch(`http://10.10.15.15:5719/user/delete-invoice/${id}`, {
             method: "DELETE",
           });
         } else {
@@ -177,7 +177,7 @@ const IssuefixTable = () => {
           gap: "20px",
           fontWeight: "bold",
           marginLeft: "-3em",
-          // height:"30vh"
+          height: "10vh",
         }}
       >
         <button
@@ -220,45 +220,45 @@ const IssuefixTable = () => {
           onSearchChange={handleSearchChange}
         />
       </div>
-      <div  style={{
-        height: "70vh", // Set a fixed height for scrolling
-        overflowY: "auto", // Enable vertical scrolling
-        marginTop: "20px",
-      }}>
-      <DataGrid
-        items={filteredItems}
-        columns={columns}
-        sortable
-        selectionMode="multiselect"
-        onSelectionChange={handleSelectionChange}
-        getRowId={(item) => item.id} // Use item.id for unique identification
-        focusMode="composite"
-        style={{ minWidth: "550px" }}
+      <div
+        style={{
+          height: "80vh", // Set a fixed height for scrolling
+          overflowY: "auto", // Enable vertical scrolling
+          marginTop: "20px",
+        }}
       >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody>
-          {({ item, rowId }) => (
-            <DataGridRow
-              key={rowId}
-              onClick={(e) => handleRowClick(e, item)}
-              selected={selectedRows.has(item.invid)} // Check selectedRows based on item.id
-            >
-              {({ renderCell }) => (
-                <DataGridCell>{renderCell(item)}</DataGridCell>
+        <DataGrid
+          items={filteredItems}
+          columns={columns}
+          sortable
+          selectionMode="multiselect"
+          onSelectionChange={handleSelectionChange}
+          getRowId={(item) => item.id} // Use item.id for unique identification
+          focusMode="composite"
+          style={{ minWidth: "550px" }}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
               )}
             </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow
+                key={rowId}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(item.invid)} // Check selectedRows based on item.id
+              >
+                {({ renderCell }) => (
+                  <DataGridCell>{renderCell(item)}</DataGridCell>
+                )}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
       </div>
-      
     </>
   );
 };
