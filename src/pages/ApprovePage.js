@@ -40,7 +40,8 @@ const UserApprove = () => {
       </div>
 
       <div>
-        <TagCounters />
+        {/* <TagCounters /> */}
+        <TagCounters type="approve" />
       </div>
       <div>
         <ApproveTable />

@@ -170,7 +170,7 @@ const ApprovePage = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/user/po-number",
+        "http://10.10.15.15:5719/user/po-number",
         payload,
       );
 
@@ -272,7 +272,7 @@ const ApprovePage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/user/invoices-file/${inv_id}`,
+        `http://10.10.15.15:5719/user/invoices-file/${inv_id}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -291,7 +291,7 @@ const ApprovePage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/user/po-details/${Id}/`,
+          `http://10.10.15.15:5719/user/po-details/${Id}/`,
         );
         const fetchedItems = response.data;
 
@@ -426,7 +426,7 @@ const ApprovePage = () => {
           </BreadcrumbItem>
         </Breadcrumb>
       </div>
-
+      <div style={{maxHeight:"20vh"}}>
       <div className={styles.root}>
         <div className={styles.header}>
           <div
@@ -493,7 +493,7 @@ const ApprovePage = () => {
             PO:{purchaseOrder.poNumber}
           </h2>
 
-          <div style={{ display: "flex", marginBottom: "20px" }}>
+          <div style={{ display: "flex", marginBottom: "20px"}}>
             <div
               style={{ borderLeft: "5px solid #342d7c", paddingLeft: "10px" }}
             >
@@ -521,6 +521,7 @@ const ApprovePage = () => {
               <p>Line Matching</p>
               <h2>FULL</h2>
             </div>
+          </div>
           </div>
 
           <TabList
@@ -832,9 +833,8 @@ const ApprovePage = () => {
         )}
 
         {selectedtab === "tab2" && (
-          <div style={{ width: "100%", display: "flex", overflowY: "auto" }}>
-            {/* Left Div (1/4 of the total width) */}
-            <div style={{ flex: 1 }}>
+          <div style={{ width: "100%", display: "flex",overflowY: "auto", height: "40vh",marginTop: "10px",}}>
+            <div style={{ flex: 1, }}>
               <Table>
                 <TableHeader
                   style={{

@@ -18,19 +18,14 @@ import TagCounters from "../components/gridapprove";
 import ApproveTable from "../components/approvetable";
 import Search from "../components/Search"; 
 import AITable from "../components/aitable";
-
+import  { useState } from "react";
 import { useLocation } from "react-router-dom";
 // improve AITable
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
-const path = "/ai";
+const path = "/dashboard";
 const path1 = "http://localhost:3000/";
+const path2 = "/ai"
 
-
-const counters = [
-    { label: "To do", value: 1556, color: "#00bfbf" }, // Cyan
-   
-   
-  ];
   const containerStyle = {
     width: "100%",
     display: "flex",
@@ -78,6 +73,13 @@ const counters = [
 const AIPage = () => {
   const location = useLocation();
 const { poNumber } = location.state || {}
+const [tableLength, setTableLength] = useState(0);
+
+const counters = [
+    { label: "To do", value: tableLength, color: "#00bfbf" }, // Cyan
+   
+   
+  ];
 
 
 
@@ -94,7 +96,7 @@ const { poNumber } = location.state || {}
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>
-            <BreadcrumbButton >{poNumber}</BreadcrumbButton>
+            <BreadcrumbButton href={path2}>AI Identified</BreadcrumbButton>
           </BreadcrumbItem>
           
         </Breadcrumb>
@@ -119,9 +121,11 @@ const { poNumber } = location.state || {}
         
       </div>
       
-      
+      {/* <div>
+
+      </div> max value */}  
       <div>
-        <AITable />
+      <AITable setTableLength={setTableLength} /> 
       </div>
 
       

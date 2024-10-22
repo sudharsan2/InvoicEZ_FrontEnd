@@ -146,7 +146,7 @@ const IssuefixDetails = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/user/invoices-update/${invoiceNo}/`,
+          `http://10.10.15.15:5719/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
 
@@ -188,7 +188,7 @@ const IssuefixDetails = () => {
 
   const handleSubmit = async () => {
     // Replace with your API endpoint
-    const apiUrl = "http://127.0.0.1:8000/user/po-number";
+    const apiUrl = "http://10.10.15.15:5719/user/po-number";
 
     try {
       const response = await fetch(apiUrl, {
@@ -222,7 +222,7 @@ const IssuefixDetails = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/user/invoices-update/${invoiceNo}/`,
+          `http://10.10.15.15:5719/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
         setFormData({
@@ -337,7 +337,7 @@ const IssuefixDetails = () => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/user/invoices-update/${formData.invoiceId}/`,
+        `http://10.10.15.15:5719/user/invoices-update/${formData.invoiceId}/`,
         {
           method: "PUT",
           headers: {

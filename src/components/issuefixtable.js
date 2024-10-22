@@ -67,7 +67,7 @@ const IssuefixTable = () => {
   // Fetch data from the API
   // Fetch data from the API
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/user/no-invoice-list")
+    fetch("http://10.10.15.15:5719/user/no-invoice-list")
       .then((response) => response.json())
       .then((data) => {
         // Format data to match the table columns
@@ -101,7 +101,7 @@ const IssuefixTable = () => {
         if (id) {
           // Check if id is defined
           console.log(`Deleting item with ID: ${id}`);
-          return fetch(`http://127.0.0.1:8000/user/delete-poheader/${id}`, {
+          return fetch(`http://10.10.15.15:5719/user/delete-poheader/${id}`, {
             method: "DELETE",
           });
         } else {
@@ -177,6 +177,7 @@ const IssuefixTable = () => {
           gap: "20px",
           fontWeight: "bold",
           marginLeft: "-3em",
+          // height:"30vh"
         }}
       >
         <button
@@ -219,7 +220,11 @@ const IssuefixTable = () => {
           onSearchChange={handleSearchChange}
         />
       </div>
-
+      <div  style={{
+        height: "70vh", // Set a fixed height for scrolling
+        overflowY: "auto", // Enable vertical scrolling
+        marginTop: "20px",
+      }}>
       <DataGrid
         items={filteredItems}
         columns={columns}
@@ -251,6 +256,9 @@ const IssuefixTable = () => {
           )}
         </DataGridBody>
       </DataGrid>
+
+      </div>
+      
     </>
   );
 };

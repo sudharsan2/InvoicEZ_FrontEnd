@@ -248,7 +248,8 @@ const NavDrawerDefault = (props) => {
   const [empId, setEmpId] = useState("");
   const dropdownId = useId("dropdown");
   // const styles = useStyles();
-
+  const[value,setValue] = useState("1")
+  console.log("value",{value});
   const someClickHandler = () => {
     navigate("/dashboard");
   };
@@ -277,12 +278,13 @@ const NavDrawerDefault = (props) => {
       }
     }
   }, []);
+  
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
       {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
       <NavDrawer
-        defaultSelectedValue="1"
-        defaultSelectedCategoryValue="1"
+        defaultSelectedValue={value}
+        // defaultSelectedCategoryValue="3"
         open={isOpen}
         type={type}
         onOpenChange={(_, { open }) => setIsOpen(open)}
@@ -299,7 +301,7 @@ const NavDrawerDefault = (props) => {
         }
       >
         {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
-
+       
         <NavDrawerHeader
           style={
             themestate
@@ -373,7 +375,11 @@ const NavDrawerDefault = (props) => {
                 }
                 onClick={() => {
                   navigate("/dashboard");
+                  setValue("1")
                 }}
+
+                
+
                 value="1"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -400,6 +406,7 @@ const NavDrawerDefault = (props) => {
                 }
                 onClick={() => {
                   navigate("/approve");
+                  setValue("2")
                 }}
                 value="2"
                 className={
@@ -427,6 +434,7 @@ const NavDrawerDefault = (props) => {
                 }
                 onClick={() => {
                   navigate("/ai");
+                  setValue("3")
                 }}
                 value="3"
                 className={
@@ -454,6 +462,7 @@ const NavDrawerDefault = (props) => {
                 }
                 onClick={() => {
                   navigate("/issuefix");
+                  setValue("4")
                 }}
                 value="4"
                 className={
@@ -479,7 +488,10 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                onClick={() => {
+                  navigate("/");
+                  setValue("5")
+                }}
                 value="5"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -504,7 +516,10 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                onClick={() => {
+                  navigate("/");
+                  setValue("6")
+                }}
                 value="6"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -529,7 +544,10 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                onClick={() => {
+                  navigate("/");
+                  setValue("7")
+                }}
                 value="7"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -592,12 +610,18 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                // onClick={someClickHandler}
                 value="1"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
                 }
                 style={{ marginTop: "10px", fontSize: "17px" }}
+
+                onClick={() => {
+                  navigate("/dashboard");
+                  setValue("1")
+
+                }}
               >
                 <div
                   style={
@@ -625,6 +649,7 @@ const NavDrawerDefault = (props) => {
                 }
                 onClick={() => {
                   navigate("/approve");
+                  setValue("2")
                 }}
                 value="2"
                 className={
@@ -643,39 +668,6 @@ const NavDrawerDefault = (props) => {
                 </div>
               </NavItem>
             </div>
-            {/* 3 */}
-            {/* <div style={{ width: "100%" }}>
-              <NavItem
-                target="_blank"
-                icon={
-                  <PersonStarRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="3"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
-              >
-                <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
-                >
-
-
-
-                </div>
-              </NavItem>
-            </div> */}
             <div style={{ width: "100%" }}>
               <div
                 style={
@@ -702,7 +694,12 @@ const NavDrawerDefault = (props) => {
                       themestate ? styles.navItemdark : styles.navItemlight
                     }
                     style={{ marginTop: "10px", fontSize: "17px" }}
+                    onClick={() => {
+                       
+                      setValue("3")
+                    }}
                   >
+                    
                     Issue
                   </NavCategoryItem>
                   <NavSubItemGroup>
@@ -711,6 +708,7 @@ const NavDrawerDefault = (props) => {
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
                         navigate("/ai");
+                        setValue("4")
                       }}
                     >
                       AI Identified
@@ -720,6 +718,7 @@ const NavDrawerDefault = (props) => {
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
                         navigate("/issuefix");
+                        setValue("5")
                       }}
                     >
                       Fix
@@ -742,7 +741,7 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                // onClick={someClickHandler}
                 value="6"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -760,6 +759,10 @@ const NavDrawerDefault = (props) => {
                         color: lighttheme.fontcolorlight,
                       }
                 }
+                onClick={() => {
+                       
+                  setValue("6")
+                }}
               >
                 <div style={{ marginTop: "2px" }}>Settings</div>
               </NavItem>
@@ -775,7 +778,7 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                // onClick={someClickHandler}
                 value="7"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -793,6 +796,10 @@ const NavDrawerDefault = (props) => {
                         color: lighttheme.fontcolorlight,
                       }
                 }
+                onClick={() => {
+                       
+                  setValue("7")
+                }}
               >
                 <div style={{ marginTop: "2px" }}>Purchase Order</div>
               </NavItem>
@@ -807,7 +814,7 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                // onClick={someClickHandler}
                 value="8"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -825,6 +832,10 @@ const NavDrawerDefault = (props) => {
                         color: lighttheme.fontcolorlight,
                       }
                 }
+                onClick={() => {
+                       
+                  setValue("8")
+                }}
               >
                 <div style={{ marginTop: "2px" }}>Usage</div>
               </NavItem>
