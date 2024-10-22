@@ -224,7 +224,7 @@
 //     if (newPassword === confirmPassword) {
 //       try {
 
-//         const response = await axios.post('http://10.10.15.15:5719/reset-password', {
+//         const response = await axios.post('http://127.0.0.1:8000/reset-password', {
 //           newPassword,
 
 //         });
@@ -366,7 +366,7 @@ const ResetPassword = () => {
     if (newPassword === confirmPassword) {
       try {
         const response = await axios.post(
-          "http://10.10.15.15:5719/user/reset-password",
+          "http://127.0.0.1:8000/user/reset-password",
           {
             password,
             token,

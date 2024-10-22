@@ -96,7 +96,7 @@ const ApproveTable = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://10.10.15.15:5719/user/one-invoice-list",
+        "http://127.0.0.1:8000/user/one-invoice-list",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
 
@@ -182,7 +182,7 @@ const ApproveTable = () => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.delete(
-            `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+            `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[item].InvoiceId}`,
           ),
         ),
       );
@@ -228,7 +228,7 @@ const ApproveTable = () => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `http://10.10.15.15:5719/user/approve-status/${filteredItems[item].InvoiceId}`,
+            `http://127.0.0.1:8000/user/approve-status/${filteredItems[item].InvoiceId}`,
           ),
         ),
       );
@@ -320,44 +320,45 @@ const ApproveTable = () => {
           onSearchChange={handleSearchChange}
         />
       </div>
-      <div  style={{
-        height: "400px", 
-        overflowY: "auto", 
-        marginTop: "20px",
-      }}>
-      <DataGrid
-        items={filteredItems}
-        columns={columns}
-        sortable
-        selectionMode="multiselect"
-        onSelectionChange={handleSelectionChange}
-        getRowId={(_, index) => index}
-        focusMode="composite"
-        style={{ minWidth: "550px" }}
+      <div
+        style={{
+          height: "400px",
+          overflowY: "auto",
+          marginTop: "20px",
+        }}
       >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody>
-          {({ item, rowId }) => (
-            <DataGridRow
-              key={rowId}
-              onClick={(e) => handleRowClick(e, item)}
-              selected={selectedRows.has(rowId)}
-            >
-              {({ renderCell }) => (
-                <DataGridCell>{renderCell(item)}</DataGridCell>
+        <DataGrid
+          items={filteredItems}
+          columns={columns}
+          sortable
+          selectionMode="multiselect"
+          onSelectionChange={handleSelectionChange}
+          getRowId={(_, index) => index}
+          focusMode="composite"
+          style={{ minWidth: "550px" }}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
               )}
             </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-        </div>
-      
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow
+                key={rowId}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(rowId)}
+              >
+                {({ renderCell }) => (
+                  <DataGridCell>{renderCell(item)}</DataGridCell>
+                )}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
+      </div>
     </>
   );
 };

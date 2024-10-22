@@ -266,7 +266,7 @@ const AiNav = ({ onPoNumberClick }) => {
   const [poNumbers, setPoNumbers] = useState([]); // To store PO numbers from API response
   const location2 = useLocation();
   const [items, setItems] = useState([]);
-  const [selectedPoNumber, setSelectedPoNumber] = useState(""); 
+  const [selectedPoNumber, setSelectedPoNumber] = useState("");
   // Extract the invoiceId from the URL
   const { invoiceNumber } = location2.state || {};
   console.log("AI", invoiceNumber);
@@ -274,7 +274,7 @@ const AiNav = ({ onPoNumberClick }) => {
     // const invoiceNumber = "110"; // Replace with dynamic invoice number if available
     try {
       const response = await axios.get(
-        `http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`,
+        `http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`,
       );
       const fetchedItem = response.data;
       console.log("Fetched Invoice Details:", fetchedItem);
@@ -285,10 +285,9 @@ const AiNav = ({ onPoNumberClick }) => {
         );
         console.log("poNumbers", poNumbers);
         setPoNumbers(poNumbers);
-        
-          setSelectedPoNumber(poNumbers[0]); 
-          onPoNumberClick(poNumbers[0]); 
-        
+
+        setSelectedPoNumber(poNumbers[0]);
+        onPoNumberClick(poNumbers[0]);
       }
     } catch (error) {
       console.error("Error fetching invoice data", error);
@@ -306,11 +305,11 @@ const AiNav = ({ onPoNumberClick }) => {
       </Tooltip>
     );
   };
-//  console.log("Number",number);
+  //  console.log("Number",number);
   return (
     <div className={styles.root}>
       <NavDrawer
-      defaultSelectedValue={0}
+        defaultSelectedValue={0}
         open={isOpen}
         style={{ backgroundColor: "#fff" }}
       >
@@ -322,16 +321,12 @@ const AiNav = ({ onPoNumberClick }) => {
               <NavItem
                 key={index}
                 value={index}
-                
                 style={{
                   backgroundColor: "#fff",
                   cursor: "pointer",
                   maxWidth: "200px",
                 }}
-                onClick={() => onPoNumberClick(poNumber)
-                  
-                }
-               
+                onClick={() => onPoNumberClick(poNumber)}
               >
                 PO-{poNumber}
               </NavItem>

@@ -67,7 +67,7 @@ const IssuefixTable = () => {
   // Fetch data from the API
   // Fetch data from the API
   useEffect(() => {
-    fetch("http://10.10.15.15:5719/user/no-invoice-list")
+    fetch("http://127.0.0.1:8000/user/no-invoice-list")
       .then((response) => response.json())
       .then((data) => {
         // Format data to match the table columns
@@ -101,7 +101,7 @@ const IssuefixTable = () => {
         if (id) {
           // Check if id is defined
           console.log(`Deleting item with ID: ${id}`);
-          return fetch(`http://10.10.15.15:5719/user/delete-invoice/${id}`, {
+          return fetch(`http://127.0.0.1:8000/user/delete-invoice/${id}`, {
             method: "DELETE",
           });
         } else {
@@ -178,6 +178,7 @@ const IssuefixTable = () => {
           fontWeight: "bold",
           marginLeft: "-3em",
           height: "10vh",
+          maxHeight: "10vh",
         }}
       >
         <button
@@ -222,7 +223,7 @@ const IssuefixTable = () => {
       </div>
       <div
         style={{
-          height: "80vh", // Set a fixed height for scrolling
+          maxHeight: "50vh", // Set a fixed height for scrolling
           overflowY: "auto", // Enable vertical scrolling
           marginTop: "20px",
         }}

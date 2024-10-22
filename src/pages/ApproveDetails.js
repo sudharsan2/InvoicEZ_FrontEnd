@@ -170,7 +170,7 @@ const ApprovePage = () => {
 
     try {
       const response = await axios.post(
-        "http://10.10.15.15:5719/user/po-number",
+        "http://127.0.0.1:8000/user/po-number",
         payload,
       );
 
@@ -272,7 +272,7 @@ const ApprovePage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://10.10.15.15:5719/user/invoices-file/${inv_id}`,
+        `http://127.0.0.1:8000/user/invoices-file/${inv_id}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -291,7 +291,7 @@ const ApprovePage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://10.10.15.15:5719/user/po-details/${Id}/`,
+          `http://127.0.0.1:8000/user/po-details/${Id}/`,
         );
         const fetchedItems = response.data;
 
@@ -426,102 +426,102 @@ const ApprovePage = () => {
           </BreadcrumbItem>
         </Breadcrumb>
       </div>
-      <div style={{maxHeight:"20vh"}}>
-      <div className={styles.root}>
-        <div className={styles.header}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              alignItems: "center",
-              width: "100%",
-              marginTop: "0px",
-            }}
-          >
-            <div style={{ right: "5%", display: "flex", gap: "10px" }}>
-              <Button>Revoke</Button>
-              <Button
-                className=" buttoncolor"
-                style={{ backgroundColor: "#3570c3", color: "white" }}
-              >
-                Approve
-              </Button>
+      <div style={{ maxHeight: "20vh" }}>
+        <div className={styles.root}>
+          <div className={styles.header}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "end",
+                alignItems: "center",
+                width: "100%",
+                marginTop: "0px",
+              }}
+            >
+              <div style={{ right: "5%", display: "flex", gap: "10px" }}>
+                <Button>Revoke</Button>
+                <Button
+                  className=" buttoncolor"
+                  style={{ backgroundColor: "#3570c3", color: "white" }}
+                >
+                  Approve
+                </Button>
+              </div>
             </div>
-          </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              alignItems: "center",
-              width: "100%",
-              marginTop: "20px",
-            }}
-          >
-            <CreatableSelect
-              className="basic-single"
-              classNamePrefix="select"
-              value={selectedOption}
-              onChange={handleChange}
-              name="po_number"
-              options={PONumberOPtions}
-              styles={{
-                container: (provided) => ({ ...provided, width: 200 }),
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "end",
+                alignItems: "center",
+                width: "100%",
                 marginTop: "20px",
               }}
-              onCreateOption={handleCreate}
-              placeholder="Select or Enter PO..."
-              isClearable
-            />
+            >
+              <CreatableSelect
+                className="basic-single"
+                classNamePrefix="select"
+                value={selectedOption}
+                onChange={handleChange}
+                name="po_number"
+                options={PONumberOPtions}
+                styles={{
+                  container: (provided) => ({ ...provided, width: 200 }),
+                  marginTop: "20px",
+                }}
+                onCreateOption={handleCreate}
+                placeholder="Select or Enter PO..."
+                isClearable
+              />
 
-            <Button
-              appearance="subtle"
-              style={{
-                color: "#0078d4",
-                backgroundColor: "#fff",
-                alignSelf: "flex-end",
-                width: "auto",
-              }}
-              className={styles.wrapper}
-              onClick={handlePostApi}
-            >
-              Submit
-            </Button>
-          </div>
+              <Button
+                appearance="subtle"
+                style={{
+                  color: "#0078d4",
+                  backgroundColor: "#fff",
+                  alignSelf: "flex-end",
+                  width: "auto",
+                }}
+                className={styles.wrapper}
+                onClick={handlePostApi}
+              >
+                Submit
+              </Button>
+            </div>
 
-          <h2 style={{ margin: "20px 0 20px 0" }}>
-            PO:{purchaseOrder.poNumber}
-          </h2>
+            <h2 style={{ margin: "20px 0 20px 0" }}>
+              PO:{purchaseOrder.poNumber}
+            </h2>
 
-          <div style={{ display: "flex", marginBottom: "20px"}}>
-            <div
-              style={{ borderLeft: "5px solid #342d7c", paddingLeft: "10px" }}
-            >
-              <p>Supplier</p>
-              <h2>{supplier}</h2>
-              {/* <h2>Levin</h2> */}
+            <div style={{ display: "flex", marginBottom: "20px" }}>
+              <div
+                style={{ borderLeft: "5px solid #342d7c", paddingLeft: "10px" }}
+              >
+                <p>Supplier</p>
+                <h2>{supplier}</h2>
+                {/* <h2>Levin</h2> */}
+              </div>
+              <div
+                style={{
+                  marginLeft: "3vw",
+                  borderLeft: "5px solid #9a3ca9",
+                  paddingLeft: "10px",
+                }}
+              >
+                <p>Invoice Matching</p>
+                <h2>PO</h2>
+              </div>
+              <div
+                style={{
+                  marginLeft: "3vw",
+                  borderLeft: "5px solid black",
+                  paddingLeft: "10px",
+                }}
+              >
+                <p>Line Matching</p>
+                <h2>FULL</h2>
+              </div>
             </div>
-            <div
-              style={{
-                marginLeft: "3vw",
-                borderLeft: "5px solid #9a3ca9",
-                paddingLeft: "10px",
-              }}
-            >
-              <p>Invoice Matching</p>
-              <h2>PO</h2>
-            </div>
-            <div
-              style={{
-                marginLeft: "3vw",
-                borderLeft: "5px solid black",
-                paddingLeft: "10px",
-              }}
-            >
-              <p>Line Matching</p>
-              <h2>FULL</h2>
-            </div>
-          </div>
           </div>
 
           <TabList
@@ -833,8 +833,16 @@ const ApprovePage = () => {
         )}
 
         {selectedtab === "tab2" && (
-          <div style={{ width: "100%", display: "flex",overflowY: "auto", height: "40vh",marginTop: "10px",}}>
-            <div style={{ flex: 1, }}>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              overflowY: "auto",
+              height: "40vh",
+              marginTop: "10px",
+            }}
+          >
+            <div style={{ flex: 1 }}>
               <Table>
                 <TableHeader
                   style={{

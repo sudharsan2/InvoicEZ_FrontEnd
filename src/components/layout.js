@@ -290,7 +290,7 @@ const CustomLayout = ({ children }) => {
 
       try {
         const response = await axios.post(
-          "http://10.10.15.15:5719/user/invoice-upload",
+          "http://127.0.0.1:8000/user/invoice-upload",
           formData,
           {
             headers: {
@@ -334,6 +334,7 @@ const CustomLayout = ({ children }) => {
       setUsername(storedUsername);
     }
   }, []);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);

@@ -237,8 +237,7 @@ const AIDetailPage = () => {
   });
 
   const handleViewInvoice = async () => {
-    try 
-    {
+    try {
       const response = await fetch(
         `http://127.0.0.1:8000/user/invoices-file/${invoiceId}`,
       );
@@ -271,7 +270,7 @@ const AIDetailPage = () => {
     console.log("test function called");
     setSelectedInvoiceNumber(poNumber);
     try {
-      // const response = await axios.get(`http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`);
+      // const response = await axios.get(`http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`);
       // const fetchedData = response.data;
 
       const selectedPoDetails = poheader.find(
@@ -295,12 +294,13 @@ const AIDetailPage = () => {
     if (invoiceNumber) {
       try {
         const response = await axios.get(
-          `http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`,
+          `http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`,
         );
         const fetchedItem = response.data;
         console.log("R", fetchedItem);
         setInvoiceId(fetchedItem.invoice_info.id);
         setInvoiceData(fetchedItem);
+
         setPoHeader(fetchedItem.po_headers);
 
         const poOptions = fetchedItem.po_headers.map((header) => ({
@@ -332,7 +332,7 @@ const AIDetailPage = () => {
     { label: "Invoice Date", value: invoiceData.invoice_info.InvoiceDate },
     {
       label: "Invoice Due Date",
-      
+
       value: invoiceData.invoice_info.DueDate || "Null",
     },
     {
@@ -406,7 +406,7 @@ const AIDetailPage = () => {
     // Uncomment the following block if you want to save the PO number immediately when created.
     /*
     try {
-      const response = await fetch('http://10.10.15.15:5719/user/po-number', {
+      const response = await fetch('http://127.0.0.1:8000/user/po-number', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -449,7 +449,7 @@ const AIDetailPage = () => {
 
     try {
       const response = await axios.post(
-        "http://10.10.15.15:5719/user/po-number",
+        "http://127.0.0.1:8000/user/po-number",
         payload,
       );
 
@@ -546,7 +546,7 @@ const AIDetailPage = () => {
               style={{ borderLeft: "5px solid #342d7c", paddingLeft: "10px" }}
             >
               <p>Supplier</p>
-              <h2>Levin Technologies</h2>
+              <h2>{invoiceData.invoice_info.VendorName}</h2>
             </div>
             <div
               style={{
@@ -566,7 +566,7 @@ const AIDetailPage = () => {
               }}
             >
               <p>Potential PO</p>
-              <h2>3</h2>
+              <h2>{poheader.length}</h2>
             </div>
           </div>
 
@@ -708,25 +708,26 @@ const AIDetailPage = () => {
                 </ul>
 
                 <div>
-                  {dataitem.po_items.map((item, index) => (
-                    <ul key={item.id}>
-                      <h3>Item {index + 1}</h3>
-                      <ul>
-                        <li>Item Name: {item.item_name}</li>
-                        <li>Line Number: {item.line_num}</li>
-                        <li>Quantity: {item.quantity}</li>
-                        <li>Unit Price: {item.unit_price}</li>
-                        <li>Amount Billed: {item.amount_billed || "N/A"}</li>
-                        <li>Order Type: {item.order_type_lookup_code}</li>
-                        <li>Purchase Basis: {item.purchase_basis}</li>
-                        <li>Category: {item.category_name}</li>
-                        <li>Status: {item.closed_code}</li>
-                        <li>Description: {item.item_description}</li>
-                        <li>Need By Date: {item.need_by_date || "N/A"}</li>
-                        <li>Promised Date: {item.promised_date}</li>
+                  {dataitem.po_items &&
+                    dataitem.po_items.map((item, index) => (
+                      <ul key={item.id}>
+                        <h3>Item {index + 1}</h3>
+                        <ul>
+                          <li>Item Name: {item.item_name}</li>
+                          <li>Line Number: {item.line_num}</li>
+                          <li>Quantity: {item.quantity}</li>
+                          <li>Unit Price: {item.unit_price}</li>
+                          <li>Amount Billed: {item.amount_billed || "N/A"}</li>
+                          <li>Order Type: {item.order_type_lookup_code}</li>
+                          <li>Purchase Basis: {item.purchase_basis}</li>
+                          <li>Category: {item.category_name}</li>
+                          <li>Status: {item.closed_code}</li>
+                          <li>Description: {item.item_description}</li>
+                          <li>Need By Date: {item.need_by_date || "N/A"}</li>
+                          <li>Promised Date: {item.promised_date}</li>
+                        </ul>
                       </ul>
-                    </ul>
-                  ))}
+                    ))}
                 </div>
               </div>
 
