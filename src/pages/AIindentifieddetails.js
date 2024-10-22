@@ -236,7 +236,8 @@ const AIDetailPage = () => {
   });
 
   const handleViewInvoice = async () => {
-    try {
+    try 
+    {
       const response = await fetch(
         `http://10.10.15.15:5719/user/invoices-file/${invoiceNumber}`,
       );
@@ -330,6 +331,7 @@ const AIDetailPage = () => {
     { label: "Invoice Date", value: invoiceData.invoice_info.InvoiceDate },
     {
       label: "Invoice Due Date",
+      
       value: invoiceData.invoice_info.DueDate || "Null",
     },
     {

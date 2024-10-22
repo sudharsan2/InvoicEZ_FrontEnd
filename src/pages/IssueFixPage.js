@@ -52,13 +52,13 @@ const IssuefixPage = () => {
       >
         <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Fix</h3>
       </div>
-      <div style={{height:"10vh"}}>
+      <div style={{maxHeight:"10vh"}}>
 
       
 
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ width: "65vw" }}>
-          <TagCounters type="fix"/>
+          <TagCounters type="approve"/>
         </div>
         {/* <div style={{display:'flex', flexDirection:'column'}} */}
         <div
@@ -71,20 +71,20 @@ const IssuefixPage = () => {
           }}
         >
           {/* New Filter Button */}
-          <Button
+          {/* <Button
             icon={<FilterRegular />}
             appearance="primary" // Gives it a highlighted primary style
           >
             New Filter
-          </Button>
+          </Button> */}
 
           {/* Clear Filter Button */}
-          <Button
+          {/* <Button
             icon={<DismissCircleRegular />}
             appearance="outline" // Gives it an outlined style
           >
             Clear Filter
-          </Button>
+          </Button> */}
         </div>
       </div>
       </div>

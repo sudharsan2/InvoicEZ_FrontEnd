@@ -309,7 +309,7 @@ const ApproveTable = () => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          onClick={() => alert("Refresh")}
+          onClick={fetchData}
         >
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>

@@ -65,7 +65,7 @@ const AITable = ({ setTableLength }) => {
 
   const location2 = useLocation();
   const { invoiceNumber } = location2.state || {};
-  console.log("inn2", invoiceNumber);
+  console.log("inn", invoiceNumber);
 
   const fetchData = async () => {
     try {
@@ -136,11 +136,12 @@ const AITable = ({ setTableLength }) => {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
         .join(", ");
-
+        console.log("Invoice",{invoiceNumber});
       await Promise.all(
+        
         selectedItemsArray.map((item) =>
           axios.delete(
-            `http://10.10.15.15:5719/user/delete-poheader/${filteredItems[item].po_number}`,
+            `http://10.10.15.15:5719/user/delete-poheader/${filteredItems[item].InvoiceId}`,
           ),
         ),
       );
@@ -248,7 +249,7 @@ const AITable = ({ setTableLength }) => {
       </div>
       <div
        style={{
-        height: "400px", 
+        height: "70vh", 
         overflowY: "auto",
         marginTop: "20px",
       }}>

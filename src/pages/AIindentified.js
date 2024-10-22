@@ -121,7 +121,9 @@ const counters = [
         
       </div>
       
-      
+      {/* <div>
+
+      </div> max value */}  
       <div>
       <AITable setTableLength={setTableLength} /> 
       </div>
