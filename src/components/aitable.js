@@ -61,6 +61,7 @@ const AITable = ({ setTableLength }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]);
   const [selectedRows, setSelectedRows] = useState(new Set());
+  const [invoiceId, setInvoiceId] = useState(null);
   const navigate = useNavigate();
 
   const location2 = useLocation();
@@ -73,6 +74,7 @@ const AITable = ({ setTableLength }) => {
         "http://10.10.15.15:5719/user/morethanone-invoice-list",
       );
       const fetchedItems = response.data;
+      setInvoiceId(fetchedItems[0].id)
       const inv = fetchedItems.InvoiceId;
       const mappedItems = fetchedItems.map((item) => ({
         Id: item.id || "NULL",
@@ -141,7 +143,7 @@ const AITable = ({ setTableLength }) => {
         
         selectedItemsArray.map((item) =>
           axios.delete(
-            `http://10.10.15.15:5719/user/delete-poheader/${filteredItems[item].InvoiceId}`,
+            `http://10.10.15.15:5719/user/delete-invoice/${invoiceId}`,
           ),
         ),
       );
