@@ -1,17 +1,17 @@
 // authSlice.js
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  InvoiceUploadRefresh: false,
+};
 
 const userActions = createSlice({
-  name: 'auth',
-  initialState: {
-    isAuthenticated: false,
-    username: '', // Add username to the initial state
-  },
+  name: "auth",
+  initialState,
   reducers: {
-    setUsername(state, action) {
-      state.username = action.payload;
+    InvoiceUploadRefresh(state) {
+      state.InvoiceUploadRefresh = !state.InvoiceUploadRefresh;
     },
-    // other reducers like setAuthenticated, etc.
   },
 });
 

@@ -44,8 +44,13 @@ import { ShareIos24Filled } from "@fluentui/react-icons";
 import axios from "axios";
 import InvoiceUpload from "./UploadInvoice";
 import { useRef } from "react";
-import { notification } from "antd";
+
+import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
+import { Modal, Upload, notification, message } from "antd";
+import WalkInCandidate from "./WalkinCandidate.jsx";
+
 const { Header, Content, Footer, Sider } = Layout;
+const { Dragger } = Upload;
 const useStyles = makeStyles({
   contentHeader: {
     marginTop: "0",
@@ -241,6 +246,8 @@ const CustomLayout = ({ children }) => {
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
   const [username, setUsername] = useState("");
+  const [isWalkinUpload, setIsWalkinUpload] = useState(false);
+  const [newCandidate, setNewCandidate] = useState(false);
 
   // const fileInputRef = useRef(null);
 
@@ -259,10 +266,25 @@ const CustomLayout = ({ children }) => {
     }
   };
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleFileChange = async (info) => {
+    const { status, originFileObj: file } = info.file;
+
+    if (status === "uploading") {
+      // Ignore this, as we're handling the file manually
+      return;
+    }
+
     if (file) {
-      console.log("12");
       const formData = new FormData();
       formData.append("file", file);
 
@@ -277,13 +299,11 @@ const CustomLayout = ({ children }) => {
           },
         );
 
-        // Show success notification
         notification.success({
           message: "Upload Successful",
           description: `File ${file.name} uploaded successfully!`,
         });
       } catch (error) {
-        // Handle error (you can also show an error notification)
         console.error("Upload failed:", error);
         notification.error({
           message: "Upload Failed",
@@ -292,6 +312,12 @@ const CustomLayout = ({ children }) => {
         });
       }
     }
+  };
+
+  const uploadProps = {
+    name: "file",
+    multiple: false, // Single file upload
+    onChange: handleFileChange, // This is where we handle the file change
   };
 
   const toggleDarkMode = (checked) => {
@@ -343,6 +369,19 @@ const CustomLayout = ({ children }) => {
     }
   };
 
+  const handleIsWalkinUpload = () => {
+    console.log("yes it works");
+    setIsWalkinUpload(true);
+    setNewCandidate(false);
+  };
+  const handleNewCandidate = () => {
+    setNewCandidate(false);
+  };
+  const handleNewCandidateBtn = () => {
+    console.log("btn clicked");
+    setNewCandidate(true);
+  };
+
   return (
     <div style={{}}>
       <div>
@@ -351,7 +390,7 @@ const CustomLayout = ({ children }) => {
             <div className="focusr-logo">
               <img src={frLogo} alt="FRLogo" className="focusr-logo-img"></img>
             </div>
-            <span className="focusR-text">EZinvoice</span>
+            <span className="focusR-text">InvoicEZ</span>
           </div>
           {/* <Field
             style={
@@ -418,13 +457,13 @@ const CustomLayout = ({ children }) => {
                 }}
                 onClick={handleButtonClick}
               >
-                <ShareIos24Filled />
-                <input
+                <ShareIos24Filled onClick={handleNewCandidateBtn} />
+                {/* <input
                   type="file"
                   ref={fileInputRef}
                   style={{ display: "none" }} // Hide the file input
-                  onChange={handleFileChange} // Add the onChange prop to handle file input changes
-                />
+                  onChange={showModal} // Add the onChange prop to handle file input changes
+                /> */}
               </div>
             </div>
             <div className="notification-container">
@@ -472,6 +511,33 @@ const CustomLayout = ({ children }) => {
         </div>
       </div>
       <div style={{ marginTop: "48px" }}>{children}</div>
+      {/* <Modal
+        title="Upload File"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Dragger {...uploadProps}>
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+          </p>
+          <p className="ant-upload-text">
+            Click or drag file to this area to upload
+          </p>
+          <p className="ant-upload-hint">
+            Support for a single file upload. Strictly prohibited from uploading
+            company data or other banned files.
+          </p>
+        </Dragger>
+      </Modal> */}
+      <Modal
+        open={newCandidate}
+        onCancel={handleNewCandidate}
+        width={540}
+        footer={[]}
+      >
+        <WalkInCandidate isWalkinUpload={handleIsWalkinUpload} />
+      </Modal>
     </div>
   );
 };

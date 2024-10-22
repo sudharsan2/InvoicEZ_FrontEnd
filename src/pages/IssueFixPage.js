@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import {
   Breadcrumb,
@@ -14,10 +12,10 @@ import {
 } from "@fluentui/react-icons";
 import TagCounters from "../components/gridapprove";
 import ApproveTable from "../components/approvetable";
-import Search from "../components/Search"; 
+import Search from "../components/Search";
 import IssuefixTable from "../components/issuefixtable";
-import { Button, makeStyles } from '@fluentui/react-components';
-import { FilterRegular, DismissCircleRegular } from '@fluentui/react-icons'; // Import icons
+import { Button, makeStyles } from "@fluentui/react-components";
+import { FilterRegular, DismissCircleRegular } from "@fluentui/react-icons"; // Import icons
 
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/approve";
@@ -29,7 +27,6 @@ const IssuefixPage = () => {
     { label: "AI Identified", value: 2, color: "#d62727" }, // Red
     { label: "User Resolved", value: 9, color: "#1f497d" }, // Dark Blue
     { label: "Refix", value: 4, color: "#d21994" }, // Magenta
-    
   ];
   return (
     <div>
@@ -45,38 +42,43 @@ const IssuefixPage = () => {
           <BreadcrumbDivider />
         </Breadcrumb>
       </div>
-      <div style={{ display: "flex", justifyContent: "flexStart", padding: "1px" }}>
+      <div
+        style={{ display: "flex", justifyContent: "flexStart", padding: "1px" }}
+      >
         <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Fix</h3>
       </div>
 
-      
-      <div  style={{display:'flex'}}>
-        <div style={{width:'65vw'}}>
-        <TagCounters  counters={counters}/>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ width: "65vw" }}>
+          <TagCounters counters={counters} />
         </div>
         {/* <div style={{display:'flex', flexDirection:'column'}} */}
-        <div style={{display:'flex', flexDirection:'column', gap:'10px', justifyContent:'space-around'}}>
-      {/* New Filter Button */}
-      <Button
-      
-        icon={<FilterRegular />}
-        appearance="primary" // Gives it a highlighted primary style
-      >
-        New Filter
-      </Button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            justifyContent: "space-around",
+          }}
+        >
+          {/* New Filter Button */}
+          <Button
+            icon={<FilterRegular />}
+            appearance="primary" // Gives it a highlighted primary style
+          >
+            New Filter
+          </Button>
 
-      {/* Clear Filter Button */}
-      <Button
-        icon={<DismissCircleRegular />}
-        appearance="outline" // Gives it an outlined style
-      >
-        Clear Filter
-      </Button>
-    </div>
-      
+          {/* Clear Filter Button */}
+          <Button
+            icon={<DismissCircleRegular />}
+            appearance="outline" // Gives it an outlined style
+          >
+            Clear Filter
+          </Button>
+        </div>
       </div>
       <div>
-
         <IssuefixTable />
       </div>
     </div>

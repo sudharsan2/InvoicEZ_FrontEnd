@@ -36,27 +36,30 @@ const path1 = "http://localhost:3000/";
 
 const useStyles = makeStyles({
   root: {
-    width: "77vw",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
+    // width: "77vw",
+    // height: "100vh",
+    // display: "flex",
+    // flexDirection: "column",
   },
+
   header: {
     padding: "20px",
   },
+
   content1: {
-    flex: 1,
     overflowY: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
-    maxHeight: "48vh",
+    maxHeight: "70vh",
   },
+
   content2: {
     width: "77vw",
     overflowY: "auto",
-    paddingTop: "3vh",
+    // paddingTop: "3vh",
     padding: "0 20px",
-    maxHeight: "48vh",
+
+    // maxHeight: "48vh",
   },
   controls: {
     display: "flex",
@@ -269,7 +272,7 @@ const ApprovePage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/user/invoices-file/${invoiceid}`,
+        `http://127.0.0.1:8000/user/invoices-file/${inv_id}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -436,7 +439,7 @@ const ApprovePage = () => {
             }}
           >
             <div style={{ right: "5%", display: "flex", gap: "10px" }}>
-              <Button>Review</Button>
+              <Button>Revoke</Button>
               <Button
                 className=" buttoncolor"
                 style={{ backgroundColor: "#3570c3", color: "white" }}
@@ -516,7 +519,7 @@ const ApprovePage = () => {
               }}
             >
               <p>Line Matching</p>
-              <h2>{closedcode}</h2>
+              <h2>FULL</h2>
             </div>
           </div>
 
@@ -829,95 +832,100 @@ const ApprovePage = () => {
         )}
 
         {selectedtab === "tab2" && (
-          <div className={styles.content2}>
-            <Table>
-              <TableHeader
-                style={{
-                  position: "sticky",
-                  top: 0,
-                  backgroundColor: themestate ? "#383838" : "white", // background to ensure it's visible
-                  zIndex: 1, // to ensure it stays above the content
-                  color: themestate ? "white" : "black",
-                }}
-              >
-                <TableRow
-                  style={
-                    themestate
-                      ? { color: "white", borderBottomColor: "#383838" }
-                      : {}
-                  }
+          <div style={{ width: "100%", display: "flex", overflowY: "auto" }}>
+            {/* Left Div (1/4 of the total width) */}
+            <div style={{ flex: 1 }}>
+              <Table>
+                <TableHeader
+                  style={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: themestate ? "#383838" : "white", // background to ensure it's visible
+                    zIndex: 1, // to ensure it stays above the content
+                    color: themestate ? "white" : "black",
+                  }}
                 >
-                  {/* Update the header labels */}
-                  <TableHeaderCell
-                    style={{ fontWeight: "bold", cursor: "pointer" }}
-                    {...headerSortProps("PO_line_id")}
+                  <TableRow
+                    style={
+                      themestate
+                        ? { color: "white", borderBottomColor: "#383838" }
+                        : {}
+                    }
                   >
-                    PO Line ID
-                  </TableHeaderCell>
-                  <TableHeaderCell
-                    style={{ fontWeight: "bold", cursor: "pointer" }}
-                    {...headerSortProps("name")}
-                  >
-                    Name
-                  </TableHeaderCell>
-                  <TableHeaderCell
-                    style={{ fontWeight: "bold", cursor: "pointer" }}
-                    {...headerSortProps("description")}
-                  >
-                    Description
-                  </TableHeaderCell>
-                  <TableHeaderCell
-                    style={{ fontWeight: "bold", cursor: "pointer" }}
-                    {...headerSortProps("invoice_item_name")}
-                  >
-                    Invc Item Name
-                  </TableHeaderCell>
-                  <TableHeaderCell
-                    style={{ fontWeight: "bold", cursor: "pointer" }}
-                    {...headerSortProps("unit_price")}
-                  >
-                    Unit Price
-                  </TableHeaderCell>
-                  <TableHeaderCell
-                    style={{ fontWeight: "bold", cursor: "pointer" }}
-                    {...headerSortProps("quantity")}
-                  >
-                    Quantity
-                  </TableHeaderCell>
-                  <TableHeaderCell
-                    style={{ fontWeight: "bold", cursor: "pointer" }}
-                    {...headerSortProps("invoice_quantity")}
-                  >
-                    Invoice Quantity
-                  </TableHeaderCell>
-                  {/* <TableHeaderCell
+                    {/* Update the header labels */}
+                    <TableHeaderCell
+                      style={{ fontWeight: "bold", cursor: "pointer" }}
+                      {...headerSortProps("PO_line_id")}
+                    >
+                      PO Line ID
+                    </TableHeaderCell>
+                    <TableHeaderCell
+                      style={{ fontWeight: "bold", cursor: "pointer" }}
+                      {...headerSortProps("name")}
+                    >
+                      Name
+                    </TableHeaderCell>
+                    <TableHeaderCell
+                      style={{ fontWeight: "bold", cursor: "pointer" }}
+                      {...headerSortProps("description")}
+                    >
+                      Description
+                    </TableHeaderCell>
+                    <TableHeaderCell
+                      style={{ fontWeight: "bold", cursor: "pointer" }}
+                      {...headerSortProps("invoice_item_name")}
+                    >
+                      Invc Item Name
+                    </TableHeaderCell>
+                    <TableHeaderCell
+                      style={{ fontWeight: "bold", cursor: "pointer" }}
+                      {...headerSortProps("unit_price")}
+                    >
+                      Unit Price
+                    </TableHeaderCell>
+                    <TableHeaderCell
+                      style={{ fontWeight: "bold", cursor: "pointer" }}
+                      {...headerSortProps("quantity")}
+                    >
+                      Quantity
+                    </TableHeaderCell>
+                    <TableHeaderCell
+                      style={{ fontWeight: "bold", cursor: "pointer" }}
+                      {...headerSortProps("invoice_quantity")}
+                    >
+                      Invoice Quantity
+                    </TableHeaderCell>
+                    {/* <TableHeaderCell
                     style={{ fontWeight: "bold", cursor: "pointer" }}
                     {...headerSortProps("final_po_quantity")}
                   >
                     Final PO Quantity
                   </TableHeaderCell> */}
-                </TableRow>
-              </TableHeader>
-
-              <TableBody style={themestate ? { color: "white" } : {}}>
-                {sortedData.map((item) => (
-                  <TableRow
-                    key={item.id}
-                    style={themestate ? { color: "white" } : {}}
-                    className={themestate ? "hovereffect dark" : "hovereffect"}
-                  >
-                    <TableCell>{item.id}</TableCell>
-                    <TableCell>{item.item_name}</TableCell>
-                    <TableCell>{item.item_description}</TableCell>
-                    <TableCell>{item.item_name}</TableCell>
-                    <TableCell>{item.unit_price}</TableCell>
-                    <TableCell>{item.quantity}</TableCell>
-                    <TableCell>{item.Quantity}</TableCell>
-                    <TableCell>{item.final_po_quantity}</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+
+                <TableBody style={themestate ? { color: "white" } : {}}>
+                  {sortedData.map((item) => (
+                    <TableRow
+                      key={item.id}
+                      style={themestate ? { color: "white" } : {}}
+                      className={
+                        themestate ? "hovereffect dark" : "hovereffect"
+                      }
+                    >
+                      <TableCell>{item.id}</TableCell>
+                      <TableCell>{item.item_name}</TableCell>
+                      <TableCell>{item.item_description}</TableCell>
+                      <TableCell>{item.item_name}</TableCell>
+                      <TableCell>{item.unit_price}</TableCell>
+                      <TableCell>{item.quantity}</TableCell>
+                      <TableCell>{item.Quantity}</TableCell>
+                      <TableCell>{item.final_po_quantity}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         )}
       </div>

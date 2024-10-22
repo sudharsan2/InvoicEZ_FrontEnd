@@ -1,12 +1,19 @@
-// AreaChartComponent.js
-import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import React from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
-const AreaChartComponent = ({ supplierNames, openPOCounts }) => {
+const AreaChartComponent = ({ supplierNames, supplierTotalAmounts }) => {
   // Create data format for Recharts
   const data = supplierNames.map((supplier, index) => ({
     supplierName: supplier,
-    openPOCount: openPOCounts[index],
+    supplierTotalAmounts: supplierTotalAmounts[index],
   }));
 
   return (
@@ -24,7 +31,13 @@ const AreaChartComponent = ({ supplierNames, openPOCounts }) => {
         <XAxis dataKey="supplierName" />
         <YAxis />
         <Tooltip />
-        <Area type="monotone" dataKey="openPOCount" stroke="#8884d8" fill="#8884d8" />
+        {/* Updated dataKey to supplierTotalAmounts */}
+        <Area
+          type="monotone"
+          dataKey="supplierTotalAmounts"
+          stroke="#8884d8"
+          fill="#8884d8"
+        />
       </AreaChart>
     </ResponsiveContainer>
   );

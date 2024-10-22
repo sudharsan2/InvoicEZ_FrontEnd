@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -59,7 +57,8 @@ import {
   Navigation24Regular,
   DocumentCatchUp24Filled,
   DocumentCatchUp24Regular,
-  
+  WrenchSettings24Filled,
+  WrenchSettings24Regular,
 } from "@fluentui/react-icons";
 
 import {
@@ -206,6 +205,8 @@ const TableSearchRegular = bundleIcon(Cart24Filled, Cart24Regular);
 const Usage = bundleIcon(DocumentCatchUp24Filled, DocumentCatchUp24Regular);
 const Navi = bundleIcon(Navigation24Filled, Navigation24Regular);
 
+const Fix = bundleIcon(WrenchSettings24Filled, WrenchSettings24Regular);
+
 const Search = bundleIcon(PersonSearch20Filled, PersonSearch20Regular);
 const PerformanceReviews = bundleIcon(
   PreviewLink20Filled,
@@ -247,7 +248,7 @@ const NavDrawerDefault = (props) => {
   const [empId, setEmpId] = useState("");
   const dropdownId = useId("dropdown");
   // const styles = useStyles();
- 
+
   const someClickHandler = () => {
     navigate("/dashboard");
   };
@@ -354,7 +355,7 @@ const NavDrawerDefault = (props) => {
             }
           >
             <Tooltip
-              content={"Dashboard"}
+              content={"Home"}
               positioning="after"
               withArrow={true}
               appearance={themestate ? "inverted" : "normal"}
@@ -370,7 +371,9 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                onClick={() => {
+                  navigate("/dashboard");
+                }}
                 value="1"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -379,8 +382,8 @@ const NavDrawerDefault = (props) => {
             </Tooltip>
 
             <Tooltip
-              content={"Employee"}
-              // positioning="after"
+              content={"approve"}
+              positioning="after"
               withArrow={true}
               appearance={themestate ? "inverted" : "normal"}
             >
@@ -395,7 +398,9 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                onClick={() => {
+                  navigate("/approve");
+                }}
                 value="2"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -404,7 +409,7 @@ const NavDrawerDefault = (props) => {
             </Tooltip>
 
             <Tooltip
-              content={"Manager"}
+              content={"AI Identified"}
               positioning="after"
               withArrow={true}
               appearance={themestate ? "inverted" : "normal"}
@@ -420,7 +425,9 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                onClick={() => {
+                  navigate("/ai");
+                }}
                 value="3"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -429,7 +436,7 @@ const NavDrawerDefault = (props) => {
             </Tooltip>
 
             <Tooltip
-              content={"Reviewer"}
+              content={"Fix"}
               positioning="after"
               withArrow={true}
               appearance={themestate ? "inverted" : "normal"}
@@ -437,7 +444,7 @@ const NavDrawerDefault = (props) => {
               <NavItem
                 target="_blank"
                 icon={
-                  <PremiumPersonRegular
+                  <Fix
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark }
@@ -445,7 +452,9 @@ const NavDrawerDefault = (props) => {
                     }
                   />
                 }
-                onClick={someClickHandler}
+                onClick={() => {
+                  navigate("/issuefix");
+                }}
                 value="4"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -527,55 +536,6 @@ const NavDrawerDefault = (props) => {
                 }
               ></NavItem>
             </Tooltip>
-            <Tooltip
-              content={"AI"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <Usage
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="8"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-            <Tooltip
-              content={"fix"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <Usage
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="9"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-            
           </NavDrawerBody>
         ) : (
           <NavDrawerBody
@@ -711,60 +671,63 @@ const NavDrawerDefault = (props) => {
                   }
                 >
 
-                  
- 
+
+
                 </div>
               </NavItem>
             </div> */}
             <div style={{ width: "100%" }}>
-            <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
-                >
-                  <NavCategory value="6"
-                  >
-            <NavCategoryItem
-            target="_blank"
-            icon={
-              <PersonStarRegular
+              <div
                 style={
                   themestate
-                    ? { color: darktheme.fontcolordark }
-                    : { color: lighttheme.fontcolorlight }
+                    ? { marginTop: "2px", color: darktheme.fontcolordark }
+                    : { marginTop: "2px", color: lighttheme.fontcolorlight }
                 }
-              />
-            }
-            onClick={someClickHandler}
-            value="3"
-            className={
-              themestate ? styles.navItemdark : styles.navItemlight
-            }
-            style={{ marginTop: "10px", fontSize: "17px" }}>
-              Issue
-            </NavCategoryItem>
-            <NavSubItemGroup>
-              <NavSubItem  value="4" style={{ marginTop: "10px", fontSize: "17px" }} onClick={() => {
-                  navigate("/ai");
-                }}>
-               AI Identified
-              </NavSubItem>
-              <NavSubItem  value="5" style={{ marginTop: "10px", fontSize: "17px" }} onClick={() => {
-                  navigate("/issuefix");
-                }}>
-                Fix
-              </NavSubItem>
-            </NavSubItemGroup>
-            </NavCategory>
-
-                  
- 
-                </div>
-
+              >
+                <NavCategory value="6">
+                  <NavCategoryItem
+                    target="_blank"
+                    icon={
+                      <PersonStarRegular
+                        style={
+                          themestate
+                            ? { color: darktheme.fontcolordark }
+                            : { color: lighttheme.fontcolorlight }
+                        }
+                      />
+                    }
+                    // onClick={someClickHandler}
+                    value="3"
+                    className={
+                      themestate ? styles.navItemdark : styles.navItemlight
+                    }
+                    style={{ marginTop: "10px", fontSize: "17px" }}
+                  >
+                    Issue
+                  </NavCategoryItem>
+                  <NavSubItemGroup>
+                    <NavSubItem
+                      value="4"
+                      style={{ marginTop: "10px", fontSize: "17px" }}
+                      onClick={() => {
+                        navigate("/ai");
+                      }}
+                    >
+                      AI Identified
+                    </NavSubItem>
+                    <NavSubItem
+                      value="5"
+                      style={{ marginTop: "10px", fontSize: "17px" }}
+                      onClick={() => {
+                        navigate("/issuefix");
+                      }}
+                    >
+                      Fix
+                    </NavSubItem>
+                  </NavSubItemGroup>
+                </NavCategory>
+              </div>
             </div>
-            
 
             {/* 4 */}
             <div style={{ width: "100%" }}>

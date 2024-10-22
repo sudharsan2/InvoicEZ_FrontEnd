@@ -46,7 +46,7 @@ const Checkbox = ({ children, ...props }) => (
 
 const useStyles = makeStyles({
   root: {
-    width: "77vw",
+    // width: "77vw",
     height: "100vh",
     display: "flex",
     flexDirection: "column",

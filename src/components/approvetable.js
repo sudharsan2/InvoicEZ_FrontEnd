@@ -19,6 +19,7 @@ import {
 } from "@fluentui/react-components";
 import Search from "./Search"; // Assuming your search component is imported here
 import { Button, notification } from "antd"; // Import Ant Design components
+import { useDispatch, useSelector } from "react-redux";
 
 // Define columns for the DataGrid
 const columns = [
@@ -87,39 +88,43 @@ const ApproveTable = () => {
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
   const navigate = useNavigate();
+  const isInvoiceUploadRefreshed = useSelector(
+    (state) => state.refresh.InvoiceUploadRefresh,
+  );
 
   // Fetch data from the API when the component mounts
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/user/one-invoice-list",
+      );
+      const fetchedItems = response.data; // Assuming data is in response.data
+
+      // Map fetched data to the format expected by DataGrid
+      const mappedItems = fetchedItems.map((item) => ({
+        Id: item.po_headers[0].id,
+        InvoiceId: item.id,
+        InvoiceNumber: item.InvoiceId,
+        po_number: item.po_headers[0].po_number,
+        po_type: item.po_headers[0].po_type,
+        po_status: item.po_headers[0].po_status,
+        supplier_name: item.po_headers[0].supplier_name,
+        location: item.po_headers[0].location,
+        ship_to: item.po_headers[0].ship_to,
+        bill_to: item.po_headers[0].bill_to,
+        buyer_name: item.po_headers[0].buyer_name,
+        total_amount: item.po_headers[0].total_amount,
+        status: item.po_headers[0].status,
+      }));
+
+      setItems(mappedItems);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/user/one-invoice-list",
-        );
-        const fetchedItems = response.data; // Assuming data is in response.data
-
-        // Map fetched data to the format expected by DataGrid
-        const mappedItems = fetchedItems.map((item) => ({
-          Id: item.po_headers[0].id,
-          po_number: item.po_headers[0].po_number,
-          po_type: item.po_headers[0].po_type,
-          po_status: item.po_headers[0].po_status,
-          supplier_name: item.po_headers[0].supplier_name,
-          location: item.po_headers[0].location,
-          ship_to: item.po_headers[0].ship_to,
-          bill_to: item.po_headers[0].bill_to,
-          buyer_name: item.po_headers[0].buyer_name,
-          total_amount: item.po_headers[0].total_amount,
-          status: item.po_headers[0].status,
-        }));
-
-        setItems(mappedItems);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
-  }, []);
+  }, [isInvoiceUploadRefreshed]);
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
@@ -129,6 +134,8 @@ const ApproveTable = () => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
     return (
+      item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
+      item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
       item.po_number?.toString().toLowerCase().includes(searchLower) ||
       item.po_type?.toLowerCase().includes(searchLower) ||
       item.po_status?.toLowerCase().includes(searchLower) ||
@@ -175,7 +182,7 @@ const ApproveTable = () => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.delete(
-            `http://127.0.0.1:8000/user/delete-poheader/${filteredItems[item].po_number}`,
+            `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[item].InvoiceId}`,
           ),
         ),
       );
@@ -188,6 +195,7 @@ const ApproveTable = () => {
         message: "Successfully deleted",
         description: `You have successfully deleted: ${supplierNames}`,
       });
+      fetchData();
     } catch (error) {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
@@ -219,8 +227,8 @@ const ApproveTable = () => {
       // Make API call to delete selected POs
       await Promise.all(
         selectedItemsArray.map((item) =>
-          axios.delete(
-            `http://127.0.0.1:8000/user/approve-status/<int:pk>/${item.po_number}`,
+          axios.post(
+            `http://127.0.0.1:8000/user/approve-status/${filteredItems[item].InvoiceId}`,
           ),
         ),
       );
@@ -233,6 +241,7 @@ const ApproveTable = () => {
         message: "Successfully Approved",
         description: `You have successfully approved: ${supplierNames}`,
       });
+      fetchData();
     } catch (error) {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)

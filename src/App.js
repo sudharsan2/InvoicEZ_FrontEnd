@@ -83,17 +83,97 @@ function App() {
           }
         />
         <Route path="form/:token" element={<EmployeeForm />} />
-        <Route path="/approvepage" element={<CustomLayout><NavDrawerDefault><ApprovePage/></NavDrawerDefault></CustomLayout>}/>
-        <Route path="/admin" element={<CustomLayout><NavDrawerDefaultAdmin><Admin/></NavDrawerDefaultAdmin></CustomLayout>}/>
-        <Route path="/llm" element={<CustomLayout><NavDrawerDefaultAdmin><LLMPage/></NavDrawerDefaultAdmin></CustomLayout>}/>
-        <Route path="/document" element={<CustomLayout><NavDrawerDefaultAdmin><DocumentPage/></NavDrawerDefaultAdmin></CustomLayout>}/>
-        <Route path="/blob" element={<CustomLayout><NavDrawerDefaultAdmin><BlobPage/></NavDrawerDefaultAdmin></CustomLayout>}/>
-        <Route path="/ai" element={<CustomLayout><NavDrawerDefault><AIPage/></NavDrawerDefault></CustomLayout>}/>
-        <Route path="/aidetail" element={<CustomLayout><NavDrawerDefault>< AIDetailPage/></NavDrawerDefault></CustomLayout>}/>
-        
-        <Route path="/issuefix" element={<CustomLayout><NavDrawerDefault><IssuefixPage/></NavDrawerDefault></CustomLayout>}/>
-        <Route path="/issuefixdetails" element={<CustomLayout><NavDrawerDefault><IssuefixDetails/></NavDrawerDefault></CustomLayout>}/>
+        <Route
+          path="/approvepage"
+          element={
+            <CustomLayout>
+              <NavDrawerDefault>
+                <ApprovePage />
+              </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <CustomLayout>
+              <NavDrawerDefaultAdmin>
+                <Admin />
+              </NavDrawerDefaultAdmin>
+            </CustomLayout>
+          }
+        />
+        <Route
+          path="/llm"
+          element={
+            <CustomLayout>
+              <NavDrawerDefaultAdmin>
+                <LLMPage />
+              </NavDrawerDefaultAdmin>
+            </CustomLayout>
+          }
+        />
+        <Route
+          path="/document"
+          element={
+            <CustomLayout>
+              <NavDrawerDefaultAdmin>
+                <DocumentPage />
+              </NavDrawerDefaultAdmin>
+            </CustomLayout>
+          }
+        />
+        <Route
+          path="/blob"
+          element={
+            <CustomLayout>
+              <NavDrawerDefaultAdmin>
+                <BlobPage />
+              </NavDrawerDefaultAdmin>
+            </CustomLayout>
+          }
+        />
+        <Route
+          path="/ai"
+          element={
+            <CustomLayout>
+              <NavDrawerDefault>
+                <AIPage />
+              </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
+        <Route
+          path="/aidetail"
+          element={
+            <CustomLayout>
+              <NavDrawerDefault>
+                <AIDetailPage />
+              </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
 
+        <Route
+          path="/issuefix"
+          element={
+            <CustomLayout>
+              <NavDrawerDefault>
+                <IssuefixPage />
+              </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
+        <Route
+          path="/issuefixdetails"
+          element={
+            <CustomLayout>
+              <NavDrawerDefault>
+                <IssuefixDetails />
+              </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
       </Routes>
     </Router>
   );
