@@ -239,7 +239,7 @@ const AIDetailPage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/user/invoices-file/${invoiceId}`,
+        `http://10.10.15.15:5719/user/invoices-file/${invoiceId}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -265,12 +265,12 @@ const AIDetailPage = () => {
   const [poheader, setPoHeader] = useState();
   // const [selectedOption, setSelectedOption] = useState(null);
   const [invoiceId, setInvoiceId] = useState(null); // Placeholder for dynamically fetched invoice ID
-
+  const[vendor,setVendor] = useState("");
   const handlePoNumberClick = async (poNumber) => {
     console.log("test function called");
     setSelectedInvoiceNumber(poNumber);
     try {
-      // const response = await axios.get(`http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`);
+      // const response = await axios.get(`http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`);
       // const fetchedData = response.data;
 
       const selectedPoDetails = poheader.find(
@@ -294,7 +294,7 @@ const AIDetailPage = () => {
     if (invoiceNumber) {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`,
+          `http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`,
         );
         const fetchedItem = response.data;
         console.log("R", fetchedItem);
@@ -302,7 +302,8 @@ const AIDetailPage = () => {
         setInvoiceData(fetchedItem);
 
         setPoHeader(fetchedItem.po_headers);
-
+        // setVendor(fetchedItem.po_headers.id)
+        // console.log("SETVENDOR",vendor)
         const poOptions = fetchedItem.po_headers.map((header) => ({
           value: header.po_number,
           label: header.po_number,
@@ -345,7 +346,7 @@ const AIDetailPage = () => {
 
   const inv_id = invoiceData.invoice_info.id;
   // const inv_id = invoiceData.InvoiceId;
-  console.log("---", inv_id);
+  
 
   const formatAddress = (address) => {
     if (!address) return "N/A";
@@ -406,7 +407,7 @@ const AIDetailPage = () => {
     // Uncomment the following block if you want to save the PO number immediately when created.
     /*
     try {
-      const response = await fetch('http://127.0.0.1:8000/user/po-number', {
+      const response = await fetch('http://10.10.15.15:5719/user/po-number', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -449,7 +450,7 @@ const AIDetailPage = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/user/po-number",
+        "http://10.10.15.15:5719/user/po-number",
         payload,
       );
 

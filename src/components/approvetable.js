@@ -87,6 +87,7 @@ const ApproveTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
+  const [po_id,set_Po_id]=useState("");
   const navigate = useNavigate();
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
@@ -98,10 +99,12 @@ const ApproveTable = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/user/one-invoice-list",
+        "http://10.10.15.15:5719/user/one-invoice-list",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
-
+      console.log("fetchedItems",fetchedItems);
+      set_Po_id(fetchedItems[0]['po_headers'][0]['id'])
+      //  console.log("InvId",InvoiceNumber);
       // Map fetched data to the format expected by DataGrid
       const mappedItems = fetchedItems.map((item) => ({
         Id: item.po_headers[0].id,
@@ -136,7 +139,7 @@ const ApproveTable = () => {
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
-
+  // console.log("--------->",filteredItems)
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
@@ -189,7 +192,7 @@ const ApproveTable = () => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.delete(
-            `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+            `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[item].InvoiceId}`,
           ),
         ),
       );
@@ -235,7 +238,7 @@ const ApproveTable = () => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `http://127.0.0.1:8000/user/approve-status/${filteredItems[item].InvoiceId}`,
+            `http://10.10.15.15:5719/user/oracle-payload/${po_id}`,
           ),
         ),
       );
@@ -343,7 +346,7 @@ const ApproveTable = () => {
           onSelectionChange={handleSelectionChange}
           getRowId={(_, index) => index}
           focusMode="composite"
-          style={{ minWidth: "550px" }}
+          style={{ minWidth: "600px" }}
         >
           <DataGridHeader>
             <DataGridRow>
@@ -358,9 +361,10 @@ const ApproveTable = () => {
                 key={rowId}
                 onClick={(e) => handleRowClick(e, item)}
                 selected={selectedRows.has(rowId)}
+              
               >
                 {({ renderCell }) => (
-                  <DataGridCell>{renderCell(item)}</DataGridCell>
+                  <DataGridCell style={{wordWrap:"break-word",whiteSpace: "normal",overflow:"hidden" }}>{renderCell(item)}</DataGridCell>
                 )}
               </DataGridRow>
             )}

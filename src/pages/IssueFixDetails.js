@@ -28,9 +28,9 @@ import {
 import { TextField } from "@fluentui/react/lib/TextField";
 import line_data from "./data_approve";
 import "./dashboard.css";
-
+import { message } from "antd";
 import { ArrowDownload28Regular } from "@fluentui/react-icons";
-
+import { useNavigate } from "react-router-dom";
 const path = "/issuefix";
 const path1 = "http://localhost:3000/";
 
@@ -114,6 +114,7 @@ const useStyles = makeStyles({
 });
 
 const IssuefixDetails = () => {
+  const navigate = useNavigate();
   const [height, setHeight] = useState(0);
   const divRef = useRef(null);
 
@@ -157,7 +158,7 @@ const IssuefixDetails = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/user/invoices-update/${invoiceNo}/`,
+          `http://10.10.15.15:5719/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
 
@@ -199,7 +200,7 @@ const IssuefixDetails = () => {
 
   const handleSubmit = async () => {
     // Replace with your API endpoint
-    const apiUrl = "http://127.0.0.1:8000/user/po-number";
+    const apiUrl = "http://10.10.15.15:5719/user/po-number";
 
     try {
       const response = await fetch(apiUrl, {
@@ -212,14 +213,20 @@ const IssuefixDetails = () => {
           invoice_id: invoiceNo,
         }), // send PO number as a JSON payload
       });
-
+      
       if (!response.ok) {
         throw new Error("Failed to submit PO");
+       
       }
-
+       
+      if (response.status === 201) {
+        message.success("PO successfully Updated");
+        navigate(`/approve`);
+      }
       const data = await response.json();
       console.log("API response:", data);
     } catch (error) {
+      message.error(error);
       console.error("Error submitting PO:", error);
     }
   };
@@ -233,7 +240,7 @@ const IssuefixDetails = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/user/invoices-update/${invoiceNo}/`,
+          `http://10.10.15.15:5719/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
         setFormData({
@@ -348,7 +355,7 @@ const IssuefixDetails = () => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/user/invoices-update/${invoiceNo}/`,
+        `http://10.10.15.15:5719/user/invoices-update/${invoiceNo}/`,
         {
           method: "PUT",
           headers: {
@@ -363,11 +370,13 @@ const IssuefixDetails = () => {
 
       if (response.ok) {
         console.log("Form data updated successfully");
+        message.success("Updated Successfully!!!")
       } else {
         console.error("Error updating form data");
       }
     } catch (error) {
       console.error("Network error:", error);
+      message.error("Update failed")
     }
   };
 
@@ -406,7 +415,7 @@ const IssuefixDetails = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/user/invoices-file/${invoiceNo}`,
+        `http://10.10.15.15:5719/user/invoices-file/${invoiceNo}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");

@@ -22,9 +22,53 @@ const path = "/approve";
 const path1 = "http://localhost:3000/";
 const path2 = "/issuefix";
 
+const containerStyle = {
+  width: "100%",
+  display: "flex",
+  
+  // justifyContent: "space-around",
+  padding: "8px",
+  marginLeft:"0em"
+};
+
+const itemStyle = {
+  display: "flex",
+  alignItems: "flex-start",
+};
+
+const lineStyle = (color) => ({
+  width: "3px",
+  height: "50px", 
+  backgroundColor: color,
+  marginRight: "12px",
+});
+
+const labelStyle = {
+  fontSize: "14px",
+  fontWeight: "normal", 
+  marginBottom:"10px"
+};
+
+const valueStyle = {
+  fontSize: "28px", 
+  fontWeight: "bold",
+  color: "#333", 
+  marginLeft: "0px", 
+};
+
+const divstyle ={
+  display:"flex",
+  flexDirection:"column",
+  marginLeft:"20px",
+  paddingTop:"6em",
+  fontWeight:"bold",
+
+  
+}
 const IssuefixPage = () => {
   const [height, setHeight] = useState(0);
   const divRef1 = useRef(null);
+  const [tableLength, setTableLength] = useState(0);
 
   useEffect(() => {
     const updateHeight = () => {
@@ -45,12 +89,14 @@ const IssuefixPage = () => {
       window.removeEventListener("resize", updateHeight);
     };
   }, []);
-  // const counters = [
-  //   { label: "To Do", value: 15, color: "#00bfbf" }, // Cyan
-  //   { label: "AI Identified", value: 2, color: "#d62727" }, // Red
-  //   { label: "User Resolved", value: 9, color: "#1f497d" }, // Dark Blue
-  //   { label: "Refix", value: 4, color: "#d21994" }, // Magenta
-  // ];
+
+   console.log("tablelength",tableLength);
+  const counters = [
+    { label: "To Do", value: tableLength, color: "#00bfbf" }, // Cyan
+    // { label: "AI Identified", value: 2, color: "#d62727" }, // Red
+    // { label: "User Resolved", value: 9, color: "#1f497d" }, // Dark Blue
+    // { label: "Refix", value: 4, color: "#d21994" }, // Magenta
+  ];
   return (
     <div>
       <div ref={divRef1}>
@@ -79,19 +125,28 @@ const IssuefixPage = () => {
           <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Fix</h3>
         </div>
         <div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{ width: "65vw" }}>
-              <TagCounters type="approve" />
-            </div>
+          <div style={{ display: "flex", justifyContent: "flex-start" }}>
+            
             {/* <div style={{display:'flex', flexDirection:'column'}} */}
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
                 gap: "10px",
-                justifyContent: "space-around",
+                justifyContent: "flex-start",
               }}
             >
+              <div style={containerStyle}>
+        {counters.map((item, index) => (
+          <div style={itemStyle} key={index}>
+            <div style={lineStyle(item.color)} />
+            <div>
+              <div style={labelStyle}>{item.label}</div>
+              <div style={valueStyle}>{item.value}</div>
+            </div>
+          </div>
+        ))}
+      </div>
               {/* New Filter Button */}
               {/* <Button
             icon={<FilterRegular />}
@@ -107,12 +162,14 @@ const IssuefixPage = () => {
           >
             Clear Filter
           </Button> */}
+
+
             </div>
           </div>
         </div>
       </div>
       <div>
-        {height > 0 ? <IssuefixTable height={height} /> : <p>Loading...</p>}
+        {height > 0 ? <IssuefixTable height={height} setTableLength={setTableLength}/> : <p>Loading...</p>}
       </div>
     </div>
   );

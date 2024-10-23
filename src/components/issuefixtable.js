@@ -16,7 +16,7 @@ import {
 } from "@fluentui/react-components";
 import Search from "./Search"; // Assuming your search component is imported here
 import { useState, useEffect } from "react";
-
+import { message } from "antd";
 const columns = [
   createTableColumn({
     columnId: "invoiceNo",
@@ -54,25 +54,27 @@ const columns = [
   }),
 ];
 
-const IssuefixTable = ({ height }) => {
+const IssuefixTable = ({ height ,setTableLength}) => {
   const [items, setItems] = useState([]); // Initialize items state
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRows, setSelectedRows] = useState(new Set());
   const navigate = useNavigate();
-
+  const [refreshKey, setRefreshKey] = useState(0);
   const getNumberOfLines = (invoice) => {
     return invoice.items ? invoice.items.length : 0;
   };
-
+  const[invid,setInvId]=useState("");
   // Fetch data from the API
   // Fetch data from the API
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/user/no-invoice-list")
+    fetch("http://10.10.15.15:5719/user/no-invoice-list")
       .then((response) => response.json())
       .then((data) => {
         // Format data to match the table columns
         const formattedItems = data.map((invoice) => ({
-          invid: invoice.id, // Use the "id" field from the response
+          invid: invoice.id, 
+          // Use the "id" field from the response
+         
           invoiceNo: invoice.InvoiceId, // Use "InvoiceId" for invoice number
           supplier: invoice.VendorName,
           numberOfLines: getNumberOfLines(invoice),
@@ -80,38 +82,46 @@ const IssuefixTable = ({ height }) => {
           totalAmount: invoice.InvoiceTotal,
           statusVerified: invoice.statusVerified,
         }));
-        console.log("Formatted Items:", formattedItems); // Debugging log
+        console.log("Formatted Items:", formattedItems);
+        setInvId(formattedItems.InvoiceId) // Debugging log
         setItems(formattedItems);
+        setTableLength(formattedItems.length);
         console.log("height", height);
+        
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []);
+  },  [refreshKey]);
 
+  const handleRefresh = () => {
+    setRefreshKey((prevKey) => prevKey + 1); // Increment the refreshKey to trigger useEffect
+  };
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
 
   const handleDelete = () => {
+    console.log("del")
     const idsToDelete = [...selectedRows]; // Convert Set to array
     console.log("IDs to delete:", idsToDelete);
 
     if (idsToDelete.length > 0) {
       const deletePromises = idsToDelete.map((id) => {
-        if (id) {
+        
           // Check if id is defined
           console.log(`Deleting item with ID: ${id}`);
+          console.log("//",filteredItems[id].invid)
           return fetch(
-            `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[id].invid}`,
+            `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[id].invid}`,
             {
               method: "DELETE",
             },
+            
+
           );
-        } else {
-          console.warn("Attempting to delete an undefined ID");
-          return Promise.resolve(); // Skip undefined IDs
-        }
+        
+          
       });
 
       Promise.all(deletePromises)
@@ -123,12 +133,15 @@ const IssuefixTable = ({ height }) => {
             ); // Use item.id here
             setItems(updatedItems);
             setSelectedRows(new Set());
+            message.success(" successfully Deleted");
           } else {
             throw new Error("Some deletions failed");
+           
           }
         })
         .catch((error) => {
           console.error("Error deleting items:", error);
+          message.error("  Deletion failed");
         });
     } else {
       console.warn("No rows selected for deletion");
@@ -216,7 +229,7 @@ const IssuefixTable = ({ height }) => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          onClick={() => alert("Refresh")}
+          onClick={handleRefresh}
         >
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
