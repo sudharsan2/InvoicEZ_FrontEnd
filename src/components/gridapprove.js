@@ -107,8 +107,6 @@
 
 // export default TagCounters;
 
-
-
 import React, { useEffect, useState } from "react";
 
 const TagCounters = ({ type }) => {
@@ -151,8 +149,8 @@ const TagCounters = ({ type }) => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://10.10.15.15:5719/user/statusForApprove"
-      ); 
+        "http://10.10.15.15:5719/user/statusForApprove",
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -183,9 +181,26 @@ const TagCounters = ({ type }) => {
 
       // Filter based on the type
       if (type === "approve") {
-        setData(allData.filter((item) => item.label === "To Do" || item.label === "Crossed PO Date"|| item.label === "PO Number Matching" ||item.label === "Supplier Matching" || item.label === "Supplier Line Matching"));
+        setData(
+          allData.filter(
+            (item) =>
+              item.label === "To Do" ||
+              item.label === "Crossed PO Date" ||
+              item.label === "PO Number Matching" ||
+              item.label === "Supplier Matching" ||
+              item.label === "Supplier Line Matching",
+          ),
+        );
       } else if (type === "fix") {
-        setData(allData.filter((item) => item.label === "To Do" || item.label === "AI Identified"|| item.label === "User Revoked"|| item.label === "Refix"));
+        setData(
+          allData.filter(
+            (item) =>
+              item.label === "To Do" ||
+              item.label === "AI Identified" ||
+              item.label === "User Revoked" ||
+              item.label === "Refix",
+          ),
+        );
       }
     } catch (error) {
       console.error(error.message);

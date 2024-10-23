@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import React from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -28,14 +28,16 @@ import {
 import { TextField } from "@fluentui/react/lib/TextField";
 import line_data from "./data_approve";
 import "./dashboard.css";
-
+import { message } from "antd";
+import { ArrowDownload28Regular } from "@fluentui/react-icons";
+import { useNavigate } from "react-router-dom";
 const path = "/issuefix";
 const path1 = "http://localhost:3000/";
 
 const useStyles = makeStyles({
   root: {
     // width: "80vw",
-    height: "100vh",
+    // height: "100vh",
     display: "flex",
     flexDirection: "column",
   },
@@ -112,6 +114,16 @@ const useStyles = makeStyles({
 });
 
 const IssuefixDetails = () => {
+  const navigate = useNavigate();
+  const [height, setHeight] = useState(0);
+  const divRef = useRef(null);
+
+  useEffect(() => {
+    if (divRef.current) {
+      setHeight(divRef.current.offsetHeight); // Calculate the height of the div based on its content
+    }
+  }, []);
+
   const styles = useStyles();
   const themestate = false;
   const [selectedtab, setSelectedTab] = React.useState("tab1");
@@ -198,17 +210,23 @@ const IssuefixDetails = () => {
         },
         body: JSON.stringify({
           po_number: poNumber,
-          invoice_id: formData.invoiceId,
+          invoice_id: invoiceNo,
         }), // send PO number as a JSON payload
       });
-
+      
       if (!response.ok) {
         throw new Error("Failed to submit PO");
+       
       }
-
+       
+      if (response.status === 201) {
+        message.success("PO successfully Updated");
+        navigate(`/approve`);
+      }
       const data = await response.json();
       console.log("API response:", data);
     } catch (error) {
+      message.error(error);
       console.error("Error submitting PO:", error);
     }
   };
@@ -337,7 +355,7 @@ const IssuefixDetails = () => {
 
     try {
       const response = await fetch(
-        `http://10.10.15.15:5719/user/invoices-update/${formData.invoiceId}/`,
+        `http://10.10.15.15:5719/user/invoices-update/${invoiceNo}/`,
         {
           method: "PUT",
           headers: {
@@ -352,11 +370,13 @@ const IssuefixDetails = () => {
 
       if (response.ok) {
         console.log("Form data updated successfully");
+        message.success("Updated Successfully!!!")
       } else {
         console.error("Error updating form data");
       }
     } catch (error) {
       console.error("Network error:", error);
+      message.error("Update failed")
     }
   };
 
@@ -392,308 +412,356 @@ const IssuefixDetails = () => {
     }));
   };
 
+  const handleViewInvoice = async () => {
+    try {
+      const response = await fetch(
+        `http://10.10.15.15:5719/user/invoices-file/${invoiceNo}`,
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const blob = await response.blob();
+      const fileURL = URL.createObjectURL(blob);
+
+      window.open(fileURL, "_blank");
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+    }
+  };
+
   const handlePOChange = (event) => {};
 
   return (
-    <div style={{ height: "100vh" }}>
-      <div className="Approvebreadcrump">
-        <Breadcrumb aria-label="Breadcrumb default example">
-          <BreadcrumbItem>
-            <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
-          </BreadcrumbItem>
-          <BreadcrumbDivider />
-          <BreadcrumbItem>
-            <BreadcrumbButton href={path}>Issues</BreadcrumbButton>
-          </BreadcrumbItem>
-          <BreadcrumbDivider />
-          <BreadcrumbItem>
-            <BreadcrumbButton href={path}>
-              {formData.vendorName}
-            </BreadcrumbButton>
-          </BreadcrumbItem>
-        </Breadcrumb>
+    <div>
+      <div ref={divRef}>
+        <div className="Approvebreadcrump">
+          <Breadcrumb aria-label="Breadcrumb default example">
+            <BreadcrumbItem>
+              <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
+            </BreadcrumbItem>
+            <BreadcrumbDivider />
+            <BreadcrumbItem>
+              <BreadcrumbButton href={path}>Issues</BreadcrumbButton>
+            </BreadcrumbItem>
+            <BreadcrumbDivider />
+            <BreadcrumbItem>
+              <BreadcrumbButton href={path}>
+                {formData.vendorName}
+              </BreadcrumbButton>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+
+        <div className={styles.root}>
+          <div className={styles.header}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "end",
+                alignItems: "center",
+                width: "100%",
+                marginTop: "0px",
+              }}
+            >
+              <div style={{ right: "5%", display: "flex", gap: "10px" }}>
+                <Input
+                  type="text"
+                  placeholder="Enter PO number"
+                  value={poNumber}
+                  onChange={(e) => setPoNumber(e.target.value)}
+                />
+                <Button
+                  className="buttoncolor"
+                  style={{ backgroundColor: "#3570c3", color: "white" }}
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </Button>
+              </div>
+            </div>
+
+            <h2 style={{ margin: "20px 0 20px 0" }}>
+              Invoice No:{formData.invoiceId}
+            </h2>
+            <div
+              style={{
+                display: "flex",
+                marginBottom: "20px",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div style={{ display: "flex", marginBottom: "20px" }}>
+                <div
+                  style={{
+                    borderLeft: "5px solid #342d7c",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  <p>Supplier</p>
+                  <h2>{formData.vendorName}</h2>
+                </div>
+                <div
+                  style={{
+                    marginLeft: "3vw",
+                    borderLeft: "5px solid #9a3ca9",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  <p>Status</p>
+                  <h2>Revoked</h2>
+                </div>
+                <div
+                  style={{
+                    marginLeft: "3vw",
+                    borderLeft: "5px solid black",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  <p>Potential PO</p>
+                  <h2>0</h2>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  width: "25%",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <ArrowDownload28Regular
+                    style={{ color: "#1281d7" }}
+                    onClick={handleViewInvoice}
+                  />{" "}
+                  <span onClick={handleViewInvoice}> View Invoice</span>
+                </div>
+                <Button
+                  className="buttoncolor"
+                  style={{ backgroundColor: "#3570c3", color: "white" }}
+                  onClick={handleformSubmit}
+                >
+                  Update form
+                </Button>
+              </div>
+            </div>
+
+            <div>
+              <h2>Header</h2>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "10px",
+                }}
+              >
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>Vendor Name</label>
+                  <Input
+                    name="vendorName"
+                    value={formData.vendorName}
+                    onChange={handleChange}
+                    resize="none"
+                  />
+                </div>
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>Customer Name</label>
+                  <Input
+                    name="customerName"
+                    value={formData.customerName}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>Invoice Date</label>
+                  <Input
+                    name="invoiceDate"
+                    value={formData.invoiceDate}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>Invoice Total</label>
+                  <Input
+                    name="invoiceTotal"
+                    value={formData.invoiceTotal}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "10px",
+                }}
+              >
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>
+                    Vendor Address Recipient
+                  </label>
+                  <Input
+                    name="vendorAddressRecipient"
+                    value={formData.vendorAddressRecipient}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>
+                    Customer Address Recipient
+                  </label>
+                  <Input
+                    name="customerAddressRecipient"
+                    value={formData.customerAddressRecipient}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>Invoice ID</label>
+                  <Input
+                    name="invoiceId"
+                    value={formData.invoiceId}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>Customer ID</label>
+                  <Input
+                    name="customerId"
+                    value={formData.customerId}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "10px",
+                }}
+              >
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>
+                    Billing Address Recipient
+                  </label>
+                  <Input
+                    name="billingAddressRecipient"
+                    value={formData.billingAddressRecipient}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>
+                    Shipping Address Recipient
+                  </label>
+                  <Input
+                    name="shippingAddressRecipient"
+                    value={formData.shippingAddressRecipient}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>Due Date</label>
+                  <Input
+                    name="dueDate"
+                    value={formData.dueDate}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+                <div className={styles.formField}>
+                  <label style={{ marginBottom: "5px" }}>Purchase Order</label>
+                  <Input
+                    name="purchaseOrder"
+                    value={formData.purchaseOrder}
+                    onChange={handleChange}
+                    placeholder="Type here..."
+                    resize="none"
+                  />
+                </div>
+              </div>
+            </div>
+            <h2 style={{ marginTop: "40px" }}>Lines</h2>
+          </div>
+        </div>
       </div>
 
-      <div className={styles.root}>
-        <div className={(styles.header, { height: "30vh" })}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              alignItems: "center",
-              width: "100%",
-              marginTop: "0px",
-            }}
-          >
-            <div style={{ right: "5%", display: "flex", gap: "10px" }}>
-              <Input
-                type="text"
-                placeholder="Enter PO number"
-                value={poNumber}
-                onChange={(e) => setPoNumber(e.target.value)}
-              />
-              <Button
-                className="buttoncolor"
-                style={{ backgroundColor: "#3570c3", color: "white" }}
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-            </div>
-          </div>
+      {/* Editable Table */}
+      <div
+        style={{
+          marginTop: "-20px",
+          height: `calc(95vh - ${height}px)`,
+          overflowY: "auto",
+        }}
+      >
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHeaderCell>No</TableHeaderCell>
+              <TableHeaderCell>Description</TableHeaderCell>
+              <TableHeaderCell>Quantity</TableHeaderCell>
+              <TableHeaderCell>Unit</TableHeaderCell>
+              <TableHeaderCell>Unit Price</TableHeaderCell>
 
-          <h2 style={{ margin: "20px 0 20px 0" }}>
-            Invoice No:{formData.invoiceId}
-          </h2>
-          <div
-            style={{
-              display: "flex",
-              marginBottom: "20px",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ display: "flex", marginBottom: "20px" }}>
-              <div
-                style={{ borderLeft: "5px solid #342d7c", paddingLeft: "10px" }}
-              >
-                <p>Supplier</p>
-                <h2>{formData.vendorName}</h2>
-              </div>
-              <div
-                style={{
-                  marginLeft: "3vw",
-                  borderLeft: "5px solid #9a3ca9",
-                  paddingLeft: "10px",
-                }}
-              >
-                <p>Status</p>
-                <h2>Revoked</h2>
-              </div>
-              <div
-                style={{
-                  marginLeft: "3vw",
-                  borderLeft: "5px solid black",
-                  paddingLeft: "10px",
-                }}
-              >
-                <p>Potential PO</p>
-                <h2>0</h2>
-              </div>
-            </div>
-            <div>
-              <Button
-                className="buttoncolor"
-                style={{ backgroundColor: "#3570c3", color: "white" }}
-                onClick={handleformSubmit}
-              >
-                Update form
-              </Button>
-            </div>
-          </div>
-        </div>
+              <TableHeaderCell>Amount</TableHeaderCell>
+              <TableHeaderCell>Subtotal</TableHeaderCell>
+              <TableHeaderCell>Previous Unpaid Balance</TableHeaderCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow key={row.id}>
+                {" "}
+                {/* Use row.id for a unique key */}
+                <TableCell>{row.id}</TableCell>
+                {Object.keys(row)
+                  .filter((key) => key !== "id")
+                  .map((key) => (
+                    <TableCell key={key}>
+                      <Input
+                        // appearance="underline"
+                        value={row[key] || ""} // Fallback to empty string for null values
+                        onChange={(e) =>
+                          handleInputChange(index, key, e.target.value)
+                        }
+                        style={{ width: "100%" }}
+                      />
+                    </TableCell>
+                  ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
-        <div style={{ overflowY: "auto", maxHeight: "65vh" }}>
-          <h2>Header</h2>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "10px",
-            }}
-          >
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>Vendor Name</label>
-              <Input
-                name="vendorName"
-                value={formData.vendorName}
-                onChange={handleChange}
-                resize="none"
-              />
-            </div>
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>Customer Name</label>
-              <Input
-                name="customerName"
-                value={formData.customerName}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>Invoice Date</label>
-              <Input
-                name="invoiceDate"
-                value={formData.invoiceDate}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>Invoice Total</label>
-              <Input
-                name="invoiceTotal"
-                value={formData.invoiceTotal}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "10px",
-            }}
-          >
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>
-                Vendor Address Recipient
-              </label>
-              <Input
-                name="vendorAddressRecipient"
-                value={formData.vendorAddressRecipient}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>
-                Customer Address Recipient
-              </label>
-              <Input
-                name="customerAddressRecipient"
-                value={formData.customerAddressRecipient}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>Invoice ID</label>
-              <Input
-                name="invoiceId"
-                value={formData.invoiceId}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>Customer ID</label>
-              <Input
-                name="customerId"
-                value={formData.customerId}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "10px",
-            }}
-          >
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>
-                Billing Address Recipient
-              </label>
-              <Input
-                name="billingAddressRecipient"
-                value={formData.billingAddressRecipient}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>
-                Shipping Address Recipient
-              </label>
-              <Input
-                name="shippingAddressRecipient"
-                value={formData.shippingAddressRecipient}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>Due Date</label>
-              <Input
-                name="dueDate"
-                value={formData.dueDate}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-            <div className={styles.formField}>
-              <label style={{ marginBottom: "5px" }}>Purchase Order</label>
-              <Input
-                name="purchaseOrder"
-                value={formData.purchaseOrder}
-                onChange={handleChange}
-                placeholder="Type here..."
-                resize="none"
-              />
-            </div>
-          </div>
-
-          {/* Editable Table */}
-          <div style={{ marginTop: "20px" }}>
-            <h2>Lines</h2>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHeaderCell>No</TableHeaderCell>
-                  <TableHeaderCell>Description</TableHeaderCell>
-                  <TableHeaderCell>Quantity</TableHeaderCell>
-                  <TableHeaderCell>Unit</TableHeaderCell>
-                  <TableHeaderCell>Unit Price</TableHeaderCell>
-
-                  <TableHeaderCell>Amount</TableHeaderCell>
-                  <TableHeaderCell>Subtotal</TableHeaderCell>
-                  <TableHeaderCell>Previous Unpaid Balance</TableHeaderCell>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {rows.map((row, index) => (
-                  <TableRow key={row.id}>
-                    {" "}
-                    {/* Use row.id for a unique key */}
-                    <TableCell>{row.id}</TableCell>
-                    {Object.keys(row)
-                      .filter((key) => key !== "id")
-                      .map((key) => (
-                        <TableCell key={key}>
-                          <Input
-                            // appearance="underline"
-                            value={row[key] || ""} // Fallback to empty string for null values
-                            onChange={(e) =>
-                              handleInputChange(index, key, e.target.value)
-                            }
-                            style={{ width: "100%" }}
-                          />
-                        </TableCell>
-                      ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-
-            {/* <Button onClick={addLine} style={{ marginTop: "10px" }}>+ Add Line</Button> */}
-          </div>
-        </div>
+        {/* <Button onClick={addLine} style={{ marginTop: "10px" }}>+ Add Line</Button> */}
       </div>
     </div>
   );

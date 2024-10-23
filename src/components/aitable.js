@@ -74,7 +74,7 @@ const AITable = ({ setTableLength }) => {
         "http://10.10.15.15:5719/user/morethanone-invoice-list",
       );
       const fetchedItems = response.data;
-      setInvoiceId(fetchedItems[0].id)
+      setInvoiceId(fetchedItems[0].id);
       const inv = fetchedItems.InvoiceId;
       const mappedItems = fetchedItems.map((item) => ({
         Id: item.id || "NULL",
@@ -138,9 +138,8 @@ const AITable = ({ setTableLength }) => {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
         .join(", ");
-        console.log("Invoice",{invoiceNumber});
+      console.log("Invoice", { invoiceNumber });
       await Promise.all(
-        
         selectedItemsArray.map((item) =>
           axios.delete(
             `http://10.10.15.15:5719/user/delete-invoice/${invoiceId}`,
@@ -250,46 +249,44 @@ const AITable = ({ setTableLength }) => {
         />
       </div>
       <div
-       style={{
-        height: "70vh", 
-        overflowY: "auto",
-        marginTop: "20px",
-      }}>
-      <DataGrid
-        items={filteredItems}
-        columns={columns}
-        sortable
-        selectionMode="multiselect"
-        onSelectionChange={handleSelectionChange}
-        getRowId={(_, index) => index}
-        focusMode="composite"
-        style={{ minWidth: "550px" }}
+        style={{
+          height: "70vh",
+          overflowY: "auto",
+          marginTop: "20px",
+        }}
       >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody>
-          {({ item, rowId }) => (
-            <DataGridRow
-              key={rowId}
-              onClick={(e) => handleRowClick(e, item)}
-              selected={selectedRows.has(rowId)}
-            >
-              {({ renderCell }) => (
-                <DataGridCell>{renderCell(item)}</DataGridCell>
+        <DataGrid
+          items={filteredItems}
+          columns={columns}
+          sortable
+          selectionMode="multiselect"
+          onSelectionChange={handleSelectionChange}
+          getRowId={(_, index) => index}
+          focusMode="composite"
+          style={{ minWidth: "550px" }}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
               )}
             </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow
+                key={rowId}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(rowId)}
+              >
+                {({ renderCell }) => (
+                  <DataGridCell>{renderCell(item)}</DataGridCell>
+                )}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
       </div>
-
-      
     </>
   );
 };

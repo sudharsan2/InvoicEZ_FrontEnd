@@ -87,6 +87,7 @@ const ApproveTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
+  const [po_id,set_Po_id]=useState("");
   const navigate = useNavigate();
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
@@ -99,7 +100,9 @@ const ApproveTable = () => {
         "http://10.10.15.15:5719/user/one-invoice-list",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
-
+      console.log("fetchedItems",fetchedItems);
+      set_Po_id(fetchedItems[0]['po_headers'][0]['id'])
+      //  console.log("InvId",InvoiceNumber);
       // Map fetched data to the format expected by DataGrid
       const mappedItems = fetchedItems.map((item) => ({
         Id: item.po_headers[0].id,
@@ -129,7 +132,7 @@ const ApproveTable = () => {
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
-
+  // console.log("--------->",filteredItems)
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
@@ -228,7 +231,7 @@ const ApproveTable = () => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `http://10.10.15.15:5719/user/approve-status/${filteredItems[item].InvoiceId}`,
+            `http://10.10.15.15:5719/user/oracle-payload/${po_id}`,
           ),
         ),
       );
@@ -274,6 +277,7 @@ const ApproveTable = () => {
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
+            height: "7vh",
           }}
           onClick={handleDeleteSelectedRows} // Call delete function
         >
@@ -320,44 +324,46 @@ const ApproveTable = () => {
           onSearchChange={handleSearchChange}
         />
       </div>
-      <div  style={{
-        height: "400px", 
-        overflowY: "auto", 
-        marginTop: "20px",
-      }}>
-      <DataGrid
-        items={filteredItems}
-        columns={columns}
-        sortable
-        selectionMode="multiselect"
-        onSelectionChange={handleSelectionChange}
-        getRowId={(_, index) => index}
-        focusMode="composite"
-        style={{ minWidth: "550px" }}
+      <div
+        style={{
+          height: "60vh",
+          overflow: "scroll",
+          marginTop: "20px",
+        }}
       >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody>
-          {({ item, rowId }) => (
-            <DataGridRow
-              key={rowId}
-              onClick={(e) => handleRowClick(e, item)}
-              selected={selectedRows.has(rowId)}
-            >
-              {({ renderCell }) => (
-                <DataGridCell>{renderCell(item)}</DataGridCell>
+        <DataGrid
+          items={filteredItems}
+          columns={columns}
+          sortable
+          selectionMode="multiselect"
+          onSelectionChange={handleSelectionChange}
+          getRowId={(_, index) => index}
+          focusMode="composite"
+          style={{ minWidth: "600px" }}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
               )}
             </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-        </div>
-      
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow
+                key={rowId}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(rowId)}
+              
+              >
+                {({ renderCell }) => (
+                  <DataGridCell style={{wordWrap:"break-word",whiteSpace: "normal",overflow:"hidden" }}>{renderCell(item)}</DataGridCell>
+                )}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
+      </div>
     </>
   );
 };

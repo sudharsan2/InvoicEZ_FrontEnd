@@ -334,6 +334,7 @@ const CustomLayout = ({ children }) => {
       setUsername(storedUsername);
     }
   }, []);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);

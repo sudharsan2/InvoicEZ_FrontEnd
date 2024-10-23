@@ -1,6 +1,15 @@
 // HorizontalBarChart.js
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const HorizontalBarChart = ({ supplierNames, invoiceCounts }) => {
   // Ensure that the data is in the correct format
@@ -9,8 +18,11 @@ const HorizontalBarChart = ({ supplierNames, invoiceCounts }) => {
     invoiceCount: invoiceCounts[index],
   }));
 
+  const barHeight = 100; // Height for each bar
+  const chartHeight = supplierNames.length * barHeight + 100; // Add extra height for padding, labels, etc.
+
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={chartHeight}>
       <BarChart
         data={data}
         layout="vertical" // This is important to ensure the chart is horizontal
@@ -29,7 +41,7 @@ const HorizontalBarChart = ({ supplierNames, invoiceCounts }) => {
         <Tooltip />
         <Legend />
         {/* Bar now uses the invoiceCount as the dataKey */}
-        <Bar dataKey="invoiceCount" fill="#82ca9d" barSize={30}/>
+        <Bar dataKey="invoiceCount" fill="#82ca9d" barSize={30} />
       </BarChart>
     </ResponsiveContainer>
   );

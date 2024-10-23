@@ -16,7 +16,7 @@ import {
 } from "@fluentui/react-components";
 import Search from "./Search"; // Assuming your search component is imported here
 import { useState, useEffect } from "react";
-
+import { message } from "antd";
 const columns = [
   createTableColumn({
     columnId: "invoiceNo",
@@ -54,16 +54,16 @@ const columns = [
   }),
 ];
 
-const IssuefixTable = () => {
+const IssuefixTable = ({ height ,setTableLength}) => {
   const [items, setItems] = useState([]); // Initialize items state
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRows, setSelectedRows] = useState(new Set());
   const navigate = useNavigate();
-
+  const [refreshKey, setRefreshKey] = useState(0);
   const getNumberOfLines = (invoice) => {
     return invoice.items ? invoice.items.length : 0;
   };
-
+  const[invid,setInvId]=useState("");
   // Fetch data from the API
   // Fetch data from the API
   useEffect(() => {
@@ -72,7 +72,9 @@ const IssuefixTable = () => {
       .then((data) => {
         // Format data to match the table columns
         const formattedItems = data.map((invoice) => ({
-          invid: invoice.id, // Use the "id" field from the response
+          invid: invoice.id, 
+          // Use the "id" field from the response
+         
           invoiceNo: invoice.InvoiceId, // Use "InvoiceId" for invoice number
           supplier: invoice.VendorName,
           numberOfLines: getNumberOfLines(invoice),
@@ -80,34 +82,46 @@ const IssuefixTable = () => {
           totalAmount: invoice.InvoiceTotal,
           statusVerified: invoice.statusVerified,
         }));
-        console.log("Formatted Items:", formattedItems); // Debugging log
+        console.log("Formatted Items:", formattedItems);
+        setInvId(formattedItems.InvoiceId) // Debugging log
         setItems(formattedItems);
+        setTableLength(formattedItems.length);
+        console.log("height", height);
+        
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []);
+  },  [refreshKey]);
 
+  const handleRefresh = () => {
+    setRefreshKey((prevKey) => prevKey + 1); // Increment the refreshKey to trigger useEffect
+  };
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
 
   const handleDelete = () => {
+    console.log("del")
     const idsToDelete = [...selectedRows]; // Convert Set to array
     console.log("IDs to delete:", idsToDelete);
 
     if (idsToDelete.length > 0) {
       const deletePromises = idsToDelete.map((id) => {
-        if (id) {
+        
           // Check if id is defined
           console.log(`Deleting item with ID: ${id}`);
-          return fetch(`http://10.10.15.15:5719/user/delete-poheader/${id}`, {
-            method: "DELETE",
-          });
-        } else {
-          console.warn("Attempting to delete an undefined ID");
-          return Promise.resolve(); // Skip undefined IDs
-        }
+          console.log("//",filteredItems[id].invid)
+          return fetch(
+            `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[id].invid}`,
+            {
+              method: "DELETE",
+            },
+            
+
+          );
+        
+          
       });
 
       Promise.all(deletePromises)
@@ -119,12 +133,15 @@ const IssuefixTable = () => {
             ); // Use item.id here
             setItems(updatedItems);
             setSelectedRows(new Set());
+            message.success(" successfully Deleted");
           } else {
             throw new Error("Some deletions failed");
+           
           }
         })
         .catch((error) => {
           console.error("Error deleting items:", error);
+          message.error("  Deletion failed");
         });
     } else {
       console.warn("No rows selected for deletion");
@@ -133,6 +150,10 @@ const IssuefixTable = () => {
 
   const filteredItems = items.filter((item) => {
     return (
+      item.invid
+        ?.toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
       item.invoiceNo
         ?.toString()
         .toLowerCase()
@@ -157,15 +178,15 @@ const IssuefixTable = () => {
   const handleSelectionChange = (event, data) => {
     const newSelectedRows = new Set(selectedRows); // Create a copy of the selected rows
     data.selectedItems.forEach((item) => {
-      if (item.invid) {
-        // Ensure invid is defined
-        newSelectedRows.add(item.invid); // Store item.invid instead of item.invoiceNo
-      } else {
-        console.warn("Selected item does not have an invid:", item);
-      }
+      // if (item) {
+      //   // Ensure invid is defined
+      newSelectedRows.add(item); // Store item.invid instead of item.invoiceNo
+      // } else {
+      //   console.warn("Selected item does not have an invid:", item);
+      console.log(item);
     });
     setSelectedRows(newSelectedRows); // Update state
-    console.log("Selected IDs:", Array.from(newSelectedRows)); // Log selected IDs for debugging
+    // console.log("Selected IDs:", Array.from(newSelectedRows)); // Log selected IDs for debugging
   };
 
   return (
@@ -177,7 +198,6 @@ const IssuefixTable = () => {
           gap: "20px",
           fontWeight: "bold",
           marginLeft: "-3em",
-          // height:"30vh"
         }}
       >
         <button
@@ -209,7 +229,7 @@ const IssuefixTable = () => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          onClick={() => alert("Refresh")}
+          onClick={handleRefresh}
         >
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
@@ -220,45 +240,45 @@ const IssuefixTable = () => {
           onSearchChange={handleSearchChange}
         />
       </div>
-      <div  style={{
-        height: "70vh", // Set a fixed height for scrolling
-        overflowY: "auto", // Enable vertical scrolling
-        marginTop: "20px",
-      }}>
-      <DataGrid
-        items={filteredItems}
-        columns={columns}
-        sortable
-        selectionMode="multiselect"
-        onSelectionChange={handleSelectionChange}
-        getRowId={(item) => item.id} // Use item.id for unique identification
-        focusMode="composite"
-        style={{ minWidth: "550px" }}
+      <div
+        style={{
+          height: `calc(73vh - ${height}px)`, // Set a fixed height for scrolling
+          overflowY: "auto", // Enable vertical scrolling
+          marginTop: "20px",
+        }}
       >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody>
-          {({ item, rowId }) => (
-            <DataGridRow
-              key={rowId}
-              onClick={(e) => handleRowClick(e, item)}
-              selected={selectedRows.has(item.invid)} // Check selectedRows based on item.id
-            >
-              {({ renderCell }) => (
-                <DataGridCell>{renderCell(item)}</DataGridCell>
+        <DataGrid
+          items={filteredItems}
+          columns={columns}
+          sortable
+          selectionMode="multiselect"
+          onSelectionChange={handleSelectionChange}
+          getRowId={(item) => item.id} // Use item.id for unique identification
+          focusMode="composite"
+          style={{ minWidth: "550px" }}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
               )}
             </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow
+                key={rowId}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(item.invid)} // Check selectedRows based on item.id
+              >
+                {({ renderCell }) => (
+                  <DataGridCell>{renderCell(item)}</DataGridCell>
+                )}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
       </div>
-      
     </>
   );
 };

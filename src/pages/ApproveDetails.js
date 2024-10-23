@@ -30,6 +30,7 @@ import { ArrowDownload28Regular } from "@fluentui/react-icons";
 /*eslint-disabled*/
 import CreatableSelect from "react-select/creatable";
 import { message } from "antd";
+import {  notification } from "antd";
 
 const path = "/approve";
 const path1 = "http://localhost:3000/";
@@ -50,7 +51,7 @@ const useStyles = makeStyles({
     overflowY: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
-    maxHeight: "70vh",
+    maxHeight: "35vh",
   },
 
   content2: {
@@ -142,10 +143,54 @@ const ApprovePage = () => {
   const [invoicedate, setInvoiceDate] = useState();
   const [invoicetot, setInvoicetot] = useState();
   const [closedcode, setClosedCode] = useState();
+  const[po_id,set_Po_id]= useState("");
 
   const [inv_id, setInv_id] = useState();
 
   // console.log("vendor", setVendor);
+
+  const approvePo = async () => {
+    const url = `http://10.10.15.15:5719/user/oracle-payload/${po_id}`;
+
+    try {
+      const response = await axios.post(url, {
+        
+      });
+     
+      if (response.status === 201) {
+        message.success("PO successfully Updated");
+        navigate(`/approve`);
+      } 
+      console.log('Success:', response.data); // Handle the response data
+    } catch (error) {
+      notification.error({
+        message: "Approved Failed",
+        // description: `You have successfully Approved: ${po_id}`,
+      });
+      console.error('Error:', error);
+    }
+  };
+
+
+  const deleteInvoice = async () => {
+    const url = `http://10.10.15.15:5719/user/delete-pos/${inv_id}`;
+
+    try {
+      const response = await axios.delete(url);
+      if (response.status === 204) {
+        message.success("PO successfully Deleted");
+        navigate(`/issuefix`);
+      } 
+      
+    } catch (error) {
+      message.error(`Operation Unsuccessfull Please try again`);
+      
+
+      console.error('Error:', error);
+    }
+  };
+
+
 
   const handlePostApi = async () => {
     console.log("Button clicked!");
@@ -296,6 +341,8 @@ const ApprovePage = () => {
         const fetchedItems = response.data;
 
         setInv_id(fetchedItems.invoice_info.id);
+        set_Po_id(fetchedItems.po_header.id);
+
         console.log("InvoiceId", fetchedItems.invoice_info.id);
 
         const normalizedPoLineItems = fetchedItems.po_lineitems.map(
@@ -410,146 +457,152 @@ const ApprovePage = () => {
   });
 
   return (
-    <div>
-      <div className="Approvebreadcrump">
-        <Breadcrumb aria-label="Breadcrumb default example">
-          <BreadcrumbItem>
-            <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
-          </BreadcrumbItem>
-          <BreadcrumbDivider />
-          <BreadcrumbItem>
-            <BreadcrumbButton href={path}>Approve</BreadcrumbButton>
-          </BreadcrumbItem>
-          <BreadcrumbDivider />
-          <BreadcrumbItem>
-            <BreadcrumbButton href={path}>PO:13466</BreadcrumbButton>
-          </BreadcrumbItem>
-        </Breadcrumb>
-      </div>
-      <div style={{maxHeight:"20vh"}}>
-      <div className={styles.root}>
-        <div className={styles.header}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              alignItems: "center",
-              width: "100%",
-              marginTop: "0px",
-            }}
-          >
-            <div style={{ right: "5%", display: "flex", gap: "10px" }}>
-              <Button>Revoke</Button>
-              <Button
-                className=" buttoncolor"
-                style={{ backgroundColor: "#3570c3", color: "white" }}
+    <div >
+      <div>
+        <div className="Approvebreadcrump">
+          <Breadcrumb aria-label="Breadcrumb default example">
+            <BreadcrumbItem>
+              <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
+            </BreadcrumbItem>
+            <BreadcrumbDivider />
+            <BreadcrumbItem>
+              <BreadcrumbButton href={path}>Approve</BreadcrumbButton>
+            </BreadcrumbItem>
+            <BreadcrumbDivider />
+            <BreadcrumbItem>
+              <BreadcrumbButton href={path}>PO:13466</BreadcrumbButton>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+        <div style={{ maxHeight: "20vh" }}>
+          <div className={styles.root}>
+            <div className={styles.header}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "end",
+                  alignItems: "center",
+                  width: "100%",
+                  marginTop: "0px",
+                }}
               >
-                Approve
-              </Button>
+                <div style={{ right: "5%", display: "flex", gap: "10px" }}>
+                  <Button onClick={() => deleteInvoice()}
+                  >Revoke</Button>
+                  <Button
+                    className=" buttoncolor"
+                    style={{ backgroundColor: "#3570c3", color: "white" }}
+                    onClick={()=>approvePo()}
+                  >
+                    Approve
+                  </Button>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "end",
+                  alignItems: "center",
+                  width: "100%",
+                  marginTop: "20px",
+                }}
+              >
+                <CreatableSelect
+                  className="basic-single"
+                  classNamePrefix="select"
+                  value={selectedOption}
+                  onChange={handleChange}
+                  name="po_number"
+                  options={PONumberOPtions}
+                  styles={{
+                    container: (provided) => ({ ...provided, width: 200 }),
+                    marginTop: "20px",
+                  }}
+                  onCreateOption={handleCreate}
+                  placeholder="Select or Enter PO..."
+                  isClearable
+                />
+
+                <Button
+                  appearance="subtle"
+                  style={{
+                    color: "#0078d4",
+                    backgroundColor: "#fff",
+                    alignSelf: "flex-end",
+                    width: "auto",
+                  }}
+                  className={styles.wrapper}
+                  onClick={handlePostApi}
+                >
+                  Submit
+                </Button>
+              </div>
+
+              <h2 style={{ margin: "20px 0 20px 0" }}>
+                PO:{purchaseOrder.poNumber}
+              </h2>
+
+              <div style={{ display: "flex", marginBottom: "20px" }}>
+                <div
+                  style={{
+                    borderLeft: "5px solid #342d7c",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  <p>Supplier</p>
+                  <h2>{supplier}</h2>
+                  {/* <h2>Levin</h2> */}
+                </div>
+                <div
+                  style={{
+                    marginLeft: "3vw",
+                    borderLeft: "5px solid #9a3ca9",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  <p>Invoice Matching</p>
+                  <h2>PO</h2>
+                </div>
+                <div
+                  style={{
+                    marginLeft: "3vw",
+                    borderLeft: "5px solid black",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  <p>Line Matching</p>
+                  <h2>FULL</h2>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              alignItems: "center",
-              width: "100%",
-              marginTop: "20px",
-            }}
-          >
-            <CreatableSelect
-              className="basic-single"
-              classNamePrefix="select"
-              value={selectedOption}
-              onChange={handleChange}
-              name="po_number"
-              options={PONumberOPtions}
-              styles={{
-                container: (provided) => ({ ...provided, width: 200 }),
-                marginTop: "20px",
-              }}
-              onCreateOption={handleCreate}
-              placeholder="Select or Enter PO..."
-              isClearable
-            />
-
-            <Button
+            <TabList
+              defaultSelectedValue="tab1"
               appearance="subtle"
+              onTabSelect={handleTabSelect2}
               style={{
-                color: "#0078d4",
-                backgroundColor: "#fff",
-                alignSelf: "flex-end",
-                width: "auto",
-              }}
-              className={styles.wrapper}
-              onClick={handlePostApi}
-            >
-              Submit
-            </Button>
-          </div>
-
-          <h2 style={{ margin: "20px 0 20px 0" }}>
-            PO:{purchaseOrder.poNumber}
-          </h2>
-
-          <div style={{ display: "flex", marginBottom: "20px"}}>
-            <div
-              style={{ borderLeft: "5px solid #342d7c", paddingLeft: "10px" }}
-            >
-              <p>Supplier</p>
-              <h2>{supplier}</h2>
-              {/* <h2>Levin</h2> */}
-            </div>
-            <div
-              style={{
-                marginLeft: "3vw",
-                borderLeft: "5px solid #9a3ca9",
-                paddingLeft: "10px",
+                marginLeft: "0vw",
+                marginTop: "0vh",
+                paddingBottom: "2vh",
+                borderBottom: "1px solid rgb(200,200,200)",
               }}
             >
-              <p>Invoice Matching</p>
-              <h2>PO</h2>
-            </div>
-            <div
-              style={{
-                marginLeft: "3vw",
-                borderLeft: "5px solid black",
-                paddingLeft: "10px",
-              }}
-            >
-              <p>Line Matching</p>
-              <h2>FULL</h2>
-            </div>
-          </div>
-          </div>
-
-          <TabList
-            defaultSelectedValue="tab1"
-            appearance="subtle"
-            onTabSelect={handleTabSelect2}
-            style={{
-              marginLeft: "0vw",
-              marginTop: "0vh",
-              paddingBottom: "2vh",
-              borderBottom: "1px solid rgb(200,200,200)",
-            }}
-          >
-            <Tab
-              value="tab1"
-              className={themestate ? "tab dark drawer" : "tab"}
-              style={{ border: "1px solid transparent" }}
-            >
-              Header
-            </Tab>
-            <Tab
-              value="tab2"
-              className={themestate ? "tab dark drawer" : "tab"}
-              style={{ border: "1px solid transparent" }}
-            >
-              Line Item
-            </Tab>
-            {/* <Tab
+              <Tab
+                value="tab1"
+                className={themestate ? "tab dark drawer" : "tab"}
+                style={{ border: "1px solid transparent" }}
+              >
+                Header
+              </Tab>
+              <Tab
+                value="tab2"
+                className={themestate ? "tab dark drawer" : "tab"}
+                style={{ border: "1px solid transparent" }}
+              >
+                Line Item
+              </Tab>
+              {/* <Tab
               value="tab3"
               className={themestate ? "tab dark drawer" : "tab"}
               style={{ border: "1px solid transparent" }}
@@ -563,371 +616,391 @@ const ApprovePage = () => {
             >
               Supplier
             </Tab> */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "10px",
-                fontSize: "17px",
-                marginLeft: "auto",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-            >
-              <ArrowDownload28Regular
-                style={{ color: "#1281d7" }}
-                onClick={handleViewInvoice}
-              />{" "}
-              <span onClick={handleViewInvoice}> View Invoice</span>
-            </div>
-          </TabList>
-        </div>
-        {selectedtab === "tab1" && (
-          <div className={styles.content1}>
-            <div className={`${styles.container} ${styles.gridTemplate1}`}>
-              <div className={`${styles.section} ${styles.poNumber}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  PO Number:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {/* {purchaseOrder.poNumber} */}
-                  {poNumber}
-                </div>
-              </div>
-
-              <div className={`${styles.section} ${styles.vendorAddress}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  Vendor Address:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {/* {purchaseOrder.vendorAddress} */}
-                  {vendor}
-
-                  {/* {formattedVendorAddress} */}
-                </div>
-              </div>
-
-              <div className={`${styles.section} ${styles.poDate}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  PO Date:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {/* {purchaseOrder.poDate} */}
-                  {poDate}
-                </div>
-              </div>
-
-              <div className={`${styles.section} ${styles.customerAddress}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  Customer Address:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {/* {purchaseOrder.customerAddress} */}
-                  {customer}
-                </div>
-              </div>
-
-              <div className={`${styles.section} ${styles.poTotalAmount}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  PO Total Amount:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {total}
-                </div>
-              </div>
-
-              <div className={`${styles.section} ${styles.invoiceId}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  Invoice ID:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {/* {purchaseOrder.invoiceId} */}
-                  {invoiceid}
-                </div>
-              </div>
-
-              <div className={`${styles.section} ${styles.poCurrency}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  PO Currency:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {purchaseOrder.poCurrency}
-                </div>
-              </div>
-              <div className={`${styles.section} ${styles.invoiceDate}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  Invoice Date:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {/* {purchaseOrder.invoiceDate} */}
-                  {invoicedate}
-                </div>
-              </div>
-
-              <div className={`${styles.section} ${styles.poStatus}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  PO Status:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {postatus}
-                </div>
-              </div>
-
-              <div className={`${styles.section} ${styles.invoiceTotal}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  Invoice Total:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {/* {purchaseOrder.invoiceTotal} */}
-                  {invoicetot}
-                </div>
-              </div>
-
-              <div className={`${styles.section} ${styles.lineMatching}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  Line Matching:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {closedcode}
-                </div>
-              </div>
-
-              <div className={`${styles.section} ${styles.invoiceCurrency}`}>
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  Invoice Currency:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {purchaseOrder.invoiceCurrency}
-                </div>
-              </div>
-
               <div
-                className={`${styles.section} ${styles.purchaseOrderNumber}`}
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: "10px",
+                  fontSize: "17px",
+                  marginLeft: "auto",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
               >
-                <div
-                  className={styles.heading}
-                  style={{
-                    fontWeight: "bold",
-                    color: themestate ? "white" : "",
-                  }}
-                >
-                  Purchase Order Number in Invoice:
-                </div>
-                <div
-                  className={styles.content}
-                  style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                >
-                  {purchaseOrder.purchaseOrderNumberInInvoice}
+                <ArrowDownload28Regular
+                  style={{ color: "#1281d7" }}
+                  onClick={handleViewInvoice}
+                />{" "}
+                <span onClick={handleViewInvoice}> View Invoice</span>
+              </div>
+            </TabList>
+          </div>
+          {selectedtab === "tab1" && (
+            <div style={{ marginTop: "20px" }}>
+              <div className={styles.content1}>
+                <div className={`${styles.container} ${styles.gridTemplate1}`}>
+                  <div className={`${styles.section} ${styles.poNumber}`}>
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      PO Number:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {/* {purchaseOrder.poNumber} */}
+                      {poNumber}
+                    </div>
+                  </div>
+
+                  <div className={`${styles.section} ${styles.vendorAddress}`}>
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      Vendor Address:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {/* {purchaseOrder.vendorAddress} */}
+                      {vendor}
+
+                      {/* {formattedVendorAddress} */}
+                    </div>
+                  </div>
+
+                  <div className={`${styles.section} ${styles.poDate}`}>
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      PO Date:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {/* {purchaseOrder.poDate} */}
+                      {poDate}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`${styles.section} ${styles.customerAddress}`}
+                  >
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      Customer Address:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {/* {purchaseOrder.customerAddress} */}
+                      {customer}
+                    </div>
+                  </div>
+
+                  <div className={`${styles.section} ${styles.poTotalAmount}`}>
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      PO Total Amount:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {total}
+                    </div>
+                  </div>
+
+                  <div className={`${styles.section} ${styles.invoiceId}`}>
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      Invoice ID:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {/* {purchaseOrder.invoiceId} */}
+                      {invoiceid}
+                    </div>
+                  </div>
+
+                  <div className={`${styles.section} ${styles.poCurrency}`}>
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      PO Currency:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {purchaseOrder.poCurrency}
+                    </div>
+                  </div>
+                  <div className={`${styles.section} ${styles.invoiceDate}`}>
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      Invoice Date:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {/* {purchaseOrder.invoiceDate} */}
+                      {invoicedate}
+                    </div>
+                  </div>
+
+                  <div className={`${styles.section} ${styles.poStatus}`}>
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      PO Status:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {postatus}
+                    </div>
+                  </div>
+
+                  <div className={`${styles.section} ${styles.invoiceTotal}`}>
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      Invoice Total:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {/* {purchaseOrder.invoiceTotal} */}
+                      {invoicetot}
+                    </div>
+                  </div>
+
+                  <div className={`${styles.section} ${styles.lineMatching}`}>
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      Line Matching:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {closedcode}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`${styles.section} ${styles.invoiceCurrency}`}
+                  >
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      Invoice Currency:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {purchaseOrder.invoiceCurrency}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`${styles.section} ${styles.purchaseOrderNumber}`}
+                  >
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                      }}
+                    >
+                      Purchase Order Number in Invoice:
+                    </div>
+                    <div
+                      className={styles.content}
+                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                    >
+                      {purchaseOrder.purchaseOrderNumberInInvoice}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {selectedtab === "tab2" && (
-          <div style={{ width: "100%", display: "flex",overflowY: "auto", height: "40vh",marginTop: "10px",}}>
-            <div style={{ flex: 1, }}>
-              <Table>
-                <TableHeader
-                  style={{
-                    position: "sticky",
-                    top: 0,
-                    backgroundColor: themestate ? "#383838" : "white", // background to ensure it's visible
-                    zIndex: 1, // to ensure it stays above the content
-                    color: themestate ? "white" : "black",
-                  }}
-                >
-                  <TableRow
-                    style={
-                      themestate
-                        ? { color: "white", borderBottomColor: "#383838" }
-                        : {}
-                    }
-                  >
-                    {/* Update the header labels */}
-                    <TableHeaderCell
-                      style={{ fontWeight: "bold", cursor: "pointer" }}
-                      {...headerSortProps("PO_line_id")}
-                    >
-                      PO Line ID
-                    </TableHeaderCell>
-                    <TableHeaderCell
-                      style={{ fontWeight: "bold", cursor: "pointer" }}
-                      {...headerSortProps("name")}
-                    >
-                      Name
-                    </TableHeaderCell>
-                    <TableHeaderCell
-                      style={{ fontWeight: "bold", cursor: "pointer" }}
-                      {...headerSortProps("description")}
-                    >
-                      Description
-                    </TableHeaderCell>
-                    <TableHeaderCell
-                      style={{ fontWeight: "bold", cursor: "pointer" }}
-                      {...headerSortProps("invoice_item_name")}
-                    >
-                      Invc Item Name
-                    </TableHeaderCell>
-                    <TableHeaderCell
-                      style={{ fontWeight: "bold", cursor: "pointer" }}
-                      {...headerSortProps("unit_price")}
-                    >
-                      Unit Price
-                    </TableHeaderCell>
-                    <TableHeaderCell
-                      style={{ fontWeight: "bold", cursor: "pointer" }}
-                      {...headerSortProps("quantity")}
-                    >
-                      Quantity
-                    </TableHeaderCell>
-                    <TableHeaderCell
-                      style={{ fontWeight: "bold", cursor: "pointer" }}
-                      {...headerSortProps("invoice_quantity")}
-                    >
-                      Invoice Quantity
-                    </TableHeaderCell>
-                    {/* <TableHeaderCell
-                    style={{ fontWeight: "bold", cursor: "pointer" }}
-                    {...headerSortProps("final_po_quantity")}
-                  >
-                    Final PO Quantity
-                  </TableHeaderCell> */}
-                  </TableRow>
-                </TableHeader>
+          {selectedtab === "tab2" && (
+  <div
+    style={{
+      width: "100%",
+      display: "flex",
+      overflowY: "auto",
+      height: "40vh",
+      marginTop: "10px",
+    }}
+  >
+    <div style={{ flex: 1 }}>
+      <Table>
+        <TableHeader
+          style={{
+            position: "sticky",
+            top: 0,
+            backgroundColor: themestate ? "#383838" : "white", 
+            zIndex: 1, 
+            color: themestate ? "white" : "black",
+          }}
+        >
+          <TableRow
+            style={
+              themestate
+                ? { color: "white", borderBottomColor: "#383838" }
+                : {}
+            }
+          >
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
+              {...headerSortProps("PO_line_id")}
+            >
+              PO Line ID
+            </TableHeaderCell>
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "200px" }}
+              {...headerSortProps("name")}
+            >
+              Name
+            </TableHeaderCell>
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "300px" }}
+              {...headerSortProps("description")}
+            >
+              Description
+            </TableHeaderCell>
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "250px" }}
+              {...headerSortProps("invoice_item_name")}
+            >
+              Invc Item Name
+            </TableHeaderCell>
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
+              {...headerSortProps("unit_price")}
+            >
+              Unit Price
+            </TableHeaderCell>
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
+              {...headerSortProps("quantity")}
+            >
+              Quantity
+            </TableHeaderCell>
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
+              {...headerSortProps("invoice_quantity")}
+            >
+              Invoice Quantity
+            </TableHeaderCell>
+          </TableRow>
+        </TableHeader>
 
-                <TableBody style={themestate ? { color: "white" } : {}}>
-                  {sortedData.map((item) => (
-                    <TableRow
-                      key={item.id}
-                      style={themestate ? { color: "white" } : {}}
-                      className={
-                        themestate ? "hovereffect dark" : "hovereffect"
-                      }
-                    >
-                      <TableCell>{item.id}</TableCell>
-                      <TableCell>{item.item_name}</TableCell>
-                      <TableCell>{item.item_description}</TableCell>
-                      <TableCell>{item.item_name}</TableCell>
-                      <TableCell>{item.unit_price}</TableCell>
-                      <TableCell>{item.quantity}</TableCell>
-                      <TableCell>{item.Quantity}</TableCell>
-                      <TableCell>{item.final_po_quantity}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </div>
-        )}
+        <TableBody style={themestate ? { color: "white" } : {}}>
+          {sortedData.map((item) => (
+            <TableRow
+              key={item.id}
+              style={themestate ? { color: "white" } : {}}
+              className={themestate ? "hovereffect dark" : "hovereffect"}
+            >
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.id}
+              </TableCell>
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.item_name}
+              </TableCell>
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.item_description}
+              </TableCell>
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.item_name}
+              </TableCell>
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.unit_price}
+              </TableCell>
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.quantity}
+              </TableCell>
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.Quantity}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  </div>
+)}
+
+        </div>
       </div>
     </div>
   );
