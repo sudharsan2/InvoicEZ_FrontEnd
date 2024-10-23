@@ -92,6 +92,8 @@ const ApproveTable = () => {
     (state) => state.refresh.InvoiceUploadRefresh,
   );
 
+  const [RefreshUpload, SetRefreshUpload] = useState(null);
+
   // Fetch data from the API when the component mounts
   const fetchData = async () => {
     try {
@@ -122,9 +124,14 @@ const ApproveTable = () => {
       console.error("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    SetRefreshUpload(isInvoiceUploadRefreshed);
+  }, []);
+
   useEffect(() => {
     fetchData();
-  }, [isInvoiceUploadRefreshed]);
+  }, [RefreshUpload]);
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);

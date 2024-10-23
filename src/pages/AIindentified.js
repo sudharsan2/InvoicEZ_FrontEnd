@@ -1,7 +1,3 @@
-
-
-
-
 import React from "react";
 import {
   Breadcrumb,
@@ -16,75 +12,69 @@ import {
 } from "@fluentui/react-icons";
 import TagCounters from "../components/gridapprove";
 import ApproveTable from "../components/approvetable";
-import Search from "../components/Search"; 
+import Search from "../components/Search";
 import AITable from "../components/aitable";
-import  { useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 // improve AITable
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/dashboard";
 const path1 = "http://localhost:3000/";
-const path2 = "/ai"
+const path2 = "/ai";
 
-  const containerStyle = {
-    width: "100%",
-    display: "flex",
-    
-    // justifyContent: "space-around",
-    padding: "8px",
-    marginLeft:"0em"
-  };
+const containerStyle = {
+  width: "100%",
+  display: "flex",
 
-  const itemStyle = {
-    display: "flex",
-    alignItems: "flex-start",
-  };
+  // justifyContent: "space-around",
+  padding: "8px",
+  marginLeft: "0em",
+};
 
-  const lineStyle = (color) => ({
-    width: "3px",
-    height: "50px", 
-    backgroundColor: color,
-    marginRight: "12px",
-  });
+const itemStyle = {
+  display: "flex",
+  alignItems: "flex-start",
+};
 
-  const labelStyle = {
-    fontSize: "14px",
-    fontWeight: "normal", 
-    marginBottom:"10px"
-  };
+const lineStyle = (color) => ({
+  width: "3px",
+  height: "50px",
+  backgroundColor: color,
+  marginRight: "12px",
+});
 
-  const valueStyle = {
-    fontSize: "28px", 
-    fontWeight: "bold",
-    color: "#333", 
-    marginLeft: "6px", 
-  };
+const labelStyle = {
+  fontSize: "14px",
+  fontWeight: "normal",
+  marginBottom: "10px",
+};
 
-  const divstyle ={
-    display:"flex",
-    flexDirection:"column",
-    marginLeft:"20px",
-    paddingTop:"6em",
-    fontWeight:"bold",
+const valueStyle = {
+  fontSize: "28px",
+  fontWeight: "bold",
+  color: "#333",
+  marginLeft: "6px",
+};
 
-    
-  }
-  
+const divstyle = {
+  display: "flex",
+  flexDirection: "column",
+  marginLeft: "20px",
+  paddingTop: "6em",
+  fontWeight: "bold",
+};
+
 const AIPage = () => {
   const location = useLocation();
-const { poNumber } = location.state || {}
-const [tableLength, setTableLength] = useState(0);
+  const { poNumber } = location.state || {};
+  const [tableLength, setTableLength] = useState(0);
 
-const counters = [
+  const counters = [
     { label: "To do", value: tableLength, color: "#00bfbf" }, // Cyan
-   
-   
   ];
 
-
-
   return (
-    <div>
+    <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
       <div className="Approvebreadcrump">
         <Breadcrumb aria-label="Breadcrumb default example">
           <BreadcrumbItem>
@@ -98,38 +88,34 @@ const counters = [
           <BreadcrumbItem>
             <BreadcrumbButton href={path2}>AI Identified</BreadcrumbButton>
           </BreadcrumbItem>
-          
         </Breadcrumb>
       </div>
-      <div style={{ display: "flex", justifyContent: "flexStart", padding: "1px" }}>
+      <div
+        style={{ display: "flex", justifyContent: "flexStart", padding: "1px" }}
+      >
         <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>AI Identified</h3>
       </div>
- 
 
       <div>
-      <div style={containerStyle}>
-        {counters.map((item, index) => (
-          <div style={itemStyle} key={index}>
-            <div style={lineStyle(item.color)} />
-            <div>
-              <div style={labelStyle}>{item.label}</div>
-              <div style={valueStyle}>{item.value}</div>
+        <div style={containerStyle}>
+          {counters.map((item, index) => (
+            <div style={itemStyle} key={index}>
+              <div style={lineStyle(item.color)} />
+              <div>
+                <div style={labelStyle}>{item.label}</div>
+                <div style={valueStyle}>{item.value}</div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-        
-      </div>
-      
+
       {/* <div>
 
-      </div> max value */}  
+      </div> max value */}
       <div>
-      <AITable setTableLength={setTableLength} /> 
+        <AITable setTableLength={setTableLength} />
       </div>
-
-      
-
     </div>
   );
 };

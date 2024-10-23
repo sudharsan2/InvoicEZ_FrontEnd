@@ -20,7 +20,7 @@ const path1 = "http://localhost:3000/";
 
 const UserApprove = () => {
   return (
-    <div>
+    <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
       <div style={{ height: "5vh" }}>
         <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
