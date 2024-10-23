@@ -265,7 +265,7 @@ const AIDetailPage = () => {
   const [poheader, setPoHeader] = useState();
   // const [selectedOption, setSelectedOption] = useState(null);
   const [invoiceId, setInvoiceId] = useState(null); // Placeholder for dynamically fetched invoice ID
-
+  const[vendor,setVendor] = useState("");
   const handlePoNumberClick = async (poNumber) => {
     console.log("test function called");
     setSelectedInvoiceNumber(poNumber);
@@ -301,7 +301,8 @@ const AIDetailPage = () => {
 
         setInvoiceData(fetchedItem);
         setPoHeader(fetchedItem.po_headers);
-
+        // setVendor(fetchedItem.po_headers.id)
+        // console.log("SETVENDOR",vendor)
         const poOptions = fetchedItem.po_headers.map((header) => ({
           value: header.po_number,
           label: header.po_number,
@@ -344,7 +345,7 @@ const AIDetailPage = () => {
 
   const inv_id = invoiceData.invoice_info.id;
   // const inv_id = invoiceData.InvoiceId;
-  console.log("---", inv_id);
+  
 
   const formatAddress = (address) => {
     if (!address) return "N/A";
@@ -546,6 +547,7 @@ const AIDetailPage = () => {
             >
               <p>Supplier</p>
               <h2>Levin Technologies</h2>
+              {/* <h2>{vendor}</h2> */}
             </div>
             <div
               style={{
@@ -707,7 +709,7 @@ const AIDetailPage = () => {
                 </ul>
 
                 <div>
-                  {dataitem.po_items.map((item, index) => (
+                  { dataitem.po_items && dataitem.po_items.map((item, index) => (
                     <ul key={item.id}>
                       <h3>Item {index + 1}</h3>
                       <ul>

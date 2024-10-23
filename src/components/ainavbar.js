@@ -310,7 +310,7 @@ const AiNav = ({ onPoNumberClick }) => {
   return (
     <div className={styles.root}>
       <NavDrawer
-      defaultSelectedValue={0}
+      defaultSelectedValue="1"
         open={isOpen}
         style={{ backgroundColor: "#fff" }}
       >
