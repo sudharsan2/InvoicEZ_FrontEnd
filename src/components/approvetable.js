@@ -96,7 +96,7 @@ const ApproveTable = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/user/one-invoice-list",
+        "http://10.10.15.15:5719/user/one-invoice-list",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
 
@@ -182,7 +182,7 @@ const ApproveTable = () => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.delete(
-            `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+            `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[item].InvoiceId}`,
           ),
         ),
       );
@@ -228,7 +228,7 @@ const ApproveTable = () => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `http://127.0.0.1:8000/user/approve-status/${filteredItems[item].InvoiceId}`,
+            `http://10.10.15.15:5719/user/approve-status/${filteredItems[item].InvoiceId}`,
           ),
         ),
       );
@@ -274,6 +274,7 @@ const ApproveTable = () => {
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
+            height: "7vh",
           }}
           onClick={handleDeleteSelectedRows} // Call delete function
         >
@@ -322,8 +323,8 @@ const ApproveTable = () => {
       </div>
       <div
         style={{
-          height: "400px",
-          overflowY: "auto",
+          height: "60vh",
+          overflow: "scroll",
           marginTop: "20px",
         }}
       >

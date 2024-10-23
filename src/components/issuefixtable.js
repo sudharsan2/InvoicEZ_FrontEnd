@@ -54,7 +54,7 @@ const columns = [
   }),
 ];
 
-const IssuefixTable = () => {
+const IssuefixTable = ({ height }) => {
   const [items, setItems] = useState([]); // Initialize items state
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -67,7 +67,7 @@ const IssuefixTable = () => {
   // Fetch data from the API
   // Fetch data from the API
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/user/no-invoice-list")
+    fetch("http://10.10.15.15:5719/user/no-invoice-list")
       .then((response) => response.json())
       .then((data) => {
         // Format data to match the table columns
@@ -82,6 +82,7 @@ const IssuefixTable = () => {
         }));
         console.log("Formatted Items:", formattedItems); // Debugging log
         setItems(formattedItems);
+        console.log("height", height);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -101,9 +102,12 @@ const IssuefixTable = () => {
         if (id) {
           // Check if id is defined
           console.log(`Deleting item with ID: ${id}`);
-          return fetch(`http://127.0.0.1:8000/user/delete-invoice/${id}`, {
-            method: "DELETE",
-          });
+          return fetch(
+            `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[id].invid}`,
+            {
+              method: "DELETE",
+            },
+          );
         } else {
           console.warn("Attempting to delete an undefined ID");
           return Promise.resolve(); // Skip undefined IDs
@@ -133,6 +137,10 @@ const IssuefixTable = () => {
 
   const filteredItems = items.filter((item) => {
     return (
+      item.invid
+        ?.toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
       item.invoiceNo
         ?.toString()
         .toLowerCase()
@@ -157,15 +165,15 @@ const IssuefixTable = () => {
   const handleSelectionChange = (event, data) => {
     const newSelectedRows = new Set(selectedRows); // Create a copy of the selected rows
     data.selectedItems.forEach((item) => {
-      if (item.invid) {
-        // Ensure invid is defined
-        newSelectedRows.add(item.invid); // Store item.invid instead of item.invoiceNo
-      } else {
-        console.warn("Selected item does not have an invid:", item);
-      }
+      // if (item) {
+      //   // Ensure invid is defined
+      newSelectedRows.add(item); // Store item.invid instead of item.invoiceNo
+      // } else {
+      //   console.warn("Selected item does not have an invid:", item);
+      console.log(item);
     });
     setSelectedRows(newSelectedRows); // Update state
-    console.log("Selected IDs:", Array.from(newSelectedRows)); // Log selected IDs for debugging
+    // console.log("Selected IDs:", Array.from(newSelectedRows)); // Log selected IDs for debugging
   };
 
   return (
@@ -177,8 +185,6 @@ const IssuefixTable = () => {
           gap: "20px",
           fontWeight: "bold",
           marginLeft: "-3em",
-          height: "10vh",
-          maxHeight: "10vh",
         }}
       >
         <button
@@ -223,7 +229,7 @@ const IssuefixTable = () => {
       </div>
       <div
         style={{
-          maxHeight: "50vh", // Set a fixed height for scrolling
+          height: `calc(73vh - ${height}px)`, // Set a fixed height for scrolling
           overflowY: "auto", // Enable vertical scrolling
           marginTop: "20px",
         }}

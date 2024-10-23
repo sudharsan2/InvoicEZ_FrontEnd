@@ -89,7 +89,7 @@
 //     e.preventDefault();
 
 //     try {
-//       const response = await axios.post('http://127.0.0.1:8000/user/forgot-password', {
+//       const response = await axios.post('http://10.10.15.15:5719/user/forgot-password', {
 //         email,
 //       });
 
@@ -201,7 +201,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/user/forgot-password",
+        "http://10.10.15.15:5719/user/forgot-password",
         {
           email,
         },
