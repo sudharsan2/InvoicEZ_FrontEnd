@@ -170,7 +170,7 @@ const ApprovePage = () => {
 
     try {
       const response = await axios.post(
-        "http://10.10.15.15:5719/user/po-number",
+        "http://127.0.0.1:8000/user/po-number",
         payload,
       );
 
@@ -272,7 +272,7 @@ const ApprovePage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://10.10.15.15:5719/user/invoices-file/${inv_id}`,
+        `http://127.0.0.1:8000/user/invoices-file/${inv_id}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -291,7 +291,7 @@ const ApprovePage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://10.10.15.15:5719/user/po-details/${Id}/`,
+          `http://127.0.0.1:8000/user/po-details/${Id}/`,
         );
         const fetchedItems = response.data;
 

@@ -37,13 +37,10 @@ const Login = () => {
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       setIsLoading(true);
       try {
-        const response = await axios.post(
-          "http://10.10.15.15:5719/user/signin",
-          {
-            username: values.username,
-            password: values.password,
-          },
-        );
+        const response = await axios.post("http://127.0.0.1:8000/user/signin", {
+          username: values.username,
+          password: values.password,
+        });
 
         const { role, username, useremail, empcode } = response.data;
         localStorage.setItem("username", username);

@@ -67,7 +67,7 @@ const IssuefixTable = ({ height }) => {
   // Fetch data from the API
   // Fetch data from the API
   useEffect(() => {
-    fetch("http://10.10.15.15:5719/user/no-invoice-list")
+    fetch("http://127.0.0.1:8000/user/no-invoice-list")
       .then((response) => response.json())
       .then((data) => {
         // Format data to match the table columns
@@ -103,7 +103,7 @@ const IssuefixTable = ({ height }) => {
           // Check if id is defined
           console.log(`Deleting item with ID: ${id}`);
           return fetch(
-            `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[id].invid}`,
+            `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[id].invid}`,
             {
               method: "DELETE",
             },
