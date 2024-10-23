@@ -348,7 +348,7 @@ const IssuefixDetails = () => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/user/invoices-update/${formData.invoiceId}/`,
+        `http://127.0.0.1:8000/user/invoices-update/${invoiceNo}/`,
         {
           method: "PUT",
           headers: {
