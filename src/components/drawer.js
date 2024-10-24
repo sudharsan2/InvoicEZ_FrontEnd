@@ -248,10 +248,14 @@ const NavDrawerDefault = (props) => {
   const [empId, setEmpId] = useState("");
   const dropdownId = useId("dropdown");
   // const styles = useStyles();
-  const [value, setValue] = useState("1");
+  // const[value,setValue] = useState("1")
+  const value = localStorage.getItem("drawerposition");
   console.log("value", { value });
   const someClickHandler = () => {
     navigate("/dashboard");
+  };
+  const setValue = (value) => {
+    localStorage.setItem("drawerposition", value);
   };
   useEffect(() => {
     const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
@@ -259,6 +263,7 @@ const NavDrawerDefault = (props) => {
     if (storedUsername) {
       setUsername(storedUsername);
     }
+    localStorage.setItem("drawerposition", "1");
   }, []);
 
   useEffect(() => {
