@@ -214,6 +214,7 @@ const ApprovePage = () => {
     console.log("payload", payload);
 
     try {
+      setLoad(true); 
       const response = await axios.post(
         "http://10.10.15.15:5719/user/po-number",
         payload,
@@ -221,8 +222,12 @@ const ApprovePage = () => {
 
       if (response.status === 201) {
         message.success("PO successfully Updated");
+        setLoad(false); 
         navigate(`/approve`);
-      } else {
+
+      }
+      
+       else {
         message.error(`Operation Unsuccessfully Please try again`);
       }
     } catch (error) {
@@ -250,6 +255,7 @@ const ApprovePage = () => {
     sortDirection: "ascending",
     sortColumn: "empid",
   });
+  const [load, setLoad] = useState(false);
 
   const [data, setData] = useState("");
   // console.log("data", data);
@@ -524,19 +530,45 @@ const ApprovePage = () => {
                   isClearable
                 />
 
-                <Button
-                  appearance="subtle"
-                  style={{
-                    color: "#0078d4",
-                    backgroundColor: "#fff",
-                    alignSelf: "flex-end",
-                    width: "auto",
-                  }}
-                  className={styles.wrapper}
-                  onClick={handlePostApi}
-                >
-                  Submit
-                </Button>
+<Button
+            appearance="subtle"
+            style={{
+                color: "#0078d4",
+                backgroundColor: "#fff",
+                alignSelf: "flex-end",
+                width: "auto",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: loading ? 'not-allowed' : 'pointer', // Change cursor to not-allowed when loading
+                opacity: loading ? 0.6 : 1 // Change opacity when loading
+            }}
+            className={styles.wrapper}
+            onClick={handlePostApi}
+            disabled={load} // Disable button while loading
+        >
+            {load ? (
+                <div style={{
+                    border: '4px solid rgba(255, 255, 255, 0.3)', // Light background
+                    borderRadius: '50%',
+                    borderTop: '4px solid #0078d4', // Main color
+                    width: '20px',
+                    height: '20px',
+                    animation: 'spin 1s linear infinite',
+                    marginRight: '8px', // Space between spinner and text
+                }} />
+            ) : (
+                "Submit"
+            )}
+            <style>
+                {`
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                `}
+            </style>
+        </Button>
               </div>
 
               <h2 style={{ margin: "20px 0 20px 0" }}>
