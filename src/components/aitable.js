@@ -79,11 +79,11 @@ const AITable = ({ setTableLength }) => {
       const mappedItems = fetchedItems.map((item) => ({
         Id: item.id || "NULL",
         InvoiceId: item.InvoiceId || "NULL",
-        supplier_name: item.po_headers?.[0]?.supplier_name || "NULL",
+        supplier_name: item.VendorName || "NULL",
         city: item.po_headers?.[0]?.location || "NULL",
         InvoiceDate: item.InvoiceDate || "NULL",
         InvoiceTotal: item.InvoiceTotal || "NULL",
-        ship_to: item.po_headers?.[0]?.ship_to || "NULL",
+        ship_to: item.items.length || "NULL",
       }));
 
       setItems(mappedItems);
