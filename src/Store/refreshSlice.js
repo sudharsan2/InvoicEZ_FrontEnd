@@ -1,19 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  InvoiceUploadRefresh: false,
+  invoiceUploadRefresh: false, // consistent camelCase
 };
 
 const refreshSlice = createSlice({
-  name: "refresh",
+  name: "refresh", // or use a more descriptive name like 'invoiceUpload'
   initialState,
   reducers: {
     toggleInvoiceUploadRefresh(state) {
-      // Updated action name for clarity
-      state.InvoiceUploadRefresh = !state.InvoiceUploadRefresh;
+      state.invoiceUploadRefresh = !state.invoiceUploadRefresh;
     },
   },
 });
 
-export const { toggleInvoiceUploadRefresh } = refreshSlice.actions; // Export action
-export default refreshSlice;
+// Export the action and reducer
+// export const { toggleInvoiceUploadRefresh } = refreshSlice.actions;
+export default refreshSlice; // note: it's `.reducer` to export the reducer function

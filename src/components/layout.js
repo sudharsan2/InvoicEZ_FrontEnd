@@ -35,7 +35,7 @@ import {
   WeatherSunnyRegular,
   WeatherMoonRegular,
 } from "@fluentui/react-icons";
-import { themeActions } from "../Store/Store";
+import { themeActions, refreshActions } from "../Store/Store";
 import { calc } from "antd/es/theme/internal";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 // import { useNavigate } from "react-router-dom";
@@ -276,6 +276,10 @@ const CustomLayout = ({ children }) => {
     setIsModalVisible(false);
   };
 
+  const handleToggle = () => {
+    dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Dispatch the action to toggle the state
+  };
+
   const handleFileChange = async (info) => {
     const { status, originFileObj: file } = info.file;
 
@@ -303,6 +307,7 @@ const CustomLayout = ({ children }) => {
           message: "Upload Successful",
           description: `File ${file.name} uploaded successfully!`,
         });
+        handleToggle();
       } catch (error) {
         console.error("Upload failed:", error);
         notification.error({

@@ -87,10 +87,10 @@ const ApproveTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
-  const [po_id,set_Po_id]=useState("");
+  const [po_id, set_Po_id] = useState("");
   const navigate = useNavigate();
-  const isInvoiceUploadRefreshed = useSelector(
-    (state) => state.refresh.InvoiceUploadRefresh,
+  const invoiceUploadRefresh = useSelector(
+    (state) => state.refresh.invoiceUploadRefresh,
   );
 
   const [RefreshUpload, SetRefreshUpload] = useState(null);
@@ -102,8 +102,8 @@ const ApproveTable = () => {
         "http://10.10.15.15:5719/user/one-invoice-list",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
-      console.log("fetchedItems",fetchedItems);
-      set_Po_id(fetchedItems[0]['po_headers'][0]['id'])
+      console.log("fetchedItems", fetchedItems);
+      set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
       //  console.log("InvId",InvoiceNumber);
       // Map fetched data to the format expected by DataGrid
       const mappedItems = fetchedItems.map((item) => ({
@@ -129,12 +129,12 @@ const ApproveTable = () => {
   };
 
   useEffect(() => {
-    SetRefreshUpload(isInvoiceUploadRefreshed);
+    SetRefreshUpload(invoiceUploadRefresh);
   }, []);
 
   useEffect(() => {
     fetchData();
-  }, [RefreshUpload]);
+  }, [invoiceUploadRefresh]);
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
@@ -173,12 +173,9 @@ const ApproveTable = () => {
     setSelectedRows(data.selectedItems);
   };
 
- 
-
-
   //  delete API
   const handleDeleteSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows); 
+    const selectedItemsArray = Array.from(selectedRows);
     if (selectedItemsArray.length === 0) {
       notification.warning({
         message: "No PO Selected",
@@ -186,37 +183,35 @@ const ApproveTable = () => {
       });
       return;
     }
-  
+
     try {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
         .join(", ");
-  
-      
+
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[item].InvoiceId}` 
-        )
+          `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+        ),
       );
-  
-      await Promise.all(deletePromises); 
-  
-      
-      const newItems = items.filter(item => 
-        !selectedItemsArray.some(selectedItem => selectedItem.InvoiceId === item.InvoiceId) // Ensure to compare InvoiceId
+
+      await Promise.all(deletePromises);
+
+      const newItems = items.filter(
+        (item) =>
+          !selectedItemsArray.some(
+            (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
+          ), // Ensure to compare InvoiceId
       );
-  
-      setItems(newItems); 
-  
-      
+
+      setItems(newItems);
+
       notification.success({
         message: "Successfully deleted",
         description: `You have successfully deleted: ${supplierNames}`,
       });
-  
-      
+
       fetchData();
-  
     } catch (error) {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
@@ -227,8 +222,7 @@ const ApproveTable = () => {
       });
     }
   };
-  
-  
+
   // Approve API
 
   const handleApproveSelectedRows = async () => {
@@ -249,9 +243,7 @@ const ApproveTable = () => {
       // Make API call to delete selected POs
       await Promise.all(
         selectedItemsArray.map((item) =>
-          axios.post(
-            `http://10.10.15.15:5719/user/oracle-payload/${po_id}`,
-          ),
+          axios.post(`http://10.10.15.15:5719/user/oracle-payload/${po_id}`),
         ),
       );
 
@@ -373,10 +365,17 @@ const ApproveTable = () => {
                 key={rowId}
                 onClick={(e) => handleRowClick(e, item)}
                 selected={selectedRows.has(rowId)}
-              
               >
                 {({ renderCell }) => (
-                  <DataGridCell style={{wordWrap:"break-word",whiteSpace: "normal",overflow:"hidden" }}>{renderCell(item)}</DataGridCell>
+                  <DataGridCell
+                    style={{
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {renderCell(item)}
+                  </DataGridCell>
                 )}
               </DataGridRow>
             )}
