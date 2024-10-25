@@ -408,11 +408,10 @@ const ApprovePage = () => {
         
           
           setVendor(formattedVendorAddress);
-          console.log("Approve page vendor address",typeof(formattedVendorAddress));
-          console.log("VENDOR",vendor);
+          
 
         } else {
-          setVendor();
+          setVendor("NULL");
           console.error("VendorAddress is missing");
         }
 
@@ -430,10 +429,10 @@ const ApprovePage = () => {
             .replace(/\s+/g, " ")
             .replace(/,$/, "");
 
-          setVendor(formattedCustomerAddress);
+            setCustomer(formattedCustomerAddress);
           
         } else {
-          setVendor();
+          setCustomer("NULL");
           console.error("CustomerAddress is missing");
         }
       } catch (error) {
@@ -451,6 +450,8 @@ const ApprovePage = () => {
       fetchData();
     }
   }, [poNumber]);
+
+
 
 
   
@@ -891,7 +892,7 @@ const ApprovePage = () => {
                   <div
                     className={`${styles.section} ${styles.invoiceCurrency}`}
                   >
-                    <div
+                    {/* <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
@@ -899,16 +900,16 @@ const ApprovePage = () => {
                       }}
                     >
                       Invoice Currency:
-                    </div>
-                    <div
+                    </div> */}
+                    {/* <div
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
                       {purchaseOrder.invoiceCurrency}
-                    </div>
+                    </div> */}
                   </div>
 
-                  <div
+                  {/* <div
                     className={`${styles.section} ${styles.purchaseOrderNumber}`}
                   >
                     <div
@@ -926,7 +927,7 @@ const ApprovePage = () => {
                     >
                       {purchaseOrder.purchaseOrderNumberInInvoice}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

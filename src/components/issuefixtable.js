@@ -109,6 +109,7 @@ const IssuefixTable = ({ height ,setTableLength}) => {
         }));
         console.log("Formatted Items:", formattedItems);
         setItems(formattedItems); // Set the fetched items
+        setTableLength(formattedItems.length);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
