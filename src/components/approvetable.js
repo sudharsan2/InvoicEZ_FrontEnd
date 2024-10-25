@@ -89,8 +89,8 @@ const ApproveTable = () => {
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [po_id, set_Po_id] = useState("");
   const navigate = useNavigate();
-  const invoiceUploadRefresh = useSelector(
-    (state) => state.refresh.invoiceUploadRefresh,
+  const isInvoiceUploadRefreshed = useSelector(
+    (state) => state.refresh.InvoiceUploadRefresh,
   );
 
   const [RefreshUpload, SetRefreshUpload] = useState(null);
@@ -129,12 +129,12 @@ const ApproveTable = () => {
   };
 
   useEffect(() => {
-    SetRefreshUpload(invoiceUploadRefresh);
+    SetRefreshUpload(isInvoiceUploadRefreshed);
   }, []);
 
   useEffect(() => {
     fetchData();
-  }, [invoiceUploadRefresh]);
+  }, [RefreshUpload]);
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
