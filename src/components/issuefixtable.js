@@ -64,17 +64,42 @@ const IssuefixTable = ({ height ,setTableLength}) => {
     return invoice.items ? invoice.items.length : 0;
   };
   const[invid,setInvId]=useState("");
-  // Fetch data from the API
-  // Fetch data from the API
-  useEffect(() => {
+ 
+  // useEffect(() => {
+  //   fetch("http://10.10.15.15:5719/user/no-invoice-list")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+        
+  //       const formattedItems = data.map((invoice) => ({
+  //         invid: invoice.id, 
+         
+         
+  //         invoiceNo: invoice.InvoiceId, // Use "InvoiceId" for invoice number
+  //         supplier: invoice.VendorName,
+  //         numberOfLines: getNumberOfLines(invoice),
+  //         invoiceDate: invoice.InvoiceDate,
+  //         totalAmount: invoice.InvoiceTotal,
+  //         statusVerified: invoice.statusVerified,
+  //       }));
+  //       console.log("Formatted Items:", formattedItems);
+  //       setInvId(formattedItems.InvoiceId) // Debugging log
+  //       setItems(formattedItems);
+  //       setTableLength(formattedItems.length);
+  //       console.log("height", height);
+        
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // },  [refreshKey]);
+
+
+  const fetchData = () => {
     fetch("http://10.10.15.15:5719/user/no-invoice-list")
       .then((response) => response.json())
       .then((data) => {
-        // Format data to match the table columns
         const formattedItems = data.map((invoice) => ({
-          invid: invoice.id, 
-          // Use the "id" field from the response
-         
+          invid: invoice.id,
           invoiceNo: invoice.InvoiceId, // Use "InvoiceId" for invoice number
           supplier: invoice.VendorName,
           numberOfLines: getNumberOfLines(invoice),
@@ -83,16 +108,15 @@ const IssuefixTable = ({ height ,setTableLength}) => {
           statusVerified: invoice.statusVerified,
         }));
         console.log("Formatted Items:", formattedItems);
-        setInvId(formattedItems.InvoiceId) // Debugging log
-        setItems(formattedItems);
-        setTableLength(formattedItems.length);
-        console.log("height", height);
-        
+        setItems(formattedItems); // Set the fetched items
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  },  [refreshKey]);
+  };
+  useEffect(() => {
+    fetchData(); // Fetch the data when component is mounted
+  }, []);
 
   const handleRefresh = () => {
     setRefreshKey((prevKey) => prevKey + 1); // Increment the refreshKey to trigger useEffect
@@ -128,12 +152,14 @@ const IssuefixTable = ({ height ,setTableLength}) => {
         .then((responses) => {
           const allDeleted = responses.every((response) => response.ok);
           if (allDeleted) {
+            message.success(" successfully Deleted");
             const updatedItems = items.filter(
               (item) => !idsToDelete.includes(item.id),
             ); // Use item.id here
             setItems(updatedItems);
             setSelectedRows(new Set());
-            message.success(" successfully Deleted");
+            fetchData();
+           
           } else {
             throw new Error("Some deletions failed");
            

@@ -330,7 +330,7 @@ const AIDetailPage = () => {
   }
 
   const invoiceInfo = [
-    { label: "Invoice Number", value: invoiceNumber },
+    { label: "Invoice Number", value: invoiceData.invoice_info.InvoiceId },
     { label: "Invoice Date", value: invoiceData.invoice_info.InvoiceDate },
     {
       label: "Invoice Due Date",
@@ -569,7 +569,7 @@ const AIDetailPage = () => {
             </div>
           </div>
 
-          <h2 style={{ margin: "20px 0 20px 0" }}>Invoice:</h2>
+          <h2 style={{ margin: "20px 0 20px 0" }}>Invoice No : {invoiceData.invoice_info.InvoiceId}</h2>
 
           <div style={{ display: "flex", marginBottom: "20px" }}>
             <div
