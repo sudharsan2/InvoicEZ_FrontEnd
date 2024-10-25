@@ -178,7 +178,7 @@ const ApprovePage = () => {
     try {
       const response = await axios.delete(url);
       if (response.status === 204) {
-        message.success("PO successfully Deleted");
+        message.success("Revoked successfully");
         navigate(`/issuefix`);
       } 
       
