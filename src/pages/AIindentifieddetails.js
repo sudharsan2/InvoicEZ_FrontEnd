@@ -1,6 +1,8 @@
 // import { useState } from "react";
 // import React from "react";
 import { message } from "antd";
+import {  OverlayTrigger } from "react-bootstrap";
+
 import {
   makeStyles,
   Button,
@@ -33,8 +35,16 @@ import { tokens, Divider } from "@fluentui/react-components";
 import CreatableSelect from "react-select/creatable";
 import React, { useState } from "react";
 import { useEffect } from "react";
-
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
+import {
+  
+  
+  PopoverSurface,
+  PopoverTrigger,
+} from "@fluentui/react-components";
 import axios from "axios";
+import { Popover} from '@mui/material';
+
 const path = "/aidetail";
 const path1 = "http://localhost:3000/";
 const Checkbox = ({ children, ...props }) => (
@@ -45,6 +55,15 @@ const Checkbox = ({ children, ...props }) => (
 );
 
 const useStyles = makeStyles({
+  contentHeader: {
+    marginTop: "0",
+  },
+  tableCell: {
+    maxWidth: "300px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
   root: {
     // width: "77vw",
     height: "100vh",
@@ -123,6 +142,9 @@ const useStyles = makeStyles({
   },
 });
 
+
+// pop up message for table cell see more
+
 const AIDetailPage = () => {
   const navigate = useNavigate();
 
@@ -168,37 +190,26 @@ const AIDetailPage = () => {
 
   const columns = [
     createTableColumn({
-      columnId: "PO_line_id",
-      compare: (a, b) => a.PO_line_id - b.PO_line_id,
+      columnId: "Description",
+      compare: (a, b) => a.Description - b.Description,
     }),
     createTableColumn({
-      columnId: "name",
-      compare: (a, b) => a.name.localeCompare(b.name),
+      columnId: "Quantity",
+      compare: (a, b) => a.Quantity.localeCompare(b.Quantity),
     }),
     createTableColumn({
-      columnId: "description",
-      compare: (a, b) => a.description.localeCompare(b.description),
+      columnId: "UnitPrice",
+      compare: (a, b) => a.UnitPrice.localeCompare(b.UnitPrice),
     }),
     createTableColumn({
-      columnId: "invoice_item_name",
-      compare: (a, b) => a.invoice_item_name.localeCompare(b.invoice_item_name),
+      columnId: "Discount",
+      compare: (a, b) => a.Discount.localeCompare(b.Discount),
     }),
     createTableColumn({
-      columnId: "unit_price",
-      compare: (a, b) => a.unit_price - b.unit_price,
+      columnId: "ProductCode",
+      compare: (a, b) => a.ProductCode - b.ProductCode,
     }),
-    createTableColumn({
-      columnId: "quantity",
-      compare: (a, b) => a.quantity - b.quantity,
-    }),
-    createTableColumn({
-      columnId: "invoice_quantity",
-      compare: (a, b) => a.invoice_quantity - b.invoice_quantity,
-    }),
-    createTableColumn({
-      columnId: "final_po_quantity",
-      compare: (a, b) => a.final_po_quantity - b.final_po_quantity,
-    }),
+    
   ];
 
   const {
@@ -267,6 +278,12 @@ const AIDetailPage = () => {
   const [invoiceId, setInvoiceId] = useState(null); // Placeholder for dynamically fetched invoice ID
   const[vendor,setVendor] = useState("");
   const [load, setLoad] = useState(false);
+  const [showPopover, setShowPopover] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  //  PopOver 
+
+
+
   const handlePoNumberClick = async (poNumber) => {
     console.log("test function called");
     setSelectedInvoiceNumber(poNumber);
@@ -288,6 +305,19 @@ const AIDetailPage = () => {
       console.error("Error fetching invoice details:", error);
     }
   };
+
+  // pop over 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
   const { invoiceNumber } = location2.state || {};
   console.log("inn", invoiceNumber);
 
@@ -389,12 +419,24 @@ const AIDetailPage = () => {
     { label: "Vendor Tax ID", value: invoiceData.VendorTaxId || "N/A" },
   ];
 
+  // const renderPopover = (props) => (
+  //   <Popover {...props}>
+  //     <Popover.Body>
+  //       Hi
+  //     </Popover.Body>
+  //   </Popover>
+  // );
+
+  
+  
+
   const lineItems = invoiceData.invoice_info.items.map((item) => ({
-    Description: item.Description || "N/A",
-    Quantity: item.Quantity || "N/A",
-    Amount: item.Amount || "N/A",
-    Discount: item.Discount || "N/A",
-    ProductCode: item.ProductCode || "N/A",
+    Description: item.Description || "Null",
+    Quantity: item.Quantity || "Null",
+    UnitPrice:item.UnitPrice || "Null",
+    Amount: item.Amount || "Null",
+    Discount: item.Discount || "Null",
+    ProductCode: item.ProductCode || "Null",
   }));
 
   const handleCreate = (inputValue) => {
@@ -666,56 +708,142 @@ const AIDetailPage = () => {
                   </li>
                 ))}
               </ul>
+              </div>
+              
+              <h2>Line Information</h2>
+              
+             <Divider/>
 
-              {/* Line Items */}
-              <h2>Line Items</h2>
-              <ol>
-                {lineItems.map((info, index) => (
-                  <li key={index} style={{ marginBottom: "15px" }}>
-                    <strong>Description: {info.Description}</strong>
-                    <ul style={{ marginLeft: "20px", listStyleType: "disc" }}>
-                      <li>
-                        <strong>Quantity:</strong> {info.Quantity}
-                      </li>
-                      <li>
-                        <strong>Amount:</strong> {info.Amount}
-                      </li>
-                      <li>
-                        <strong>Discount:</strong> {info.Discount}
-                      </li>
-                      <li>
-                        <strong>ProductCode:</strong> {info.ProductCode}
-                      </li>
-                    </ul>
-                  </li>
-                ))}
-              </ol>
-            </div>
+              <div
+    style={{
+      width: "100%",
+      display: "flex",
+      overflowY: "auto",
+      height: "40vh",
+      marginTop: "10px",
+    }}
+  >
+    <div style={{ flex: 2 }}>
+      <Table>
+        <TableHeader
+          style={{
+            position: "sticky",
+            top: 0,
+            backgroundColor: themestate ? "#383838" : "white", 
+            zIndex: 1, 
+            color: themestate ? "white" : "black",
+          }}
+        >
+          <TableRow
+            style={
+              themestate
+                ? { color: "white", borderBottomColor: "#383838" }
+                : {}
+            }
+          >
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
+              {...headerSortProps("Description")}
+            >
+              Description
+            </TableHeaderCell>
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "200px" }}
+              {...headerSortProps("Quantity")}
+            >
+              Quantity
+            </TableHeaderCell>
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "300px" }}
+              {...headerSortProps("Unit Price")}
+            >
+              Unit Price
+            </TableHeaderCell>
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "250px" }}
+              {...headerSortProps("Discount")}
+            >
+              Discount
+            </TableHeaderCell>
+            <TableHeaderCell
+              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
+              {...headerSortProps("Product Code")}
+            >
+              Product Code
+            </TableHeaderCell>
+           
+            
+          </TableRow>
+        </TableHeader>
+
+        <TableBody style={themestate ? { color: "white" } : {}}>
+          {lineItems.map((item) => (
+            <TableRow
+              key={item.id}
+              style={themestate ? { color: "white" } : {}}
+              className={themestate ? "hovereffect dark" : "hovereffect"}
+            >
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.Description}
+              </TableCell>
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.Quantity}
+              </TableCell>
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.UnitPrice}
+              </TableCell>
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.Discount}
+              </TableCell>
+              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {item.ProductCode}
+              </TableCell>
+              {/* <TableCell
+                    style={{
+                      maxWidth: "300px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    
+                      <FaArrowUpRightFromSquare
+                        style={{ cursor: "pointer" }}
+                      />
+                   
+                  </TableCell> */}
+              
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  </div>
+
+            
           </div>
         )}
 
         {selectedtab === "tab4" && (
           <div style={{ width: "100%", display: "flex", overflowY: "auto" }}>
-            {/* Left Div (1/4 of the total width) */}
             <div style={{ flex: 1, borderRight: "2px solid rgb(240,240,240)" }}>
               <AiNav onPoNumberClick={handlePoNumberClick} />
             </div>
-
-            {/* Right Div (3/4 of the total width) */}
             <div
               style={{
-                flex: 3, // Three times the width of the left div
+                flex: 3, 
                 display: "flex",
-                justifyContent: "center", // Aligns content to the left
-                paddingLeft: "2em", // Padding for spacing
+                justifyContent: "center", 
+                paddingLeft: "2em", 
+                flexDirection:"column"
               }}
             >
               <div
                 style={{
                   width: "90%",
                   display: "flex",
-                  justifyContent: "space-between", // Aligns content to the left
-                  paddingLeft: "2em", // Padding for spacing
+                  justifyContent: "space-between", 
+                  paddingLeft: "2em", 
                 }}
               >
                 <ul>
@@ -729,53 +857,221 @@ const AIDetailPage = () => {
                       <li>Total Amount: {dataitem.total_amount}</li>
                       <li>Buyer Name: {dataitem.buyer_name}</li>
                       <li>Invoice Detail: {dataitem.invoice_detail}</li>
-                      {/* <li>InvoiceDate: {invoiceData.InvoiceDate}</li>
-                  <li>Invoice Date: {items.invoice_info.InvoiceDate }</li>  */}
                       <li>Shipping Address: {dataitem.ship_to}</li>
                       <li>Billing Address: {dataitem.ship_to}</li>
                     </>
                   )}
                 </ul>
-
-                <div>
-                  {dataitem.po_items &&
-                    dataitem.po_items.map((item, index) => (
-                      <ul key={item.id}>
-                        <h3>Item {index + 1}</h3>
-                        <ul>
-                          <li>Item Name: {item.item_name}</li>
-                          <li>Line Number: {item.line_num}</li>
-                          <li>Quantity: {item.quantity}</li>
-                          <li>Unit Price: {item.unit_price}</li>
-                          <li>Amount Billed: {item.amount_billed || "N/A"}</li>
-                          <li>Order Type: {item.order_type_lookup_code}</li>
-                          <li>Purchase Basis: {item.purchase_basis}</li>
-                          <li>Category: {item.category_name}</li>
-                          <li>Status: {item.closed_code}</li>
-                          <li>Description: {item.item_description}</li>
-                          <li>Need By Date: {item.need_by_date || "N/A"}</li>
-                          <li>Promised Date: {item.promised_date}</li>
-                        </ul>
-                      </ul>
-                    ))}
-                </div>
               </div>
+              <div
+      style={{
+        width: "100%",
+        display: "flex",
+        overflowY: "auto",
+        height: "40vh",
+        marginTop: "30px",
+      }}
+    >
+      <div style={{ flex: 1 }}>
+        <Table>
+          <TableHeader
+            style={{
+              position: "sticky",
+              top: 0,
+              backgroundColor: themestate ? "#383838" : "white",
+              zIndex: 1,
+              color: themestate ? "white" : "black",
+            }}
+          >
+            <TableRow
+              style={
+                themestate
+                  ? { color: "white", borderBottomColor: "#383838" }
+                  : {}
+              }
+            >
+              <TableHeaderCell
+                style={{
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  maxWidth: "200px",
+                }}
+                {...headerSortProps("Line Number")}
+              >
+                Line Number
+              </TableHeaderCell>
+              <TableHeaderCell
+                style={{
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  maxWidth: "150px",
+                }}
+                {...headerSortProps("Item Name")}
+              >
+                Item Name
+              </TableHeaderCell>
+              <TableHeaderCell
+                style={{
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  maxWidth: "300px",
+                }}
+                {...headerSortProps("Quantity")}
+              >
+                Quantity
+              </TableHeaderCell>
+              <TableHeaderCell
+                style={{
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  maxWidth: "250px",
+                }}
+                {...headerSortProps("Unit Price")}
+              >
+                Unit Price
+              </TableHeaderCell>
+              <TableHeaderCell
+                style={{
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  maxWidth: "150px",
+                }}
+                {...headerSortProps("Amount Billed")}
+              >
+                Amount Billed
+              </TableHeaderCell>
+              <TableHeaderCell
+                style={{
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  maxWidth: "150px",
+                }}
+              >
+                See more
+              </TableHeaderCell>
+            </TableRow>
+          </TableHeader>
 
-              {/* Displaying items in a separate list */}
-              {/* {items.length > 0 && (
-              <div>
-                <h3>Items:</h3>
+          <TableBody style={themestate ? { color: "white" } : {}}>
+            {dataitem.po_items &&
+              dataitem.po_items.map((item) => (
+                <TableRow
+                  key={item.id}
+                  style={themestate ? { color: "white" } : {}}
+                  className={themestate ? "hovereffect dark" : "hovereffect"}
+                >
+                  <TableCell
+                    style={{
+                      maxWidth: "300px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {item.line_num || "Null"}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      maxWidth: "300px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {item.item_name || "Null"}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      maxWidth: "300px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {item.quantity || "Null"}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      maxWidth: "300px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {item.unit_price || "Null"}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      maxWidth: "300px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {item.amount_billed || "Null"}
+                  </TableCell>
+                  <TableCell
+      style={{
+        maxWidth: "300px",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      }}
+    >
+      <FaArrowUpRightFromSquare
+        style={{ cursor: "pointer" }}
+        onClick={handleClick}
+      />
+      
+      {/* Popover component */}
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <div style={{ padding: "30px", maxWidth: "300px",marginLeft:"-1em",fontFamily:"Segoe UI" }}>
+          {dataitem.po_items && dataitem.po_items.length > 0 ? (
+            dataitem.po_items.map((item, index) => (
+              <ul key={item.id}>
+                <h3>Item {index + 1}</h3>
                 <ul>
-                  {items.map((item) => (
-                    <li key={item.id}>
-                      <div>
-                        <strong>{item.item_description}</strong> - Quantity: {item.quantity}, Unit Price: {item.unit_price}, Total Amount: {item.amount}
-                      </div>
-                    </li>
-                  ))}
+                  
+                  <li><b>Order Type:</b> {item.order_type_lookup_code}</li>
+                  <li><b>Purchase Basis:</b> {item.purchase_basis}</li>
+                  <li><b>Category:</b> {item.category_name}</li>
+                  <li><b>Status:</b> {item.closed_code}</li>
+                  <li><b>Description:</b> {item.item_description}</li>
+                  <li><b>Need By Date: </b>{item.need_by_date || "N/A"}</li>
+                  <li><b>Promised Date:</b> {item.promised_date || "N/A"}</li>
                 </ul>
-              </div>
-            )}  */}
+              </ul>
+            ))
+          ) : (
+            <p>No items available.</p>
+          )}
+        </div>
+      </Popover>
+    </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+              
+
+
+
+              
             </div>
           </div>
         )}

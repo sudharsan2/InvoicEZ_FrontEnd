@@ -22,6 +22,7 @@ import AIPage from "./pages/AIindentified";
 import AIDetailPage from "./pages/AIindentifieddetails";
 import IssuefixPage from "./pages/IssueFixPage";
 import IssuefixDetails from "./pages/IssueFixDetails";
+
 function App() {
   return (
     <Router basename="">
@@ -174,6 +175,7 @@ function App() {
             </CustomLayout>
           }
         />
+        
       </Routes>
     </Router>
   );
