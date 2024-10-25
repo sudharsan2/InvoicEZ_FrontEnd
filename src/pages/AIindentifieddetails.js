@@ -177,7 +177,7 @@ const AIDetailPage = () => {
 
   const [sortState, setSortState] = useState({
     sortDirection: "ascending",
-    sortColumn: "empid",
+    sortColumn: "Quantity",
   });
   //  const [data, setData] = useState([])
 
@@ -187,7 +187,7 @@ const AIDetailPage = () => {
   };
 
   const [data, setData] = useState(line_data);
-
+  const [selectedItem, setSelectedItem] = useState(null);
   const columns = [
     createTableColumn({
       columnId: "Description",
@@ -307,12 +307,14 @@ const AIDetailPage = () => {
   };
 
   // pop over 
-  const handleClick = (event) => {
+  const handleClick = (event, item) => {
     setAnchorEl(event.currentTarget);
+    setSelectedItem(item);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    setSelectedItem(null);
   };
 
   const open = Boolean(anchorEl);
@@ -527,9 +529,9 @@ const AIDetailPage = () => {
             <BreadcrumbButton href={path}>Issue</BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
-          {/* <BreadcrumbItem>
-            <BreadcrumbButton href={path}>{ poNumber }</BreadcrumbButton>
-          </BreadcrumbItem> */}
+          <BreadcrumbItem>
+            <BreadcrumbButton href={path}>Invoice No: {invoiceData.invoice_info.InvoiceId}</BreadcrumbButton>
+          </BreadcrumbItem>
         </Breadcrumb>
       </div>
 
@@ -867,8 +869,6 @@ const AIDetailPage = () => {
       style={{
         width: "100%",
         display: "flex",
-        overflowY: "auto",
-        height: "40vh",
         marginTop: "30px",
       }}
     >
@@ -1020,46 +1020,37 @@ const AIDetailPage = () => {
     >
       <FaArrowUpRightFromSquare
         style={{ cursor: "pointer" }}
-        onClick={handleClick}
+        onClick={(event) => handleClick(event, item)}
       />
       
       {/* Popover component */}
       <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-      >
-        <div style={{ padding: "30px", maxWidth: "300px",marginLeft:"-1em",fontFamily:"Segoe UI" }}>
-          {dataitem.po_items && dataitem.po_items.length > 0 ? (
-            dataitem.po_items.map((item, index) => (
-              <ul key={item.id}>
-                <h3>Item {index + 1}</h3>
-                <ul>
-                  
-                  <li><b>Order Type:</b> {item.order_type_lookup_code}</li>
-                  <li><b>Purchase Basis:</b> {item.purchase_basis}</li>
-                  <li><b>Category:</b> {item.category_name}</li>
-                  <li><b>Status:</b> {item.closed_code}</li>
-                  <li><b>Description:</b> {item.item_description}</li>
-                  <li><b>Need By Date: </b>{item.need_by_date || "N/A"}</li>
-                  <li><b>Promised Date:</b> {item.promised_date || "N/A"}</li>
-                </ul>
-              </ul>
-            ))
-          ) : (
-            <p>No items available.</p>
-          )}
-        </div>
-      </Popover>
+                      id={id}
+                      open={open}
+                      anchorEl={anchorEl}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                      }}
+                    >
+                      <div style={{ padding: "30px", maxWidth: "300px", marginLeft: "-1em", fontFamily: "Segoe UI" }}>
+                        <ul>
+                          <li><b>Line Number:</b>{selectedItem?.line_num || "N/A"}</li>
+                          <li><b>Order Type:</b> {selectedItem?.order_type_lookup_code || "N/A"}</li>
+                          <li><b>Purchase Basis:</b> {selectedItem?.purchase_basis || "N/A"}</li>
+                          <li><b>Category:</b> {selectedItem?.category_name || "N/A"}</li>
+                          <li><b>Status:</b> {selectedItem?.closed_code || "N/A"}</li>
+                          <li><b>Description:</b> {selectedItem?.item_description || "N/A"}</li>
+                          <li><b>Need By Date:</b> {selectedItem?.need_by_date || "N/A"}</li>
+                          <li><b>Promised Date:</b> {selectedItem?.promised_date || "N/A"}</li>
+                        </ul>
+                      </div>
+                    </Popover>
     </TableCell>
                 </TableRow>
               ))}

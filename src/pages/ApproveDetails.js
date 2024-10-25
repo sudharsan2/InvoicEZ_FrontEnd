@@ -195,7 +195,7 @@ const ApprovePage = () => {
   const handlePostApi = async () => {
     console.log("Button clicked!");
 
-    // Check if PO number and invoice ID are provided
+    
     if (!selectedOption || !selectedOption.value) {
       message.warning("PO number not selected or entered.");
       return;
