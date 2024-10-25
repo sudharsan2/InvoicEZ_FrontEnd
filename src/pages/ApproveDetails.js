@@ -137,7 +137,7 @@ const ApprovePage = () => {
   const [total, setTotal] = useState();
   const [status, setStatus] = useState();
   const [supplier, setSupplier] = useState();
-  const [vendor, setVendor] = useState();
+  const [vendor, setVendor] = useState("");
   const [customer, setCustomer] = useState();
   const [invoiceid, setInvoiceId] = useState();
   const [invoicedate, setInvoiceDate] = useState();
@@ -337,6 +337,7 @@ const ApprovePage = () => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -404,7 +405,12 @@ const ApprovePage = () => {
             .replace(/\s+/g, " ")
             .replace(/,$/, "");
 
+        
+          
           setVendor(formattedVendorAddress);
+          console.log("Approve page vendor address",typeof(formattedVendorAddress));
+          console.log("VENDOR",vendor);
+
         } else {
           setVendor();
           console.error("VendorAddress is missing");
@@ -425,7 +431,7 @@ const ApprovePage = () => {
             .replace(/,$/, "");
 
           setVendor(formattedCustomerAddress);
-          console.log(formattedCustomerAddress);
+          
         } else {
           setVendor();
           console.error("CustomerAddress is missing");
@@ -446,7 +452,10 @@ const ApprovePage = () => {
     }
   }, [poNumber]);
 
-  // Sorting function for the table
+
+  
+    
+  
   const sortedData = [...data].sort((a, b) => {
     const aValue = a[sortState.sortColumn];
     const bValue = b[sortState.sortColumn];
@@ -704,10 +713,10 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.vendorAddress} */}
+                      
                       {vendor}
 
-                      {/* {formattedVendorAddress} */}
+                      
                     </div>
                   </div>
 
