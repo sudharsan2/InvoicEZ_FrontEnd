@@ -111,7 +111,7 @@ const IssuefixPage = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>Fix</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>Fix</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>

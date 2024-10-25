@@ -33,6 +33,7 @@ import { message } from "antd";
 import {  notification } from "antd";
 
 const path = "/approve";
+const path2 = "/approvepage"
 const path1 = "http://localhost:3000/";
 
 const useStyles = makeStyles({
@@ -486,7 +487,7 @@ const ApprovePage = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>PO:13466</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>PO:13466</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>

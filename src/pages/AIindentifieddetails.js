@@ -846,21 +846,22 @@ const AIDetailPage = () => {
                   display: "flex",
                   justifyContent: "space-between", 
                   paddingLeft: "2em", 
+                  marginTop:"20px"
                 }}
               >
                 <ul>
                   {invoiceData && (
                     <>
-                      <li>PO Number: {selectedInvoiceNumber}</li>
-                      <li>PO Type: {dataitem.po_type}</li>
-                      <li>Supplier Name: {dataitem.supplier_name}</li>
-                      <li>Site: {dataitem.location}</li>
-                      <li>Status: {dataitem.po_status}</li>
-                      <li>Total Amount: {dataitem.total_amount}</li>
-                      <li>Buyer Name: {dataitem.buyer_name}</li>
-                      <li>Invoice Detail: {dataitem.invoice_detail}</li>
-                      <li>Shipping Address: {dataitem.ship_to}</li>
-                      <li>Billing Address: {dataitem.ship_to}</li>
+                      <li><b>PO Number:</b> {selectedInvoiceNumber}</li>
+                      <li><b>PO Type:</b> {dataitem.po_type}</li>
+                      <li><b>Supplier Name:</b> {dataitem.supplier_name}</li>
+                      <li><b>Site: </b>{dataitem.location}</li>
+                      <li><b>Status:</b> {dataitem.po_status}</li>
+                      <li><b>Total Amount:</b> {dataitem.total_amount}</li>
+                      <li><b>Buyer Name:</b> {dataitem.buyer_name}</li>
+                      <li><b>Invoice Detail:</b> {dataitem.invoice_detail}</li>
+                      <li><b>Shipping Address:</b> {dataitem.ship_to}</li>
+                      <li><b>Billing Address:</b> {dataitem.ship_to}</li>
                     </>
                   )}
                 </ul>
