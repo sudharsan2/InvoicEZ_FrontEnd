@@ -134,7 +134,7 @@ const ApproveTable = () => {
 
   useEffect(() => {
     fetchData();
-  }, [RefreshUpload]);
+  }, []);
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
