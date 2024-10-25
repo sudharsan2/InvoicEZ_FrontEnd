@@ -711,9 +711,9 @@ const AIDetailPage = () => {
                 ))}
               </ul>
               </div>
-              
+              <div style={{display:"flex",justifyContent:"flex-start"}}>
               <h2>Line Information</h2>
-              
+              </div>
              <Divider/>
 
               <div
@@ -827,7 +827,7 @@ const AIDetailPage = () => {
         )}
 
         {selectedtab === "tab4" && (
-          <div style={{ width: "100%", display: "flex", overflowY: "auto" }}>
+          <div style={{ width: "100%", display: "flex", overflowY:"auto" }}>
             <div style={{ flex: 1, borderRight: "2px solid rgb(240,240,240)" }}>
               <AiNav onPoNumberClick={handlePoNumberClick} />
             </div>
@@ -871,6 +871,7 @@ const AIDetailPage = () => {
         width: "100%",
         display: "flex",
         marginTop: "30px",
+        overflowY:"auto"
       }}
     >
       <div style={{ flex: 1 }}>
@@ -896,6 +897,7 @@ const AIDetailPage = () => {
                   fontWeight: "bold",
                   cursor: "pointer",
                   maxWidth: "200px",
+
                 }}
                 {...headerSortProps("Line Number")}
               >
@@ -967,6 +969,7 @@ const AIDetailPage = () => {
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
+                      marginTop:"200px"
                     }}
                   >
                     {item.line_num || "Null"}
@@ -1037,6 +1040,14 @@ const AIDetailPage = () => {
                       transformOrigin={{
                         vertical: "top",
                         horizontal: "center",
+                      }}
+                     
+                      sx={{
+                        boxShadow: '0px 2px 10px rgba(128, 128, 128, 0.1)', 
+                        '& .MuiPopover-paper': {
+                          boxShadow: '0px 2px 10px rgba(128, 128, 128, 0.1)', 
+                          backgroundColor: "white", 
+                        },
                       }}
                     >
                       <div style={{ padding: "30px", maxWidth: "300px", marginLeft: "-1em", fontFamily: "Segoe UI" }}>

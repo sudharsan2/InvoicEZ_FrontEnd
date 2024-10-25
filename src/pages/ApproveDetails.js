@@ -886,7 +886,7 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {closedcode}
+                      {closedcode||"NULL"}
                     </div>
                   </div>
 
