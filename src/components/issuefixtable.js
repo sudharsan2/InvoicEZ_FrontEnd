@@ -54,7 +54,7 @@ const columns = [
   }),
 ];
 
-const IssuefixTable = ({ height ,setTableLength}) => {
+const IssuefixTable = ({ height, setTableLength }) => {
   const [items, setItems] = useState([]); // Initialize items state
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -63,17 +63,16 @@ const IssuefixTable = ({ height ,setTableLength}) => {
   const getNumberOfLines = (invoice) => {
     return invoice.items ? invoice.items.length : 0;
   };
-  const[invid,setInvId]=useState("");
- 
+  const [invid, setInvId] = useState("");
+
   // useEffect(() => {
-  //   fetch("http://10.10.15.15:5719/user/no-invoice-list")
+  //   fetch("http://127.0.0.1:8000/user/no-invoice-list")
   //     .then((response) => response.json())
   //     .then((data) => {
-        
+
   //       const formattedItems = data.map((invoice) => ({
-  //         invid: invoice.id, 
-         
-         
+  //         invid: invoice.id,
+
   //         invoiceNo: invoice.InvoiceId, // Use "InvoiceId" for invoice number
   //         supplier: invoice.VendorName,
   //         numberOfLines: getNumberOfLines(invoice),
@@ -86,16 +85,15 @@ const IssuefixTable = ({ height ,setTableLength}) => {
   //       setItems(formattedItems);
   //       setTableLength(formattedItems.length);
   //       console.log("height", height);
-        
+
   //     })
   //     .catch((error) => {
   //       console.error("Error fetching data:", error);
   //     });
   // },  [refreshKey]);
 
-
   const fetchData = () => {
-    fetch("http://10.10.15.15:5719/user/no-invoice-list")
+    fetch("http://127.0.0.1:8000/user/no-invoice-list")
       .then((response) => response.json())
       .then((data) => {
         const formattedItems = data.map((invoice) => ({
@@ -109,6 +107,7 @@ const IssuefixTable = ({ height ,setTableLength}) => {
         }));
         console.log("Formatted Items:", formattedItems);
         setItems(formattedItems); // Set the fetched items
+        setTableLength(formattedItems.length);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -126,26 +125,21 @@ const IssuefixTable = ({ height ,setTableLength}) => {
   };
 
   const handleDelete = () => {
-    console.log("del")
+    console.log("del");
     const idsToDelete = [...selectedRows]; // Convert Set to array
     console.log("IDs to delete:", idsToDelete);
 
     if (idsToDelete.length > 0) {
       const deletePromises = idsToDelete.map((id) => {
-        
-          // Check if id is defined
-          console.log(`Deleting item with ID: ${id}`);
-          console.log("//",filteredItems[id].invid)
-          return fetch(
-            `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[id].invid}`,
-            {
-              method: "DELETE",
-            },
-            
-
-          );
-        
-          
+        // Check if id is defined
+        console.log(`Deleting item with ID: ${id}`);
+        console.log("//", filteredItems[id].invid);
+        return fetch(
+          `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[id].invid}`,
+          {
+            method: "DELETE",
+          },
+        );
       });
 
       Promise.all(deletePromises)
@@ -159,10 +153,8 @@ const IssuefixTable = ({ height ,setTableLength}) => {
             setItems(updatedItems);
             setSelectedRows(new Set());
             fetchData();
-           
           } else {
             throw new Error("Some deletions failed");
-           
           }
         })
         .catch((error) => {

@@ -170,6 +170,8 @@ const AIDetailPage = () => {
   const themestate = false;
   const [selectedtab, setSelectedTab] = React.useState("tab3");
 
+  const [selectedItem, setSelectedItem] = useState(null);
+
   const [sortState, setSortState] = useState({
     sortDirection: "ascending",
     sortColumn: "empid",
@@ -244,7 +246,7 @@ const AIDetailPage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://10.10.15.15:5719/user/invoices-file/${invoiceId}`,
+        `http://127.0.0.1:8000/user/invoices-file/${invoiceId}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -280,7 +282,7 @@ const AIDetailPage = () => {
     console.log("test function called");
     setSelectedInvoiceNumber(poNumber);
     try {
-      // const response = await axios.get(`http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`);
+      // const response = await axios.get(`http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`);
       // const fetchedData = response.data;
 
       const selectedPoDetails = poheader.find(
@@ -299,8 +301,9 @@ const AIDetailPage = () => {
   };
 
   // pop over
-  const handleClick = (event) => {
+  const handleClick = (event, item) => {
     setAnchorEl(event.currentTarget);
+    setSelectedItem(item); // Set the clicked item as the selected item
   };
 
   const handleClose = () => {
@@ -317,7 +320,7 @@ const AIDetailPage = () => {
     if (invoiceNumber) {
       try {
         const response = await axios.get(
-          `http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`,
+          `http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`,
         );
         const fetchedItem = response.data;
         console.log("R", fetchedItem);
@@ -438,7 +441,7 @@ const AIDetailPage = () => {
     // Uncomment the following block if you want to save the PO number immediately when created.
     /*
     try {
-      const response = await fetch('http://10.10.15.15:5719/user/po-number', {
+      const response = await fetch('http://127.0.0.1:8000/user/po-number', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -482,7 +485,7 @@ const AIDetailPage = () => {
     try {
       setLoad(true);
       const response = await axios.post(
-        "http://10.10.15.15:5719/user/po-number",
+        "http://127.0.0.1:8000/user/po-number",
         payload,
       );
 
@@ -1067,7 +1070,7 @@ const AIDetailPage = () => {
                               >
                                 <FaArrowUpRightFromSquare
                                   style={{ cursor: "pointer" }}
-                                  onClick={handleClick}
+                                  onClick={(event) => handleClick(event, item)}
                                 />
 
                                 {/* Popover component */}
@@ -1093,44 +1096,45 @@ const AIDetailPage = () => {
                                       fontFamily: "Segoe UI",
                                     }}
                                   >
-                                    {dataitem.po_items &&
-                                    dataitem.po_items.length > 0 ? (
-                                      dataitem.po_items.map((item, index) => (
-                                        <ul key={item.id}>
-                                          <h3>Item {index + 1}</h3>
-                                          <ul>
-                                            <li>
-                                              <b>Order Type:</b>{" "}
-                                              {item.order_type_lookup_code}
-                                            </li>
-                                            <li>
-                                              <b>Purchase Basis:</b>{" "}
-                                              {item.purchase_basis}
-                                            </li>
-                                            <li>
-                                              <b>Category:</b>{" "}
-                                              {item.category_name}
-                                            </li>
-                                            <li>
-                                              <b>Status:</b> {item.closed_code}
-                                            </li>
-                                            <li>
-                                              <b>Description:</b>{" "}
-                                              {item.item_description}
-                                            </li>
-                                            <li>
-                                              <b>Need By Date: </b>
-                                              {item.need_by_date || "N/A"}
-                                            </li>
-                                            <li>
-                                              <b>Promised Date:</b>{" "}
-                                              {item.promised_date || "N/A"}
-                                            </li>
-                                          </ul>
+                                    {selectedItem ? (
+                                      <ul key={selectedItem.id}>
+                                        <h3>Item Details</h3>
+                                        <ul>
+                                          <li>
+                                            <b>Order Type:</b>{" "}
+                                            {
+                                              selectedItem.order_type_lookup_code
+                                            }
+                                          </li>
+                                          <li>
+                                            <b>Purchase Basis:</b>{" "}
+                                            {selectedItem.purchase_basis}
+                                          </li>
+                                          <li>
+                                            <b>Category:</b>{" "}
+                                            {selectedItem.category_name}
+                                          </li>
+                                          <li>
+                                            <b>Status:</b>{" "}
+                                            {selectedItem.closed_code}
+                                          </li>
+                                          <li>
+                                            <b>Description:</b>{" "}
+                                            {selectedItem.item_description}
+                                          </li>
+                                          <li>
+                                            <b>Need By Date:</b>{" "}
+                                            {selectedItem.need_by_date || "N/A"}
+                                          </li>
+                                          <li>
+                                            <b>Promised Date:</b>{" "}
+                                            {selectedItem.promised_date ||
+                                              "N/A"}
+                                          </li>
                                         </ul>
-                                      ))
+                                      </ul>
                                     ) : (
-                                      <p>No items available.</p>
+                                      <p>No item selected.</p>
                                     )}
                                   </div>
                                 </Popover>

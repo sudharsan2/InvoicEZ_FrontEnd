@@ -30,15 +30,17 @@ import { ArrowDownload28Regular } from "@fluentui/react-icons";
 /*eslint-disabled*/
 import CreatableSelect from "react-select/creatable";
 import { message } from "antd";
-import {  notification } from "antd";
+import { notification } from "antd";
 
 const path = "/approve";
+const path2 = "/approvepage";
 const path1 = "http://localhost:3000/";
 
 const useStyles = makeStyles({
   root: {
     // width: "77vw",
-    // height: "100vh",
+    // height: "88vh",
+    // overflowY: "auto",
     // display: "flex",
     // flexDirection: "column",
   },
@@ -143,59 +145,51 @@ const ApprovePage = () => {
   const [invoicedate, setInvoiceDate] = useState();
   const [invoicetot, setInvoicetot] = useState();
   const [closedcode, setClosedCode] = useState();
-  const[po_id,set_Po_id]= useState("");
+  const [po_id, set_Po_id] = useState("");
 
   const [inv_id, setInv_id] = useState();
 
   // console.log("vendor", setVendor);
 
   const approvePo = async () => {
-    const url = `http://10.10.15.15:5719/user/oracle-payload/${po_id}`;
+    const url = `http://127.0.0.1:8000/user/oracle-payload/${po_id}`;
 
     try {
-      const response = await axios.post(url, {
-        
-      });
-     
-      if (response.status === 201) {
+      const response = await axios.post(url, {});
+
+      if (response.status === 200) {
         message.success("PO successfully Updated");
         navigate(`/approve`);
-      } 
-      console.log('Success:', response.data); // Handle the response data
+      }
+      console.log("Success:", response.data); // Handle the response data
     } catch (error) {
       notification.error({
         message: "Approved Failed",
         // description: `You have successfully Approved: ${po_id}`,
       });
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
-
   const deleteInvoice = async () => {
-    const url = `http://10.10.15.15:5719/user/delete-pos/${inv_id}`;
+    const url = `http://127.0.0.1:8000/user/delete-pos/${inv_id}`;
 
     try {
       const response = await axios.delete(url);
       if (response.status === 204) {
         message.success("Revoked successfully");
         navigate(`/issuefix`);
-      } 
-      
+      }
     } catch (error) {
       message.error(`Operation Unsuccessfull Please try again`);
-      
 
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
-
-
 
   const handlePostApi = async () => {
     console.log("Button clicked!");
 
-    // Check if PO number and invoice ID are provided
     if (!selectedOption || !selectedOption.value) {
       message.warning("PO number not selected or entered.");
       return;
@@ -214,20 +208,17 @@ const ApprovePage = () => {
     console.log("payload", payload);
 
     try {
-      setLoad(true); 
+      setLoad(true);
       const response = await axios.post(
-        "http://10.10.15.15:5719/user/po-number",
+        "http://127.0.0.1:8000/user/po-number",
         payload,
       );
 
       if (response.status === 201) {
         message.success("PO successfully Updated");
-        setLoad(false); 
+        setLoad(false);
         navigate(`/approve`);
-
-      }
-      
-       else {
+      } else {
         message.error(`Operation Unsuccessfully Please try again`);
       }
     } catch (error) {
@@ -323,7 +314,7 @@ const ApprovePage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://10.10.15.15:5719/user/invoices-file/${inv_id}`,
+        `http://127.0.0.1:8000/user/invoices-file/${inv_id}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -337,13 +328,12 @@ const ApprovePage = () => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
- 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://10.10.15.15:5719/user/po-details/${Id}/`,
+          `http://127.0.0.1:8000/user/po-details/${Id}/`,
         );
         const fetchedItems = response.data;
 
@@ -382,7 +372,7 @@ const ApprovePage = () => {
         setPoDate(fetchedItems.po_lineitems[0]?.promised_date || "N/A"); // Assuming the first date is used
         setPoStatus(fetchedItems.po_header.po_status);
         setVendor(fetchedItems.invoice_info.VendorAddress);
-        setCustomer(fetchedItems.invoice_info.CustomerAddress);
+        setCustomer(fetchedItems.invoice_info.ShippingAddress);
         setInvoiceId(fetchedItems.invoice_info.InvoiceId);
         setInvoiceDate(fetchedItems.invoice_info.InvoiceDate);
         setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
@@ -405,35 +395,29 @@ const ApprovePage = () => {
             .replace(/\s+/g, " ")
             .replace(/,$/, "");
 
-        
-          
           setVendor(formattedVendorAddress);
-          console.log("Approve page vendor address",typeof(formattedVendorAddress));
-          console.log("VENDOR",vendor);
-
         } else {
-          setVendor();
+          setVendor("NULL");
           console.error("VendorAddress is missing");
         }
 
-        const vendorCustomerObj = fetchedItems.invoice_info.CustomerAddress;
+        const vendorCustomerObj = fetchedItems.invoice_info.ShippingAddress;
         console.log("obj", vendorAddressObj);
 
         if (vendorCustomerObj) {
           const formattedCustomerAddress = `
-        ${vendorAddressObj.street_address || ""}
-        ${vendorAddressObj.city || ""},
-        ${vendorAddressObj.postal_code || ""},
-        ${vendorAddressObj.country_region || ""}
+        ${vendorCustomerObj.street_address || ""}
+        ${vendorCustomerObj.city || ""},
+        ${vendorCustomerObj.postal_code || ""},
+        ${vendorCustomerObj.country_region || ""}
     `
             .trim()
             .replace(/\s+/g, " ")
             .replace(/,$/, "");
 
-          setVendor(formattedCustomerAddress);
-          
+          setCustomer(formattedCustomerAddress);
         } else {
-          setVendor();
+          setCustomer("NULL");
           console.error("CustomerAddress is missing");
         }
       } catch (error) {
@@ -452,10 +436,6 @@ const ApprovePage = () => {
     }
   }, [poNumber]);
 
-
-  
-    
-  
   const sortedData = [...data].sort((a, b) => {
     const aValue = a[sortState.sortColumn];
     const bValue = b[sortState.sortColumn];
@@ -472,7 +452,7 @@ const ApprovePage = () => {
   });
 
   return (
-    <div >
+    <div style={{ height: "88vh", overflowY: "auto" }}>
       <div>
         <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
@@ -485,7 +465,7 @@ const ApprovePage = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>PO:13466</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>PO:13466</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -502,12 +482,11 @@ const ApprovePage = () => {
                 }}
               >
                 <div style={{ right: "5%", display: "flex", gap: "10px" }}>
-                  <Button onClick={() => deleteInvoice()}
-                  >Revoke</Button>
+                  <Button onClick={() => deleteInvoice()}>Revoke</Button>
                   <Button
                     className=" buttoncolor"
                     style={{ backgroundColor: "#3570c3", color: "white" }}
-                    onClick={()=>approvePo()}
+                    onClick={() => approvePo()}
                   >
                     Approve
                   </Button>
@@ -539,45 +518,47 @@ const ApprovePage = () => {
                   isClearable
                 />
 
-<Button
-            appearance="subtle"
-            style={{
-                color: "#0078d4",
-                backgroundColor: "#fff",
-                alignSelf: "flex-end",
-                width: "auto",
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: loading ? 'not-allowed' : 'pointer', // Change cursor to not-allowed when loading
-                opacity: loading ? 0.6 : 1 // Change opacity when loading
-            }}
-            className={styles.wrapper}
-            onClick={handlePostApi}
-            disabled={load} // Disable button while loading
-        >
-            {load ? (
-                <div style={{
-                    border: '4px solid rgba(255, 255, 255, 0.3)', // Light background
-                    borderRadius: '50%',
-                    borderTop: '4px solid #0078d4', // Main color
-                    width: '20px',
-                    height: '20px',
-                    animation: 'spin 1s linear infinite',
-                    marginRight: '8px', // Space between spinner and text
-                }} />
-            ) : (
-                "Submit"
-            )}
-            <style>
-                {`
+                <Button
+                  appearance="subtle"
+                  style={{
+                    color: "#0078d4",
+                    backgroundColor: "#fff",
+                    alignSelf: "flex-end",
+                    width: "auto",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: loading ? "not-allowed" : "pointer", // Change cursor to not-allowed when loading
+                    opacity: loading ? 0.6 : 1, // Change opacity when loading
+                  }}
+                  className={styles.wrapper}
+                  onClick={handlePostApi}
+                  disabled={load} // Disable button while loading
+                >
+                  {load ? (
+                    <div
+                      style={{
+                        border: "4px solid rgba(255, 255, 255, 0.3)", // Light background
+                        borderRadius: "50%",
+                        borderTop: "4px solid #0078d4", // Main color
+                        width: "20px",
+                        height: "20px",
+                        animation: "spin 1s linear infinite",
+                        marginRight: "8px", // Space between spinner and text
+                      }}
+                    />
+                  ) : (
+                    "Submit"
+                  )}
+                  <style>
+                    {`
                 @keyframes spin {
                     0% { transform: rotate(0deg); }
                     100% { transform: rotate(360deg); }
                 }
                 `}
-            </style>
-        </Button>
+                  </style>
+                </Button>
               </div>
 
               <h2 style={{ margin: "20px 0 20px 0" }}>
@@ -713,10 +694,7 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      
                       {vendor}
-
-                      
                     </div>
                   </div>
 
@@ -884,14 +862,14 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {closedcode}
+                      {closedcode || "NULL"}
                     </div>
                   </div>
 
                   <div
                     className={`${styles.section} ${styles.invoiceCurrency}`}
                   >
-                    <div
+                    {/* <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
@@ -899,16 +877,16 @@ const ApprovePage = () => {
                       }}
                     >
                       Invoice Currency:
-                    </div>
-                    <div
+                    </div> */}
+                    {/* <div
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
                       {purchaseOrder.invoiceCurrency}
-                    </div>
+                    </div> */}
                   </div>
 
-                  <div
+                  {/* <div
                     className={`${styles.section} ${styles.purchaseOrderNumber}`}
                   >
                     <div
@@ -926,121 +904,199 @@ const ApprovePage = () => {
                     >
                       {purchaseOrder.purchaseOrderNumberInInvoice}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
           )}
 
           {selectedtab === "tab2" && (
-  <div
-    style={{
-      width: "100%",
-      display: "flex",
-      overflowY: "auto",
-      height: "40vh",
-      marginTop: "10px",
-    }}
-  >
-    <div style={{ flex: 1 }}>
-      <Table>
-        <TableHeader
-          style={{
-            position: "sticky",
-            top: 0,
-            backgroundColor: themestate ? "#383838" : "white", 
-            zIndex: 1, 
-            color: themestate ? "white" : "black",
-          }}
-        >
-          <TableRow
-            style={
-              themestate
-                ? { color: "white", borderBottomColor: "#383838" }
-                : {}
-            }
-          >
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
-              {...headerSortProps("PO_line_id")}
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                overflowY: "auto",
+                height: "40vh",
+                marginTop: "10px",
+              }}
             >
-              PO Line ID
-            </TableHeaderCell>
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "200px" }}
-              {...headerSortProps("name")}
-            >
-              Name
-            </TableHeaderCell>
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "300px" }}
-              {...headerSortProps("description")}
-            >
-              Description
-            </TableHeaderCell>
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "250px" }}
-              {...headerSortProps("invoice_item_name")}
-            >
-              Invc Item Name
-            </TableHeaderCell>
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
-              {...headerSortProps("unit_price")}
-            >
-              Unit Price
-            </TableHeaderCell>
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
-              {...headerSortProps("quantity")}
-            >
-              Quantity
-            </TableHeaderCell>
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
-              {...headerSortProps("invoice_quantity")}
-            >
-              Invoice Quantity
-            </TableHeaderCell>
-          </TableRow>
-        </TableHeader>
+              <div style={{ flex: 1 }}>
+                <Table>
+                  <TableHeader
+                    style={{
+                      position: "sticky",
+                      top: 0,
+                      backgroundColor: themestate ? "#383838" : "white",
+                      zIndex: 1,
+                      color: themestate ? "white" : "black",
+                    }}
+                  >
+                    <TableRow
+                      style={
+                        themestate
+                          ? { color: "white", borderBottomColor: "#383838" }
+                          : {}
+                      }
+                    >
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("PO_line_id")}
+                      >
+                        PO Line ID
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "200px",
+                        }}
+                        {...headerSortProps("name")}
+                      >
+                        Name
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "300px",
+                        }}
+                        {...headerSortProps("description")}
+                      >
+                        Description
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "250px",
+                        }}
+                        {...headerSortProps("invoice_item_name")}
+                      >
+                        Invc Item Name
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("unit_price")}
+                      >
+                        Unit Price
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("quantity")}
+                      >
+                        Quantity
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Invoice Quantity
+                      </TableHeaderCell>
+                    </TableRow>
+                  </TableHeader>
 
-        <TableBody style={themestate ? { color: "white" } : {}}>
-          {sortedData.map((item) => (
-            <TableRow
-              key={item.id}
-              style={themestate ? { color: "white" } : {}}
-              className={themestate ? "hovereffect dark" : "hovereffect"}
-            >
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.id}
-              </TableCell>
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.item_name}
-              </TableCell>
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.item_description}
-              </TableCell>
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.item_name}
-              </TableCell>
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.unit_price}
-              </TableCell>
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.quantity}
-              </TableCell>
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.Quantity}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  </div>
-)}
-
+                  <TableBody style={themestate ? { color: "white" } : {}}>
+                    {sortedData.map((item) => (
+                      <TableRow
+                        key={item.id}
+                        style={themestate ? { color: "white" } : {}}
+                        className={
+                          themestate ? "hovereffect dark" : "hovereffect"
+                        }
+                      >
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.id}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.item_name}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.item_description}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.item_name}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.unit_price}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.quantity}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Quantity}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

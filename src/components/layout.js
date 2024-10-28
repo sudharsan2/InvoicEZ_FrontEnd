@@ -126,7 +126,7 @@ const ExampleContent = () => {
         </Text>
         <Link
           appearance="subtle"
-          href="http://localhost:3000/"
+          // href="http://localhost:3000/"
           onClick={() => {
             // Clear tokens from local storage
             localStorage.removeItem("accessToken");
@@ -134,7 +134,7 @@ const ExampleContent = () => {
             localStorage.removeItem("username");
 
             // Navigate to the login page
-            navigate("");
+            navigate("/");
           }}
           style={
             themestate
@@ -294,7 +294,7 @@ const CustomLayout = ({ children }) => {
 
       try {
         const response = await axios.post(
-          "http://10.10.15.15:5719/user/invoice-upload",
+          "http://127.0.0.1:8000/user/invoice-upload",
           formData,
           {
             headers: {

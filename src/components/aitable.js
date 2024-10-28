@@ -71,11 +71,11 @@ const AITable = ({ setTableLength }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://10.10.15.15:5719/user/morethanone-invoice-list",
+        "http://127.0.0.1:8000/user/morethanone-invoice-list",
       );
       const fetchedItems = response.data;
       setInvoiceId(fetchedItems[0].id);
-      console.log("Approve Inv id",invoiceId);
+      console.log("Approve Inv id", invoiceId);
       const mappedItems = fetchedItems.map((item) => ({
         Id: item.id || "NULL",
         InvoiceId: item.InvoiceId || "NULL",
@@ -102,7 +102,7 @@ const AITable = ({ setTableLength }) => {
 
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
-    
+
     return (
       item.Id?.toString().toLowerCase().includes(searchLower) ||
       item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
@@ -125,10 +125,8 @@ const AITable = ({ setTableLength }) => {
     setSelectedRows(data.selectedItems);
   };
 
-
-
   const handleDeleteSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows); 
+    const selectedItemsArray = Array.from(selectedRows);
     if (selectedItemsArray.length === 0) {
       notification.warning({
         message: "No PO Selected",
@@ -136,36 +134,35 @@ const AITable = ({ setTableLength }) => {
       });
       return;
     }
-  
+
     try {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
         .join(", ");
-      
+
       const deletePromises = selectedItemsArray.map((item) =>
-       
         axios.delete(
-          `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[item].Id}` 
-        )
+          `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[item].Id}`,
+        ),
       );
-  
-      await Promise.all(deletePromises); 
-  
-     
-      const newItems = items.filter(item => 
-        !selectedItemsArray.some(selectedItem => selectedItem.InvoiceId === item.InvoiceId) 
+
+      await Promise.all(deletePromises);
+
+      const newItems = items.filter(
+        (item) =>
+          !selectedItemsArray.some(
+            (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
+          ),
       );
-  
-      setItems(newItems); 
-  
-     
+
+      setItems(newItems);
+
       notification.success({
         message: "Successfully deleted",
         description: `You have successfully deleted: ${supplierNames}`,
       });
-  
+
       fetchData();
-  
     } catch (error) {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
@@ -176,7 +173,6 @@ const AITable = ({ setTableLength }) => {
       });
     }
   };
-  
 
   const handleApproveSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows);
@@ -196,7 +192,7 @@ const AITable = ({ setTableLength }) => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `http://10.10.15.15:5719/user/approve-status/${filteredItems[item].po_number}`,
+            `http://127.0.0.1:8000/user/approve-status/${filteredItems[item].po_number}`,
           ),
         ),
       );

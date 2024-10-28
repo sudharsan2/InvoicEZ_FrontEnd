@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { DrawerProps } from "@fluentui/react-components";
 import {
@@ -101,7 +99,7 @@ const AiNav = ({ onPoNumberClick }) => {
     // const invoiceNumber = "110"; // Replace with dynamic invoice number if available
     try {
       const response = await axios.get(
-        `http://10.10.15.15:5719/user/invoices-details/${invoiceNumber}/`,
+        `http://127.0.0.1:8000/user/invoices-details/${invoiceNumber}/`,
       );
       const fetchedItem = response.data;
       console.log("Fetched Invoice Details:", fetchedItem);
