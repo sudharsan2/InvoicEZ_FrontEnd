@@ -152,7 +152,7 @@ const ApprovePage = () => {
   // console.log("vendor", setVendor);
 
   const approvePo = async () => {
-    const url = `http://10.10.15.15:5719/user/oracle-payload/${po_id}`;
+    const url = `http://127.0.0.1:8000/user/oracle-payload/${po_id}`;
 
     try {
       const response = await axios.post(url, {});
@@ -172,7 +172,7 @@ const ApprovePage = () => {
   };
 
   const deleteInvoice = async () => {
-    const url = `http://10.10.15.15:5719/user/delete-pos/${inv_id}`;
+    const url = `http://127.0.0.1:8000/user/delete-pos/${inv_id}`;
 
     try {
       const response = await axios.delete(url);
@@ -210,7 +210,7 @@ const ApprovePage = () => {
     try {
       setLoad(true);
       const response = await axios.post(
-        "http://10.10.15.15:5719/user/po-number",
+        "http://127.0.0.1:8000/user/po-number",
         payload,
       );
 
@@ -314,7 +314,7 @@ const ApprovePage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://10.10.15.15:5719/user/invoices-file/${inv_id}`,
+        `http://127.0.0.1:8000/user/invoices-file/${inv_id}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -333,7 +333,7 @@ const ApprovePage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://10.10.15.15:5719/user/po-details/${Id}/`,
+          `http://127.0.0.1:8000/user/po-details/${Id}/`,
         );
         const fetchedItems = response.data;
 

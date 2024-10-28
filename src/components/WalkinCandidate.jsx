@@ -1,20 +1,14 @@
 import { Upload, message } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import "./WalkinCandidate.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { refreshActions } from "../Store/Store";
 
 const WalkInCandidate = ({ isWalkinUpload }) => {
-  // const [isUploading, setIsUploading] = useState(false);
-  //
   const dispatch = useDispatch();
-  const handleTheme = () => {
-    dispatch(refreshActions.toggletheme());
-  };
 
   const handleUpload = async ({ file, onSuccess, onError }) => {
-    // setIsUploading(true);
     const token = localStorage.getItem("accessToken");
 
     try {
@@ -22,7 +16,7 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
       formData.append("file", file);
 
       const response = await axios.post(
-        "http://10.10.15.15:5719/user/invoice-upload",
+        "http://127.0.0.1:8000/user/invoice-upload",
         formData,
         {
           headers: {
@@ -33,18 +27,21 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
       );
 
       // Handle success
-      console.log(" in axios File uploaded successfully:", response.data);
+      console.log("File uploaded successfully:", response.data);
       message.success(`${file.name} uploaded successfully.`);
       file.status = "done";
       onSuccess();
+
+      // Dispatch the refresh action to trigger any reloads in other components
+      dispatch(refreshActions.toggleInvoiceUploadRefresh());
     } catch (error) {
       // Handle error
-      console.error("in axios Error uploading file:", error);
+      console.error("Error uploading file:", error);
       message.error(`${file.name} upload failed.`);
       file.status = "error";
       onError();
     } finally {
-      // setIsUploading(false);
+      // Trigger any additional local refresh if needed
       isWalkinUpload();
     }
   };
@@ -56,7 +53,6 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
         name="file"
         onChange={(info) => {}}
         customRequest={handleUpload}
-        // disabled={false}
       >
         <p className="ant-upload-text">Click or drag file to upload</p>
         <p className="ant-upload-hint">

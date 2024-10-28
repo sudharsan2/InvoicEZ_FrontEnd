@@ -17,6 +17,10 @@ import {
 import Search from "./Search"; // Assuming your search component is imported here
 import { useState, useEffect } from "react";
 import { message } from "antd";
+
+import { useDispatch, useSelector } from "react-redux";
+import { refreshActions } from "../Store/Store";
+
 const columns = [
   createTableColumn({
     columnId: "invoiceNo",
@@ -65,8 +69,14 @@ const IssuefixTable = ({ height, setTableLength }) => {
   };
   const [invid, setInvId] = useState("");
 
+  const dispatch = useDispatch();
+
+  const isInvoiceUploadRefreshed = useSelector(
+    (state) => state.refresh.InvoiceUploadRefresh,
+  );
+
   // useEffect(() => {
-  //   fetch("http://10.10.15.15:5719/user/no-invoice-list")
+  //   fetch("http://127.0.0.1:8000/user/no-invoice-list")
   //     .then((response) => response.json())
   //     .then((data) => {
 
@@ -93,7 +103,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
   // },  [refreshKey]);
 
   const fetchData = () => {
-    fetch("http://10.10.15.15:5719/user/no-invoice-list")
+    fetch("http://127.0.0.1:8000/user/no-invoice-list")
       .then((response) => response.json())
       .then((data) => {
         const formattedItems = data.map((invoice) => ({
@@ -115,7 +125,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
   };
   useEffect(() => {
     fetchData(); // Fetch the data when component is mounted
-  }, []);
+  }, [isInvoiceUploadRefreshed]);
 
   const handleRefresh = () => {
     setRefreshKey((prevKey) => prevKey + 1); // Increment the refreshKey to trigger useEffect
@@ -135,7 +145,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
         console.log(`Deleting item with ID: ${id}`);
         console.log("//", filteredItems[id].invid);
         return fetch(
-          `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[id].invid}`,
+          `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[id].invid}`,
           {
             method: "DELETE",
           },
@@ -152,7 +162,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
             ); // Use item.id here
             setItems(updatedItems);
             setSelectedRows(new Set());
-            fetchData();
+            dispatch(refreshActions.toggleInvoiceUploadRefresh());
           } else {
             throw new Error("Some deletions failed");
           }

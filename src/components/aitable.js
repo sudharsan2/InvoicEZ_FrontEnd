@@ -20,6 +20,9 @@ import {
 import Search from "./Search";
 import { Button, notification } from "antd";
 
+import { useDispatch, useSelector } from "react-redux";
+import { refreshActions } from "../Store/Store";
+
 const columns = [
   createTableColumn({
     columnId: "InvoiceId",
@@ -68,10 +71,15 @@ const AITable = ({ setTableLength }) => {
   const { invoiceNumber } = location2.state || {};
   console.log("inn", invoiceNumber);
 
+  const dispatch = useDispatch();
+  const isInvoiceUploadRefreshed = useSelector(
+    (state) => state.refresh.InvoiceUploadRefresh,
+  );
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://10.10.15.15:5719/user/morethanone-invoice-list",
+        "http://127.0.0.1:8000/user/morethanone-invoice-list",
       );
       const fetchedItems = response.data;
       setInvoiceId(fetchedItems[0].id);
@@ -94,7 +102,7 @@ const AITable = ({ setTableLength }) => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [isInvoiceUploadRefreshed]);
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
@@ -142,7 +150,7 @@ const AITable = ({ setTableLength }) => {
 
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[item].Id}`,
+          `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[item].Id}`,
         ),
       );
 
@@ -162,7 +170,7 @@ const AITable = ({ setTableLength }) => {
         description: `You have successfully deleted: ${supplierNames}`,
       });
 
-      fetchData();
+      dispatch(refreshActions.toggleInvoiceUploadRefresh());
     } catch (error) {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
@@ -192,7 +200,7 @@ const AITable = ({ setTableLength }) => {
       await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `http://10.10.15.15:5719/user/approve-status/${filteredItems[item].po_number}`,
+            `http://127.0.0.1:8000/user/approve-status/${filteredItems[item].po_number}`,
           ),
         ),
       );

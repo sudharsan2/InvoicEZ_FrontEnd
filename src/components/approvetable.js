@@ -20,6 +20,7 @@ import {
 import Search from "./Search"; // Assuming your search component is imported here
 import { Button, notification } from "antd"; // Import Ant Design components
 import { useDispatch, useSelector } from "react-redux";
+import { refreshActions } from "../Store/Store";
 
 // Define columns for the DataGrid
 const columns = [
@@ -89,17 +90,21 @@ const ApproveTable = () => {
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [po_id, set_Po_id] = useState("");
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
 
   const [RefreshUpload, SetRefreshUpload] = useState(null);
 
+  const [DeleteRefresh, SetDeleteRefresh] = useState(false);
+
   // Fetch data from the API when the component mounts
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://10.10.15.15:5719/user/one-invoice-list",
+        "http://127.0.0.1:8000/user/one-invoice-list",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
@@ -134,7 +139,7 @@ const ApproveTable = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [isInvoiceUploadRefreshed]);
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
@@ -191,7 +196,7 @@ const ApproveTable = () => {
 
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+          `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[item].InvoiceId}`,
         ),
       );
 
@@ -211,7 +216,7 @@ const ApproveTable = () => {
         description: `You have successfully deleted: ${supplierNames}`,
       });
 
-      fetchData();
+      dispatch(refreshActions.toggleInvoiceUploadRefresh());
     } catch (error) {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
@@ -243,7 +248,7 @@ const ApproveTable = () => {
       // Make API call to delete selected POs
       await Promise.all(
         selectedItemsArray.map((item) =>
-          axios.post(`http://10.10.15.15:5719/user/oracle-payload/${po_id}`),
+          axios.post(`http://127.0.0.1:8000/user/oracle-payload/${po_id}`),
         ),
       );
 
@@ -255,7 +260,7 @@ const ApproveTable = () => {
         message: "Successfully Approved",
         description: `You have successfully approved: ${supplierNames}`,
       });
-      fetchData();
+      dispatch(refreshActions.toggleInvoiceUploadRefresh());
     } catch (error) {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
