@@ -433,7 +433,7 @@ const IssuefixDetails = () => {
   const handlePOChange = (event) => {};
 
   return (
-    <div>
+    <div style={{maxHeight:"89vh",overflowY:"auto"}}>
       <div ref={divRef}>
         <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
@@ -447,7 +447,7 @@ const IssuefixDetails = () => {
             <BreadcrumbDivider />
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>
-                {formData.vendorName}
+              Invoice No : {formData.invoiceId}
               </BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
@@ -482,7 +482,7 @@ const IssuefixDetails = () => {
             </div>
 
             <h2 style={{ margin: "20px 0 20px 0" }}>
-              Invoice No:{formData.invoiceId}
+              Invoice No : {formData.invoiceId}
             </h2>
             <div
               style={{

@@ -177,7 +177,7 @@ const AIDetailPage = () => {
 
   const [sortState, setSortState] = useState({
     sortDirection: "ascending",
-    sortColumn: "empid",
+    sortColumn: "Quantity",
   });
   //  const [data, setData] = useState([])
 
@@ -187,7 +187,7 @@ const AIDetailPage = () => {
   };
 
   const [data, setData] = useState(line_data);
-
+  const [selectedItem, setSelectedItem] = useState(null);
   const columns = [
     createTableColumn({
       columnId: "Description",
@@ -307,12 +307,14 @@ const AIDetailPage = () => {
   };
 
   // pop over 
-  const handleClick = (event) => {
+  const handleClick = (event, item) => {
     setAnchorEl(event.currentTarget);
+    setSelectedItem(item);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    setSelectedItem(null);
   };
 
   const open = Boolean(anchorEl);
@@ -527,9 +529,9 @@ const AIDetailPage = () => {
             <BreadcrumbButton href={path}>Issue</BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
-          {/* <BreadcrumbItem>
-            <BreadcrumbButton href={path}>{ poNumber }</BreadcrumbButton>
-          </BreadcrumbItem> */}
+          <BreadcrumbItem>
+            <BreadcrumbButton href={path}>Invoice No: {invoiceData.invoice_info.InvoiceId}</BreadcrumbButton>
+          </BreadcrumbItem>
         </Breadcrumb>
       </div>
 
@@ -709,9 +711,9 @@ const AIDetailPage = () => {
                 ))}
               </ul>
               </div>
-              
+              <div style={{display:"flex",justifyContent:"flex-start"}}>
               <h2>Line Information</h2>
-              
+              </div>
              <Divider/>
 
               <div
@@ -825,7 +827,7 @@ const AIDetailPage = () => {
         )}
 
         {selectedtab === "tab4" && (
-          <div style={{ width: "100%", display: "flex", overflowY: "auto" }}>
+          <div style={{ width: "100%", display: "flex", overflowY:"auto" }}>
             <div style={{ flex: 1, borderRight: "2px solid rgb(240,240,240)" }}>
               <AiNav onPoNumberClick={handlePoNumberClick} />
             </div>
@@ -844,21 +846,22 @@ const AIDetailPage = () => {
                   display: "flex",
                   justifyContent: "space-between", 
                   paddingLeft: "2em", 
+                  marginTop:"20px"
                 }}
               >
                 <ul>
                   {invoiceData && (
                     <>
-                      <li>PO Number: {selectedInvoiceNumber}</li>
-                      <li>PO Type: {dataitem.po_type}</li>
-                      <li>Supplier Name: {dataitem.supplier_name}</li>
-                      <li>Site: {dataitem.location}</li>
-                      <li>Status: {dataitem.po_status}</li>
-                      <li>Total Amount: {dataitem.total_amount}</li>
-                      <li>Buyer Name: {dataitem.buyer_name}</li>
-                      <li>Invoice Detail: {dataitem.invoice_detail}</li>
-                      <li>Shipping Address: {dataitem.ship_to}</li>
-                      <li>Billing Address: {dataitem.ship_to}</li>
+                      <li><b>PO Number:</b> {selectedInvoiceNumber}</li>
+                      <li><b>PO Type:</b> {dataitem.po_type}</li>
+                      <li><b>Supplier Name:</b> {dataitem.supplier_name}</li>
+                      <li><b>Site: </b>{dataitem.location}</li>
+                      <li><b>Status:</b> {dataitem.po_status}</li>
+                      <li><b>Total Amount:</b> {dataitem.total_amount}</li>
+                      <li><b>Buyer Name:</b> {dataitem.buyer_name}</li>
+                      <li><b>Invoice Detail:</b> {dataitem.invoice_detail}</li>
+                      <li><b>Shipping Address:</b> {dataitem.ship_to}</li>
+                      <li><b>Billing Address:</b> {dataitem.ship_to}</li>
                     </>
                   )}
                 </ul>
@@ -867,9 +870,8 @@ const AIDetailPage = () => {
       style={{
         width: "100%",
         display: "flex",
-        overflowY: "auto",
-        height: "40vh",
         marginTop: "30px",
+        overflowY:"auto"
       }}
     >
       <div style={{ flex: 1 }}>
@@ -895,6 +897,7 @@ const AIDetailPage = () => {
                   fontWeight: "bold",
                   cursor: "pointer",
                   maxWidth: "200px",
+
                 }}
                 {...headerSortProps("Line Number")}
               >
@@ -966,6 +969,7 @@ const AIDetailPage = () => {
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
+                      marginTop:"200px"
                     }}
                   >
                     {item.line_num || "Null"}
@@ -1020,46 +1024,45 @@ const AIDetailPage = () => {
     >
       <FaArrowUpRightFromSquare
         style={{ cursor: "pointer" }}
-        onClick={handleClick}
+        onClick={(event) => handleClick(event, item)}
       />
       
       {/* Popover component */}
       <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-      >
-        <div style={{ padding: "30px", maxWidth: "300px",marginLeft:"-1em",fontFamily:"Segoe UI" }}>
-          {dataitem.po_items && dataitem.po_items.length > 0 ? (
-            dataitem.po_items.map((item, index) => (
-              <ul key={item.id}>
-                <h3>Item {index + 1}</h3>
-                <ul>
-                  
-                  <li><b>Order Type:</b> {item.order_type_lookup_code}</li>
-                  <li><b>Purchase Basis:</b> {item.purchase_basis}</li>
-                  <li><b>Category:</b> {item.category_name}</li>
-                  <li><b>Status:</b> {item.closed_code}</li>
-                  <li><b>Description:</b> {item.item_description}</li>
-                  <li><b>Need By Date: </b>{item.need_by_date || "N/A"}</li>
-                  <li><b>Promised Date:</b> {item.promised_date || "N/A"}</li>
-                </ul>
-              </ul>
-            ))
-          ) : (
-            <p>No items available.</p>
-          )}
-        </div>
-      </Popover>
+                      id={id}
+                      open={open}
+                      anchorEl={anchorEl}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                      }}
+                     
+                      sx={{
+                        boxShadow: '0px 2px 10px rgba(128, 128, 128, 0.1)', 
+                        '& .MuiPopover-paper': {
+                          boxShadow: '0px 2px 10px rgba(128, 128, 128, 0.1)', 
+                          backgroundColor: "white", 
+                        },
+                      }}
+                    >
+                      <div style={{ padding: "30px", maxWidth: "300px", marginLeft: "-1em", fontFamily: "Segoe UI" }}>
+                        <ul>
+                          <li><b>Line Number:</b>{selectedItem?.line_num || "N/A"}</li>
+                          <li><b>Order Type:</b> {selectedItem?.order_type_lookup_code || "N/A"}</li>
+                          <li><b>Purchase Basis:</b> {selectedItem?.purchase_basis || "N/A"}</li>
+                          <li><b>Category:</b> {selectedItem?.category_name || "N/A"}</li>
+                          <li><b>Status:</b> {selectedItem?.closed_code || "N/A"}</li>
+                          <li><b>Description:</b> {selectedItem?.item_description || "N/A"}</li>
+                          <li><b>Need By Date:</b> {selectedItem?.need_by_date || "N/A"}</li>
+                          <li><b>Promised Date:</b> {selectedItem?.promised_date || "N/A"}</li>
+                        </ul>
+                      </div>
+                    </Popover>
     </TableCell>
                 </TableRow>
               ))}

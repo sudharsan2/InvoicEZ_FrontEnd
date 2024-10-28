@@ -33,6 +33,7 @@ import { message } from "antd";
 import {  notification } from "antd";
 
 const path = "/approve";
+const path2 = "/approvepage"
 const path1 = "http://localhost:3000/";
 
 const useStyles = makeStyles({
@@ -195,7 +196,7 @@ const ApprovePage = () => {
   const handlePostApi = async () => {
     console.log("Button clicked!");
 
-    // Check if PO number and invoice ID are provided
+    
     if (!selectedOption || !selectedOption.value) {
       message.warning("PO number not selected or entered.");
       return;
@@ -408,11 +409,10 @@ const ApprovePage = () => {
         
           
           setVendor(formattedVendorAddress);
-          console.log("Approve page vendor address",typeof(formattedVendorAddress));
-          console.log("VENDOR",vendor);
+          
 
         } else {
-          setVendor();
+          setVendor("NULL");
           console.error("VendorAddress is missing");
         }
 
@@ -430,10 +430,10 @@ const ApprovePage = () => {
             .replace(/\s+/g, " ")
             .replace(/,$/, "");
 
-          setVendor(formattedCustomerAddress);
+            setCustomer(formattedCustomerAddress);
           
         } else {
-          setVendor();
+          setCustomer("NULL");
           console.error("CustomerAddress is missing");
         }
       } catch (error) {
@@ -451,6 +451,8 @@ const ApprovePage = () => {
       fetchData();
     }
   }, [poNumber]);
+
+
 
 
   
@@ -485,7 +487,7 @@ const ApprovePage = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>PO:13466</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>PO:13466</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -884,14 +886,14 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {closedcode}
+                      {closedcode||"NULL"}
                     </div>
                   </div>
 
                   <div
                     className={`${styles.section} ${styles.invoiceCurrency}`}
                   >
-                    <div
+                    {/* <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
@@ -899,16 +901,16 @@ const ApprovePage = () => {
                       }}
                     >
                       Invoice Currency:
-                    </div>
-                    <div
+                    </div> */}
+                    {/* <div
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
                       {purchaseOrder.invoiceCurrency}
-                    </div>
+                    </div> */}
                   </div>
 
-                  <div
+                  {/* <div
                     className={`${styles.section} ${styles.purchaseOrderNumber}`}
                   >
                     <div
@@ -926,7 +928,7 @@ const ApprovePage = () => {
                     >
                       {purchaseOrder.purchaseOrderNumberInInvoice}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
