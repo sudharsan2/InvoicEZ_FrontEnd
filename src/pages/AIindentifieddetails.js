@@ -1,7 +1,7 @@
 // import { useState } from "react";
 // import React from "react";
 import { message } from "antd";
-import {  OverlayTrigger } from "react-bootstrap";
+import { OverlayTrigger } from "react-bootstrap";
 
 import {
   makeStyles,
@@ -36,14 +36,9 @@ import CreatableSelect from "react-select/creatable";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
-import {
-  
-  
-  PopoverSurface,
-  PopoverTrigger,
-} from "@fluentui/react-components";
+import { PopoverSurface, PopoverTrigger } from "@fluentui/react-components";
 import axios from "axios";
-import { Popover} from '@mui/material';
+import { Popover } from "@mui/material";
 
 const path = "/aidetail";
 const path1 = "http://localhost:3000/";
@@ -66,7 +61,8 @@ const useStyles = makeStyles({
   },
   root: {
     // width: "77vw",
-    height: "100vh",
+    height: "88vh",
+    overflowY: "auto",
     display: "flex",
     flexDirection: "column",
   },
@@ -142,7 +138,6 @@ const useStyles = makeStyles({
   },
 });
 
-
 // pop up message for table cell see more
 
 const AIDetailPage = () => {
@@ -209,7 +204,6 @@ const AIDetailPage = () => {
       columnId: "ProductCode",
       compare: (a, b) => a.ProductCode - b.ProductCode,
     }),
-    
   ];
 
   const {
@@ -276,13 +270,11 @@ const AIDetailPage = () => {
   const [poheader, setPoHeader] = useState();
   // const [selectedOption, setSelectedOption] = useState(null);
   const [invoiceId, setInvoiceId] = useState(null); // Placeholder for dynamically fetched invoice ID
-  const[vendor,setVendor] = useState("");
+  const [vendor, setVendor] = useState("");
   const [load, setLoad] = useState(false);
   const [showPopover, setShowPopover] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  //  PopOver 
-
-
+  //  PopOver
 
   const handlePoNumberClick = async (poNumber) => {
     console.log("test function called");
@@ -306,7 +298,7 @@ const AIDetailPage = () => {
     }
   };
 
-  // pop over 
+  // pop over
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -377,7 +369,6 @@ const AIDetailPage = () => {
 
   const inv_id = invoiceData.invoice_info.id;
   // const inv_id = invoiceData.InvoiceId;
-  
 
   const formatAddress = (address) => {
     if (!address) return "N/A";
@@ -427,13 +418,10 @@ const AIDetailPage = () => {
   //   </Popover>
   // );
 
-  
-  
-
   const lineItems = invoiceData.invoice_info.items.map((item) => ({
     Description: item.Description || "Null",
     Quantity: item.Quantity || "Null",
-    UnitPrice:item.UnitPrice || "Null",
+    UnitPrice: item.UnitPrice || "Null",
     Amount: item.Amount || "Null",
     Discount: item.Discount || "Null",
     ProductCode: item.ProductCode || "Null",
@@ -569,49 +557,53 @@ const AIDetailPage = () => {
                 isClearable
               />
 
-<Button
-            appearance="subtle"
-            style={{
-                color: "#0078d4",
-                backgroundColor: "#fff",
-                alignSelf: "flex-end",
-                width: "auto",
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: load ? 'not-allowed' : 'pointer', 
-                opacity: load ? 0.6 : 1
-            }}
-            className={styles.wrapper}
-            onClick={handlePostApi}
-            disabled={load} 
-        >
-            {load ? (
-                <div style={{
-                    border: '4px solid rgba(255, 255, 255, 0.3)', 
-                    borderRadius: '50%',
-                    borderTop: '4px solid #0078d4', 
-                    width: '20px',
-                    height: '20px',
-                    animation: 'spin 1s linear infinite',
-                    marginRight: '8px', 
-                }} />
-            ) : (
-                "Submit"
-            )}
-            <style>
-                {`
+              <Button
+                appearance="subtle"
+                style={{
+                  color: "#0078d4",
+                  backgroundColor: "#fff",
+                  alignSelf: "flex-end",
+                  width: "auto",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: load ? "not-allowed" : "pointer",
+                  opacity: load ? 0.6 : 1,
+                }}
+                className={styles.wrapper}
+                onClick={handlePostApi}
+                disabled={load}
+              >
+                {load ? (
+                  <div
+                    style={{
+                      border: "4px solid rgba(255, 255, 255, 0.3)",
+                      borderRadius: "50%",
+                      borderTop: "4px solid #0078d4",
+                      width: "20px",
+                      height: "20px",
+                      animation: "spin 1s linear infinite",
+                      marginRight: "8px",
+                    }}
+                  />
+                ) : (
+                  "Submit"
+                )}
+                <style>
+                  {`
                 @keyframes spin {
                     0% { transform: rotate(0deg); }
                     100% { transform: rotate(360deg); }
                 }
                 `}
-            </style>
-        </Button>
+                </style>
+              </Button>
             </div>
           </div>
 
-          <h2 style={{ margin: "20px 0 20px 0" }}>Invoice No : {invoiceData.invoice_info.InvoiceId}</h2>
+          <h2 style={{ margin: "20px 0 20px 0" }}>
+            Invoice No : {invoiceData.invoice_info.InvoiceId}
+          </h2>
 
           <div style={{ display: "flex", marginBottom: "20px" }}>
             <div
@@ -708,97 +700,152 @@ const AIDetailPage = () => {
                   </li>
                 ))}
               </ul>
-              </div>
-              
-              <h2>Line Information</h2>
-              
-             <Divider/>
+            </div>
 
-              <div
-    style={{
-      width: "100%",
-      display: "flex",
-      overflowY: "auto",
-      height: "40vh",
-      marginTop: "10px",
-    }}
-  >
-    <div style={{ flex: 2 }}>
-      <Table>
-        <TableHeader
-          style={{
-            position: "sticky",
-            top: 0,
-            backgroundColor: themestate ? "#383838" : "white", 
-            zIndex: 1, 
-            color: themestate ? "white" : "black",
-          }}
-        >
-          <TableRow
-            style={
-              themestate
-                ? { color: "white", borderBottomColor: "#383838" }
-                : {}
-            }
-          >
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
-              {...headerSortProps("Description")}
-            >
-              Description
-            </TableHeaderCell>
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "200px" }}
-              {...headerSortProps("Quantity")}
-            >
-              Quantity
-            </TableHeaderCell>
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "300px" }}
-              {...headerSortProps("Unit Price")}
-            >
-              Unit Price
-            </TableHeaderCell>
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "250px" }}
-              {...headerSortProps("Discount")}
-            >
-              Discount
-            </TableHeaderCell>
-            <TableHeaderCell
-              style={{ fontWeight: "bold", cursor: "pointer", maxWidth: "150px" }}
-              {...headerSortProps("Product Code")}
-            >
-              Product Code
-            </TableHeaderCell>
-           
-            
-          </TableRow>
-        </TableHeader>
+            <h2>Line Information</h2>
 
-        <TableBody style={themestate ? { color: "white" } : {}}>
-          {lineItems.map((item) => (
-            <TableRow
-              key={item.id}
-              style={themestate ? { color: "white" } : {}}
-              className={themestate ? "hovereffect dark" : "hovereffect"}
+            <Divider />
+
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                overflowY: "auto",
+                height: "40vh",
+                marginTop: "10px",
+              }}
             >
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.Description}
-              </TableCell>
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.Quantity}
-              </TableCell>
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.UnitPrice}
-              </TableCell>
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.Discount}
-              </TableCell>
-              <TableCell style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {item.ProductCode}
-              </TableCell>
-              {/* <TableCell
+              <div style={{ flex: 2 }}>
+                <Table>
+                  <TableHeader
+                    style={{
+                      position: "sticky",
+                      top: 0,
+                      backgroundColor: themestate ? "#383838" : "white",
+                      zIndex: 1,
+                      color: themestate ? "white" : "black",
+                    }}
+                  >
+                    <TableRow
+                      style={
+                        themestate
+                          ? { color: "white", borderBottomColor: "#383838" }
+                          : {}
+                      }
+                    >
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("Description")}
+                      >
+                        Description
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "200px",
+                        }}
+                        {...headerSortProps("Quantity")}
+                      >
+                        Quantity
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "300px",
+                        }}
+                        {...headerSortProps("Unit Price")}
+                      >
+                        Unit Price
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "250px",
+                        }}
+                        {...headerSortProps("Discount")}
+                      >
+                        Discount
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("Product Code")}
+                      >
+                        Product Code
+                      </TableHeaderCell>
+                    </TableRow>
+                  </TableHeader>
+
+                  <TableBody style={themestate ? { color: "white" } : {}}>
+                    {lineItems.map((item) => (
+                      <TableRow
+                        key={item.id}
+                        style={themestate ? { color: "white" } : {}}
+                        className={
+                          themestate ? "hovereffect dark" : "hovereffect"
+                        }
+                      >
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Description}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Quantity}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.UnitPrice}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Discount}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.ProductCode}
+                        </TableCell>
+                        {/* <TableCell
                     style={{
                       maxWidth: "300px",
                       whiteSpace: "nowrap",
@@ -806,272 +853,295 @@ const AIDetailPage = () => {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    
+
                       <FaArrowUpRightFromSquare
                         style={{ cursor: "pointer" }}
                       />
-                   
-                  </TableCell> */}
-              
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  </div>
 
-            
+                  </TableCell> */}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
           </div>
         )}
 
         {selectedtab === "tab4" && (
-          <div style={{ width: "100%", display: "flex", overflowY: "auto" }}>
+          <div style={{ width: "100%", display: "flex" }}>
             <div style={{ flex: 1, borderRight: "2px solid rgb(240,240,240)" }}>
               <AiNav onPoNumberClick={handlePoNumberClick} />
             </div>
             <div
               style={{
-                flex: 3, 
+                flex: 3,
                 display: "flex",
-                justifyContent: "center", 
-                paddingLeft: "2em", 
-                flexDirection:"column"
+                // justifyContent: "center",
+                paddingLeft: "2em",
+                flexDirection: "column",
               }}
             >
-              <div
-                style={{
-                  width: "90%",
-                  display: "flex",
-                  justifyContent: "space-between", 
-                  paddingLeft: "2em", 
-                }}
-              >
-                <ul>
-                  {invoiceData && (
-                    <>
-                      <li>PO Number: {selectedInvoiceNumber}</li>
-                      <li>PO Type: {dataitem.po_type}</li>
-                      <li>Supplier Name: {dataitem.supplier_name}</li>
-                      <li>Site: {dataitem.location}</li>
-                      <li>Status: {dataitem.po_status}</li>
-                      <li>Total Amount: {dataitem.total_amount}</li>
-                      <li>Buyer Name: {dataitem.buyer_name}</li>
-                      <li>Invoice Detail: {dataitem.invoice_detail}</li>
-                      <li>Shipping Address: {dataitem.ship_to}</li>
-                      <li>Billing Address: {dataitem.ship_to}</li>
-                    </>
-                  )}
-                </ul>
-              </div>
-              <div
-      style={{
-        width: "100%",
-        display: "flex",
-        overflowY: "auto",
-        height: "40vh",
-        marginTop: "30px",
-      }}
-    >
-      <div style={{ flex: 1 }}>
-        <Table>
-          <TableHeader
-            style={{
-              position: "sticky",
-              top: 0,
-              backgroundColor: themestate ? "#383838" : "white",
-              zIndex: 1,
-              color: themestate ? "white" : "black",
-            }}
-          >
-            <TableRow
-              style={
-                themestate
-                  ? { color: "white", borderBottomColor: "#383838" }
-                  : {}
-              }
-            >
-              <TableHeaderCell
-                style={{
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  maxWidth: "200px",
-                }}
-                {...headerSortProps("Line Number")}
-              >
-                Line Number
-              </TableHeaderCell>
-              <TableHeaderCell
-                style={{
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  maxWidth: "150px",
-                }}
-                {...headerSortProps("Item Name")}
-              >
-                Item Name
-              </TableHeaderCell>
-              <TableHeaderCell
-                style={{
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  maxWidth: "300px",
-                }}
-                {...headerSortProps("Quantity")}
-              >
-                Quantity
-              </TableHeaderCell>
-              <TableHeaderCell
-                style={{
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  maxWidth: "250px",
-                }}
-                {...headerSortProps("Unit Price")}
-              >
-                Unit Price
-              </TableHeaderCell>
-              <TableHeaderCell
-                style={{
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  maxWidth: "150px",
-                }}
-                {...headerSortProps("Amount Billed")}
-              >
-                Amount Billed
-              </TableHeaderCell>
-              <TableHeaderCell
-                style={{
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  maxWidth: "150px",
-                }}
-              >
-                See more
-              </TableHeaderCell>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody style={themestate ? { color: "white" } : {}}>
-            {dataitem.po_items &&
-              dataitem.po_items.map((item) => (
-                <TableRow
-                  key={item.id}
-                  style={themestate ? { color: "white" } : {}}
-                  className={themestate ? "hovereffect dark" : "hovereffect"}
+              <div>
+                <div
+                  style={{
+                    width: "90%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    paddingLeft: "2em",
+                  }}
                 >
-                  <TableCell
-                    style={{
-                      maxWidth: "300px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {item.line_num || "Null"}
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      maxWidth: "300px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {item.item_name || "Null"}
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      maxWidth: "300px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {item.quantity || "Null"}
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      maxWidth: "300px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {item.unit_price || "Null"}
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      maxWidth: "300px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {item.amount_billed || "Null"}
-                  </TableCell>
-                  <TableCell
-      style={{
-        maxWidth: "300px",
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-      }}
-    >
-      <FaArrowUpRightFromSquare
-        style={{ cursor: "pointer" }}
-        onClick={handleClick}
-      />
-      
-      {/* Popover component */}
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-      >
-        <div style={{ padding: "30px", maxWidth: "300px",marginLeft:"-1em",fontFamily:"Segoe UI" }}>
-          {dataitem.po_items && dataitem.po_items.length > 0 ? (
-            dataitem.po_items.map((item, index) => (
-              <ul key={item.id}>
-                <h3>Item {index + 1}</h3>
-                <ul>
-                  
-                  <li><b>Order Type:</b> {item.order_type_lookup_code}</li>
-                  <li><b>Purchase Basis:</b> {item.purchase_basis}</li>
-                  <li><b>Category:</b> {item.category_name}</li>
-                  <li><b>Status:</b> {item.closed_code}</li>
-                  <li><b>Description:</b> {item.item_description}</li>
-                  <li><b>Need By Date: </b>{item.need_by_date || "N/A"}</li>
-                  <li><b>Promised Date:</b> {item.promised_date || "N/A"}</li>
-                </ul>
-              </ul>
-            ))
-          ) : (
-            <p>No items available.</p>
-          )}
-        </div>
-      </Popover>
-    </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
-              
+                  <ul>
+                    {invoiceData && (
+                      <>
+                        <li>PO Number: {selectedInvoiceNumber}</li>
+                        <li>PO Type: {dataitem.po_type}</li>
+                        <li>Supplier Name: {dataitem.supplier_name}</li>
+                        <li>Site: {dataitem.location}</li>
+                        <li>Status: {dataitem.po_status}</li>
+                        <li>Total Amount: {dataitem.total_amount}</li>
+                        <li>Buyer Name: {dataitem.buyer_name}</li>
+                        <li>Invoice Detail: {dataitem.invoice_detail}</li>
+                        <li>Shipping Address: {dataitem.ship_to}</li>
+                        <li>Billing Address: {dataitem.ship_to}</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    overflowY: "auto",
+                    height: "40vh",
+                    marginTop: "30px",
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <Table>
+                      <TableHeader
+                        style={{
+                          position: "sticky",
+                          top: 0,
+                          backgroundColor: themestate ? "#383838" : "white",
+                          zIndex: 1,
+                          color: themestate ? "white" : "black",
+                        }}
+                      >
+                        <TableRow
+                          style={
+                            themestate
+                              ? { color: "white", borderBottomColor: "#383838" }
+                              : {}
+                          }
+                        >
+                          <TableHeaderCell
+                            style={{
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              maxWidth: "200px",
+                            }}
+                            {...headerSortProps("Line Number")}
+                          >
+                            Line Number
+                          </TableHeaderCell>
+                          <TableHeaderCell
+                            style={{
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              maxWidth: "150px",
+                            }}
+                            {...headerSortProps("Item Name")}
+                          >
+                            Item Name
+                          </TableHeaderCell>
+                          <TableHeaderCell
+                            style={{
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              maxWidth: "300px",
+                            }}
+                            {...headerSortProps("Quantity")}
+                          >
+                            Quantity
+                          </TableHeaderCell>
+                          <TableHeaderCell
+                            style={{
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              maxWidth: "250px",
+                            }}
+                            {...headerSortProps("Unit Price")}
+                          >
+                            Unit Price
+                          </TableHeaderCell>
+                          <TableHeaderCell
+                            style={{
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              maxWidth: "150px",
+                            }}
+                            {...headerSortProps("Amount Billed")}
+                          >
+                            Amount Billed
+                          </TableHeaderCell>
+                          <TableHeaderCell
+                            style={{
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              maxWidth: "150px",
+                            }}
+                          >
+                            See more
+                          </TableHeaderCell>
+                        </TableRow>
+                      </TableHeader>
 
+                      <TableBody style={themestate ? { color: "white" } : {}}>
+                        {dataitem.po_items &&
+                          dataitem.po_items.map((item) => (
+                            <TableRow
+                              key={item.id}
+                              style={themestate ? { color: "white" } : {}}
+                              className={
+                                themestate ? "hovereffect dark" : "hovereffect"
+                              }
+                            >
+                              <TableCell
+                                style={{
+                                  maxWidth: "300px",
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {item.line_num || "Null"}
+                              </TableCell>
+                              <TableCell
+                                style={{
+                                  maxWidth: "300px",
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {item.item_name || "Null"}
+                              </TableCell>
+                              <TableCell
+                                style={{
+                                  maxWidth: "300px",
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {item.quantity || "Null"}
+                              </TableCell>
+                              <TableCell
+                                style={{
+                                  maxWidth: "300px",
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {item.unit_price || "Null"}
+                              </TableCell>
+                              <TableCell
+                                style={{
+                                  maxWidth: "300px",
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {item.amount_billed || "Null"}
+                              </TableCell>
+                              <TableCell
+                                style={{
+                                  maxWidth: "300px",
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                <FaArrowUpRightFromSquare
+                                  style={{ cursor: "pointer" }}
+                                  onClick={handleClick}
+                                />
 
-
-              
+                                {/* Popover component */}
+                                <Popover
+                                  id={id}
+                                  open={open}
+                                  anchorEl={anchorEl}
+                                  onClose={handleClose}
+                                  anchorOrigin={{
+                                    vertical: "bottom",
+                                    horizontal: "center",
+                                  }}
+                                  transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "center",
+                                  }}
+                                >
+                                  <div
+                                    style={{
+                                      padding: "30px",
+                                      maxWidth: "300px",
+                                      marginLeft: "-1em",
+                                      fontFamily: "Segoe UI",
+                                    }}
+                                  >
+                                    {dataitem.po_items &&
+                                    dataitem.po_items.length > 0 ? (
+                                      dataitem.po_items.map((item, index) => (
+                                        <ul key={item.id}>
+                                          <h3>Item {index + 1}</h3>
+                                          <ul>
+                                            <li>
+                                              <b>Order Type:</b>{" "}
+                                              {item.order_type_lookup_code}
+                                            </li>
+                                            <li>
+                                              <b>Purchase Basis:</b>{" "}
+                                              {item.purchase_basis}
+                                            </li>
+                                            <li>
+                                              <b>Category:</b>{" "}
+                                              {item.category_name}
+                                            </li>
+                                            <li>
+                                              <b>Status:</b> {item.closed_code}
+                                            </li>
+                                            <li>
+                                              <b>Description:</b>{" "}
+                                              {item.item_description}
+                                            </li>
+                                            <li>
+                                              <b>Need By Date: </b>
+                                              {item.need_by_date || "N/A"}
+                                            </li>
+                                            <li>
+                                              <b>Promised Date:</b>{" "}
+                                              {item.promised_date || "N/A"}
+                                            </li>
+                                          </ul>
+                                        </ul>
+                                      ))
+                                    ) : (
+                                      <p>No items available.</p>
+                                    )}
+                                  </div>
+                                </Popover>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
