@@ -58,7 +58,7 @@ import {
   Navigation24Filled,
   Navigation24Regular,
 } from "@fluentui/react-icons";
-
+import {Apps28Regular} from "@fluentui/react-icons"
 import {
   Button,
   Caption1Strong,
@@ -213,6 +213,7 @@ const NavDrawerDefaultAdmin = (props) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
+  const [value,setValue] = useState("");
   const someClickHandler = () => {
     navigate("/employee");
   };
@@ -318,7 +319,7 @@ const NavDrawerDefaultAdmin = (props) => {
                 : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
             }
           >
-            <Tooltip
+            {/* <Tooltip
               content={"Dashboard"}
               positioning="after"
               withArrow={true}
@@ -441,7 +442,54 @@ const NavDrawerDefaultAdmin = (props) => {
                   themestate ? styles.navItemdark : styles.navItemlight
                 }
               ></NavItem>
-            </Tooltip>
+            </Tooltip> */}
+            <NavCategory value="1">
+                  <NavCategoryItem
+                    target="_blank"
+                    icon={
+                      <Apps28Regular
+                        style={
+                          themestate
+                            ? { color: darktheme.fontcolordark }
+                            : { color: lighttheme.fontcolorlight }
+                        }
+                      />
+                    }
+                    // onClick={someClickHandler}
+                    value="2"
+                    className={
+                      themestate ? styles.navItemdark : styles.navItemlight
+                    }
+                    style={{ marginTop: "10px", fontSize: "17px" }}
+                    onClick={() => {
+                      setValue("2");
+                    }}
+                  >
+                    Control Center
+                  </NavCategoryItem>
+                  <NavSubItemGroup>
+                    <NavSubItem
+                      value="3"
+                      style={{ marginTop: "10px", fontSize: "17px" }}
+                      onClick={() => {
+                        // navigate("/ai");
+                        setValue("3");
+                      }}
+                    >
+                     Matrimony.com
+                    </NavSubItem>
+                    <NavSubItem
+                      value="4"
+                      style={{ marginTop: "10px", fontSize: "17px" }}
+                      onClick={() => {
+                        // navigate("/issuefix");
+                        setValue("4");
+                      }}
+                    >
+                      Bilt
+                    </NavSubItem>
+                  </NavSubItemGroup>
+                </NavCategory>
           </NavDrawerBody>
         ) : (
           <NavDrawerBody
@@ -456,6 +504,7 @@ const NavDrawerDefaultAdmin = (props) => {
             }
           >
             {/* DETAILS OF USER  */}
+            <div style={{ width: "100%" }}>
             <div
               style={{
                 display: "flex",
@@ -485,138 +534,56 @@ const NavDrawerDefaultAdmin = (props) => {
                 Admin Page
               </h4>
             </div>
-            <div style={{ width: "100%" }}>
-              <NavItem
-                target="_blank"
-                icon={
-                  <Dashboard
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={() => {
-                    navigate("/admin");
-                  }}
-                value="1"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
-                
-              >
-                <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
-                >
-                  Usage
-                 
-                </div>
-              </NavItem>
-            </div>
-            <div style={{ width: "100%" }}>
-              <NavItem
-                target="_blank"
-                icon={
-                  <LayerDiagonalPersonRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={() => {
-                    navigate("/llm");
-                  }}
-                
-                value="2"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
-              >
-                <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
-                >
-                  LLM
-                </div>
-              </NavItem>
-            </div>
-            <div style={{ width: "100%" }}>
-              <NavItem
-                target="_blank"
-                icon={
-                  <PersonStarRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={() => {
-                    navigate("/document");
-                  }}
-                value="3"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
-              >
-                <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
-                >
-                  Document
-                </div>
-              </NavItem>
-            </div>
-            <div style={{ width: "100%" }}>
-              <NavItem
-                target="_blank"
-                icon={
-                  <PremiumPersonRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={() => {
-                    navigate("/blob");
-                  }}
-                value="4"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
-              >
-                <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
-                >
-                  Blob Storage
-                </div>
-              </NavItem>
-            </div>
             
+                <NavCategory value="1">
+                  <NavCategoryItem
+                    target="_blank"
+                    icon={
+                      <Apps28Regular
+                        style={
+                          themestate
+                            ? { color: darktheme.fontcolordark }
+                            : { color: lighttheme.fontcolorlight }
+                        }
+                      />
+                    }
+                    // onClick={someClickHandler}
+                    value="2"
+                    className={
+                      themestate ? styles.navItemdark : styles.navItemlight
+                    }
+                    style={{ marginTop: "10px", fontSize: "17px" }}
+                    onClick={() => {
+                      setValue("2");
+                    }}
+                  >
+                    Control Center
+                  </NavCategoryItem>
+                  <NavSubItemGroup>
+                    <NavSubItem
+                      value="3"
+                      style={{ marginTop: "10px", fontSize: "17px" }}
+                      onClick={() => {
+                        // navigate("/ai");
+                        setValue("3");
+                      }}
+                    >
+                     Matrimony.com
+                    </NavSubItem>
+                    <NavSubItem
+                      value="4"
+                      style={{ marginTop: "10px", fontSize: "17px" }}
+                      onClick={() => {
+                        navigate("/matrimony");
+                        setValue("4");
+                      }}
+                    >
+                      Bilt
+                    </NavSubItem>
+                  </NavSubItemGroup>
+                </NavCategory>
+              </div>
+            {/* </div> */}
           </NavDrawerBody>
         )}
 

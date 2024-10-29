@@ -22,6 +22,7 @@ import AIPage from "./pages/AIindentified";
 import AIDetailPage from "./pages/AIindentifieddetails";
 import IssuefixPage from "./pages/IssueFixPage";
 import IssuefixDetails from "./pages/IssueFixDetails";
+import Matrimony from "./pages/MatrimonyPage";
 
 function App() {
   return (
@@ -154,14 +155,24 @@ function App() {
             </CustomLayout>
           }
         />
-
         <Route
-          path="/issuefix"
+          path="/aidetail"
           element={
             <CustomLayout>
               <NavDrawerDefault>
-                <IssuefixPage />
+                <AIDetailPage />
               </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
+
+        <Route
+          path="/matrimony"
+          element={
+            <CustomLayout>
+              <NavDrawerDefaultAdmin>
+                <Matrimony />
+                </NavDrawerDefaultAdmin>
             </CustomLayout>
           }
         />
