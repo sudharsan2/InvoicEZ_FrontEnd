@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { toggleDrawerPosition } from "../Store/refreshSlice";
 import {
   NavCategory,
   NavCategoryItem,
@@ -247,15 +248,17 @@ const NavDrawerDefault = (props) => {
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
   const dropdownId = useId("dropdown");
+
+  const drawerPosition = useSelector((state) => state.refresh.drawerPosition);
   // const styles = useStyles();
   // const[value,setValue] = useState("1")
-  const value = localStorage.getItem("drawerposition");
+  const value = localStorage.getItem("userDrawerPosition");
   console.log("value", { value });
   const someClickHandler = () => {
     navigate("/dashboard");
   };
   const setValue = (value) => {
-    localStorage.setItem("drawerposition", value);
+    dispatch(toggleDrawerPosition(value));
   };
   useEffect(() => {
     const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
@@ -263,7 +266,7 @@ const NavDrawerDefault = (props) => {
     if (storedUsername) {
       setUsername(storedUsername);
     }
-    localStorage.setItem("drawerposition", "1");
+    // localStorage.setItem("userDrawerPosition", "1");
   }, []);
 
   useEffect(() => {
@@ -288,8 +291,9 @@ const NavDrawerDefault = (props) => {
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
       {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
       <NavDrawer
-        defaultSelectedValue={value}
+        defaultSelectedValue={drawerPosition}
         // defaultSelectedCategoryValue="3"
+
         open={isOpen}
         type={type}
         onOpenChange={(_, { open }) => setIsOpen(open)}

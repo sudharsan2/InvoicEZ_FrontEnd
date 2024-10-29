@@ -39,6 +39,8 @@ import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { PopoverSurface, PopoverTrigger } from "@fluentui/react-components";
 import axios from "axios";
 import { Popover } from "@mui/material";
+import { toggleDrawerPosition } from "../Store/refreshSlice";
+import { useDispatch } from "react-redux";
 
 const path = "/aidetail";
 const path1 = "http://localhost:3000/";
@@ -142,6 +144,7 @@ const useStyles = makeStyles({
 
 const AIDetailPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [colourOptions, setColourOptions] = useState([
     { value: "1009", label: "1009" },
@@ -493,6 +496,7 @@ const AIDetailPage = () => {
         message.success("PO successfully Updated");
         setLoad(false);
         navigate(`/approve`);
+        dispatch(toggleDrawerPosition("2"));
       } else {
         message.error(`Operation Unsuccessfully Please try again`);
       }

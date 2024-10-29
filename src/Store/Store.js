@@ -2,7 +2,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import themeSlice from "./ThemeSlice";
 import authSlice from "./authSlice";
-import { refreshReducer, toggleInvoiceUploadRefresh } from "./refreshSlice"; // Import both reducer and action
+import {
+  refreshReducer,
+  toggleInvoiceUploadRefresh,
+  toggleDrawerPosition,
+} from "./refreshSlice"; // Import both reducer and action
 
 const store = configureStore({
   reducer: {
@@ -13,5 +17,8 @@ const store = configureStore({
 });
 
 export const themeActions = themeSlice.actions;
-export const refreshActions = { toggleInvoiceUploadRefresh }; // Export the specific action
+export const refreshActions = {
+  toggleInvoiceUploadRefresh,
+  toggleDrawerPosition,
+}; // Export the specific action
 export default store;
