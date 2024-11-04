@@ -20,15 +20,16 @@ import DocumentPage from "./pages/Document";
 import BlobPage from "./pages/BlobPage";
 import AIPage from "./pages/AIindentified";
 import AIDetailPage from "./pages/AIindentifieddetails";
-import IssuefixPage from "./pages/IssueFixPage";
+import IssueFixPage from "./pages/IssueFixPage"
 import IssuefixDetails from "./pages/IssueFixDetails";
 import Matrimony from "./pages/MatrimonyPage";
+import LoginPage from "./pages/new";
 
 function App() {
   return (
     <Router basename="">
       <Routes>
-        <Route path="" element={<Login />} />
+        <Route path="" element={<LoginPage />} />
         {/* <Route path='dashboard'  element={<CustomLayout><Dashboard/></CustomLayout>}/> */}
         <Route
           path="dashboard"
@@ -182,6 +183,17 @@ function App() {
             <CustomLayout>
               <NavDrawerDefault>
                 <IssuefixDetails />
+              </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
+
+<Route
+          path="/issuefix"
+          element={
+            <CustomLayout>
+              <NavDrawerDefault>
+                <IssueFixPage />
               </NavDrawerDefault>
             </CustomLayout>
           }
