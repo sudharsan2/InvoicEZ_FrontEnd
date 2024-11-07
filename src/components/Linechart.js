@@ -35,7 +35,7 @@ const LineChartPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://10.10.15.15:5719/user/dashboard-supplier-totalamount');
+        const response = await axios.get('http://172.235.21.99:57/user/dashboard-supplier-totalamount');
         const apiData = response.data;
 
         // Transform the API data into a format suitable for the chart

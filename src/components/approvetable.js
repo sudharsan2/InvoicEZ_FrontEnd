@@ -104,7 +104,7 @@ const ApproveTable = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://10.10.15.15:5719/user/one-invoice-list",
+        "http://172.235.21.99:57/user/one-invoice-list",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
@@ -196,7 +196,7 @@ const ApproveTable = () => {
 
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `http://10.10.15.15:5719/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+          `http://172.235.21.99:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
         ),
       );
 
@@ -248,7 +248,7 @@ const ApproveTable = () => {
       // Make API call to delete selected POs
       await Promise.all(
         selectedItemsArray.map((item) =>
-          axios.post(`http://10.10.15.15:5719/user/oracle-payload/${po_id}`),
+          axios.post(`http://172.235.21.99:57/user/oracle-payload/${po_id}`),
         ),
       );
 

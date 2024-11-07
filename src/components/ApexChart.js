@@ -16,7 +16,7 @@ const ApexChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://10.10.15.15:5719/user/statusForApprove');
+        const response = await axios.get('http://172.235.21.99:57/user/statusForApprove');
         const apiData = response.data;
 
         const chartData = [

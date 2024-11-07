@@ -263,7 +263,7 @@ const Matrimony = () => {
  
     const fetchLLMDetails = async () => {
       try {
-          const response = await fetch('http://10.10.15.15:5719/user/llm-detail');
+          const response = await fetch('http://172.235.21.99:57/user/llm-detail');
           const data = await response.json(); // Parse the JSON response
   
          
@@ -286,7 +286,7 @@ const Matrimony = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://10.10.15.15:5719/user/statusForApprove",
+        "http://172.235.21.99:57/user/statusForApprove",
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -303,7 +303,7 @@ const Matrimony = () => {
 
     const fetchAzureDetails = async () => {
       try {
-          const response = await fetch('http://10.10.15.15:5719/user/azure-detail');
+          const response = await fetch('http://172.235.21.99:57/user/azure-detail');
           const data = await response.json();
           if (data) {
               setStorage(data.storage_account_name);
@@ -345,7 +345,7 @@ const handleUpdate = async (field, value) => {
 
       console.log('Payload:', JSON.stringify(body)); // Log payload for verification
 
-      const response = await fetch('http://10.10.15.15:5719/user/llm-detail', {
+      const response = await fetch('http://172.235.21.99:57/user/llm-detail', {
           method: 'PUT',
           headers: {
               'Content-Type': 'application/json',
@@ -403,7 +403,7 @@ const handleAzureUpdate = async (field, value) => {
 
       console.log('Payload:', JSON.stringify(body)); 
 
-      const response = await fetch('http://10.10.15.15:5719/user/azure-detail', {
+      const response = await fetch('http://172.235.21.99:57/user/azure-detail', {
           method: 'PUT',
           headers: {
               'Content-Type': 'application/json',

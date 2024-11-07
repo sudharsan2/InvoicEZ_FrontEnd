@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -15,7 +15,7 @@ import {
   getIsLoadingFromAuth,
   getErrorFromAuth,
 } from "../Store/authSlice";
-
+import { jwtDecode } from "jwt-decode";
 const LoginPage = () => {
   const navigate = useNavigate();
   const isMountedRef = useIsMountedRef();
@@ -28,11 +28,24 @@ const LoginPage = () => {
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
   });
-  // const [formData, setFormData] = useState({
-  //   email: "",
-  //   password: "",
-  // });
+  const[role,setRole]=useState('');
+ 
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    console.log(typeof token);
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        const roleFromToken = decodedToken.role;
+       
 
+        setRole(roleFromToken);
+      } catch (error) {
+        console.error("Invalid token:", error);
+      }
+    }
+  }, []);
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -42,30 +55,27 @@ const LoginPage = () => {
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       setIsLoading(true);
       try {
-        const response = await axios.post("http://10.10.15.15:5719/user/signin", {
+        const response = await axios.post("http://172.235.21.99:57/user/signin", {
           username: values.username,
           password: values.password,
         });
 
-        const { role, username, useremail, empcode } = response.data;
+        const {username } = response.data;
         localStorage.setItem("username", username);
-        localStorage.setItem("role", role);
+        // localStorage.setItem("role", role);
 
         const tokens = response.data.tokens;
         localStorage.setItem("access_token", tokens.access_token);
         console.log("ROLE",role);
         switch (role) {
-          case "ROLE_ADMIN":
+          case "admin":
             navigate("/matrimony");
             break;
-          case "ROLE_RECRUITER":
-            navigate("/kanban-recruit");
-            break;
-          case "ROLE_INTERVIEWER":
-            navigate("/kanban-interviewer");
+          case "invoice manager":
+            navigate("/dashboard");
             break;
           default:
-            navigate("/dashboard");
+            navigate("");
         }
 
         notification.success({
