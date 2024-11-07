@@ -1,6 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
 
 const FunnelChartPage = () => {
   const [data, setData] = useState([]);
@@ -9,19 +17,30 @@ const FunnelChartPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/user/statusForApprove');
+        const response = await axios.get(
+          "http://172.235.21.99:57/user/statusForApprove",
+        );
         const apiData = response.data;
 
         // Convert the API response to a format suitable for the bar chart
         const chartData = [
-          { name: 'PO Number Matching Count', value: apiData.PONumberMatchingCount },
-          { name: 'Supplier Matching Count', value: apiData.SupplierMatchingCount },
-          { name: 'Line Items Matching Count', value: apiData.LineItemsMatchingCount },
+          {
+            name: "PO Number Matching Count",
+            value: apiData.PONumberMatchingCount,
+          },
+          {
+            name: "Supplier Matching Count",
+            value: apiData.SupplierMatchingCount,
+          },
+          {
+            name: "Line Items Matching Count",
+            value: apiData.LineItemsMatchingCount,
+          },
         ];
 
         setData(chartData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -29,8 +48,20 @@ const FunnelChartPage = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "white", borderRadius: "10px", padding: "20px", width: "500px", height: "380px" }}>
-      <h2 style={{ textAlign: "center", fontWeight: "normal", fontSize: "15px" }}>Status for Approval</h2>
+    <div
+      style={{
+        backgroundColor: "white",
+        borderRadius: "10px",
+        padding: "20px",
+        width: "500px",
+        height: "380px",
+      }}
+    >
+      <h2
+        style={{ textAlign: "center", fontWeight: "normal", fontSize: "15px" }}
+      >
+        Status for Approval
+      </h2>
       {data.length > 0 ? (
         <BarChart
           data={data}

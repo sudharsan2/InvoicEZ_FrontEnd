@@ -152,7 +152,7 @@ const ApprovePage = () => {
   // console.log("vendor", setVendor);
 
   const approvePo = async () => {
-    const url = `http://127.0.0.1:8000/user/oracle-payload/${po_id}`;
+    const url = `http://172.235.21.99:57/user/oracle-payload/${po_id}`;
 
     try {
       const response = await axios.post(url, {});
@@ -172,7 +172,7 @@ const ApprovePage = () => {
   };
 
   const deleteInvoice = async () => {
-    const url = `http://127.0.0.1:8000/user/delete-pos/${inv_id}`;
+    const url = `http://172.235.21.99:57/user/delete-pos/${inv_id}`;
 
     try {
       const response = await axios.delete(url);
@@ -210,7 +210,7 @@ const ApprovePage = () => {
     try {
       setLoad(true);
       const response = await axios.post(
-        "http://127.0.0.1:8000/user/po-number",
+        "http://172.235.21.99:57/user/po-number",
         payload,
       );
 
@@ -314,7 +314,7 @@ const ApprovePage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/user/invoices-file/${inv_id}`,
+        `http://172.235.21.99:57/user/invoices-file/${inv_id}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -333,7 +333,7 @@ const ApprovePage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/user/po-details/${Id}/`,
+          `http://172.235.21.99:57/user/po-details/${Id}/`,
         );
         const fetchedItems = response.data;
 
@@ -343,16 +343,14 @@ const ApprovePage = () => {
         console.log("InvoiceId", fetchedItems.invoice_info.id);
 
         const normalizedPoLineItems = fetchedItems.po_lineitems.map(
-          (poItem,index) => {
-            console.log("PO",poItem);
-
+          (poItem, index) => {
+            console.log("PO", poItem);
 
             const matchingInvoiceItems = fetchedItems.invoice_info.items;
 
-        
-        const matchingQuantity = matchingInvoiceItems[index]
-          ? matchingInvoiceItems[index].Quantity
-          : null;
+            const matchingQuantity = matchingInvoiceItems[index]
+              ? matchingInvoiceItems[index].Quantity
+              : null;
             return {
               id: poItem.id,
               item_name: poItem.item_name,

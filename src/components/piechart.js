@@ -36,7 +36,7 @@
 //     const fetchInvoiceData = async () => {
 //       try {
 //         const response = await fetch(
-//           "http://127.0.0.1:8000/user/invoice-status-counts",
+//           "http://172.235.21.99:57/user/invoice-status-counts",
 //         );
 //         const data = await response.json();
 
@@ -89,8 +89,6 @@
 
 // export default InvoiceStatusPieChart;
 
-
-
 import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { Button, makeStyles } from "@fluentui/react-components";
@@ -117,23 +115,20 @@ const useStyles = makeStyles({
   },
 });
 
-
-const COLORS = ["#bbc3f2", "#5476d8"]; 
+const COLORS = ["#bbc3f2", "#5476d8"];
 
 const InvoiceStatusPieChart = () => {
   const styles = useStyles();
   const [invoiceData, setInvoiceData] = useState([]);
 
   useEffect(() => {
-   
     const fetchInvoiceData = async () => {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/user/invoice-status-counts"
+          "http://172.235.21.99:57/user/invoice-status-counts",
         );
         const data = await response.json();
 
-       
         setInvoiceData([
           { status: "InApprove", count: data.approved_count },
           { status: "Pending", count: data.pending_count },
@@ -144,12 +139,14 @@ const InvoiceStatusPieChart = () => {
     };
 
     fetchInvoiceData();
-  }, []);  
+  }, []);
 
   return (
     <div className={styles.root}>
       <div className={styles.chartContainer}>
-        <h2 style={{fontWeight:"normal",fontSize:"15px"}}>Invoice Status</h2>
+        <h2 style={{ fontWeight: "normal", fontSize: "15px" }}>
+          Invoice Status
+        </h2>
         {invoiceData.length > 0 ? (
           <PieChart width={400} height={400}>
             <Pie
