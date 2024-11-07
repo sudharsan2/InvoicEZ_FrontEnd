@@ -159,7 +159,7 @@ const IssuefixDetails = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://10.10.15.15:5719/user/invoices-update/${invoiceNo}/`,
+          `http://172.235.21.99:57/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
 
@@ -201,7 +201,7 @@ const IssuefixDetails = () => {
 
   const handleSubmit = async () => {
     // Replace with your API endpoint
-    const apiUrl = "http://10.10.15.15:5719/user/po-number";
+    const apiUrl = "http://172.235.21.99:57/user/po-number";
 
     try {
       const response = await fetch(apiUrl, {
@@ -240,7 +240,7 @@ const IssuefixDetails = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://10.10.15.15:5719/user/invoices-update/${invoiceNo}/`,
+          `http://172.235.21.99:57/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
         setFormData({
@@ -355,7 +355,7 @@ const IssuefixDetails = () => {
 
     try {
       const response = await fetch(
-        `http://10.10.15.15:5719/user/invoices-update/${invoiceNo}/`,
+        `http://172.235.21.99:57/user/invoices-update/${invoiceNo}/`,
         {
           method: "PUT",
           headers: {
@@ -415,7 +415,7 @@ const IssuefixDetails = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://10.10.15.15:5719/user/invoices-file/${invoiceNo}`,
+        `http://172.235.21.99:57/user/invoices-file/${invoiceNo}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");

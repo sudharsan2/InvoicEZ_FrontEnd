@@ -24,7 +24,7 @@ const TagCounters = () => {
     const fetchSupplierData = async () => {
       try {
         const response = await fetch(
-          "http://10.10.15.15:5719/user/supplier-counts",
+          "http://172.235.21.99:57/user/supplier-counts",
         );
         const data = await response.json();
 
@@ -44,7 +44,7 @@ const TagCounters = () => {
     const fetchSupplierTotalAmounts = async () => {
       try {
         const response = await fetch(
-          "http://10.10.15.15:5719/user/supplier-totalamount",
+          "http://172.235.21.99:57/user/supplier-totalamount",
         );
         const data = await response.json();
 

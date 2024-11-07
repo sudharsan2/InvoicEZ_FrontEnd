@@ -16,7 +16,7 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
       formData.append("file", file);
 
       const response = await axios.post(
-        "http://10.10.15.15:5719/user/invoice-upload",
+        "http://172.235.21.99:57/user/invoice-upload",
         formData,
         {
           headers: {

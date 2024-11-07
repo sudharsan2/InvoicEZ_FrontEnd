@@ -15,7 +15,7 @@ const CalendarComponent = () => {
     const fetchPurchaseOrders = async () => {
       try {
         const response = await fetch(
-          "http://10.10.15.15:5719/user/no-invoice-list",
+          "http://172.235.21.99:57/user/no-invoice-list",
         );
         const data = await response.json();
 

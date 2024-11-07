@@ -46,7 +46,7 @@
 //   const fetchData = async () => {
 //     try {
 //       const response = await fetch(
-//         "http://10.10.15.15:5719/user/statusForApprove",
+//         "http://172.235.21.99:57/user/statusForApprove",
 //       ); // Replace with your API URL
 //       if (!response.ok) {
 //         throw new Error("Network response was not ok");
@@ -149,7 +149,7 @@ const TagCounters = ({ type }) => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://10.10.15.15:5719/user/statusForApprove",
+        "http://172.235.21.99:57/user/statusForApprove",
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
