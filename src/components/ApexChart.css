@@ -1,0 +1,5 @@
+/* Hide CanvasJS watermark */
+.canvasjs-chart-credit {
+    display: none !important;
+  }
+  

@@ -343,23 +343,23 @@ const ApprovePage = () => {
         console.log("InvoiceId", fetchedItems.invoice_info.id);
 
         const normalizedPoLineItems = fetchedItems.po_lineitems.map(
-          (poItem) => {
-            const matchingInvoiceItem = fetchedItems.invoice_info.items.find(
-              (invoiceItem) => invoiceItem.Quantity,
-            );
+          (poItem,index) => {
+            console.log("PO",poItem);
 
-            // console.log("cc", matchingInvoiceItem)
 
+            const matchingInvoiceItems = fetchedItems.invoice_info.items;
+
+        
+        const matchingQuantity = matchingInvoiceItems[index]
+          ? matchingInvoiceItems[index].Quantity
+          : null;
             return {
               id: poItem.id,
               item_name: poItem.item_name,
               item_description: poItem.item_description,
               quantity: poItem.quantity,
-              // Quantity: poItem.Quantity,
               unit_price: poItem.unit_price,
-              Quantity: matchingInvoiceItem
-                ? matchingInvoiceItem.Quantity
-                : null, // Set final_po_quantity if match found
+              Quantity: matchingQuantity,
             };
           },
         );
