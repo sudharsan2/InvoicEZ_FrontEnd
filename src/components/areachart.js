@@ -17,7 +17,7 @@ const AreaChartComponent = ({ supplierNames, supplierTotalAmounts }) => {
   }));
 
   return (
-    <ResponsiveContainer width="100%" height={200}>
+    <ResponsiveContainer width="100%" height={200} style={{backgroundColor:"white",borderRadius:"10px",padding:"15px"}}>
       <AreaChart
         data={data}
         margin={{

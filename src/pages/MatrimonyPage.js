@@ -40,27 +40,14 @@ import { Field} from "@fluentui/react-components";
 const path = "/admin";
 const path1 = "http://localhost:3000/";
 const path3 ="/matrimony"
-// Grid
-const counters = [
-    { label: "Page Processed", value: 1556, color: "green" }, // Cyan
-    { label: "Tokens Spent", value: 2, color: "#d62727" }, // Red
-    { label: "Blob Storage Usage", value: 9, color: "#1f497d" }, // Dark Blue
-    { label: "Direct Approval", value: 4, color: "#d21994" }, // Magenta
-   
-  ];
-  const values = [
-    { label: "User", value: "matrimony.com", color: "#00bfbf" }, // Cyan
-    { label: "Invoice Processed", value: 1045, color: "#d62727" }, // Red
-   
-   
-  ];
  
   const containerStyle = {
     width: "100%",
     display: "flex",
-    justifyContent: "space-around",
+    justifyContent: "flex-start",
     padding: "8px",
-    marginLeft:"-8em"
+    gap:"6em"
+    
   };
   const containerStyle2 = {
    
@@ -69,7 +56,6 @@ const counters = [
     justifyContent: "flex-start",
     padding: "8px",
     gap:"9em",
-    marginLeft:"0.8em",
     marginBottom:"1em"
  
   };
@@ -123,15 +109,16 @@ const counters = [
       },
       inputWithIcon: {
         backgroundColor: "#e6e6e6",
-        paddingRight: "30px", // Space for the icon inside the input
+        paddingRight: "30px", 
         flex: 1,
       },
       icon: {
-        position: "absolute",
-        marginLeft: "19.5em", // Positioning the icon inside the input
+        position: "relative",
+        marginLeft: "-2em", 
         cursor: "pointer",
         color: "#555",
-        marginTop:"10px"
+        marginTop:"10px",
+        gap:"10px"
       },
  
     header: {
@@ -210,9 +197,28 @@ const counters = [
   });
 const Matrimony = () => {
    
+  const[token,setToken]=useState('');
+  const[page,setPage]=useState(''); 
+  const[invoice,setInvoice]=useState('');
+  const[directapprove,setDirectApprove]=useState('');
+  const[blob,setBlob]=useState('');
+  const counters = [
+    { label: "Page Processed", value: page, color: "green" }, 
+    { label: "Tokens Spent", value: token, color: "#d62727" }, 
+    { label: "Blob Storage Usage", value: blob||"0", color: "#1f497d" }, 
+    { label: "Direct Approval", value: directapprove, color: "#d21994" }, 
    
- 
- 
+  ];
+  const values = [
+    { label: "User", value: <span style={{ color: "#d62727" }}>matrimony.com</span>, color: "#00bfbf" }, // Cyan
+    { label: "Invoice Processed", value: invoice, color: "violet" }, // Red
+   
+   
+  ];
+
+  
+  
+    
     const [selectedtab, setSelectedTab] = React.useState("tab1");
     const handleTabSelect2 = (event, data) => {
         // console.log({"currentmonth":currentMonthEmployees})
@@ -242,7 +248,7 @@ const Matrimony = () => {
     const [storage,setStorage] = useState('');
     const [container,setContainer] = useState('');
     const [key ,setKey] = useState('');
-    const [connnection,setConnection] = useState('');
+    const [connection,setConnection] = useState('');
     const [loading, setLoading] = useState(true);
    
     const inputId = "input"; // Define your input id if needed
@@ -264,6 +270,7 @@ const Matrimony = () => {
           if (data && data.llm_apikey && data.llm_model) {
               setApiKey(data.llm_apikey);
               setModel(data.llm_model);
+              setToken(data.token_spent);
           }
   
           console.log("LLM API Key:", data.llm_apikey);
@@ -276,6 +283,23 @@ const Matrimony = () => {
       }
   };
   
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "http://10.10.15.15:5719/user/statusForApprove",
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const jsonData = await response.json();
+
+      setDirectApprove(jsonData["TodoCount"]);
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     const fetchAzureDetails = async () => {
       try {
@@ -286,8 +310,12 @@ const Matrimony = () => {
               setContainer(data.container_name);
               setKey(data.azure_key);
               setConnection(data.connection_string);
+              setPage(data.pages_processed);
+              setInvoice(data.invoice_processed);
+              setBlob(data.blob_storage_usage);
           }
           console.log("sdfghj-------",data.storage_account_name);
+          console.log("Invoice process",data.invoice_processed)
       } catch (error) {
           console.error('Error fetching LLM details:', error);
           // console.log("sdfghj-------",data[0].llm_apikey);
@@ -364,7 +392,7 @@ const handleAzureUpdate = async (field, value) => {
      
       const body = {
           azure_key: key,           
-          connection_string: connnection, 
+          connection_string: connection, 
           container_name: container, 
           storage_account_name: storage,
             
@@ -407,11 +435,41 @@ const handleAzureUpdate = async (field, value) => {
     useEffect(() => {
         fetchLLMDetails();
         fetchAzureDetails(); 
+        fetchData();
     }, []);
- 
- 
+    const [isHidden, setIsHidden] = useState(true);
+    const [isModelHidden, setIsModelHidden] = useState(true); 
+    const [isStorage,isSetStorage]=useState(true);
+    const [isKey,isSetKey]=useState(true);
+    const [isContainer,isSetContainer]=useState(true);
+    const [isConnection,isSetConnection]=useState(true);
+
+    const handleToggleVisibility = () => {
+      setIsHidden(!isHidden);
+      
+    };
+    const handleToggleModelVisibility = () => {
+      setIsModelHidden(!isModelHidden);
+    };
+
+    const handleToggleStorageVisiblity = ()=>{
+      isSetStorage(!isStorage);
+    }
+
+    const handleToggleContainerVisiblity = ()=>{
+      isSetContainer(!isContainer);
+    }
+
+    const handleToggleConnectionVisiblity = ()=>{
+      isSetConnection(!isConnection);
+    }
+
+    const handleToggleKeyVisiblity = ()=>{
+      isSetKey(!isKey);
+    }
+  
   return (
-    <div>
+    <div style={{height: "91vh", overflowY: "scroll"}}>
         {/* First Part */}
             <div>
                 <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
@@ -432,15 +490,6 @@ const handleAzureUpdate = async (field, value) => {
  
       </div>
       <div style={{display:"flex",flexDirection:"column"}}>
-      {/* <Field label="Select a date"> */}
-      {/* <DatePicker
-        allowTextInput
-        placeholder="Select a date..."
-        className={styles.control}
-      /> */}
-      {/* ----------------------- */}
-      {/* <div>Selected date: {selectedDate ? selectedDate.toDateString() : "Not set"}</div>
-      <div>Selected range: {dateRangeString}</div> */}
       <Calendar
         dateRangeType={DateRangeType.Month}
         showGoToToday
@@ -448,6 +497,7 @@ const handleAzureUpdate = async (field, value) => {
         isDayPickerVisible={false}
         onSelectDate={onSelectDate}
         value={selectedDate}
+        
        
       />
     {/* </Field> */}
@@ -461,7 +511,7 @@ const handleAzureUpdate = async (field, value) => {
       <div style={{ display: "flex", justifyContent: "flexStart", padding: "1px" ,marginTop:"-15em"}}>
         <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Usage for Oct's 2024</h3>
       </div>
-      <div>
+      <div style={{display:"flex",flexDirection:"column",justifyContent:"flex-start",marginLeft:"1em"}}>
         {/* First Tag counter */}
       <div style={containerStyle2}>
         {values.map((item, index) => (
@@ -528,20 +578,7 @@ const handleAzureUpdate = async (field, value) => {
               >
                 Cloud
               </Tab>
-              {/* <Tab
-              value="tab3"
-              className={themestate ? "tab dark drawer" : "tab"}
-              style={{ border: "1px solid transparent" }}
-            >
-              PO
-            </Tab>
-            <Tab
-              value="tab4"
-              className={themestate ? "tab dark drawer" : "tab"}
-              style={{ border: "1px solid transparent" }}
-            >
-              Supplier
-            </Tab> */}
+             
               <div
                 style={{
                   display: "flex",
@@ -568,16 +605,20 @@ const handleAzureUpdate = async (field, value) => {
                     <div style={{ marginLeft: "1.5em" }}>
                         <h3 style={{ fontSize: "20px", fontWeight: "Normal", fontFamily: "Segoe UI" }}>API Key</h3>
                         <div className={styles.input}>
-                            <Input
-                                id={inputId}
-                                value={apiKey} // Use fetched API Key
-                                onChange={(e) => setApiKey(e.target.value)} 
-                                onBlur={(e) => handleUpdate('apiKey', e.target.value)}
-                                className={styles.inputWithIcon}
-                            />
-                            <FaRegCopy className={styles.icon} onClick={handleCopy} />
-                            <Button style={{ marginLeft: "10px", color: "gray", borderColor: "black" }}>Hide</Button>
-                        </div>
+                    <Input
+                    id="inputId"
+                    value={isHidden ? '•'.repeat(apiKey.length) : apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                    onBlur={(e) => handleUpdate('apiKey', e.target.value)}
+                    className={styles.inputWithIcon}
+                  />
+                  <FaRegCopy className={styles.icon} onClick={handleCopy} />
+                  <Button
+                    style={{ marginLeft: '20px', color: 'gray', borderColor: 'black' }}
+                    onClick={handleToggleVisibility}
+                  >
+                    {isHidden ? 'Show' : 'Hide'}
+                  </Button>                      </div>
                     </div>
  
                     {/* Model */}
@@ -586,13 +627,19 @@ const handleAzureUpdate = async (field, value) => {
                         <div className={styles.input}>
                             <Input
                                 id={inputId}
-                                value={model} 
+                                value={isModelHidden ? '•'.repeat(model.length) : model}
+                                // value={model} 
                                 onChange={(e) => setModel(e.target.value)} 
                                 onBlur={(e) => handleUpdate('model', e.target.value)} 
                                 className={styles.inputWithIcon}
                             />
                             <FaRegCopy className={styles.icon} onClick={handleCopy} />
-                            <Button style={{ marginLeft: "10px", color: "gray", borderColor: "black" }}>Hide</Button>
+                            <Button
+                    style={{ marginLeft: '20px', color: 'gray', borderColor: 'black' }}
+                    onClick={handleToggleModelVisibility}
+                  >
+                    {isModelHidden ? 'Show' : 'Hide'}
+                  </Button>
                         </div>
                     </div>
                 </div>
@@ -613,15 +660,20 @@ const handleAzureUpdate = async (field, value) => {
   <div style={{ flex: "1 1 45%", margin: "10px", }}>
     <h2 style={{fontWeight:"normal",fontFamily:"Segoe UI",fontSize:"20px"}}>Storage Account Name</h2>
     <div className={styles.input}>
-      <Input
-        id={inputId}
-        value={storage} 
-        onChange={(e) => setStorage(e.target.value)}
-        onBlur={(e) => handleAzureUpdate('storage', e.target.value)}
-        className={styles.inputWithIcon}
-      />
-      <FaRegCopy className={styles.icon} onClick={handleCopy} />
-      <Button style={{marginLeft:"10px",color:"gray",borderColor:"black"}}>Hide</Button>
+    <Input
+  id={inputId}
+  value={isStorage ? '•'.repeat(storage.length) : storage}
+  onChange={(e) => setStorage(e.target.value)}
+  onBlur={(e) => handleAzureUpdate('storage', e.target.value)}
+  className={styles.inputWithIcon}
+/>
+<FaRegCopy className={styles.icon} onClick={handleCopy} />
+<Button
+  style={{ marginLeft: '20px', color: 'gray', borderColor: 'black' }}
+  onClick={handleToggleStorageVisiblity}
+>
+  {isStorage ? 'Show' : 'Hide'}
+</Button>
     </div>
   </div>
  
@@ -631,13 +683,14 @@ const handleAzureUpdate = async (field, value) => {
     <div className={styles.input}>
       <Input
         id={inputId}
-        value={container} 
+        // value={container} 
+        value ={isContainer?'•'.repeat(container.length) : container}
         onChange={(e) => setContainer(e.target.value)}
         onBlur={(e) => handleAzureUpdate('container', e.target.value)}
         className={styles.inputWithIcon}
       />
       <FaRegCopy className={styles.icon} onClick={handleCopy} />
-      <Button style={{marginLeft:"10px",color:"gray",borderColor:"black"}}>Hide</Button>
+      <Button style={{marginLeft:"20px",color:"gray",borderColor:"black"}} onClick={handleToggleContainerVisiblity}>{isContainer ? 'Show' : 'Hide'}</Button>
     </div>
   </div>
  
@@ -645,15 +698,21 @@ const handleAzureUpdate = async (field, value) => {
   <div style={{ flex: "1 1 45%", marginLeft: "10px", marginTop: "-20px"}}>
     <h2 style={{fontWeight:"normal",fontFamily:"Segoe UI",fontSize:"20px"}}>Key</h2>
     <div className={styles.input}>
-      <Input
-        id={inputId}
-        value={key} 
-        onChange={(e) => setKey(e.target.value)}
-        onBlur={(e) => handleAzureUpdate('key', e.target.value)}
-        className={styles.inputWithIcon}
-      />
-      <FaRegCopy className={styles.icon} onClick={handleCopy} />
-      <Button style={{marginLeft:"10px",color:"gray",borderColor:"black"}}>Hide</Button>
+  <Input
+  id={inputId}
+  value={isKey ? '•'.repeat(key.length) : key}
+  onChange={(e) => setKey(e.target.value)}
+  onBlur={(e) => handleAzureUpdate('key', e.target.value)}
+  className={styles.inputWithIcon}
+/>
+<FaRegCopy className={styles.icon} onClick={handleCopy} />
+<Button
+  style={{ marginLeft: "20px", color: "gray", borderColor: "black" }}
+  onClick={handleToggleKeyVisiblity}
+>
+  {isKey ? 'Show' : 'Hide'}
+</Button>
+
     </div>
   </div>
  
@@ -661,21 +720,25 @@ const handleAzureUpdate = async (field, value) => {
   <div style={{ flex: "1 1 45%", marginLeft: "10px", marginTop: "-20px", }}>
     <h2 style={{fontWeight:"normal",fontFamily:"Segoe UI",fontSize:"20px"}}>Connection String</h2>
     <div className={styles.input}>
-      <Input
-        id={inputId}
-        value={connnection}
-        onChange={(e) => setConnection(e.target.value)}
-        onBlur={(e) => handleAzureUpdate('connection', e.target.value)}
-        className={styles.inputWithIcon}
-      />
-      <FaRegCopy className={styles.icon} onClick={handleCopy} />
-      <Button style={{marginLeft:"10px",color:"gray",borderColor:"black"}}>Hide</Button>
+    <Input
+  id={inputId}
+  value={isConnection ? '•'.repeat(connection.length) : connection}
+  onChange={(e) => setConnection(e.target.value)}
+  onBlur={(e) => handleAzureUpdate('connection', e.target.value)}
+  className={styles.inputWithIcon}
+/>
+<FaRegCopy className={styles.icon} onClick={handleCopy} />
+<Button
+  style={{ marginLeft: "20px", color: "gray", borderColor: "black" }}
+  onClick={handleToggleConnectionVisiblity}
+>
+  {isConnection ? 'Show' : 'Hide'}
+</Button>
     </div>
   </div>
 </div>
- 
-          )}
-                </div>
+)}
+</div>
            
 {/* Tabs end */}
         </div>

@@ -53,10 +53,10 @@ const LoginPage = () => {
 
         const tokens = response.data.tokens;
         localStorage.setItem("access_token", tokens.access_token);
-
+        console.log("ROLE",role);
         switch (role) {
           case "ROLE_ADMIN":
-            navigate("/admin-page");
+            navigate("/matrimony");
             break;
           case "ROLE_RECRUITER":
             navigate("/kanban-recruit");
