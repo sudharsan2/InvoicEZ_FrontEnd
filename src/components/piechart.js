@@ -34,7 +34,7 @@ const InvoiceStatusPieChart = () => {
     const fetchInvoiceData = async () => {
       try {
         const response = await fetch(
-          "http://172.235.21.99:57/user/invoice-status-counts",
+          "http://127.0.0.1:8000/user/invoice-status-counts",
         );
         const data = await response.json();
 

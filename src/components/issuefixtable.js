@@ -76,7 +76,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
   );
 
   // useEffect(() => {
-  //   fetch("http://172.235.21.99:57/user/no-invoice-list")
+  //   fetch("http://127.0.0.1:8000/user/no-invoice-list")
   //     .then((response) => response.json())
   //     .then((data) => {
 
@@ -103,7 +103,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
   // },  [refreshKey]);
 
   const fetchData = () => {
-    fetch("http://172.235.21.99:57/user/no-invoice-list")
+    fetch("http://127.0.0.1:8000/user/no-invoice-list")
       .then((response) => response.json())
       .then((data) => {
         const formattedItems = data.map((invoice) => ({
@@ -145,7 +145,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
         console.log(`Deleting item with ID: ${id}`);
         console.log("//", filteredItems[id].invid);
         return fetch(
-          `http://172.235.21.99:57/user/delete-invoice/${filteredItems[id].invid}`,
+          `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[id].invid}`,
           {
             method: "DELETE",
           },
