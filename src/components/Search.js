@@ -9,7 +9,7 @@ const Search = ({ label = "", onSearchChange, ...props }) => {
         justifyContent: "flex-end",
         marginLeft: "-2em",
         marginTop: "2em",
-        marginBottom: "2em",
+        marginBottom: "1em",
         padding: "20px",
         textDecoration:"none"
 
