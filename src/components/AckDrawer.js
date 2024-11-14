@@ -1,46 +1,47 @@
-
-
-
-
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   DrawerBody,
   DrawerHeader,
   DrawerHeaderTitle,
   Drawer,
   makeStyles,
+  tokens,
+  useId,
   useRestoreFocusSource,
   useRestoreFocusTarget,
 } from "@fluentui/react-components";
-import QuotationDrawerPage from "../pages/QuotationDrawerPage";
+import AckPage from "../pages/AckPage";
 
 const useStyles = makeStyles({
   root: {
+   
     overflow: "hidden",
     display: "flex",
     height: "480px",
+    backgroundColor: "#fff",
   },
   drawer: {
-    width: "80vw",
+    width: "80vw", 
     maxWidth: "80vw",
     overflowY: "auto",
-    zIndex: 9999,
-    backgroundColor: "#fff",
   },
   drawerContent: {
     width: "100%",
-    marginLeft: "2em",
-    marginTop: "1em",
+    marginLeft:"2em" ,
+    marginTop:"1em"
   },
 });
 
-const QuotationDrawer = ({data,userId }) => {
+const AckDrawer = ({data}) => {
   const styles = useStyles();
-  const [type, setType] = useState("overlay");
   const [isOpen, setIsOpen] = useState(true);
+  const [type, setType] = useState("overlay");
+
   const restoreFocusTargetAttributes = useRestoreFocusTarget();
   const restoreFocusSourceAttributes = useRestoreFocusSource();
-  
+  useEffect(()=>{
+  console.log("Data",data);
+  },[data])
   return (
     <div className={styles.root}>
       <Drawer
@@ -53,11 +54,11 @@ const QuotationDrawer = ({data,userId }) => {
         className={styles.drawer}
       >
         <div className={styles.drawerContent}>
-          <QuotationDrawerPage userId={userId} data={data}/>
+          <AckPage data={data}/>
         </div>
       </Drawer>
     </div>
   );
 };
 
-export default QuotationDrawer;
+export default AckDrawer;

@@ -74,8 +74,9 @@ const LoginPage = () => {
           case "invoice manager":
             navigate("/dashboard");
             break;
+            case "supplier":
           default:
-            navigate("");
+            navigate("/supplier");
         }
 
         notification.success({

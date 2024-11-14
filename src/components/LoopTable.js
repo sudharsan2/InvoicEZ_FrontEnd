@@ -122,7 +122,7 @@ const LoopTable = () => {
       const response = await axios.post("http://172.235.21.99:57/user/club-pr", {
         org_id: 821,
         from_date: "11/09/24",
-        to_date: "11/09/24",
+        to_date: "11/09/25",
       });
    
       const data = response.data.details;

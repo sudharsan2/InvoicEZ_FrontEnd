@@ -77,7 +77,7 @@ const ExampleContent = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
-
+  const [id,setId] = useState("");
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     console.log(storedUsername);
@@ -94,9 +94,12 @@ const ExampleContent = () => {
         console.log(decodedToken);
         const emailFromToken = decodedToken.email;
         const empIdFromToken = decodedToken.empId;
+        const userid = decodedToken.user_id;
 
         setEmail(emailFromToken);
         setEmpId(empIdFromToken);
+        setId(userid);
+        console.log("IDD",userid);
       } catch (error) {
         console.error("Invalid token:", error);
       }

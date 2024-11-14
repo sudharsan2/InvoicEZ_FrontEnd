@@ -7,6 +7,7 @@ const initialState = {
   dropdown:false,
   suppliers:null,
   conformedSupplier:null,
+  freightterm:null
 };
 
 const refreshSlice = createSlice({
@@ -33,11 +34,14 @@ const refreshSlice = createSlice({
     conformedSupplierValue(state,action){
       state.conformedSupplier = action.payload;
    },
+   handleFreightTerm(state,action){
+    state.freightterm = action.payload;
+   }
     
   },
 });
 
-export const { toggleInvoiceUploadRefresh, toggleDrawerPosition,dropDownSubmit,dropDownValue, conformedSupplierValue } =
+export const { toggleInvoiceUploadRefresh, toggleDrawerPosition,dropDownSubmit,dropDownValue, conformedSupplierValue,handleFreightTerm } =
   refreshSlice.actions;
 export const refreshReducer = refreshSlice.reducer; // Export as refreshReducer
 

@@ -43,6 +43,7 @@ import ASNDrawerPage from "./pages/ASNDrawerPage";
 import ASNStatus from "./pages/ASNStatus";
 import ASNShipmentDrawer from "./components/ASNShipmentDrawer";
 import ASNShipmentDrawerPage from "./pages/ASNShipmentDrawerPage";
+import AckPage from "./pages/AckPage";
 function App() {
   return (
     <Router basename="">
@@ -381,6 +382,17 @@ function App() {
             <CustomLayoutLoop>
               <NavDrawerQuotationLoop>
                 <ASNShipmentDrawerPage/>
+              </NavDrawerQuotationLoop>
+            </CustomLayoutLoop>
+          }
+        />
+
+<Route
+          path="/ack"
+          element={
+            <CustomLayoutLoop>
+              <NavDrawerQuotationLoop>
+                <AckPage/>
               </NavDrawerQuotationLoop>
             </CustomLayoutLoop>
           }

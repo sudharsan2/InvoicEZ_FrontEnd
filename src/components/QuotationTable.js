@@ -667,13 +667,14 @@ import {
 } from "@fluentui/react-components";
 import { makeStyles, TabList, Tab, Divider, Button, Popover, PopoverSurface, PopoverTrigger } from "@fluentui/react-components";
 import Search from "./Search";
-import TodoDrawer from "./TodoDrawer";
+import QuotationDrawer from "./QuotationDrawer";
 import RFQDrawer from "./RFQDrawer";
 import CompareDrawer from "./CompareDrawer";
 import DatePickerComponent from "./DatePicker";
 import DropdownComponent from "../components/DropDown";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import AckDrawer from "./AckDrawer";
 const useStyles = makeStyles({
   statusBullet: {
     display: "inline-block",
@@ -727,14 +728,14 @@ const columns = [
   createTableColumn({
     columnId: "description",
     renderHeaderCell: () => "Description",
-    renderCell: (item) => <TableCellLayout>{item.description}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.lines[0].description}</TableCellLayout>,
   }),
   // 
   
   createTableColumn({
     columnId: "status",
     renderHeaderCell: () => "Quantity",
-    renderCell: (item) => <TableCellLayout>{item.status}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.lines[0].distributions[0].quantity}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "need_by_date",
@@ -742,24 +743,24 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.lines[0].need_by_date}</TableCellLayout>,
   }),
   createTableColumn({
+    columnId: "status",
+    renderHeaderCell: () => "Status",
+    renderCell: (item) => <TableCellLayout>{item.status}</TableCellLayout>,
+  }),
+  createTableColumn({
     columnId: "suppliersReplied",
     renderHeaderCell: () => "Received Date",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].supplier_ids}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.lines[0].last_update_date}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "suppliersReplied",
     renderHeaderCell: () => "UOM",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].supplier_ids}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "suppliersReplied",
-    renderHeaderCell: () => "Item",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].supplier_ids}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.lines[0].uom}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "suppliersReplied",
     renderHeaderCell: () => "Line",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].supplier_ids}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.lines[0].line_number}</TableCellLayout>,
   }),
 ];
 
@@ -773,15 +774,24 @@ const QuotationTable = () => {
   const[userId,setUserID] = useState('');
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
-  useEffect(() => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  
+  
+  // Toggle Popover
+  const togglePopover = () => setPopoverOpen(!popoverOpen);
+
+  // Fetch data
+  const fetchData = async () => {
+    let userId=null;
     const token = localStorage.getItem("access_token");
     console.log(typeof token);
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
-        const user_Id = decodedToken.user_id;
-        console.log("ID",user_Id);
+         userId = decodedToken.user_id;
+         
+        console.log("ID",userId);
         // const empIdFromToken = decodedToken.empId;
      
         
@@ -789,21 +799,12 @@ const QuotationTable = () => {
         console.error("Invalid token:", error);
       }
     }
-  }, []);
-  
-  // Toggle Popover
-  const togglePopover = () => setPopoverOpen(!popoverOpen);
-
-  // Fetch data
-  const fetchData = async () => {
     try {
-      const response = await axios.fetch("http://172.235.21.99:57/user/pr-details/supplier/", {
-        org_id: 821,
-        from_date: "11/09/24",
-        to_date: "11/09/24",
-      });
+      const response = await axios.get(`http://172.235.21.99:57/user/pr-details/supplier/${userId}/`);
+        
+      
    
-      const data = response.data.details;
+      const data = response.data;
       console.log("Status", data[0]?.status);
       // console.log("Data",data);
       
@@ -831,14 +832,18 @@ const QuotationTable = () => {
       });
 
       const data1 = mappedItems.map((item) => {
-        let status = "Todo";  // Default status
+        let status = "";  // Default status
     
         // Check if supplier_ids exists and has a length greater than 0
-        if ("supplier_ids" in item.lines[0]) {
-            status = "RFQ";
-            if(item.quotations.length>0)
+        if ("quotations" in item) {
+            
+            if(item.quotations.length==1)
             {
-              status="Compare"
+              status="To be Acknowledged";
+            }
+            else if(item.quotations.length==0 || item.quotations.length>1)
+            {
+              status="quotation";
             }
         } 
        
@@ -881,11 +886,13 @@ const QuotationTable = () => {
   });
 
   const handleRowClick = (item) => {
+       
     setSelectedRowData(item);
     // setSelectedStatus(item.status);
     console.log("status",item.status)
      console.log("items",item)
   };
+ 
  
   return (
     <div>
@@ -953,9 +960,9 @@ const QuotationTable = () => {
           </DataGridBody>
         </DataGrid>
       </div>
-      {selectedRowData && selectedRowData.status === "Todo" && <TodoDrawer data={selectedRowData} />}
-      {selectedRowData && selectedRowData.status === "RFQ" && <RFQDrawer data={selectedRowData}/>}
-      {selectedRowData && selectedRowData.status === "Compare" && <CompareDrawer data={selectedRowData}/>}
+      {selectedRowData && selectedRowData.status === "quotation" && <QuotationDrawer data={selectedRowData} userId={userId}/>}
+      {selectedRowData && selectedRowData.status === "To be Acknowledged" && <AckDrawer data={selectedRowData} />}
+      {/* <QuotationDrawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} /> */}
     </div>
   );
 };
