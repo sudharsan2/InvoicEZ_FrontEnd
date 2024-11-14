@@ -55,15 +55,14 @@ import {
   PremiumPerson24Regular,
   DocumentTableSearch24Filled,
   DocumentTableSearch24Regular,
-  VehicleTruckProfile24Regular  ,
-  VehicleTruckProfile24Filled ,
-  Gavel24Filled,
   Navigation24Filled,
   Navigation24Regular,
+  Gavel24Filled ,
   Gavel24Regular,
+  VehicleTruckProfile24Regular  ,
+  VehicleTruckProfile24Filled ,
 } from "@fluentui/react-icons";
-import {Apps28Regular} from "@fluentui/react-icons"
-import { PiTrolleyBold } from "react-icons/pi";
+import {Apps28Regular,Timer24Filled,Timer24Regular} from "@fluentui/react-icons"
 import {
   Button,
   Caption1Strong,
@@ -81,7 +80,8 @@ import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { PiTrolleyFill } from "react-icons/pi";
 import { FaTruck } from "react-icons/fa";
-
+import { RiTimeLine } from "react-icons/ri";
+import { RiTimeFill } from "react-icons/ri";
 const useStyles = makeStyles({
   root: {
     // ...shorthands.border("2px", "solid", "#ccc"),
@@ -161,9 +161,6 @@ const useStyles = makeStyles({
 
 const Person = bundleIcon(PersonFilled, PersonRegular);
 const Dashboard = bundleIcon(Board24Filled, Board24Regular);
-const Truck = bundleIcon(VehicleTruckProfile24Filled ,VehicleTruckProfile24Regular )
-const Asn = bundleIcon (Gavel24Filled,Gavel24Regular)
-const Trolly = bundleIcon(PiTrolleyFill,PiTrolleyBold);
 const Announcements = bundleIcon(MegaphoneLoud20Filled, MegaphoneLoud20Regular);
 const EmployeeSpotlight = bundleIcon(
   PersonLightbulb20Filled,
@@ -174,6 +171,7 @@ const LayerDiagonalPersonRegular = bundleIcon(
   LayerDiagonalPerson24Filled,
   LayerDiagonalPerson24Regular,
 );
+const Truck = bundleIcon(VehicleTruckProfile24Filled ,VehicleTruckProfile24Regular )
 const PersonStarRegular = bundleIcon(PersonStar24Filled, PersonStar24Regular);
 const PremiumPersonRegular = bundleIcon(
   PremiumPerson24Filled,
@@ -196,14 +194,15 @@ const HealthPlans = bundleIcon(HeartPulse20Filled, HeartPulse20Regular);
 const TrainingPrograms = bundleIcon(BoxMultiple20Filled, BoxMultiple20Regular);
 const CareerDevelopment = bundleIcon(PeopleStar20Filled, PeopleStar20Regular);
 const Analytics = bundleIcon(DataArea20Filled, DataArea20Regular);
-
+const Asn = bundleIcon (Gavel24Filled,Gavel24Regular)
 const Reports = bundleIcon(
   DocumentBulletListMultiple20Filled,
   DocumentBulletListMultiple20Regular,
 );
 const Settings = bundleIcon(Settings20Filled, Settings20Regular);
+const Status = bundleIcon(Timer24Filled,Timer24Regular);
 
-const NavDrawerDefaultLoop = (props) => {
+const NavDrawerQuotationLoop = (props) => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -429,13 +428,13 @@ const NavDrawerDefaultLoop = (props) => {
                   fontWeight: "normal",
                 }}
               >
-                Buyer
+                Supplier
               </h4>
             </div>
             <NavItem
                 target="_blank"
                 icon={
-                  <Dashboard
+                  <Asn
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark }
@@ -450,7 +449,7 @@ const NavDrawerDefaultLoop = (props) => {
                 }
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
-                  navigate("/inloop");
+                  navigate("/supplier");
                   setValue("1");
                 }}
               >
@@ -461,30 +460,29 @@ const NavDrawerDefaultLoop = (props) => {
                       : { marginTop: "2px", color: lighttheme.fontcolorlight }
                   }
                 >
-                  Purchase requistion
+                  Quotation
                 </div>
               </NavItem>
-
+            
               <NavItem
                 target="_blank"
                 icon={
-                  <Trolly 
-                    style={{
-        fontSize: "24px", 
-        color: themestate
-          ? darktheme.fontcolordark
-          : lighttheme.fontcolorlight,
-      }}
+                  <Truck
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
                   />
                 }
-                
+                // onClick={someClickHandler}
                 value="2"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
                 }
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
-                  navigate("/po");
+                  navigate("/asncreate");
                   setValue("2");
                 }}
               >
@@ -494,18 +492,14 @@ const NavDrawerDefaultLoop = (props) => {
                       ? { marginTop: "2px", color: darktheme.fontcolordark }
                       : { marginTop: "2px", color: lighttheme.fontcolorlight }
                   }
-                  
                 >
-                  Purchase Order
-                  
+                  ASN Creation
                 </div>
               </NavItem>
-
-
               <NavItem
                 target="_blank"
                 icon={
-                  <Truck
+                  <Status
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark }
@@ -519,9 +513,8 @@ const NavDrawerDefaultLoop = (props) => {
                   themestate ? styles.navItemdark : styles.navItemlight
                 }
                 style={{ marginTop: "10px", fontSize: "17px" }}
-                
                 onClick={() => {
-                  navigate("/asn");
+                  navigate("/asnstatus");
                   setValue("3");
                 }}
               >
@@ -532,70 +525,11 @@ const NavDrawerDefaultLoop = (props) => {
                       : { marginTop: "2px", color: lighttheme.fontcolorlight }
                   }
                 >
-                  ASN Status
+                  ASN Shipment Status
                 </div>
               </NavItem>
-            
-                <NavCategory value="4">
-                  <NavCategoryItem
-                    target="_blank"
-                    icon={
-                      <Apps28Regular
-                        style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
-                        }
-                      />
-                    }
-                    // onClick={someClickHandler}
-                    value="4"
-                    className={
-                      themestate ? styles.navItemdark : styles.navItemlight
-                    }
-                    style={{ marginTop: "10px", fontSize: "17px" }}
-                    onClick={() => {
-                      setValue("4");
-                    }}
-                  >
-                    AP Invoice OCR 
-                  </NavCategoryItem>
-                  <NavSubItemGroup>
-                    <NavSubItem
-                      value="5"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        // navigate("/ai");
-                        setValue("5");
-                      }}
-                    >
-                     Approve
-                    </NavSubItem>
-                    <NavSubItem
-                      value="6"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/matrimony");
-                        setValue("6");
-                      }}
-                    >
-                      AI Identified
-                    </NavSubItem>
-
-                    <NavSubItem
-                      value="7"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/matrimony");
-                        setValue("7");
-                      }}
-                    >
-                      Fix
-                    </NavSubItem>
-                  </NavSubItemGroup>
-                </NavCategory>
               </div>
-            {/* </div> */}
+            
           </NavDrawerBody>
         )}
 
@@ -682,4 +616,4 @@ const NavDrawerDefaultLoop = (props) => {
   );
 };
 
-export default NavDrawerDefaultLoop;
+export default NavDrawerQuotationLoop;

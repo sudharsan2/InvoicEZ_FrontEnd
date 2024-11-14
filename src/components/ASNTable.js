@@ -241,14 +241,12 @@ const ASNTable = () => {
     <DataGridRow>
       {({ renderHeaderCell }) => (
         <DataGridHeaderCell
-          style={{
-            maxWidth: "200px", 
-              overflow: "visible",
-              whiteSpace: "normal",
-              wordBreak: "break-word",  
-            textOverflow: "clip", 
-            maxHeight:"300px"
-          }}
+        style={{
+          width: "70%", 
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+          textOverflow: "elipsis", 
+        }}
         >
           {renderHeaderCell()}
         </DataGridHeaderCell>
@@ -260,14 +258,12 @@ const ASNTable = () => {
       <DataGridRow key={rowId}>
         {({ renderCell }) => (
           <DataGridCell
-            style={{
-                maxWidth: "200px", 
-                overflow: "visible",
-                whiteSpace: "normal",
-                wordBreak: "break-word",  
-              textOverflow: "clip", 
-              maxHeight:"300px"
-            }}
+          style={{
+               width: "70%", 
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+            textOverflow: "elipsis", 
+          }}
           >
             {renderCell(item)}
           </DataGridCell>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FolderRegular,
   EditRegular,
@@ -20,6 +20,8 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
+import { useDispatch, useSelector } from "react-redux";
+import { refreshActions } from "../Store/Store";
 
 // Sample data
 const items = [
@@ -35,95 +37,88 @@ const items = [
     Payment: { label: "29 May 2023", timestamp: 1 },
     Supplier: { label: "L1", timestamp: 1 },
   },
-  
-  
 ];
 
 // Column definitions
 const columns = [
   createTableColumn({
-    columnId: "file",
-    compare: (a, b) => a.file.label.localeCompare(b.file.label),
-    renderHeaderCell: () => "Name",
+    columnId: "distribution_number",
+    renderHeaderCell: () => "Distribution Number",
     renderCell: (item) => (
-      <TableCellLayout >{item.file.label}</TableCellLayout>
+      <TableCellLayout>{item.distribution_number}</TableCellLayout>
     ),
   }),
   createTableColumn({
-    columnId: "author",
-    compare: (a, b) => a.author.label.localeCompare(b.author.label),
-    renderHeaderCell: () => "Comments",
+    columnId: "charge_account",
+    renderHeaderCell: () => "Charge Account",
     renderCell: (item) => (
-      <TableCellLayout
-       
-      >
-        {item.author.label}
-      </TableCellLayout>
+      <TableCellLayout>{item.charge_account}</TableCellLayout>
     ),
   }),
   createTableColumn({
-    columnId: "lastUpdated",
-    compare: (a, b) => a.lastUpdated.timestamp - b.lastUpdated.timestamp,
-    renderHeaderCell: () => "Promised Date",
-    renderCell: (item) => item.lastUpdated.label,
-  }),
-  createTableColumn({
-    columnId: "lastUpdate",
-    compare: (a, b) => a.lastUpdate.label.localeCompare(b.lastUpdate.label),
-    renderHeaderCell: () => "Price",
+    columnId: "distribution_amount",
+    renderHeaderCell: () => "Distribution Amount",
     renderCell: (item) => (
-      <TableCellLayout >
-        {item.lastUpdate.label}
-      </TableCellLayout>
+      <TableCellLayout>{item.distribution_amount}</TableCellLayout>
     ),
   }),
   createTableColumn({
-    columnId: "Freight",
-    compare: (a, b) => a.lastUpdate.label.localeCompare(b.lastUpdate.label),
-    renderHeaderCell: () => "Freight Term",
+    columnId: "creation_date",
+    renderHeaderCell: () => "Creation Date",
     renderCell: (item) => (
-      <TableCellLayout>
-        {item.Freight.label}
-      </TableCellLayout>
+      <TableCellLayout>{item.creation_date}</TableCellLayout>
     ),
   }),
   createTableColumn({
-    columnId: "Payment",
-    compare: (a, b) => a.lastUpdate.label.localeCompare(b.lastUpdate.label),
-    renderHeaderCell: () => "Payment Term",
+    columnId: "last_update_date",
+    renderHeaderCell: () => "Last Update",
     renderCell: (item) => (
-      <TableCellLayout >
-        {item.Payment.label}
-      </TableCellLayout>
+      <TableCellLayout>{item.last_update_date}</TableCellLayout>
     ),
   }),
   createTableColumn({
-    columnId: "Supplier",
-    compare: (a, b) => a.lastUpdate.label.localeCompare(b.lastUpdate.label),
-    renderHeaderCell: () => "Supplier Ranking",
+    columnId: "purchase",
+    renderHeaderCell: () => "Purchase",
     renderCell: (item) => (
-      <TableCellLayout >
-        {item.Supplier.label}
-      </TableCellLayout>
+      <TableCellLayout>{item.purchase}</TableCellLayout>
+    ),
+  }),
+  createTableColumn({
+    columnId: "supplier",
+    renderHeaderCell: () => "Supplier",
+    renderCell: (item) => (
+      <TableCellLayout>{item.supplier}</TableCellLayout>
     ),
   }),
 ];
 
 // SupplierTable component
-const SupplierTable = () => {
-  const [selectedRows, setSelectedRows] = useState(new Set([1]));
+const SupplierTable = ({ data }) => {
+  const [selectedRows, setSelectedRows] = useState(new Set());
+  const dispatch = useDispatch();
 
-  const onSelectionChange = (e, data) => {
-    setSelectedRows(data.selectedItems);
+  const onSelectionChange = (e, data1) => {
+    // Update selected rows based on selection
+    const selected = data1.selectedItems;
+    // console.log("Selected row data:", selected);
+    const lastItem = Array.from(data1.selectedItems).pop();
+    setSelectedRows(new Set(selected)); 
+    // You can dispatch the selected data as needed
+    dispatch(refreshActions.conformedSupplierValue(data.quotations[lastItem].supplier));
+    console.log("Selected row data:", data.quotations[lastItem].supplier)
   };
+
+  useEffect(() => {
+    console.log("selected table quotation", data.quotations);
+  }, [data]);
 
   return (
     <DataGrid
-      items={items}
+      items={data.quotations} // Use data.quotations directly
       columns={columns}
-      selectionMode="multiselect"
-      selectedItems={selectedRows}
-      onSelectionChange={onSelectionChange}
+      selectionMode="multiple" // Enable multiple row selection
+      selectedItems={selectedRows} // Bind selected rows
+      onSelectionChange={onSelectionChange} // Handle selection change
       style={{ minWidth: "550px" }}
     >
       <DataGridHeader>

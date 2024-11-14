@@ -23,40 +23,31 @@ const items = [
 
 const columns = [
   createTableColumn({
-    columnId: "file",
-    compare: (a, b) => a.file.label.localeCompare(b.file.label),
+    columnId: "line",
+    // compare: (a, b) => a.file.label.localeCompare(b.file.label),
     renderHeaderCell: () => "Line",
     renderCell: (item) => (
       <TableCellLayout style={{ maxWidth: "100px" }}>
-        {item.file.label}
+        {item.lines[0].line_number}
       </TableCellLayout>
     ),
   }),
   createTableColumn({
-    columnId: "author",
-    compare: (a, b) => a.author.label.localeCompare(b.author.label),
+    columnId: "items",
+    // compare: (a, b) => a.author.label.localeCompare(b.author.label),
     renderHeaderCell: () => "Item",
     renderCell: (item) => (
       <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.author.label}
+        {item.lines[0].description}
       </TableCellLayout>
     ),
   }),
   createTableColumn({
-    columnId: "lastUpdated",
-    renderHeaderCell: () => "Description",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "200px" }}>
-        {item.lastUpdated.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "lastUpdate",
+    columnId: "uom",
     renderHeaderCell: () => "UOM",
     renderCell: (item) => (
       <TableCellLayout style={{ maxWidth: "100px" }}>
-        {item.lastUpdate.label}
+        {item.lines[0].uom}
       </TableCellLayout>
     ),
   }),
@@ -65,22 +56,33 @@ const columns = [
     renderHeaderCell: () => "Quantity",
     renderCell: (item) => (
       <TableCellLayout style={{ maxWidth: "100px" }}>
-        {item.Quantity.label}
+        {item.lines[0].quantity}
       </TableCellLayout>
     ),
   }),
+
   createTableColumn({
-    columnId: "NeedByDate",
+    columnId: "price",
+    renderHeaderCell: () => "Price",
+    renderCell: (item) => (
+      <TableCellLayout style={{ maxWidth: "100px" }}>
+        {item.lines[0].price}
+      </TableCellLayout>
+    ),
+  }),
+  
+  createTableColumn({
+    columnId: "need_by_date",
     renderHeaderCell: () => "Need By Date",
     renderCell: (item) => (
       <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.NeedByDate.label}
+        {item.lines[0].need_by_date}
       </TableCellLayout>
     ),
   }),
 ];
 
-const RFQTable = () => {
+const RFQTable = ({data}) => {
   const defaultSortState = useMemo(
     () => ({ sortColumn: "file", sortDirection: "ascending" }),
     []
@@ -93,7 +95,7 @@ const RFQTable = () => {
 
   return (
     <div style={gridContainerStyle}>
-      <DataGrid items={items} columns={columns} defaultSortState={defaultSortState}>
+      <DataGrid items={[data]} columns={columns} defaultSortState={defaultSortState}>
         <DataGridHeader>
           <DataGridRow>
             {({ renderHeaderCell }) => (

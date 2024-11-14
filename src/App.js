@@ -33,6 +33,16 @@ import RFQDrawer from "./components/RFQDrawer";
 import CompareDrawer from "./components/CompareDrawer";
 import PurchaseOrderPage from "./pages/PurchaseOrder";
 import ASNPage from "./pages/ASNPage";
+import CustomLayoutLoop from "./components/InloopLayout"
+import SupplierPage from "./pages/SupplierPage";
+import NavDrawerQuotationLoop from "./components/SupplierLayout";
+import QuotationDrawerPage from "./pages/QuotationDrawerPage";
+import ASNCreate from "./pages/ASNCreate";
+import PreviewPage from "./pages/PreviewPage";
+import ASNDrawerPage from "./pages/ASNDrawerPage";
+import ASNStatus from "./pages/ASNStatus";
+import ASNShipmentDrawer from "./components/ASNShipmentDrawer";
+import ASNShipmentDrawerPage from "./pages/ASNShipmentDrawerPage";
 function App() {
   return (
     <Router basename="">
@@ -210,86 +220,171 @@ function App() {
 <Route
           path="/inloop"
           element={
-            <CustomLayout>
+            <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
                 <InLoopPage />
               </NavDrawerDefaultLoop>
-            </CustomLayout>
+            </CustomLayoutLoop>
           }
         />
         <Route
           path="/todo"
           element={
-            <CustomLayout>
+            <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
                 <TodoPage />
               </NavDrawerDefaultLoop>
-            </CustomLayout>
+            </CustomLayoutLoop>
           }
         />
         <Route
           path="/rfq"
           element={
-            <CustomLayout>
+            <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
                 <RFQPage />
               </NavDrawerDefaultLoop>
-            </CustomLayout>
+            </CustomLayoutLoop>
           }
         />
         <Route
           path="/tododrawer"
           element={
-            <CustomLayout>
+            <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
                 < TodoDrawer/>
               </NavDrawerDefaultLoop>
-            </CustomLayout>
+            </CustomLayoutLoop>
           }
         />
         <Route
           path="/rfqdrawer"
           element={
-            <CustomLayout>
+            <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
                 < RFQDrawer/>
               </NavDrawerDefaultLoop>
-            </CustomLayout>
+            </CustomLayoutLoop>
           }
         />
         <Route
           path="/compare"
           element={
-            <CustomLayout>
+            <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
                 < CompareDrawer/>
               </NavDrawerDefaultLoop>
-            </CustomLayout>
+            </CustomLayoutLoop>
           }
         />
 
 <Route
           path="/po"
           element={
-            <CustomLayout>
+            <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
                 < PurchaseOrderPage/>
               </NavDrawerDefaultLoop>
-            </CustomLayout>
+            </CustomLayoutLoop>
           }
         />
 
 <Route
           path="/asn"
           element={
-            <CustomLayout>
+            <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
                 < ASNPage/>
               </NavDrawerDefaultLoop>
-            </CustomLayout>
+            </CustomLayoutLoop>
           }
         />
-        
+
+<Route
+          path="/supplier"
+          element={
+            <CustomLayoutLoop>
+              <NavDrawerQuotationLoop>
+                < SupplierPage/>
+              </NavDrawerQuotationLoop>
+            </CustomLayoutLoop>
+          }
+        />
+        <Route
+          path="/quotaiondrawer"
+          element={
+            <CustomLayoutLoop>
+              <NavDrawerQuotationLoop>
+                <QuotationDrawerPage />
+              </NavDrawerQuotationLoop>
+            </CustomLayoutLoop>
+          }
+        />
+
+<Route
+          path="/asncreate"
+          element={
+            <CustomLayoutLoop>
+              <NavDrawerQuotationLoop>
+                <ASNCreate/>
+              </NavDrawerQuotationLoop>
+            </CustomLayoutLoop>
+          }
+        />
+        <Route
+          path="/preview"
+          element={
+            <CustomLayoutLoop>
+              <NavDrawerQuotationLoop>
+                <PreviewPage/>
+              </NavDrawerQuotationLoop>
+            </CustomLayoutLoop>
+          }
+        />
+
+<Route
+          path="/asndrawer"
+          element={
+            <CustomLayoutLoop>
+              <NavDrawerQuotationLoop>
+                <ASNDrawerPage/>
+              </NavDrawerQuotationLoop>
+            </CustomLayoutLoop>
+          }
+        />
+
+<Route
+          path="/asnstatus"
+          element={
+            <CustomLayoutLoop>
+              <NavDrawerQuotationLoop>
+                <ASNStatus/>
+              </NavDrawerQuotationLoop>
+            </CustomLayoutLoop>
+          }
+        />
+
+<Route
+          path="/asnshipment"
+          element={
+            <CustomLayoutLoop>
+              <NavDrawerQuotationLoop>
+                <ASNShipmentDrawer/>
+              </NavDrawerQuotationLoop>
+            </CustomLayoutLoop>
+          }
+        />
+
+<Route
+          path="/asnshipmentpage"
+          element={
+            <CustomLayoutLoop>
+              <NavDrawerQuotationLoop>
+                <ASNShipmentDrawerPage/>
+              </NavDrawerQuotationLoop>
+            </CustomLayoutLoop>
+          }
+        />
       </Routes>
     </Router>
   );

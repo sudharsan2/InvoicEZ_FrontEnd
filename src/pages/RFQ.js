@@ -51,7 +51,7 @@ const buttonContainerStyle = {
   padding: "16px 0",
 };
 
-const RFQPage = () => {
+const RFQPage = ({data}) => {
   const counters = [
     { label: "Todo", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
     { label: "Requestor", value: <span style={{ color: "#004378" }}>Sudharsan</span>, color: "#004378" },
@@ -92,12 +92,10 @@ const RFQPage = () => {
         </div>
 
         <div style={{ height: "5vh",marginTop:"4em" }} />
-        <RFQTable />
+        <RFQTable data={data} />
       </div>
 
-      <div style={buttonContainerStyle}>
-        <button style={{color:"#0078d5",border:"none",backgroundColor:"white"}}>Submit</button>
-      </div>
+      
     </div>
   );
 };

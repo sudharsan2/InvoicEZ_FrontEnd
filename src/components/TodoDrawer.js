@@ -63,7 +63,7 @@
 
 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DrawerBody,
   DrawerHeader,
@@ -96,14 +96,16 @@ const useStyles = makeStyles({
   },
 });
 
-const TodoDrawer = () => {
+const TodoDrawer = ({data}) => {
   const styles = useStyles();
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("overlay");
 
   const restoreFocusTargetAttributes = useRestoreFocusTarget();
   const restoreFocusSourceAttributes = useRestoreFocusSource();
-
+  useEffect(() => {
+    console.log("selected", data);
+ }, [data]);
   return (
     <div className={styles.root}>
       <Drawer
@@ -116,7 +118,7 @@ const TodoDrawer = () => {
         className={styles.drawer}
       >
         <div className={styles.drawerContent}>
-          <TodoPage />
+          <TodoPage data={data}/>
         </div>
       </Drawer>
     </div>

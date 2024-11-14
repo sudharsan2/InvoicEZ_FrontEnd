@@ -28,7 +28,7 @@ const columns = [
     renderHeaderCell: () => "Line",
     renderCell: (item) => (
       <TableCellLayout style={{ maxWidth: "100px" }}>
-        {/* {item.lines[0].line_number} */}
+        {item.lines[0].line_number}
       </TableCellLayout>
     ),
   }),
@@ -82,13 +82,13 @@ const columns = [
   }),
 ];
 
-const TodoTable = ({data}) => {
+const CompareDrawerTable = ({data}) => {
   const defaultSortState = useMemo(
     () => ({ sortColumn: "file", sortDirection: "ascending" }),
     []
   );
   useEffect(() => {
-    console.log("selected table", data);
+    console.log("selected compare table", data);
  }, [data]);
 
   const gridContainerStyle = {
@@ -120,7 +120,7 @@ const TodoTable = ({data}) => {
   );
 };
 
-export default TodoTable;
+export default CompareDrawerTable;
 
 
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FolderRegular,
@@ -6,6 +6,7 @@ import {
   OpenRegular,
   DocumentRegular,
   VideoRegular,
+  ArrowClockwise28Regular,
 } from "@fluentui/react-icons";
 import {
   Avatar,
@@ -18,24 +19,15 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import { makeStyles, TabList, Tab } from "@fluentui/react-components";
-import { ArrowClockwise28Regular } from "@fluentui/react-icons";
+import { makeStyles, TabList, Tab, Divider, Button, Popover, PopoverSurface, PopoverTrigger } from "@fluentui/react-components";
 import Search from "./Search";
-import TodoDrawer from "./TodoDrawer"; // Import TodoDrawer component
-import RFQDrawer from "./RFQDrawer"; // Import RFQDrawer component
-import CompareDrawer from "./CompareDrawer"; // Import CompareDrawer component
+import TodoDrawer from "./TodoDrawer";
+import RFQDrawer from "./RFQDrawer";
+import CompareDrawer from "./CompareDrawer";
 import DatePickerComponent from "./DatePicker";
-import { CiFilter } from "react-icons/ci";
-import {Divider} from "@fluentui/react-components";
-import DropDown from "../components/DropDown";
-import {
-  Popover,
-  PopoverSurface,
-  PopoverTrigger,
-  Button,
-  // makeStyles,
-} from "@fluentui/react-components";
 import DropdownComponent from "../components/DropDown";
+import axios from "axios";
+
 const useStyles = makeStyles({
   statusBullet: {
     display: "inline-block",
@@ -53,7 +45,7 @@ const useStyles = makeStyles({
     gap: "8px",
     marginTop: "4em",
     marginLeft: "2em",
-    width:"25%"
+    width: "25%",
   },
   iconButton: {
     display: "flex",
@@ -66,248 +58,228 @@ const useStyles = makeStyles({
   },
   icon: {
     color: "#1281d7",
-    fontSize: "24px", // Adjust font size to match the ArrowClockwise icon
+    fontSize: "24px",
   },
   dataGridContainer: {
     overflowX: "auto",
-    width: "90vw", 
+    width: "90vw",
   },
 });
 
-// Sample data
-const items = [
-  {
-    file: { label: "Sudharsan", icon: <DocumentRegular /> },
-    author: { label: "101245", status: "available" },
-    lastUpdated: { label: "test", timestamp: 1 },
-    Status: { label: "RFQ", icon: <EditRegular /> },
-    Date: { label: "29 May 2023", timestamp: 1 },
-    Supplierreply: { label: "8", timestamp: 1 },
-  },
-  {
-    file: { label: "Sudharsan", icon: <FolderRegular /> },
-    author: { label: "1023456", status: "busy" },
-    lastUpdated: { label: "test", timestamp: 2 },
-    Status: { label: "Todo", icon: <OpenRegular /> },
-    Date: { label: "29 May 2023", timestamp: 1 },
-    Supplierreply: { label: "8", timestamp: 1 },
-  },
-  {
-    file: { label: "Sudharsan", icon: <VideoRegular /> },
-    author: { label: "12345678", status: "away" },
-    lastUpdated: { label: "test", timestamp: 2 },
-    Status: { label: "Compare", icon: <OpenRegular /> },
-    Date: { label: "29 May 2023", timestamp: 1 },
-    Supplierreply: { label: "8", timestamp: 1 },
-  },
-  {
-    file: { label: "Vijay", icon: <VideoRegular /> },
-    author: { label: "12345678", status: "away" },
-    lastUpdated: { label: "test", timestamp: 2 },
-    Status: { label: "Todo", icon: <OpenRegular /> },
-    Date: { label: "29 May 2023", timestamp: 1 },
-    Supplierreply: { label: "8", timestamp: 1 },
-  },
-];
-
-
-const StatusCell = ({ statusLabel }) => {
-  const styles = useStyles();
-  const statusStyle =
-    statusLabel === "RFQ"
-      ? styles.statusRFQ
-      : statusLabel === "Todo"
-      ? styles.statusTodo
-      : styles.statusCompare;
-
-  return (
-    <TableCellLayout>
-      <span className={`${styles.statusBullet} ${statusStyle}`} />
-      {statusLabel}
-    </TableCellLayout>
-  );
-};
-
-const ExampleContent = () => {
-  const styles = useStyles();
-  return (
-    <div>
-      <h2 style={{fontWeight:"normal"}}>Choose Suppliers</h2>
-
-      
-      <div style={{ display: "flex", justifyContent: "space-between", maxWidth: "200px", flexDirection: "column" }}>
-        <h3 style={{ fontWeight: "Normal" }}>Suppliers</h3>
-        <DropdownComponent />
-      </div>
-      <button style={{width:"10%",border:"none",backgroundColor:"white",color:"#1281d7",cursor:"pointer",marginTop:"1em"}} >Submit</button>
-    </div>
-  );
-};
-
+// Column definitions
 const columns = [
   createTableColumn({
-    columnId: "file",
+    columnId: "requestor",
     renderHeaderCell: () => "Requester Name",
-    renderCell: (item) => <TableCellLayout>{item.file.label}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.lines[0].requestor}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "author",
+    columnId: "document_number",
     renderHeaderCell: () => "PR Number",
-    renderCell: (item) => <TableCellLayout>{item.author.label}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.document_number}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "lastUpdated",
+    columnId: "description",
     renderHeaderCell: () => "Description",
-    renderCell: (item) => item.lastUpdated.label,
+    renderCell: (item) => <TableCellLayout>{item.description}</TableCellLayout>,
   }),
+  // 
+  
   createTableColumn({
-    columnId: "Status",
+    columnId: "status",
     renderHeaderCell: () => "Status",
-    renderCell: (item) => <StatusCell statusLabel={item.Status.label} />,
+    renderCell: (item) => <TableCellLayout>{item.status}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "Date",
+    columnId: "need_by_date",
     renderHeaderCell: () => "Need By Date",
-    renderCell: (item) => <TableCellLayout>{item.Date.label}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.lines[0].need_by_date}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "Supplierreply",
+    columnId: "suppliersReplied",
     renderHeaderCell: () => "Suppliers Replied",
-    renderCell: (item) => (
-      <TableCellLayout>{item.Supplierreply.label}</TableCellLayout>
-    ),
+    renderCell: (item) => <TableCellLayout>{item.lines[0].supplier_ids}</TableCellLayout>,
   }),
 ];
 
+// Main component
 const LoopTable = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const [popoverOpen, setPopoverOpen] = useState(false);
-    const togglePopover = () => setPopoverOpen(!popoverOpen);
   const [selectedStatus, setSelectedStatus] = useState(null);
-  const styles = useStyles();
   const [selectedRows, setSelectedRows] = useState(new Set());
-  const handleRowClick = (e, item) => {
-
-    if (e.target.type === "checkbox"){
-      setSelectedStatus(item.Status.label);
-    console.log("STATUS", selectedStatus);
-
-    }
+  const [items, setItems] = useState([]);
+  const styles = useStyles();
+  const [selectedRowData, setSelectedRowData] = useState({});
+ 
   
+  // Toggle Popover
+  const togglePopover = () => setPopoverOpen(!popoverOpen);
+
+  // Fetch data
+  const fetchData = async () => {
+    try {
+      const response = await axios.post("http://172.235.21.99:57/user/club-pr", {
+        org_id: 821,
+        from_date: "11/09/24",
+        to_date: "11/09/24",
+      });
+   
+      const data = response.data.details;
+      console.log("Status", data[0]?.status);
+      // console.log("Data",data);
+      
+      
     
+    
+      // Map through the data to structure it as needed
+      const mappedItems = data.flatMap((item) => {
+        // Use lineData to check for lines or line_items
+        const lineData = item.lines || item.line_items;
+   
+        if (lineData && lineData.length) {
+          // Map over each line and create a new item for each line entry
+          return lineData.map((line) => ({
+            ...item,         // Copy all properties from the original item
+            lines: [line],   // Replace 'lines' with a single line item array
+          }));
+        } else {
+          // Handle case where there are no lines or line_items
+          return {
+            ...item,
+            lines: [],       // Default to an empty array if no lines/line_items are found
+          };
+        }
+      });
+
+      const data1 = mappedItems.map((item) => {
+        let status = "Todo";  // Default status
+    
+        // Check if supplier_ids exists and has a length greater than 0
+        if ("supplier_ids" in item.lines[0]) {
+            status = "RFQ";
+            if(item.quotations.length>0)
+            {
+              status="Compare"
+            }
+        } 
+       
+    
+        // Set the status in the item
+        item.status = status;
+        return item;  // Return the modified item
+    });
+      
+      setItems(data1);  // Set the processed items in state
+      console.log("Mapped Items:", mappedItems);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-    const handleSelectionChange = (event, data) => {
-        console.log("handleSelectionChange", data.selectedItems);
-        setSelectedRows(data.selectedItems);
-      };
+  
 
+  useEffect(() => {
+    fetchData();
+    console.log("Items",items)
+  }, []);
+
+  // Handle search
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+  };
+
+  // Filter items based on search
+  const filteredItems = items.filter((item) => {
+    const searchLower = searchQuery.trim().toLowerCase();
+    return (
+      item.lines[0].requestor.toLowerCase().includes(searchLower) ||
+      item.document_number.toLowerCase().includes(searchLower) ||
+      item.description.toLowerCase().includes(searchLower) ||
+      item.status.toLowerCase().includes(searchLower) ||
+      item.lines[0].need_by_date.toLowerCase().includes(searchLower) ||
+      item.lines[0].supplier_ids.toString().toLowerCase().includes(searchLower)
+    );
+  });
+
+  const handleRowClick = (item) => {
+    setSelectedRowData(item);
+    // setSelectedStatus(item.status);
+    console.log("status",item.status)
+     console.log("items",item)
+  };
+ 
   return (
     <div>
-      <TabList
-        defaultSelectedValue="tab1"
-        appearance="subtle"
-        style={{ marginLeft: "0vw", marginTop: "2vh" }}
-      >
-        <Tab
-          value="tab1"
-          style={{ border: "1px solid transparent", marginTop: "4em" }}
-        >
+      <TabList defaultSelectedValue="tab1" appearance="subtle" style={{ marginLeft: "0vw", marginTop: "2vh" }}>
+        <Tab value="tab1" style={{ border: "1px solid transparent", marginTop: "4em" }}>
           PR
         </Tab>
-
         <div className={styles.iconButtonContainer}>
-          <button className={styles.iconButton}>
+          <button className={styles.iconButton} onClick={fetchData}>
             <ArrowClockwise28Regular className={styles.icon} />
             <span>Refresh</span>
           </button>
           {selectedStatus === "Todo" && (
-        <button
-          style={{
-            width: "100%",
-            border: "none",
-            backgroundColor: "white",
-            color: "#1281d7",
-            cursor: "pointer",
-          }}
-          onClick={togglePopover}
-        >
-          Choose Suppliers
-        </button>
-      )}
-           {/* Popover */}
-           {popoverOpen && (
-  <Popover
-    open={popoverOpen}
-    onOpenChange={togglePopover}
-    positioning={{ position: "right", align: "top" }}
-  >
-                  <PopoverTrigger disableButtonEnhancement>
-                    <Button style={{ border: "none" }}></Button>
-                  </PopoverTrigger>
-
-                  <PopoverSurface
-                    tabIndex={-1}
+            <button
+              style={{ width: "100%", border: "none", backgroundColor: "white", color: "#1281d7", cursor: "pointer" }}
+              onClick={togglePopover}
+            >
+              Choose Suppliers
+            </button>
+          )}
+          {popoverOpen && (
+            <Popover open={popoverOpen} onOpenChange={togglePopover} positioning={{ position: "right", align: "top" }}>
+              <PopoverTrigger disableButtonEnhancement>
+                <Button style={{ border: "none" }}></Button>
+              </PopoverTrigger>
+              <PopoverSurface tabIndex={-1} style={{ width: "50%", maxWidth: "300px", padding: "1.5em" }}>
+                <div>
+                  <h2 style={{ fontWeight: "normal" }}>Choose Suppliers</h2>
+                  <div style={{ display: "flex", justifyContent: "space-between", maxWidth: "200px", flexDirection: "column" }}>
+                    <h3 style={{ fontWeight: "Normal" }}>Suppliers</h3>
+                    <DropdownComponent />
+                  </div>
+                  <button
                     style={{
-                      width: "50%",     
-                      maxWidth: "300px",  
-                      padding: "1.5em",  
-                      
+                      width: "10%",
+                      border: "none",
+                      backgroundColor: "white",
+                      color: "#1281d7",
+                      cursor: "pointer",
+                      marginTop: "1em",
                     }}
                   >
-                    <ExampleContent />
-                  </PopoverSurface>
-                </Popover>
-              )}
+                    Submit
+                  </button>
+                </div>
+              </PopoverSurface>
+            </Popover>
+          )}
         </div>
-
-        <Search placeholder="Search PO or Supplier" />
+        <Search placeholder="Search PO or Supplier" onSearchChange={handleSearchChange} />
       </TabList>
       <div className={styles.dataGridContainer}>
-      <Divider style={{marginTop:"2em"}}/>
-
-<DataGrid items={items} columns={columns} selectionMode="multiselect">
-<DataGridHeader>
-<DataGridRow
-selectionCell={{
-  checkboxIndicator: { "aria-label": "Select all rows" },
-}}
->
-{({ renderHeaderCell }) => (
-  <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-)}
-</DataGridRow>
-</DataGridHeader>
-<DataGridBody>
-{({ item, rowId }) => (
-<DataGridRow
-  key={rowId}
-  // selectionCell={{
-  //   checkboxIndicator: { "aria-label": "Select row" }
-  // }}
-  onClick={(e) => handleRowClick(e, item)} 
->
-  {({ renderCell }) => (
-    <DataGridCell>{renderCell(item)}</DataGridCell>
-  )}
-</DataGridRow>
-)}
-</DataGridBody>
-</DataGrid>
-
-
+        <DataGrid items={items} columns={columns} selectionMode="multiselect">
+          <DataGridHeader>
+            <DataGridRow selectionCell={{ checkboxIndicator: { "aria-label": "Select all rows" } }}>
+              {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
+            </DataGridRow>
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow key={rowId} onClick={() => handleRowClick(item)}>
+                {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
       </div>
-     
-
-      {selectedStatus === "Todo" && <TodoDrawer />}
-      {selectedStatus === "RFQ" && <RFQDrawer />}
-      {selectedStatus === "Compare" && <CompareDrawer />}
+      {selectedRowData && selectedRowData.status === "Todo" && <TodoDrawer data={selectedRowData} />}
+      {selectedRowData && selectedRowData.status === "RFQ" && <RFQDrawer data={selectedRowData}/>}
+      {selectedRowData && selectedRowData.status === "Compare" && <CompareDrawer data={selectedRowData}/>}
     </div>
   );
 };
 
 export default LoopTable;
-
-
-
-
-

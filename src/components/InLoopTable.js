@@ -205,18 +205,30 @@ const InLoopTable = () => {
         console.log("handleSelectionChange", data.selectedItems);
         setSelectedRows(data.selectedItems);
       };
-
+ 
+    
     //   API FOR ONE INVOICE LIST
     const fetchData = async () => {
+      console.log("fetchdata")
         try {
-          const response = await axios.get(
-            "http://172.235.21.99:57/user/one-invoice-list",
+          const response = await axios.post(
+            "http:172.235.21.99:57/user/club-pr",{
+              "org_id":821,
+              "from_date":"11/09/24",
+              "to_date":"11/09/24"
+              }
           );
-          const fetchedItems = response.data; // Assuming data is in response.data
-          console.log("fetchedItems", fetchedItems);
+          // const fetchedItems = response.data; 
+          const fetchedItems = data.flatMap(item =>
+            item.lines.map(line => ({
+              ...item,               // Copy all properties from the original item
+              lines: [line]          // Replace 'lines' with only one line item
+            }))
+          );
+
+          console.log("FETCHED",fetchedItems);
+         
           set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-          //  console.log("InvId",InvoiceNumber);
-          // Map fetched data to the format expected by DataGrid
           const mappedItems = fetchedItems.map((item) => ({
             Id: item.po_headers[0].id,
             InvoiceId: item.id,
@@ -241,9 +253,9 @@ const InLoopTable = () => {
     
      
     
-      useEffect(() => {
-        fetchData();
-      }, []);
+      // useEffect(() => {
+      //   fetchData();
+      // }, []);
     
     
   return (

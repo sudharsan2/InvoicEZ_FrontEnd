@@ -32,7 +32,7 @@ const useStyles = makeStyles({
   },
 });
 
-const RFQDrawer = () => {
+const RFQDrawer = ({data}) => {
   const styles = useStyles();
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("overlay");
@@ -52,7 +52,7 @@ const RFQDrawer = () => {
         className={styles.drawer}
       >
         <div className={styles.drawerContent}>
-          <RFQPage />
+          <RFQPage data={data}/>
         </div>
       </Drawer>
     </div>

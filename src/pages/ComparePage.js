@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,9 +7,10 @@ import {
 } from "@fluentui/react-components";
 import TagCounters from "../components/gridapprove";
 import Search from "../components/Search";
-import TodoTable from "../components/TodoTable";
+import CompareDrawerTable from "../components/CompareDrawerTable";
 import SupplierTable from "../components/SupplierTable";
-
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 const path = "/inloop";
 const path1 = "http://localhost:3000/";
 
@@ -52,13 +53,41 @@ const buttonContainerStyle = {
   padding: "16px 0",
 };
 
-const ComparePage = () => {
+const ComparePage = ({data}) => {
   const counters = [
-    { label: "Requestor", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
-    { label: "PR Number", value: <span style={{ color: "#004378" }}>Sudharsan</span>, color: "#004378" },
-    { label: "RFQ Number", value: <span style={{ color: "#00a2ad" }}>5</span>, color: "#00a2ad" },
-    { label: "Description", value: "", },
+    { label: "Requestor", value: <span style={{ color: "#d62727" }}>{data.lines[0].requestor}</span>, color: "#d62727" },
+    { label: "PR Number", value: <span style={{ color: "#004378" }}>{data.document_number}</span>, color: "#004378" },
+    
   ];
+  const[selectedRow,setSelectedRow]=useState('');
+  useEffect(()=>{
+    console.log("compare Data",data);
+  },[data]);
+
+  const selectedSupplier = useSelector(
+    (state) => state.refresh.conformedSupplier,
+  );
+
+
+  const handleRowClick=()=>{
+    setSelectedRow()
+  }
+
+  const handleSupplier= async ()=>{
+    
+    try{
+      axios.defaults.baseURL = 'http://172.235.21.99:57';
+      const response = await axios.put(`/user/update-supplier/${data.id}/`, { supplier_id: selectedSupplier });
+      
+    }
+    catch(error)
+  {
+     console.log("Error",error);
+  }
+
+  
+  
+}
 
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
@@ -97,17 +126,17 @@ const ComparePage = () => {
         </div>
 
         <div style={{ height: "5vh" ,marginTop:"-2em"}} />
-        <TodoTable />
+        <CompareDrawerTable data={data}/>
       </div>
       <div style={{marginTop:"2em"}}>
             <h2>Supplier Response</h2>
         </div>
-        <SupplierTable style={{ marginTop:"2em"}}/>
+        <SupplierTable style={{ marginTop:"2em"}} data={data}/>
         
         
 
       <div style={buttonContainerStyle}>
-        <button style={{color:"#0078d5",border:"none",backgroundColor:"white"}}>Submit</button>
+        <button style={{color:"#0078d5",border:"none",backgroundColor:"white",cursor:"pointer"}} onClick={handleSupplier}>Submit</button>
       </div>
     </div>
   );

@@ -6,6 +6,9 @@ import {
   refreshReducer,
   toggleInvoiceUploadRefresh,
   toggleDrawerPosition,
+  dropDownSubmit,
+  dropDownValue,
+  conformedSupplierValue,
 } from "./refreshSlice"; // Import both reducer and action
 
 const store = configureStore({
@@ -20,5 +23,8 @@ export const themeActions = themeSlice.actions;
 export const refreshActions = {
   toggleInvoiceUploadRefresh,
   toggleDrawerPosition,
+  dropDownSubmit,
+  dropDownValue,
+  conformedSupplierValue
 }; // Export the specific action
 export default store;

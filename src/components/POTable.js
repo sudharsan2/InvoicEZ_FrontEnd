@@ -182,6 +182,11 @@ const columns = [
       </TableCellLayout>
     ),
   }),
+  // createTableColumn({
+  //   columnId: "Status ",
+  //   renderHeaderCell: () => "Status",
+  //   renderCell: (item) => <StatusCell statusLabel={item.Status.label} />
+  // }),
   createTableColumn({
     columnId: "QuantityAmount",
     renderHeaderCell: () => "QTY/Amount",
@@ -273,11 +278,7 @@ const columns = [
       </TableCellLayout>
     ),
   }),
-  createTableColumn({
-    columnId: "Status ",
-    renderHeaderCell: () => "Status",
-    renderCell: (item) => <StatusCell statusLabel={item.Status.label} />
-  }),
+ 
 ];
 
 const POTable = () => {
@@ -300,10 +301,9 @@ const POTable = () => {
         <DataGridHeaderCell
           style={{
             maxWidth: "500vw", 
-              overflow: "visible",
-              whiteSpace: "normal",
-              wordBreak: "break-word",  
-            textOverflow: "clip", 
+              overflow: "hidden",
+              whiteSpace: "no-wrap",
+            textOverflow: "elipsis", 
           }}
         >
           {renderHeaderCell()}
@@ -317,12 +317,10 @@ const POTable = () => {
         {({ renderCell }) => (
           <DataGridCell
             style={{
-              maxWidth: "200px", 
-              overflow: "visible",
-              whiteSpace: "normal",
-              wordBreak: "break-word",  
-            textOverflow: "clip", 
-            maxHeight:"300px"
+              maxWidth: "500vw", 
+              overflow: "hidden",
+              whiteSpace: "no-wrap",
+            textOverflow: "elipsis",
             }}
           >
             {renderCell(item)}

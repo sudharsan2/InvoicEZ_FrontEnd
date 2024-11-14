@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,6 +9,9 @@ import TagCounters from "../components/gridapprove";
 import Search from "../components/Search";
 import TodoTable from "../components/TodoTable";
 import DropDown from "../components/DropDown";
+import { refreshActions } from "../Store/Store";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 const path = "/inloop";
 const path1 = "http://localhost:3000/";
 
@@ -51,13 +54,30 @@ const buttonContainerStyle = {
   padding: "16px 0",
 };
 
-const TodoPage = () => {
-  const counters = [
-    { label: "Todo", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
-    { label: "Requestor", value: <span style={{ color: "#004378" }}>Sudharsan</span>, color: "#004378" },
-    { label: "PR Number", value: <span style={{ color: "#00a2ad" }}>5</span>, color: "#00a2ad" },
-  ];
+const TodoPage = ({data}) => {
 
+  const counters = [
+    // { label: "Todo", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
+    { label: "Requestor", value: <span style={{ color: "#004378" }}>{data.lines[0].requestor}</span>, color: "#004378" },
+    { label: "PR Number", value: <span style={{ color: "#00a2ad" }}>{data.document_number}</span>, color: "#00a2ad" },
+  ];
+  // const[suppliers,setSuppliers] = useState("");
+  
+   const handleSubmit = async ()=>{
+    try {
+      const response = await axios.post('http://172.235.21.99:57/user/store-purchase-details',{details:[],suppliers:suppliers1})
+      const fetchedItems = response.data;
+      console.log("fecthed Items",fetchedItems);
+    }
+    catch(error){
+      console.log("Error",error);
+    }
+
+   }
+    
+    const suppliers1 = useSelector((state) => state.refresh.suppliers);
+    
+ 
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
       <div style={{ height: "5vh",display:"flex",flexDirection:"row",justifyContent:"space-between",}}>
@@ -95,11 +115,11 @@ const TodoPage = () => {
         </div>
 
         <div style={{ height: "5vh" ,marginTop:"4em"}} />
-        <TodoTable />
+        <TodoTable data={data} />
       </div>
 
       <div style={buttonContainerStyle}>
-        <button style={{color:"#0078d5",border:"none",backgroundColor:"white"}}>Submit</button>
+        <button style={{color:"#0078d5",border:"none",backgroundColor:"white"}} onClick={handleSubmit}>Submit</button>
       </div>
     </div>
   );
