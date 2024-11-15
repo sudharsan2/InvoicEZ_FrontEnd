@@ -77,7 +77,7 @@ const ExampleContent = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
-  const [id,setId] = useState("");
+  const [id, setId] = useState("");
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     console.log(storedUsername);
@@ -99,7 +99,7 @@ const ExampleContent = () => {
         setEmail(emailFromToken);
         setEmpId(empIdFromToken);
         setId(userid);
-        console.log("IDD",userid);
+        console.log("IDD", userid);
       } catch (error) {
         console.error("Invalid token:", error);
       }
@@ -297,7 +297,7 @@ const CustomLayout = ({ children }) => {
 
       try {
         const response = await axios.post(
-          "http://172.235.21.99:57/user/invoice-upload",
+          "http://127.0.0.1:8000/user/invoice-upload",
           formData,
           {
             headers: {

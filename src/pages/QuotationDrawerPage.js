@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Button, Input, Label, Field, Textarea } from "@fluentui/react-components";
+import {
+  Button,
+  Input,
+  Label,
+  Field,
+  Textarea,
+} from "@fluentui/react-components";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import QuotationDropDown from "../components/QuotationDropDown";
@@ -38,17 +44,17 @@ const QuotationDrawerPage = ({ data, userId }) => {
   };
 
   const handleSubmit = async () => {
-    console.log("data",data)
+    console.log("data", data);
     try {
       const response = await axios.post(
-        `http://172.235.21.99:57/user/create-quotations/${data.id}`,
+        `http://127.0.0.1:8000/user/create-quotations/${data.id}`,
         {
           distribution_number: data.line_items[0].distribution_number,
           charge_account: handleFreightTerm,
           distribution_amount: formData.price,
           last_update_date: formData.deliverySchedule,
           supplier: userId,
-        }
+        },
       );
       const fetchedItems = response.data;
       console.log(fetchedItems); // You can handle the response as needed
@@ -141,7 +147,10 @@ const QuotationDrawerPage = ({ data, userId }) => {
       </div>
 
       <div style={{ marginLeft: "2em", marginTop: "3em" }}>
-        <Label size="large" style={{ fontWeight: "normal", marginBottom: "10px" }}>
+        <Label
+          size="large"
+          style={{ fontWeight: "normal", marginBottom: "10px" }}
+        >
           Remarks
         </Label>
         <Field style={{ width: "80%" }}>
@@ -157,7 +166,10 @@ const QuotationDrawerPage = ({ data, userId }) => {
           marginTop: "2em",
         }}
       >
-        <Button style={{ color: "white", backgroundColor: "#3d98de" }} onClick={handleSubmit}>
+        <Button
+          style={{ color: "white", backgroundColor: "#3d98de" }}
+          onClick={handleSubmit}
+        >
           Submit
         </Button>
       </div>

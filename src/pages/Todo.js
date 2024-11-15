@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -54,33 +54,49 @@ const buttonContainerStyle = {
   padding: "16px 0",
 };
 
-const TodoPage = ({data}) => {
-
+const TodoPage = ({ data }) => {
   const counters = [
     // { label: "Todo", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
-    { label: "Requestor", value: <span style={{ color: "#004378" }}>{data.lines[0].requestor}</span>, color: "#004378" },
-    { label: "PR Number", value: <span style={{ color: "#00a2ad" }}>{data.document_number}</span>, color: "#00a2ad" },
+    {
+      label: "Requestor",
+      value: (
+        <span style={{ color: "#004378" }}>{data.lines[0].requestor}</span>
+      ),
+      color: "#004378",
+    },
+    {
+      label: "PR Number",
+      value: <span style={{ color: "#00a2ad" }}>{data.document_number}</span>,
+      color: "#00a2ad",
+    },
   ];
   // const[suppliers,setSuppliers] = useState("");
-  
-   const handleSubmit = async ()=>{
-    try {
-      const response = await axios.post('http://172.235.21.99:57/user/store-purchase-details',{details:[],suppliers:suppliers1})
-      const fetchedItems = response.data;
-      console.log("fecthed Items",fetchedItems);
-    }
-    catch(error){
-      console.log("Error",error);
-    }
 
-   }
-    
-    const suppliers1 = useSelector((state) => state.refresh.suppliers);
-    
- 
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/user/store-purchase-details",
+        { details: [data], suppliers: suppliers1 },
+      );
+      const fetchedItems = response.data;
+      console.log("fecthed Items", fetchedItems);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  const suppliers1 = useSelector((state) => state.refresh.suppliers);
+
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
-      <div style={{ height: "5vh",display:"flex",flexDirection:"row",justifyContent:"space-between",}}>
+      <div
+        style={{
+          height: "5vh",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
         <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
@@ -92,12 +108,14 @@ const TodoPage = ({data}) => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>Supplier Selection</BreadcrumbButton>
+              <BreadcrumbButton href={path}>
+                Supplier Selection
+              </BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
-        <div style={{padding:"2.5em"}}>
-          <DropDown/>
+        <div style={{ padding: "2.5em" }}>
+          <DropDown />
         </div>
       </div>
 
@@ -114,12 +132,17 @@ const TodoPage = ({data}) => {
           ))}
         </div>
 
-        <div style={{ height: "5vh" ,marginTop:"4em"}} />
+        <div style={{ height: "5vh", marginTop: "4em" }} />
         <TodoTable data={data} />
       </div>
 
       <div style={buttonContainerStyle}>
-        <button style={{color:"#0078d5",border:"none",backgroundColor:"white"}} onClick={handleSubmit}>Submit</button>
+        <button
+          style={{ color: "#0078d5", border: "none", backgroundColor: "white" }}
+          onClick={handleSubmit}
+        >
+          Submit
+        </button>
       </div>
     </div>
   );
