@@ -163,24 +163,24 @@ const LoopTable = () => {
          todoCount = todoCount+1;
         
         // Check if supplier_ids exists and has a length greater than 0
-        if ("supplier_ids" in item.lines[0]) {
-            status = "RFQ";
-            rfqCount = rfqCount+1;
-            todoCount = todoCount-1;
-            if(item.quotations.length>0)
-            {
-              status="Compare"
+        // if ("supplier_ids" in item.lines[0]) {
+        //     status = "RFQ";
+        //     rfqCount = rfqCount+1;
+        //     todoCount = todoCount-1;
+        //     if(item.quotations.length>0)
+        //     {
+        //       status="Compare"
              
-              rfqCount= rfqCount-1;
-              compareCount +=1;
-            }
-        } 
+        //       rfqCount= rfqCount-1;
+        //       compareCount +=1;
+        //     }
+        // } 
 
-        setStatusCounts({
-          todo: todoCount,
-          rfq: rfqCount,
-          compare: compareCount,
-        })
+        // setStatusCounts({
+        //   todo: todoCount,
+        //   rfq: rfqCount,
+        //   compare: compareCount,
+        // })
        
     
         // Set the status in the item
@@ -295,7 +295,7 @@ const LoopTable = () => {
           </DataGridBody>
         </DataGrid>
       </div>
-      <InLoopPage todo={statusCounts.todo} rfq={statusCounts.rfq} comapre={statusCounts.compare}/>
+      <InLoopPage />
       {selectedRowData && selectedRowData.status === "Todo" && <TodoDrawer data={selectedRowData}  />}
       {selectedRowData && selectedRowData.status === "RFQ" && <RFQDrawer data={selectedRowData}  />}
       {selectedRowData && selectedRowData.status === "Compare" && <CompareDrawer data={selectedRowData} />}

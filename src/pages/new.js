@@ -72,7 +72,7 @@ const LoginPage = () => {
             navigate("/matrimony");
             break;
           case "invoice manager":
-            navigate("/dashboard");
+            navigate("/inloop");
             break;
             case "supplier":
           default:
