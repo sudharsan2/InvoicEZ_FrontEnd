@@ -32,9 +32,9 @@ const useStyles = makeStyles({
   },
 });
 
-const AckDrawer = ({data}) => {
+const AckDrawer = ({data,setIsOpen,isOpen}) => {
   const styles = useStyles();
-  const [isOpen, setIsOpen] = useState(true);
+  // const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("overlay");
 
   const restoreFocusTargetAttributes = useRestoreFocusTarget();

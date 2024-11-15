@@ -775,7 +775,13 @@ const QuotationTable = () => {
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  
+  useEffect(() => {
+    if (selectedRowData && selectedRowData.status === "To be Acknowledged") {
+      setIsDrawerOpen(true);
+    } else {
+      setIsDrawerOpen(false); // Close the drawer if the condition is not met
+    }
+  }, [selectedRowData]);
   
   // Toggle Popover
   const togglePopover = () => setPopoverOpen(!popoverOpen);
@@ -790,7 +796,7 @@ const QuotationTable = () => {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
          userId = decodedToken.user_id;
-         
+         setUserID(userId);
         console.log("ID",userId);
         // const empIdFromToken = decodedToken.empId;
      
@@ -961,7 +967,7 @@ const QuotationTable = () => {
         </DataGrid>
       </div>
       {selectedRowData && selectedRowData.status === "quotation" && <QuotationDrawer data={selectedRowData} userId={userId}/>}
-      {selectedRowData && selectedRowData.status === "To be Acknowledged" && <AckDrawer data={selectedRowData} />}
+      {selectedRowData && selectedRowData.status === "To be Acknowledged" && <AckDrawer data={selectedRowData} isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />}
       {/* <QuotationDrawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} /> */}
     </div>
   );

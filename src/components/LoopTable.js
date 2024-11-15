@@ -27,7 +27,7 @@ import CompareDrawer from "./CompareDrawer";
 import DatePickerComponent from "./DatePicker";
 import DropdownComponent from "../components/DropDown";
 import axios from "axios";
-
+import InLoopPage from "../pages/Inloop";
 const useStyles = makeStyles({
   statusBullet: {
     display: "inline-block",
@@ -111,7 +111,11 @@ const LoopTable = () => {
   const [items, setItems] = useState([]);
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
- 
+  const [statusCounts, setStatusCounts] = useState({
+    todo: 0,
+    rfq: 0,
+    compare: 0,
+  });
   
   // Toggle Popover
   const togglePopover = () => setPopoverOpen(!popoverOpen);
@@ -125,7 +129,7 @@ const LoopTable = () => {
         to_date: "11/09/25",
       });
    
-      const data = response.data.details;
+      const data = response.data.details.details;
       console.log("Status", data[0]?.status);
       // console.log("Data",data);
       
@@ -151,24 +155,40 @@ const LoopTable = () => {
           };
         }
       });
-
+      let todoCount =0;
+      let rfqCount =0;
+      let compareCount =0;
       const data1 = mappedItems.map((item) => {
         let status = "Todo";  // Default status
-    
+         todoCount = todoCount+1;
+        
         // Check if supplier_ids exists and has a length greater than 0
         if ("supplier_ids" in item.lines[0]) {
             status = "RFQ";
+            rfqCount = rfqCount+1;
+            todoCount = todoCount-1;
             if(item.quotations.length>0)
             {
               status="Compare"
+             
+              rfqCount= rfqCount-1;
+              compareCount +=1;
             }
         } 
+
+        setStatusCounts({
+          todo: todoCount,
+          rfq: rfqCount,
+          compare: compareCount,
+        })
        
     
         // Set the status in the item
         item.status = status;
         return item;  // Return the modified item
     });
+
+    
       
       setItems(data1);  // Set the processed items in state
       console.log("Mapped Items:", mappedItems);
@@ -275,9 +295,10 @@ const LoopTable = () => {
           </DataGridBody>
         </DataGrid>
       </div>
-      {selectedRowData && selectedRowData.status === "Todo" && <TodoDrawer data={selectedRowData} />}
-      {selectedRowData && selectedRowData.status === "RFQ" && <RFQDrawer data={selectedRowData}/>}
-      {selectedRowData && selectedRowData.status === "Compare" && <CompareDrawer data={selectedRowData}/>}
+      <InLoopPage todo={statusCounts.todo} rfq={statusCounts.rfq} comapre={statusCounts.compare}/>
+      {selectedRowData && selectedRowData.status === "Todo" && <TodoDrawer data={selectedRowData}  />}
+      {selectedRowData && selectedRowData.status === "RFQ" && <RFQDrawer data={selectedRowData}  />}
+      {selectedRowData && selectedRowData.status === "Compare" && <CompareDrawer data={selectedRowData} />}
     </div>
   );
 };

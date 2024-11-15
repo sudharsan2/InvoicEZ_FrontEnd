@@ -220,16 +220,16 @@ const valueStyle = {
   marginLeft: "0px",
 };
 
-const InLoopPage = () => {
+const InLoopPage = ({ todo, rfq, compare }) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   
   const togglePopover = () => setPopoverOpen(!popoverOpen);
 
   const counters = [
-    { label: "Todo PR", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
-    { label: "Supplier Yet To Respond", value: <span style={{ color: "#004378" }}>2</span>, color: "#004378" },
-    { label: "Quotation Comparison", value: <span style={{ color: "#00a2ad" }}>5</span>, color: "#00a2ad" },
+    { label: "Todo PR", value: <span style={{ color: "#d62727" }}>{todo}</span>, color: "#d62727" },
+    { label: "Supplier Yet To Respond", value: <span style={{ color: "#004378" }}>{rfq}</span>, color: "#004378" },
+    { label: "Quotation Comparison", value: <span style={{ color: "#00a2ad" }}>{compare}</span>, color: "#00a2ad" },
   ];
 
   return (
