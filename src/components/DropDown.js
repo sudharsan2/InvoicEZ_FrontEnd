@@ -99,7 +99,9 @@ const DropdownComponent = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/user/suppliers");
+      const response = await axios.get(
+        "http://172.235.21.99:57/user/suppliers",
+      );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
 

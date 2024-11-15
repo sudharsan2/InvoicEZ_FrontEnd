@@ -134,11 +134,14 @@ const LoopTable = ({ data }) => {
   // Fetch data
   const fetchData = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/user/club-pr", {
-        org_id: 821,
-        from_date: "11/09/24",
-        to_date: "11/09/25",
-      });
+      const response = await axios.post(
+        "http://172.235.21.99:57/user/club-pr",
+        {
+          org_id: 821,
+          from_date: "11/09/24",
+          to_date: "11/09/25",
+        },
+      );
       const data = response.data.details;
       console.log("Status", data[0]?.status);
       // console.log("Data",data);

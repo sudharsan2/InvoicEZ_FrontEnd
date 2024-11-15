@@ -18,7 +18,7 @@ const BarChartComponent = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/user/dashboard-supplier-counts",
+          "http://172.235.21.99:57/user/dashboard-supplier-counts",
         );
         const apiData = response.data;
 

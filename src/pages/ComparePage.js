@@ -83,7 +83,7 @@ const ComparePage = ({ data }) => {
 
   const handleSupplier = async () => {
     try {
-      axios.defaults.baseURL = "http://127.0.0.1:8000";
+      axios.defaults.baseURL = "http://172.235.21.99:57";
       const response = await axios.put(`/user/update-supplier/${data.id}/`, {
         supplier_id: selectedSupplier,
       });

@@ -75,7 +75,7 @@ const TodoPage = ({ data }) => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/user/store-purchase-details",
+        "http://172.235.21.99:57/user/store-purchase-details",
         { details: [data], suppliers: suppliers1 },
       );
       const fetchedItems = response.data;

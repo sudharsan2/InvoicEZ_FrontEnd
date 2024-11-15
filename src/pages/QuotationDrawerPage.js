@@ -47,7 +47,7 @@ const QuotationDrawerPage = ({ data, userId }) => {
     console.log("data", data);
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8000/user/create-quotations/${data.id}`,
+        `http://172.235.21.99:57/user/create-quotations/${data.id}`,
         {
           distribution_number: data.line_items[0].distribution_number,
           charge_account: handleFreightTerm,

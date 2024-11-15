@@ -125,7 +125,7 @@ const DonutChartPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        "http://127.0.0.1:8000/user/dashboard-supplier-morethanonepo",
+        "http://172.235.21.99:57/user/dashboard-supplier-morethanonepo",
       );
       const result = await response.json();
 
