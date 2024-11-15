@@ -98,9 +98,9 @@ function App() {
           path="/approve"
           element={
             <CustomLayout>
-              <NavDrawerDefault>
+               <NavDrawerDefaultLoop>
                 <UserApprove />
-              </NavDrawerDefault>
+                </NavDrawerDefaultLoop>
             </CustomLayout>
           }
         />
@@ -109,9 +109,9 @@ function App() {
           path="/approvepage"
           element={
             <CustomLayout>
-              <NavDrawerDefault>
+               <NavDrawerDefaultLoop>
                 <ApprovePage />
-              </NavDrawerDefault>
+                </NavDrawerDefaultLoop>
             </CustomLayout>
           }
         />
@@ -159,9 +159,9 @@ function App() {
           path="/ai"
           element={
             <CustomLayout>
-              <NavDrawerDefault>
+              <NavDrawerDefaultLoop>
                 <AIPage />
-              </NavDrawerDefault>
+              </NavDrawerDefaultLoop>
             </CustomLayout>
           }
         />
@@ -169,9 +169,9 @@ function App() {
           path="/aidetail"
           element={
             <CustomLayout>
-              <NavDrawerDefault>
+               <NavDrawerDefaultLoop>
                 <AIDetailPage />
-              </NavDrawerDefault>
+                </NavDrawerDefaultLoop>
             </CustomLayout>
           }
         />
@@ -211,9 +211,9 @@ function App() {
           path="/issuefix"
           element={
             <CustomLayout>
-              <NavDrawerDefault>
+               <NavDrawerDefaultLoop>
                 <IssueFixPage />
-              </NavDrawerDefault>
+                </NavDrawerDefaultLoop>
             </CustomLayout>
           }
         />

@@ -27,7 +27,7 @@ import CompareDrawer from "./CompareDrawer";
 import DatePickerComponent from "./DatePicker";
 import DropdownComponent from "../components/DropDown";
 import axios from "axios";
-import InLoopPage from "../pages/Inloop";
+ 
 const useStyles = makeStyles({
   statusBullet: {
     display: "inline-block",
@@ -65,7 +65,7 @@ const useStyles = makeStyles({
     width: "90vw",
   },
 });
-
+ 
 // Column definitions
 const columns = [
   createTableColumn({
@@ -84,7 +84,6 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.description}</TableCellLayout>,
   }),
   // 
-  
   createTableColumn({
     columnId: "status",
     renderHeaderCell: () => "Status",
@@ -101,7 +100,7 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.lines[0].supplier_ids}</TableCellLayout>,
   }),
 ];
-
+ 
 // Main component
 const LoopTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -111,15 +110,10 @@ const LoopTable = () => {
   const [items, setItems] = useState([]);
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
-  const [statusCounts, setStatusCounts] = useState({
-    todo: 0,
-    rfq: 0,
-    compare: 0,
-  });
-  
+
   // Toggle Popover
   const togglePopover = () => setPopoverOpen(!popoverOpen);
-
+ 
   // Fetch data
   const fetchData = async () => {
     try {
@@ -128,19 +122,15 @@ const LoopTable = () => {
         from_date: "11/09/24",
         to_date: "11/09/25",
       });
-   
-      const data = response.data.details.details;
+      const data = response.data.details;
       console.log("Status", data[0]?.status);
       // console.log("Data",data);
-      
-      
-    
-    
+
+
       // Map through the data to structure it as needed
       const mappedItems = data.flatMap((item) => {
         // Use lineData to check for lines or line_items
         const lineData = item.lines || item.line_items;
-   
         if (lineData && lineData.length) {
           // Map over each line and create a new item for each line entry
           return lineData.map((line) => ({
@@ -155,60 +145,41 @@ const LoopTable = () => {
           };
         }
       });
-      let todoCount =0;
-      let rfqCount =0;
-      let compareCount =0;
+ 
       const data1 = mappedItems.map((item) => {
         let status = "Todo";  // Default status
-         todoCount = todoCount+1;
-        
         // Check if supplier_ids exists and has a length greater than 0
-        // if ("supplier_ids" in item.lines[0]) {
-        //     status = "RFQ";
-        //     rfqCount = rfqCount+1;
-        //     todoCount = todoCount-1;
-        //     if(item.quotations.length>0)
-        //     {
-        //       status="Compare"
-             
-        //       rfqCount= rfqCount-1;
-        //       compareCount +=1;
-        //     }
-        // } 
+        if ("supplier_ids" in item.lines[0]) {
+            status = "RFQ";
+            if(item.quotations.length>0)
+            {
+              status="Compare"
+            }
+        } 
 
-        // setStatusCounts({
-        //   todo: todoCount,
-        //   rfq: rfqCount,
-        //   compare: compareCount,
-        // })
-       
-    
         // Set the status in the item
         item.status = status;
         return item;  // Return the modified item
     });
-
-    
-      
       setItems(data1);  // Set the processed items in state
       console.log("Mapped Items:", mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
+ 
   
-
+ 
   useEffect(() => {
     fetchData();
     console.log("Items",items)
   }, []);
-
+ 
   // Handle search
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
-
+ 
   // Filter items based on search
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery.trim().toLowerCase();
@@ -221,46 +192,45 @@ const LoopTable = () => {
       item.lines[0].supplier_ids.toString().toLowerCase().includes(searchLower)
     );
   });
-
+ 
   const handleRowClick = (item) => {
     setSelectedRowData(item);
     // setSelectedStatus(item.status);
     console.log("status",item.status)
      console.log("items",item)
   };
- 
   return (
-    <div>
-      <TabList defaultSelectedValue="tab1" appearance="subtle" style={{ marginLeft: "0vw", marginTop: "2vh" }}>
-        <Tab value="tab1" style={{ border: "1px solid transparent", marginTop: "4em" }}>
+<div>
+<TabList defaultSelectedValue="tab1" appearance="subtle" style={{ marginLeft: "0vw", marginTop: "2vh" }}>
+<Tab value="tab1" style={{ border: "1px solid transparent", marginTop: "4em" }}>
           PR
-        </Tab>
-        <div className={styles.iconButtonContainer}>
-          <button className={styles.iconButton} onClick={fetchData}>
-            <ArrowClockwise28Regular className={styles.icon} />
-            <span>Refresh</span>
-          </button>
+</Tab>
+<div className={styles.iconButtonContainer}>
+<button className={styles.iconButton} onClick={fetchData}>
+<ArrowClockwise28Regular className={styles.icon} />
+<span>Refresh</span>
+</button>
           {selectedStatus === "Todo" && (
-            <button
+<button
               style={{ width: "100%", border: "none", backgroundColor: "white", color: "#1281d7", cursor: "pointer" }}
               onClick={togglePopover}
-            >
+>
               Choose Suppliers
-            </button>
+</button>
           )}
           {popoverOpen && (
-            <Popover open={popoverOpen} onOpenChange={togglePopover} positioning={{ position: "right", align: "top" }}>
-              <PopoverTrigger disableButtonEnhancement>
-                <Button style={{ border: "none" }}></Button>
-              </PopoverTrigger>
-              <PopoverSurface tabIndex={-1} style={{ width: "50%", maxWidth: "300px", padding: "1.5em" }}>
-                <div>
-                  <h2 style={{ fontWeight: "normal" }}>Choose Suppliers</h2>
-                  <div style={{ display: "flex", justifyContent: "space-between", maxWidth: "200px", flexDirection: "column" }}>
-                    <h3 style={{ fontWeight: "Normal" }}>Suppliers</h3>
-                    <DropdownComponent />
-                  </div>
-                  <button
+<Popover open={popoverOpen} onOpenChange={togglePopover} positioning={{ position: "right", align: "top" }}>
+<PopoverTrigger disableButtonEnhancement>
+<Button style={{ border: "none" }}></Button>
+</PopoverTrigger>
+<PopoverSurface tabIndex={-1} style={{ width: "50%", maxWidth: "300px", padding: "1.5em" }}>
+<div>
+<h2 style={{ fontWeight: "normal" }}>Choose Suppliers</h2>
+<div style={{ display: "flex", justifyContent: "space-between", maxWidth: "200px", flexDirection: "column" }}>
+<h3 style={{ fontWeight: "Normal" }}>Suppliers</h3>
+<DropdownComponent />
+</div>
+<button
                     style={{
                       width: "10%",
                       border: "none",
@@ -269,38 +239,37 @@ const LoopTable = () => {
                       cursor: "pointer",
                       marginTop: "1em",
                     }}
-                  >
+>
                     Submit
-                  </button>
-                </div>
-              </PopoverSurface>
-            </Popover>
+</button>
+</div>
+</PopoverSurface>
+</Popover>
           )}
-        </div>
-        <Search placeholder="Search PO or Supplier" onSearchChange={handleSearchChange} />
-      </TabList>
-      <div className={styles.dataGridContainer}>
-        <DataGrid items={items} columns={columns} selectionMode="multiselect">
-          <DataGridHeader>
-            <DataGridRow selectionCell={{ checkboxIndicator: { "aria-label": "Select all rows" } }}>
+</div>
+<Search placeholder="Search PO or Supplier" onSearchChange={handleSearchChange} />
+</TabList>
+<div className={styles.dataGridContainer}>
+<DataGrid items={items} columns={columns} selectionMode="multiselect">
+<DataGridHeader>
+<DataGridRow selectionCell={{ checkboxIndicator: { "aria-label": "Select all rows" } }}>
               {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
-            </DataGridRow>
-          </DataGridHeader>
-          <DataGridBody>
+</DataGridRow>
+</DataGridHeader>
+<DataGridBody>
             {({ item, rowId }) => (
-              <DataGridRow key={rowId} onClick={() => handleRowClick(item)}>
+<DataGridRow key={rowId} onClick={() => handleRowClick(item)}>
                 {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-              </DataGridRow>
+</DataGridRow>
             )}
-          </DataGridBody>
-        </DataGrid>
-      </div>
-      <InLoopPage />
-      {selectedRowData && selectedRowData.status === "Todo" && <TodoDrawer data={selectedRowData}  />}
-      {selectedRowData && selectedRowData.status === "RFQ" && <RFQDrawer data={selectedRowData}  />}
-      {selectedRowData && selectedRowData.status === "Compare" && <CompareDrawer data={selectedRowData} />}
-    </div>
+</DataGridBody>
+</DataGrid>
+</div>
+      {selectedRowData && selectedRowData.status === "Todo" && <TodoDrawer data={selectedRowData} />}
+      {selectedRowData && selectedRowData.status === "RFQ" && <RFQDrawer data={selectedRowData}/>}
+      {selectedRowData && selectedRowData.status === "Compare" && <CompareDrawer data={selectedRowData}/>}
+</div>
   );
 };
-
+ 
 export default LoopTable;

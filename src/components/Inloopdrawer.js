@@ -370,7 +370,7 @@ const NavDrawerDefaultLoop = (props) => {
                       value="4"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        // navigate("/issuefix");
+                        navigate("/approve");
                         setValue("4");
                       }}
                     >
@@ -380,7 +380,7 @@ const NavDrawerDefaultLoop = (props) => {
                       value="4"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        // navigate("/issuefix");
+                        navigate("/ai");
                         setValue("4");
                       }}
                     >
@@ -565,7 +565,7 @@ const NavDrawerDefaultLoop = (props) => {
                       value="5"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        // navigate("/ai");
+                        navigate("/approve");
                         setValue("5");
                       }}
                     >
@@ -575,7 +575,7 @@ const NavDrawerDefaultLoop = (props) => {
                       value="6"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        navigate("/matrimony");
+                        navigate("/ai");
                         setValue("6");
                       }}
                     >
@@ -586,7 +586,7 @@ const NavDrawerDefaultLoop = (props) => {
                       value="7"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        navigate("/matrimony");
+                        navigate("/issuefix");
                         setValue("7");
                       }}
                     >

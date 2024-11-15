@@ -74,9 +74,11 @@ const LoginPage = () => {
           case "invoice manager":
             navigate("/inloop");
             break;
-            case "supplier":
-          default:
+          case "supplier":
             navigate("/supplier");
+            break;
+          default:
+            
         }
 
         notification.success({
