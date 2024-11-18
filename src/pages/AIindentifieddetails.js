@@ -1104,11 +1104,9 @@ const AIDetailPage = () => {
                                       <ul key={selectedItem.id}>
                                         <h3>Item Details</h3>
                                         <ul>
-                                        <li>
+                                          <li>
                                             <b>Line Number:</b>{" "}
-                                            {
-                                              selectedItem.line_num
-                                            }
+                                            {selectedItem.line_num}
                                           </li>
                                           <li>
                                             <b>Order Type:</b>{" "}

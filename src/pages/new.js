@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -28,8 +28,8 @@ const LoginPage = () => {
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
   });
-  const[role,setRole]=useState('');
- 
+  const [role, setRole] = useState("");
+
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     console.log(typeof token);
@@ -38,7 +38,6 @@ const LoginPage = () => {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
         const roleFromToken = decodedToken.role;
-       
 
         setRole(roleFromToken);
       } catch (error) {
@@ -55,18 +54,21 @@ const LoginPage = () => {
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       setIsLoading(true);
       try {
-        const response = await axios.post("http://172.235.21.99:57/user/signin", {
-          username: values.username,
-          password: values.password,
-        });
+        const response = await axios.post(
+          "http://172.235.21.99:57/user/signin",
+          {
+            username: values.username,
+            password: values.password,
+          },
+        );
 
-        const {username } = response.data;
+        const { username } = response.data;
         localStorage.setItem("username", username);
         // localStorage.setItem("role", role);
 
         const tokens = response.data.tokens;
         localStorage.setItem("access_token", tokens.access_token);
-        console.log("ROLE",role);
+        console.log("ROLE", role);
         switch (role) {
           case "admin":
             navigate("/matrimony");
@@ -77,7 +79,6 @@ const LoginPage = () => {
           case "supplier":
             navigate("/supplier");
           default:
-            
         }
 
         notification.success({
@@ -115,7 +116,6 @@ const LoginPage = () => {
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
- 
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -146,7 +146,8 @@ const LoginPage = () => {
           maxWidth: "30rem", // Increased maxWidth for the outer card
           backgroundColor: "white",
           borderRadius: "0.5rem",
-          boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+          boxShadow:
+            "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
           padding: "2rem", // Increased padding for better spacing
         }}
       >
@@ -176,7 +177,9 @@ const LoginPage = () => {
             onSubmit={formik.handleSubmit}
             style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           >
-            <div style={{ position: "relative",marginLeft:"6em",width:"70%" }}>
+            <div
+              style={{ position: "relative", marginLeft: "6em", width: "70%" }}
+            >
               {/* <Mail
                 style={{
                   position: "absolute",
@@ -199,12 +202,10 @@ const LoginPage = () => {
                   border: "1px solid #D1D5DB",
                   outline: "none",
                   transition: "all 0.3s ease",
-                  boxSizing: "border-box", 
-                  
+                  boxSizing: "border-box",
                 }}
                 value={formik.values.username}
-                onChange={formik.handleChange
-                }
+                onChange={formik.handleChange}
                 required
               />
               {formik.touched.username && formik.errors.username && (
@@ -212,51 +213,51 @@ const LoginPage = () => {
               )}
             </div>
 
-            <div style={{ position: "relative", marginLeft: "6em", width: "70%" }}>
-  <input
-    type={showPassword ? "text" : "password"}
-    id="password"
-    name="password"
-    placeholder="Enter password"
-    style={{
-      width: "100%",
-      padding: "1em",
-      paddingRight: "2.5em", // Add extra padding to the right for the icon
-      borderRadius: "0.5rem",
-      border: "1px solid #D1D5DB",
-      outline: "none",
-      transition: "all 0.3s ease",
-      boxSizing: "border-box",
-    }}
-    value={formik.values.password}
-    onChange={formik.handleChange}
-    required
-  />
-  <EyeOutlined
-    onClick={handleTogglePassword}
-    style={{
-      position: "absolute",
-      right: "0.75rem",
-      top: "50%",
-      transform: "translateY(-50%)",
-      cursor: "pointer",
-      color: "#9CA3AF",
-    }}
-  />
-  {formik.touched.password && formik.errors.password && (
-    <div className="error">{formik.errors.password}</div>
-  )}
-</div>
-
+            <div
+              style={{ position: "relative", marginLeft: "6em", width: "70%" }}
+            >
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                placeholder="Enter password"
+                style={{
+                  width: "100%",
+                  padding: "1em",
+                  paddingRight: "2.5em", // Add extra padding to the right for the icon
+                  borderRadius: "0.5rem",
+                  border: "1px solid #D1D5DB",
+                  outline: "none",
+                  transition: "all 0.3s ease",
+                  boxSizing: "border-box",
+                }}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                required
+              />
+              <EyeOutlined
+                onClick={handleTogglePassword}
+                style={{
+                  position: "absolute",
+                  right: "0.75rem",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  cursor: "pointer",
+                  color: "#9CA3AF",
+                }}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <div className="error">{formik.errors.password}</div>
+              )}
+            </div>
 
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginLeft:"6em",
+                marginLeft: "6em",
                 // gap:"12em",
-                
               }}
             >
               {/* <label
@@ -301,7 +302,6 @@ const LoginPage = () => {
               htmlType="submit"
               loading={isLoading || formik.isSubmitting}
               disabled={formik.isSubmitting}
-
               // disabled={isLoading}
               style={{
                 width: "30%",
@@ -318,7 +318,7 @@ const LoginPage = () => {
                 justifyContent: "center",
                 gap: "0.5rem",
                 fontSize: "1rem",
-                marginLeft:"10em"
+                marginLeft: "10em",
               }}
             >
               <span>{isLoading ? "Signing in..." : "Sign in"}</span>
@@ -327,7 +327,7 @@ const LoginPage = () => {
               )}
             </button>
           </form>
-{/* 
+          {/*
           <div
             style={{
               marginTop: "1.5rem",

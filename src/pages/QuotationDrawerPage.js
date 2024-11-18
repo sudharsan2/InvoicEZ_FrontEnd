@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Button, Input, Label, Field, Textarea } from "@fluentui/react-components";
+import {
+  Button,
+  Input,
+  Label,
+  Field,
+  Textarea,
+} from "@fluentui/react-components";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import QuotationDropDown from "../components/QuotationDropDown";
@@ -141,7 +147,10 @@ const QuotationDrawerPage = ({ data, userId ,onSubmit}) => {
       </div>
 
       <div style={{ marginLeft: "2em", marginTop: "3em" }}>
-        <Label size="large" style={{ fontWeight: "normal", marginBottom: "10px" }}>
+        <Label
+          size="large"
+          style={{ fontWeight: "normal", marginBottom: "10px" }}
+        >
           Remarks
         </Label>
         <Field style={{ width: "80%" }}>

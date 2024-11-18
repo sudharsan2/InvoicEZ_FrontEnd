@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -55,23 +55,31 @@ const buttonContainerStyle = {
 
 const ComparePage = ({data,onSubmit}) => {
   const counters = [
-    { label: "Requestor", value: <span style={{ color: "#d62727" }}>{data.lines[0].requestor}</span>, color: "#d62727" },
-    { label: "PR Number", value: <span style={{ color: "#004378" }}>{data.document_number}</span>, color: "#004378" },
-    
+    {
+      label: "Requestor",
+      value: (
+        <span style={{ color: "#d62727" }}>{data.lines[0].requestor}</span>
+      ),
+      color: "#d62727",
+    },
+    {
+      label: "PR Number",
+      value: <span style={{ color: "#004378" }}>{data.document_number}</span>,
+      color: "#004378",
+    },
   ];
-  const[selectedRow,setSelectedRow]=useState('');
-  useEffect(()=>{
-    console.log("compare Data",data);
-  },[data]);
+  const [selectedRow, setSelectedRow] = useState("");
+  useEffect(() => {
+    console.log("compare Data", data);
+  }, [data]);
 
   const selectedSupplier = useSelector(
     (state) => state.refresh.conformedSupplier,
   );
 
-
-  const handleRowClick=()=>{
-    setSelectedRow()
-  }
+  const handleRowClick = () => {
+    setSelectedRow();
+  };
 
 //   const handleSupplier= async ()=>{
     
@@ -103,7 +111,9 @@ const ComparePage = ({data,onSubmit}) => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>Quotation Comparison</BreadcrumbButton>
+              <BreadcrumbButton href={path}>
+                Quotation Comparison
+              </BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -121,19 +131,17 @@ const ComparePage = ({data,onSubmit}) => {
             </div>
           ))}
         </div>
-        <div style={{marginTop:"5em"}}>
-            <h2>Line Information</h2>
+        <div style={{ marginTop: "5em" }}>
+          <h2>Line Information</h2>
         </div>
 
-        <div style={{ height: "5vh" ,marginTop:"-2em"}} />
-        <CompareDrawerTable data={data}/>
+        <div style={{ height: "5vh", marginTop: "-2em" }} />
+        <CompareDrawerTable data={data} />
       </div>
-      <div style={{marginTop:"2em"}}>
-            <h2>Supplier Response</h2>
-        </div>
-        <SupplierTable style={{ marginTop:"2em"}} data={data}/>
-        
-        
+      <div style={{ marginTop: "2em" }}>
+        <h2>Supplier Response</h2>
+      </div>
+      <SupplierTable style={{ marginTop: "2em" }} data={data} />
 
       <div style={buttonContainerStyle}>
         <button style={{color:"#0078d5",border:"none",backgroundColor:"white",cursor:"pointer"}} onClick={onSubmit}>Submit</button>

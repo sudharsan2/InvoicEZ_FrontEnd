@@ -200,8 +200,18 @@ const TodoPage = ({data,onSubmit }) => {
   const  dispatch = useDispatch();
   const counters = [
     // { label: "Todo", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
-    { label: "Requestor", value: <span style={{ color: "#004378" }}>{data.lines[0].requestor}</span>, color: "#004378" },
-    { label: "PR Number", value: <span style={{ color: "#00a2ad" }}>{data.document_number}</span>, color: "#00a2ad" },
+    {
+      label: "Requestor",
+      value: (
+        <span style={{ color: "#004378" }}>{data.lines[0].requestor}</span>
+      ),
+      color: "#004378",
+    },
+    {
+      label: "PR Number",
+      value: <span style={{ color: "#00a2ad" }}>{data.document_number}</span>,
+      color: "#00a2ad",
+    },
   ];
   // const[suppliers,setSuppliers] = useState("");
   
@@ -225,7 +235,14 @@ const TodoPage = ({data,onSubmit }) => {
   
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
-      <div style={{ height: "5vh",display:"flex",flexDirection:"row",justifyContent:"space-between",}}>
+      <div
+        style={{
+          height: "5vh",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
         <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
@@ -237,12 +254,14 @@ const TodoPage = ({data,onSubmit }) => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>Supplier Selection</BreadcrumbButton>
+              <BreadcrumbButton href={path}>
+                Supplier Selection
+              </BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
-        <div style={{padding:"2.5em"}}>
-          <DropDown/>
+        <div style={{ padding: "2.5em" }}>
+          <DropDown />
         </div>
       </div>
 
@@ -259,7 +278,7 @@ const TodoPage = ({data,onSubmit }) => {
           ))}
         </div>
 
-        <div style={{ height: "5vh" ,marginTop:"4em"}} />
+        <div style={{ height: "5vh", marginTop: "4em" }} />
         <TodoTable data={data} />
       </div>
 

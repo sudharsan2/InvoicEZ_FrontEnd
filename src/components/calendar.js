@@ -19,7 +19,6 @@ const CalendarComponent = () => {
         );
         const data = await response.json();
 
-       
         const formattedOrders = data.map((order) => ({
           id: order.id,
           title: `Order #${order.id}`,
@@ -80,10 +79,10 @@ const CalendarComponent = () => {
         endAccessor="end"
         titleAccessor="title"
         style={{ height: 500, margin: "50px" }}
-        views={["month", "week"]} 
-        defaultView={Views.MONTH} 
+        views={["month", "week"]}
+        defaultView={Views.MONTH}
         components={{
-          toolbar: CustomToolbar, 
+          toolbar: CustomToolbar,
         }}
       />
     </div>
@@ -91,5 +90,3 @@ const CalendarComponent = () => {
 };
 
 export default CalendarComponent;
-
-

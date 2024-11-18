@@ -343,16 +343,14 @@ const ApprovePage = () => {
         console.log("InvoiceId", fetchedItems.invoice_info.id);
 
         const normalizedPoLineItems = fetchedItems.po_lineitems.map(
-          (poItem,index) => {
-            console.log("PO",poItem);
-
+          (poItem, index) => {
+            console.log("PO", poItem);
 
             const matchingInvoiceItems = fetchedItems.invoice_info.items;
 
-        
-        const matchingQuantity = matchingInvoiceItems[index]
-          ? matchingInvoiceItems[index].Quantity
-          : null;
+            const matchingQuantity = matchingInvoiceItems[index]
+              ? matchingInvoiceItems[index].Quantity
+              : null;
             return {
               id: poItem.id,
               item_name: poItem.item_name,

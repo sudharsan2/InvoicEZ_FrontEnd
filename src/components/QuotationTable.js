@@ -70,7 +70,7 @@
 // //   },
 // //   dataGridContainer: {
 // //     overflowX: "auto",
-// //     width: "90vw", 
+// //     width: "90vw",
 // //   },
 // // });
 
@@ -110,7 +110,6 @@
 // //   },
 // // ];
 
-
 // // const StatusCell = ({ statusLabel }) => {
 // //   const styles = useStyles();
 // //   const statusStyle =
@@ -134,7 +133,6 @@
 // //     <div>
 // //       <h2 style={{fontWeight:"normal"}}>Choose Suppliers</h2>
 
-      
 // //       <div style={{ display: "flex", justifyContent: "space-between", maxWidth: "200px", flexDirection: "column" }}>
 // //         <h3 style={{ fontWeight: "Normal" }}>Suppliers</h3>
 // //         <DropdownComponent />
@@ -213,8 +211,7 @@
 // //     console.log("STATUS", selectedStatus);
 
 // //     }
-  
-    
+
 // //   };
 
 // //     const handleSelectionChange = (event, data) => {
@@ -269,10 +266,10 @@
 // //                   <PopoverSurface
 // //                     tabIndex={-1}
 // //                     style={{
-// //                       width: "50%",     
-// //                       maxWidth: "300px",  
-// //                       padding: "1.5em",  
-                      
+// //                       width: "50%",
+// //                       maxWidth: "300px",
+// //                       padding: "1.5em",
+
 // //                     }}
 // //                   >
 // //                     <ExampleContent />
@@ -305,7 +302,7 @@
 // //   // selectionCell={{
 // //   //   checkboxIndicator: { "aria-label": "Select row" }
 // //   // }}
-// //   onClick={(e) => handleRowClick(e, item)} 
+// //   onClick={(e) => handleRowClick(e, item)}
 // // >
 // //   {({ renderCell }) => (
 // //     <DataGridCell>{renderCell(item)}</DataGridCell>
@@ -315,9 +312,7 @@
 // // </DataGridBody>
 // // </DataGrid>
 
-
 // //       </div>
-     
 
 // //       {selectedStatus === "Todo" && <TodoDrawer />}
 // //       {selectedStatus === "RFQ" && <RFQDrawer />}
@@ -327,10 +322,6 @@
 // // };
 
 // // export default QuotationTable;
-
-
-
-
 
 // import React, { useMemo,useState } from "react";
 // import {
@@ -380,7 +371,7 @@
 //       fontSize: "24px", // Adjust font size to match the ArrowClockwise icon
 //     },
 //   });
-  
+
 // const items = [
 //   {
 //     file: { label: "10" },
@@ -444,8 +435,6 @@
 //   },
 // ];
 
-
-
 // const StatusCell = ({ statusLabel }) => {
 //     const styles = useStyles();
 //     const statusStyle =
@@ -454,7 +443,7 @@
 //         : statusLabel === "To be Acknowledged"
 //         ? styles.statusTobe
 //         : styles.statusReject;
-  
+
 //     return (
 //       <TableCellLayout>
 //         <span className={`${styles.statusBullet} ${statusStyle}`} />
@@ -546,7 +535,7 @@
 //       </TableCellLayout>
 //     ),
 //   }),
- 
+
 // ];
 
 // const QuotationTable = () => {
@@ -558,8 +547,8 @@
 //   );
 
 //   const gridContainerStyle = {
-//     overflowX: "auto", 
-//     width: "90vw", 
+//     overflowX: "auto",
+//     width: "90vw",
 //   };
 
 //   const handleRowClick = () => {
@@ -587,7 +576,7 @@
 //             <ArrowClockwise28Regular className={styles.icon} />
 //             <span>Refresh</span>
 //           </button>
-          
+
 //         </div>
 
 //         <Search placeholder="Search Requests"  style={{marginRight:"10em"}}/>
@@ -601,11 +590,11 @@
 //       {({ renderHeaderCell }) => (
 //         <DataGridHeaderCell
 //           style={{
-//             maxWidth: "500vw", 
+//             maxWidth: "500vw",
 //               overflow: "visible",
 //               whiteSpace: "normal",
-//               wordBreak: "break-word",  
-//             textOverflow: "clip", 
+//               wordBreak: "break-word",
+//             textOverflow: "clip",
 //           }}
 //         >
 //           {renderHeaderCell()}
@@ -619,11 +608,11 @@
 //         {({ renderCell }) => (
 //           <DataGridCell
 //             style={{
-//               maxWidth: "200px", 
+//               maxWidth: "200px",
 //               overflow: "visible",
 //               whiteSpace: "normal",
-//               wordBreak: "break-word",  
-//             textOverflow: "clip", 
+//               wordBreak: "break-word",
+//             textOverflow: "clip",
 //             maxHeight:"300px"
 //             }}
 //           >
@@ -641,8 +630,6 @@
 // };
 
 // export default QuotationTable;
-
-
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -665,7 +652,16 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import { makeStyles, TabList, Tab, Divider, Button, Popover, PopoverSurface, PopoverTrigger } from "@fluentui/react-components";
+import {
+  makeStyles,
+  TabList,
+  Tab,
+  Divider,
+  Button,
+  Popover,
+  PopoverSurface,
+  PopoverTrigger,
+} from "@fluentui/react-components";
 import Search from "./Search";
 import QuotationDrawer from "./QuotationDrawer";
 import RFQDrawer from "./RFQDrawer";
@@ -718,29 +714,41 @@ const columns = [
   createTableColumn({
     columnId: "requestor",
     renderHeaderCell: () => "Buyer Name",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].requestor}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.line_items[0].requestor}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "document_number",
     renderHeaderCell: () => "PR Number",
-    renderCell: (item) => <TableCellLayout>{item.document_number}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.document_number}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "description",
     renderHeaderCell: () => "Description",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].description}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.line_items[0].description}</TableCellLayout>
+    ),
   }),
-  // 
-  
+  //
+
   createTableColumn({
     columnId: "status",
     renderHeaderCell: () => "Quantity",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].distributions[0].quantity}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>
+        {item.line_items[0].distributions[0].quantity}
+      </TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "need_by_date",
     renderHeaderCell: () => "Need By Date",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].need_by_date}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.line_items[0].need_by_date}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "status",
@@ -750,17 +758,23 @@ const columns = [
   createTableColumn({
     columnId: "suppliersReplied",
     renderHeaderCell: () => "Received Date",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].last_update_date}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.line_items[0].last_update_date}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "suppliersReplied",
     renderHeaderCell: () => "UOM",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].uom}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.line_items[0].uom}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "suppliersReplied",
     renderHeaderCell: () => "Line",
-    renderCell: (item) => <TableCellLayout>{item.lines[0].line_number}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.line_items[0].line_number}</TableCellLayout>
+    ),
   }),
 ];
 
@@ -771,7 +785,7 @@ const QuotationTable = () => {
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [items, setItems] = useState([]);
-  const[userId,setUserID] = useState('');
+  const [userId, setUserID] = useState("");
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -782,64 +796,59 @@ const QuotationTable = () => {
       setIsDrawerOpen(false); // Close the drawer if the condition is not met
     }
   }, [selectedRowData]);
-  
+
   // Toggle Popover
   const togglePopover = () => setPopoverOpen(!popoverOpen);
 
   // Fetch data
   const fetchData = async () => {
-    let userId=null;
+    let userId = null;
     const token = localStorage.getItem("access_token");
     console.log(typeof token);
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
-         userId = decodedToken.user_id;
-         setUserID(userId);
-        console.log("ID",userId);
+        userId = decodedToken.user_id;
+        setUserID(userId);
+        console.log("ID", userId);
         // const empIdFromToken = decodedToken.empId;
-     
-        
       } catch (error) {
         console.error("Invalid token:", error);
       }
     }
     try {
-      const response = await axios.get(`http://172.235.21.99:57/user/pr-details/supplier/${userId}/`);
-        
-      
-   
+      const response = await axios.get(
+        `http://172.235.21.99:57/user/pr-details/supplier/${userId}/`,
+      );
+
       const data = response.data;
       console.log("Status", data[0]?.status);
       // console.log("Data",data);
-      
-      
-    
-    
-      // Map through the data to structure it as needed
-      const mappedItems = data.flatMap((item) => {
-        // Use lineData to check for lines or line_items
-        const lineData = item.lines || item.line_items;
-   
-        if (lineData && lineData.length) {
-          // Map over each line and create a new item for each line entry
-          return lineData.map((line) => ({
-            ...item,         // Copy all properties from the original item
-            lines: [line],   // Replace 'lines' with a single line item array
-          }));
-        } else {
-          // Handle case where there are no lines or line_items
-          return {
-            ...item,
-            lines: [],       // Default to an empty array if no lines/line_items are found
-          };
-        }
-      });
 
-      const data1 = mappedItems.map((item) => {
-        let status = "";  // Default status
-    
+      // Map through the data to structure it as needed
+      // const mappedItems = data.flatMap((item) => {
+      //   // Use lineData to check for lines or line_items
+      //   const lineData = item.lines || item.line_items;
+
+      //   if (lineData && lineData.length) {
+      //     // Map over each line and create a new item for each line entry
+      //     return lineData.map((line) => ({
+      //       ...item, // Copy all properties from the original item
+      //       lines: [line], // Replace 'lines' with a single line item array
+      //     }));
+      //   } else {
+      //     // Handle case where there are no lines or line_items
+      //     return {
+      //       ...item,
+      //       lines: [], // Default to an empty array if no lines/line_items are found
+      //     };
+      //   }
+      // });
+
+      const data1 = data.map((item) => {
+        let status = ""; // Default status
+
         // Check if supplier_ids exists and has a length greater than 0
         if ("quotations" in item) {
             
@@ -856,21 +865,19 @@ const QuotationTable = () => {
     
         // Set the status in the item
         item.status = status;
-        return item;  // Return the modified item
-    });
-      
-      setItems(data1);  // Set the processed items in state
-      console.log("Mapped Items:", mappedItems);
+        return item; // Return the modified item
+      });
+
+      setItems(data1); // Set the processed items in state
+      // console.log("Mapped Items:", mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  
-
   useEffect(() => {
     fetchData();
-    console.log("Items",items)
+    console.log("Items", items);
   }, []);
 
   // Handle search
@@ -882,12 +889,15 @@ const QuotationTable = () => {
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery.trim().toLowerCase();
     return (
-      item.lines[0].requestor.toLowerCase().includes(searchLower) ||
+      item.line_items[0].requestor.toLowerCase().includes(searchLower) ||
       item.document_number.toLowerCase().includes(searchLower) ||
       item.description.toLowerCase().includes(searchLower) ||
       item.status.toLowerCase().includes(searchLower) ||
-      item.lines[0].need_by_date.toLowerCase().includes(searchLower) ||
-      item.lines[0].supplier_ids.toString().toLowerCase().includes(searchLower)
+      item.line_items[0].need_by_date.toLowerCase().includes(searchLower) ||
+      item.line_items[0].supplier_ids
+        .toString()
+        .toLowerCase()
+        .includes(searchLower)
     );
   });
 
@@ -904,15 +914,20 @@ const QuotationTable = () => {
        
     // setSelectedRowData(item);
     // setSelectedStatus(item.status);
-    console.log("status",item.status)
-     console.log("items",item)
+    console.log("status", item.status);
+    console.log("items", item);
   };
- 
- 
+
   return (
     <div>
-      <TabList appearance="subtle" style={{ marginLeft: "0vw", marginTop: "2vh" }}>
-        <Tab value="tab1" style={{ border: "1px solid transparent", marginTop: "4em" }}>
+      <TabList
+        appearance="subtle"
+        style={{ marginLeft: "0vw", marginTop: "2vh" }}
+      >
+        <Tab
+          value="tab1"
+          style={{ border: "1px solid transparent", marginTop: "4em" }}
+        >
           Quotation
         </Tab>
         <div className={styles.iconButtonContainer}>
@@ -922,21 +937,41 @@ const QuotationTable = () => {
           </button>
           {selectedStatus === "Todo" && (
             <button
-              style={{ width: "100%", border: "none", backgroundColor: "white", color: "#1281d7", cursor: "pointer" }}
+              style={{
+                width: "100%",
+                border: "none",
+                backgroundColor: "white",
+                color: "#1281d7",
+                cursor: "pointer",
+              }}
               onClick={togglePopover}
             >
               Choose Suppliers
             </button>
           )}
           {popoverOpen && (
-            <Popover open={popoverOpen} onOpenChange={togglePopover} positioning={{ position: "right", align: "top" }}>
+            <Popover
+              open={popoverOpen}
+              onOpenChange={togglePopover}
+              positioning={{ position: "right", align: "top" }}
+            >
               <PopoverTrigger disableButtonEnhancement>
                 <Button style={{ border: "none" }}></Button>
               </PopoverTrigger>
-              <PopoverSurface tabIndex={-1} style={{ width: "50%", maxWidth: "300px", padding: "1.5em" }}>
+              <PopoverSurface
+                tabIndex={-1}
+                style={{ width: "50%", maxWidth: "300px", padding: "1.5em" }}
+              >
                 <div>
                   <h2 style={{ fontWeight: "normal" }}>Choose Suppliers</h2>
-                  <div style={{ display: "flex", justifyContent: "space-between", maxWidth: "200px", flexDirection: "column" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      maxWidth: "200px",
+                      flexDirection: "column",
+                    }}
+                  >
                     <h3 style={{ fontWeight: "Normal" }}>Suppliers</h3>
                     <DropdownComponent />
                   </div>
@@ -957,13 +992,22 @@ const QuotationTable = () => {
             </Popover>
           )}
         </div>
-        <Search placeholder="Search PO or Supplier" onSearchChange={handleSearchChange} />
+        <Search
+          placeholder="Search PO or Supplier"
+          onSearchChange={handleSearchChange}
+        />
       </TabList>
       <div className={styles.dataGridContainer}>
         <DataGrid items={items} columns={columns} selectionMode="multiselect">
           <DataGridHeader>
-            <DataGridRow selectionCell={{ checkboxIndicator: { "aria-label": "Select all rows" } }}>
-              {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
+            <DataGridRow
+              selectionCell={{
+                checkboxIndicator: { "aria-label": "Select all rows" },
+              }}
+            >
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+              )}
             </DataGridRow>
           </DataGridHeader>
           <DataGridBody>
@@ -983,4 +1027,3 @@ const QuotationTable = () => {
 };
 
 export default QuotationTable;
-
