@@ -53,7 +53,7 @@ const buttonContainerStyle = {
   padding: "16px 0",
 };
 
-const ComparePage = ({data}) => {
+const ComparePage = ({data,onSubmit}) => {
   const counters = [
     { label: "Requestor", value: <span style={{ color: "#d62727" }}>{data.lines[0].requestor}</span>, color: "#d62727" },
     { label: "PR Number", value: <span style={{ color: "#004378" }}>{data.document_number}</span>, color: "#004378" },
@@ -73,21 +73,21 @@ const ComparePage = ({data}) => {
     setSelectedRow()
   }
 
-  const handleSupplier= async ()=>{
+//   const handleSupplier= async ()=>{
     
-    try{
-      axios.defaults.baseURL = 'http://172.235.21.99:57';
-      const response = await axios.put(`/user/update-supplier/${data.id}/`, { supplier_id: selectedSupplier });
+//     try{
+//       axios.defaults.baseURL = 'http://172.235.21.99:57';
+//       const response = await axios.put(`/user/update-supplier/${data.id}/`, { supplier_id: selectedSupplier });
       
-    }
-    catch(error)
-  {
-     console.log("Error",error);
-  }
+//     }
+//     catch(error)
+//   {
+//      console.log("Error",error);
+//   }
 
   
   
-}
+// }
 
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
@@ -136,7 +136,7 @@ const ComparePage = ({data}) => {
         
 
       <div style={buttonContainerStyle}>
-        <button style={{color:"#0078d5",border:"none",backgroundColor:"white",cursor:"pointer"}} onClick={handleSupplier}>Submit</button>
+        <button style={{color:"#0078d5",border:"none",backgroundColor:"white",cursor:"pointer"}} onClick={onSubmit}>Submit</button>
       </div>
     </div>
   );

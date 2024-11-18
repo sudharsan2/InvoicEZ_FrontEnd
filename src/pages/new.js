@@ -76,7 +76,6 @@ const LoginPage = () => {
             break;
           case "supplier":
             navigate("/supplier");
-            break;
           default:
             
         }

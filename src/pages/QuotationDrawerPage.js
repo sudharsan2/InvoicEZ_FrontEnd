@@ -5,7 +5,7 @@ import axios from "axios";
 import QuotationDropDown from "../components/QuotationDropDown";
 import DatePickerComponent from "../components/DatePicker";
 
-const QuotationDrawerPage = ({ data, userId }) => {
+const QuotationDrawerPage = ({ data, userId ,onSubmit}) => {
   const dispatch = useDispatch();
   const handleFreightTerm = useSelector((state) => state.refresh.freightterm);
 
@@ -37,25 +37,25 @@ const QuotationDrawerPage = ({ data, userId }) => {
     }));
   };
 
-  const handleSubmit = async () => {
-    console.log("data",data)
-    try {
-      const response = await axios.post(
-        `http://172.235.21.99:57/user/create-quotations/${data.id}`,
-        {
-          distribution_number: data.line_items[0].distribution_number,
-          charge_account: handleFreightTerm,
-          distribution_amount: formData.price,
-          last_update_date: formData.deliverySchedule,
-          supplier: userId,
-        }
-      );
-      const fetchedItems = response.data;
-      console.log(fetchedItems); // You can handle the response as needed
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
+  // const handleSubmit = async () => {
+  //   console.log("data",data)
+  //   try {
+  //     const response = await axios.post(
+  //       `http://172.235.21.99:57/user/create-quotations/${data.id}`,
+  //       {
+  //         distribution_number: data.line_items[0].distribution_number,
+  //         charge_account: handleFreightTerm,
+  //         distribution_amount: formData.price,
+  //         last_update_date: formData.deliverySchedule,
+  //         supplier: userId,
+  //       }
+  //     );
+  //     const fetchedItems = response.data;
+  //     console.log(fetchedItems); // You can handle the response as needed
+  //   } catch (error) {
+  //     console.log("Error:", error);
+  //   }
+  // };
 
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
@@ -157,7 +157,7 @@ const QuotationDrawerPage = ({ data, userId }) => {
           marginTop: "2em",
         }}
       >
-        <Button style={{ color: "white", backgroundColor: "#3d98de" }} onClick={handleSubmit}>
+        <Button style={{ color: "white", backgroundColor: "#3d98de" }} onClick={()=>{onSubmit();}}>
           Submit
         </Button>
       </div>

@@ -9,7 +9,8 @@ import {
   dropDownSubmit,
   dropDownValue,
   conformedSupplierValue,
-  handleFreightTerm
+  handleFreightTerm,
+  handleMessageNotify
 } from "./refreshSlice"; // Import both reducer and action
 
 const store = configureStore({
@@ -27,6 +28,7 @@ export const refreshActions = {
   dropDownSubmit,
   dropDownValue,
   conformedSupplierValue,
-  handleFreightTerm
+  handleFreightTerm,
+  handleMessageNotify
 }; // Export the specific action
 export default store;

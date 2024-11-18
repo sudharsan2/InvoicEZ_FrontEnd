@@ -27,7 +27,9 @@ import CompareDrawer from "./CompareDrawer";
 import DatePickerComponent from "./DatePicker";
 import DropdownComponent from "../components/DropDown";
 import axios from "axios";
- 
+import {message} from "antd";
+import { useDispatch, useSelector } from "react-redux";
+
 const useStyles = makeStyles({
   statusBullet: {
     display: "inline-block",
@@ -105,12 +107,23 @@ const columns = [
 const LoopTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(false);
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [items, setItems] = useState([]);
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
+  const [mulipleRowData,setMultipleRowData]=useState([]);
+  const [selectedRowsSet, setSelectedRowsSet] = useState(new Set());
+  const navigate = useNavigate();
+  const isInvoiceUploadRefreshed = useSelector(
+    (state) => state.refresh.messageNotify,
+  );
 
+
+  useEffect(()=>{
+    // message.success("Successfully Submitted")
+  },[isInvoiceUploadRefreshed])
+  
   // Toggle Popover
   const togglePopover = () => setPopoverOpen(!popoverOpen);
  
@@ -163,6 +176,8 @@ const LoopTable = () => {
     });
       setItems(data1);  // Set the processed items in state
       console.log("Mapped Items:", mappedItems);
+
+     
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -193,12 +208,50 @@ const LoopTable = () => {
     );
   });
  
-  const handleRowClick = (item) => {
-    setSelectedRowData(item);
-    // setSelectedStatus(item.status);
+  const handleRowClick = (e,item) => {
+    if (e.target.type === "checkbox") {
+      return;
+    }
+
+    setSelectedRowData(null);
+
+    setTimeout(() => {
+      setSelectedRowData(item);
+    }, 0);
+
+    // setSelectedRowData(item);
+   
     console.log("status",item.status)
      console.log("items",item)
   };
+
+  const handleSelectionChange = (event, data) => {
+    console.log("handleSelectionChange", data.selectedItems);
+    setSelectedRowsSet(data.selectedItems);
+    let a = [];
+    let truth = false;
+    let count = 0;
+    
+   
+    for (const value of data.selectedItems) {
+        a.push(items[value])
+        if(items[value].status==="Todo")
+        {
+          count+=1;
+          
+        }
+        
+    }
+    if(count===a.length && a.length>0 && count >0)
+    {
+      truth=true;
+    }
+   
+      console.log("Length",a.length===0);
+    setSelectedStatus(truth);
+    setMultipleRowData(a);
+  };
+
   return (
 <div>
 <TabList defaultSelectedValue="tab1" appearance="subtle" style={{ marginLeft: "0vw", marginTop: "2vh" }}>
@@ -210,14 +263,17 @@ const LoopTable = () => {
 <ArrowClockwise28Regular className={styles.icon} />
 <span>Refresh</span>
 </button>
-          {selectedStatus === "Todo" && (
-<button
-              style={{ width: "100%", border: "none", backgroundColor: "white", color: "#1281d7", cursor: "pointer" }}
-              onClick={togglePopover}
+{selectedStatus && (
+  <button
+  style={{ width: "100%", border: "none", backgroundColor: "white", color: "#1281d7", cursor: "pointer" }}
+  onClick={togglePopover}
 >
-              Choose Suppliers
+  Choose Suppliers
 </button>
-          )}
+)
+}       
+
+          
           {popoverOpen && (
 <Popover open={popoverOpen} onOpenChange={togglePopover} positioning={{ position: "right", align: "top" }}>
 <PopoverTrigger disableButtonEnhancement>
@@ -250,7 +306,7 @@ const LoopTable = () => {
 <Search placeholder="Search PO or Supplier" onSearchChange={handleSearchChange} />
 </TabList>
 <div className={styles.dataGridContainer}>
-<DataGrid items={items} columns={columns} selectionMode="multiselect">
+<DataGrid items={items} columns={columns} selectionMode="multiselect" onSelectionChange={handleSelectionChange}>
 <DataGridHeader>
 <DataGridRow selectionCell={{ checkboxIndicator: { "aria-label": "Select all rows" } }}>
               {({ renderHeaderCell }) => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>}
@@ -258,16 +314,29 @@ const LoopTable = () => {
 </DataGridHeader>
 <DataGridBody>
             {({ item, rowId }) => (
-<DataGridRow key={rowId} onClick={() => handleRowClick(item)}>
+<DataGridRow key={rowId} onClick={(e) => handleRowClick(e,item)} >
                 {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
 </DataGridRow>
             )}
 </DataGridBody>
 </DataGrid>
 </div>
-      {selectedRowData && selectedRowData.status === "Todo" && <TodoDrawer data={selectedRowData} />}
+      {/* {selectedRowData && selectedRowData.status === "Todo" && <TodoDrawer data={selectedRowData} />}
       {selectedRowData && selectedRowData.status === "RFQ" && <RFQDrawer data={selectedRowData}/>}
-      {selectedRowData && selectedRowData.status === "Compare" && <CompareDrawer data={selectedRowData}/>}
+      {selectedRowData && selectedRowData.status === "Compare" && <CompareDrawer data={selectedRowData}/>} */}
+
+<div>
+  {/* Render the corresponding drawer based on the status */}
+  {selectedRowData && selectedRowData.status === "Todo" && (
+    <TodoDrawer data={selectedRowData} onClose={() => fetchData()} />
+  )}
+  {selectedRowData && selectedRowData.status === "RFQ" && (
+    <RFQDrawer data={selectedRowData} onClose={() => fetchData()} />
+  )}
+  {selectedRowData && selectedRowData.status === "Compare" && (
+    <CompareDrawer data={selectedRowData} onClose={() => fetchData()} />
+  )}
+</div>
 </div>
   );
 };

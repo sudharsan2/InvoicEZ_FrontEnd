@@ -32,13 +32,18 @@ const useStyles = makeStyles({
   },
 });
 
-const RFQDrawer = ({data}) => {
+const RFQDrawer = ({data,onClose}) => {
   const styles = useStyles();
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("overlay");
 
   const restoreFocusTargetAttributes = useRestoreFocusTarget();
   const restoreFocusSourceAttributes = useRestoreFocusSource();
+
+  const handleClose = () => {
+    setIsOpen(false);
+    if (onClose) onClose(); 
+  };
 
   return (
     <div className={styles.root}>
@@ -48,7 +53,10 @@ const RFQDrawer = ({data}) => {
         position="end"
         separator
         open={isOpen}
-        onOpenChange={(_, { open }) => setIsOpen(open)}
+        onOpenChange={(_, { open }) => {
+          setIsOpen(open)
+          if (!open) handleClose(); // Trigger close logic when the drawer closes
+        }}
         className={styles.drawer}
       >
         <div className={styles.drawerContent}>

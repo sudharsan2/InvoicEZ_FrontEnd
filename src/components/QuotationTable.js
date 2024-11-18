@@ -843,7 +843,7 @@ const QuotationTable = () => {
         // Check if supplier_ids exists and has a length greater than 0
         if ("quotations" in item) {
             
-            if(item.quotations.length==1)
+            if (item.status === "YetAcknowledged")
             {
               status="To be Acknowledged";
             }
@@ -891,9 +891,18 @@ const QuotationTable = () => {
     );
   });
 
-  const handleRowClick = (item) => {
+  const handleRowClick = (e,item) => {
+    if(e.target.type==="checkbox")
+    {
+      return;
+    }
+    setSelectedRowData(null);
+
+    setTimeout(() => {
+      setSelectedRowData(item);
+    }, 0);
        
-    setSelectedRowData(item);
+    // setSelectedRowData(item);
     // setSelectedStatus(item.status);
     console.log("status",item.status)
      console.log("items",item)
@@ -959,14 +968,14 @@ const QuotationTable = () => {
           </DataGridHeader>
           <DataGridBody>
             {({ item, rowId }) => (
-              <DataGridRow key={rowId} onClick={() => handleRowClick(item)}>
+              <DataGridRow key={rowId} onClick={(e) => handleRowClick(e,item)}>
                 {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
               </DataGridRow>
             )}
           </DataGridBody>
         </DataGrid>
       </div>
-      {selectedRowData && selectedRowData.status === "quotation" && <QuotationDrawer data={selectedRowData} userId={userId}/>}
+      {selectedRowData && selectedRowData.status === "quotation" && <QuotationDrawer data={selectedRowData} userId={userId} onClose={() => fetchData()}/>}
       {selectedRowData && selectedRowData.status === "To be Acknowledged" && <AckDrawer data={selectedRowData} isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />}
       {/* <QuotationDrawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} /> */}
     </div>
