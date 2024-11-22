@@ -178,7 +178,7 @@ const ApprovePage = () => {
       const response = await axios.delete(url);
       if (response.status === 204) {
         message.success("Revoked successfully");
-        navigate(`/issuefix`);
+        navigate(`/approve`);
       }
     } catch (error) {
       message.error(`Operation Unsuccessfull Please try again`);
@@ -333,7 +333,7 @@ const ApprovePage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://172.235.21.99:57/user/po-details/${Id}/`,
+          `http://172.235.21.99:57/user/po-details/${Id}`,
         );
         const fetchedItems = response.data;
 

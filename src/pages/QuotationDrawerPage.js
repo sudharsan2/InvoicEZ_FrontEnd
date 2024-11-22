@@ -11,57 +11,61 @@ import axios from "axios";
 import QuotationDropDown from "../components/QuotationDropDown";
 import DatePickerComponent from "../components/DatePicker";
 
-const QuotationDrawerPage = ({ data, userId ,onSubmit}) => {
+const QuotationDrawerPage = ({ formData, onFormDataChange,data, userId ,onSubmit}) => {
   const dispatch = useDispatch();
   const handleFreightTerm = useSelector((state) => state.refresh.freightterm);
 
-  const [formData, setFormData] = useState({
-    price: "",
-    deliverySchedule: null,
-    payment: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   price: "",
+  //   deliverySchedule: null,
+  //   payment: "",
+  // });
 
-  // Handler functions to update state
+  // // Handler functions to update state
+  // const handlePriceChange = (e) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     price: e.target.value,
+  //   }));
+  // };
+
+  // const handlePaymentChange = (value) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     payment: value,
+  //   }));
+  // };
+
+  // const handleDeliveryScheduleChange = (date) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     deliverySchedule: date,
+  //   }));
+  // };
+
+  
   const handlePriceChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
+    onFormDataChange({
+      ...formData,
       price: e.target.value,
-    }));
+    });
   };
 
-  const handlePaymentChange = (value) => {
-    setFormData((prev) => ({
-      ...prev,
-      payment: value,
-    }));
+  
+
+  const handlePaymentChange = (e) => {
+    onFormDataChange({
+      ...formData,
+      payment: e.target.value,
+    });
   };
 
   const handleDeliveryScheduleChange = (date) => {
-    setFormData((prev) => ({
-      ...prev,
+    onFormDataChange({
+      ...formData,
       deliverySchedule: date,
-    }));
+    });
   };
-
-  // const handleSubmit = async () => {
-  //   console.log("data",data)
-  //   try {
-  //     const response = await axios.post(
-  //       `http://172.235.21.99:57/user/create-quotations/${data.id}`,
-  //       {
-  //         distribution_number: data.line_items[0].distribution_number,
-  //         charge_account: handleFreightTerm,
-  //         distribution_amount: formData.price,
-  //         last_update_date: formData.deliverySchedule,
-  //         supplier: userId,
-  //       }
-  //     );
-  //     const fetchedItems = response.data;
-  //     console.log(fetchedItems); // You can handle the response as needed
-  //   } catch (error) {
-  //     console.log("Error:", error);
-  //   }
-  // };
 
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
@@ -117,11 +121,19 @@ const QuotationDrawerPage = ({ data, userId ,onSubmit}) => {
             maxWidth: "30%",
           }}
         >
-          <span style={{ marginBottom: "10px" }}>Delivery Schedule</span>
-          <DatePickerComponent
+          {/* <span style={{ marginBottom: "10px" }}>Delivery Schedule</span>  */}
+          {/* <DatePickerComponent
             value={formData.deliverySchedule}
             onChange={handleDeliveryScheduleChange}
-          />
+          />  */}
+
+<DatePickerComponent
+    value={formData.deliverySchedule}
+    onChange={(date) => {
+      console.log("Selected Date:", date); // Debugging
+      handleDeliveryScheduleChange(date);
+    }}
+  />
         </div>
 
         <div
@@ -133,14 +145,9 @@ const QuotationDrawerPage = ({ data, userId ,onSubmit}) => {
           }}
         >
           <span style={{ marginBottom: "10px" }}>Payment Term</span>
-          <Input
+           <Input
             value={formData.payment}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                payment: e.target.value,
-              }))
-            }
+            onChange={handlePaymentChange}
             placeholder="Enter payment term"
           />
         </div>

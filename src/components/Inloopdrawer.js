@@ -1,5 +1,6 @@
 
 
+
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -81,7 +82,8 @@ import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { PiTrolleyFill } from "react-icons/pi";
 import { FaTruck } from "react-icons/fa";
-
+// import { toggleDrawerPosition } from "../Store/refreshSlice";
+import {toggleSecondaryDrawerPosition } from "../Store/refreshSlice";
 const useStyles = makeStyles({
   root: {
     // ...shorthands.border("2px", "solid", "#ccc"),
@@ -225,9 +227,15 @@ const NavDrawerDefaultLoop = (props) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
-  const [value,setValue] = useState("");
-  const someClickHandler = () => {
-    navigate("/employee");
+  // const [value,setValue] = useState("");
+  // const [val,setVal] = useState("");
+  const drawer = useSelector((state)=>state.refresh.secondaryDrawerPosition);
+  console.log("23456",drawer);
+  const secondaryDrawerValue = localStorage.getItem("userSecondaryDrawerPosition") || "1";
+  console.log("Secondary Drawer Value from localStorage:", { secondaryDrawerValue });
+  const setValue = (value) => {
+    dispatch(toggleSecondaryDrawerPosition(value));
+    console.log("Updated secondary drawer position to:", value);
   };
   useEffect(() => {
     const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
@@ -258,7 +266,7 @@ const NavDrawerDefaultLoop = (props) => {
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
       {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
       <NavDrawer
-        defaultSelectedValue="1"
+        defaultSelectedValue={drawer}
         defaultSelectedCategoryValue="1"
         open={isOpen}
         type={type}
@@ -268,7 +276,7 @@ const NavDrawerDefaultLoop = (props) => {
         style={
           collapse
             ? {
-                width: `59px`,
+                width: collapse ? "57px" : "250px",
                 transition: "width 0.5s",
                 borderRightStyle: "none",
               }
@@ -331,7 +339,136 @@ const NavDrawerDefaultLoop = (props) => {
                 : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
             }
           >
-                        <NavCategory value="1">
+            <Tooltip
+              content={"Purchase Requistion"}
+              positioning="after"
+              withArrow={true}
+              appearance={themestate ? "inverted" : "normal"}
+            >
+               <NavItem
+                target="_blank"
+                icon={
+                  <Dashboard
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                // onClick={someClickHandler}
+                value="1"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+                style={{ marginTop: "10px", fontSize: "17px" }}
+                onClick={() => {
+                  navigate("/inloop");
+                  setValue("1");
+                }}
+              >
+                <div
+                  style={
+                    themestate
+                      ? { marginTop: "2px", color: darktheme.fontcolordark }
+                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                  }
+                >
+                  Purchase requistion
+                </div>
+              </NavItem>
+
+            </Tooltip>
+            <Tooltip
+              content={"Purchase Order"}
+              positioning="after"
+              withArrow={true}
+              appearance={themestate ? "inverted" : "normal"}
+            >
+              <NavItem
+                target="_blank"
+                icon={
+                  <Trolly 
+                    style={{
+        fontSize: "24px", 
+        color: themestate
+          ? darktheme.fontcolordark
+          : lighttheme.fontcolorlight,
+      }}
+                  />
+                }
+                
+                value="2"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+                style={{ marginTop: "10px", fontSize: "17px" }}
+                onClick={() => {
+                  navigate("/po");
+                  setValue("2");
+                }}
+              >
+                <div
+                  style={
+                    themestate
+                      ? { marginTop: "2px", color: darktheme.fontcolordark }
+                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                  }
+                  
+                >
+                  Purchase Order
+                  
+                </div>
+              </NavItem>
+
+              </Tooltip>
+              <Tooltip
+              content={"ASN Creation"}
+              positioning="after"
+              withArrow={true}
+              appearance={themestate ? "inverted" : "normal"}
+            >
+              <NavItem
+                target="_blank"
+                icon={
+                  <Truck
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                // onClick={someClickHandler}
+                value="3"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+                style={{ marginTop: "10px", fontSize: "17px" }}
+                
+                onClick={() => {
+                  navigate("/asn");
+                  setValue("3");
+                }}
+              >
+                <div
+                  style={
+                    themestate
+                      ? { marginTop: "2px", color: darktheme.fontcolordark }
+                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                  }
+                >
+                  ASN Status
+                </div>
+              </NavItem>
+              </Tooltip>
+              <Tooltip
+              content={"AP Invoice OCR"}
+              positioning="after"
+              withArrow={true}
+              appearance={themestate ? "inverted" : "normal"}
+            >
+                <NavCategory value="4">
                   <NavCategoryItem
                     target="_blank"
                     icon={
@@ -344,51 +481,27 @@ const NavDrawerDefaultLoop = (props) => {
                       />
                     }
                     // onClick={someClickHandler}
-                    value="2"
+                    value="4"
                     className={
                       themestate ? styles.navItemdark : styles.navItemlight
                     }
                     style={{ marginTop: "10px", fontSize: "17px" }}
                     onClick={() => {
-                      setValue("2");
+                      setValue("4");
                     }}
                   >
-                    AP Invoice OCR
+                    AP Invoice OCR 
                   </NavCategoryItem>
-                  <NavSubItemGroup>
-                    <NavSubItem
-                      value="3"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/m");
-                        setValue("3");
-                      }}
-                    >
-                     Approve
-                    </NavSubItem>
-                    <NavSubItem
-                      value="4"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/approve");
-                        setValue("4");
-                      }}
-                    >
-                      AI Identified
-                    </NavSubItem>
-                    <NavSubItem
-                      value="4"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/ai");
-                        setValue("4");
-                      }}
-                    >
-                     Fix
-                    </NavSubItem>
-                  </NavSubItemGroup>
-                </NavCategory>
+                  </NavCategory>
+                  </Tooltip>
+
+
+
+
+
+            
           </NavDrawerBody>
+         
         ) : (
           <NavDrawerBody
             style={
@@ -432,6 +545,7 @@ const NavDrawerDefaultLoop = (props) => {
                 Buyer
               </h4>
             </div>
+            
             <NavItem
                 target="_blank"
                 icon={
@@ -464,7 +578,8 @@ const NavDrawerDefaultLoop = (props) => {
                   Purchase requistion
                 </div>
               </NavItem>
-
+              
+              
               <NavItem
                 target="_blank"
                 icon={
@@ -501,7 +616,6 @@ const NavDrawerDefaultLoop = (props) => {
                 </div>
               </NavItem>
 
-
               <NavItem
                 target="_blank"
                 icon={
@@ -535,7 +649,7 @@ const NavDrawerDefaultLoop = (props) => {
                   ASN Status
                 </div>
               </NavItem>
-            
+              
                 <NavCategory value="4">
                   <NavCategoryItem
                     target="_blank"
@@ -594,6 +708,7 @@ const NavDrawerDefaultLoop = (props) => {
                     </NavSubItem>
                   </NavSubItemGroup>
                 </NavCategory>
+                
               </div>
             {/* </div> */}
           </NavDrawerBody>
@@ -683,3 +798,4 @@ const NavDrawerDefaultLoop = (props) => {
 };
 
 export default NavDrawerDefaultLoop;
+

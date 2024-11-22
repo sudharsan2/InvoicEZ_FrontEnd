@@ -232,7 +232,14 @@ const valueStyle = {
   marginLeft: "0px",
 };
 
-const InLoopPage = ({ todo, rfq, compare }) => {
+const InLoopPage = () => {
+
+  const [statusCounts, setStatusCounts] = useState({
+    todoCount: 0,
+    rfqCount: 0,
+    compareCount: 0,
+  });
+
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   const togglePopover = () => setPopoverOpen(!popoverOpen);
@@ -240,17 +247,17 @@ const InLoopPage = ({ todo, rfq, compare }) => {
   const counters = [
     {
       label: "Todo PR",
-      value: <span style={{ color: "#d62727" }}>{todo}</span>,
+      value: <span style={{ color: "#d62727" }}>{statusCounts.todoCount}</span>,
       color: "#d62727",
     },
     {
       label: "Supplier Yet To Respond",
-      value: <span style={{ color: "#004378" }}>{rfq}</span>,
+      value: <span style={{ color: "#004378" }}>{statusCounts.rfqCount}</span>,
       color: "#004378",
     },
     {
       label: "Quotation Comparison",
-      value: <span style={{ color: "#00a2ad" }}>{compare}</span>,
+      value: <span style={{ color: "#00a2ad" }}>{statusCounts.compareCount}</span>,
       color: "#00a2ad",
     },
   ];
@@ -356,7 +363,7 @@ const InLoopPage = ({ todo, rfq, compare }) => {
 
         <div style={{ width: "100%", height: "5vh" }} />
         <div>
-          <LoopTable />
+          <LoopTable setStatusCounts={setStatusCounts}/>
         </div>
       </div>
     </div>

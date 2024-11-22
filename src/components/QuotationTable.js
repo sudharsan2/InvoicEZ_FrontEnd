@@ -679,9 +679,9 @@ const useStyles = makeStyles({
     borderRadius: "50%",
     marginRight: "8px",
   },
-  statusRFQ: { backgroundColor: "yellow" },
-  statusTodo: { backgroundColor: "red" },
-  statusCompare: { backgroundColor: "green" },
+  statusRFQ: { backgroundColor: "#ffd966" },
+  statusTodo: { backgroundColor: "#ff6666" },
+  statusCompare: { backgroundColor: "#00d96d" },
   iconButtonContainer: {
     display: "flex",
     alignItems: "center",
@@ -708,6 +708,23 @@ const useStyles = makeStyles({
     width: "90vw",
   },
 });
+
+const StatusCell = ({ statusLabel }) => {
+  const styles = useStyles();
+  const statusStyle =
+    statusLabel === "quotation"
+      ? styles.statusTodo
+      : statusLabel === "To be Acknowledge"
+      ? styles.statusRFQ
+      : styles.statusCompare;
+
+  return (
+    <TableCellLayout>
+      <span className={`${styles.statusBullet} ${statusStyle}`} />
+      {statusLabel}
+    </TableCellLayout>
+  );
+};
 
 // Column definitions
 const columns = [
@@ -750,11 +767,19 @@ const columns = [
       <TableCellLayout>{item.line_items[0].need_by_date}</TableCellLayout>
     ),
   }),
-  createTableColumn({
-    columnId: "status",
-    renderHeaderCell: () => "Status",
-    renderCell: (item) => <TableCellLayout>{item.status}</TableCellLayout>,
-  }),
+  // createTableColumn({
+  //   columnId: "status",
+  //   renderHeaderCell: () => "Status",
+  //   renderCell: (item) => <TableCellLayout>{item.status}</TableCellLayout>,
+  // }),
+
+  
+    createTableColumn({
+      columnId: "status",
+      renderHeaderCell: () => "Status",
+      renderCell: (item) => <StatusCell statusLabel={item.status} />, // Use StatusCell component here
+    }),
+    
   createTableColumn({
     columnId: "suppliersReplied",
     renderHeaderCell: () => "Received Date",
@@ -778,8 +803,10 @@ const columns = [
   }),
 ];
 
+
+
 // Main component
-const QuotationTable = () => {
+const QuotationTable = ({setStatusCounts}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -824,52 +851,60 @@ const QuotationTable = () => {
 
       const data = response.data;
       console.log("Status", data[0]?.status);
-      // console.log("Data",data);
-
-      // Map through the data to structure it as needed
-      // const mappedItems = data.flatMap((item) => {
-      //   // Use lineData to check for lines or line_items
-      //   const lineData = item.lines || item.line_items;
-
-      //   if (lineData && lineData.length) {
-      //     // Map over each line and create a new item for each line entry
-      //     return lineData.map((line) => ({
-      //       ...item, // Copy all properties from the original item
-      //       lines: [line], // Replace 'lines' with a single line item array
-      //     }));
-      //   } else {
-      //     // Handle case where there are no lines or line_items
-      //     return {
-      //       ...item,
-      //       lines: [], // Default to an empty array if no lines/line_items are found
-      //     };
-      //   }
-      // });
-
+      
       const data1 = data.map((item) => {
         let status = ""; // Default status
-
-        // Check if supplier_ids exists and has a length greater than 0
+      
+        // Check if "quotations" exists in the item
         if ("quotations" in item) {
+          let quotationTruth = false; // Declare the variable properly
+      
+          // Check if any quotation matches the userId
+          item.quotations.forEach((quotation) => {
+            if (quotation.supplier === userId) {
+              quotationTruth = true;
+            }
+          });
+      
+          // Determine the status based on conditions
+          if (item.status === "YetAcknowledged" ) {
+            if(quotationTruth)
+            {
+              status = "To be Acknowledged";
+            }
+            else
+            {
+              status = "quotation";
+            }
             
-            if (item.status === "YetAcknowledged")
-            {
-              status="To be Acknowledged";
-            }
-            else if(item.quotations.length==0 || item.quotations.length>1)
-            {
-              status="quotation";
-            }
-        } 
-       
-    
-        // Set the status in the item
+           
+          }
+          else{
+            status = "quotation";  //changes
+
+          }
+          //  else if (item.quotations.length === 0 ||  item.quotations.length>1) {
+          //   status = "quotation";
+          // }
+          
+        }
+        else{
+          status="quotation";
+        }
+      
+        // Set the determined status
         item.status = status;
         return item; // Return the modified item
       });
+      
 
       setItems(data1); // Set the processed items in state
       // console.log("Mapped Items:", mappedItems);
+
+      const quotationCount = data1.filter((item) => item.status === "quotation").length;
+      const ackCount = data1.filter((item) => item.status === "To be Acknowledged").length;
+      
+      setStatusCounts({ quotationCount, ackCount });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -1020,7 +1055,7 @@ const QuotationTable = () => {
         </DataGrid>
       </div>
       {selectedRowData && selectedRowData.status === "quotation" && <QuotationDrawer data={selectedRowData} userId={userId} onClose={() => fetchData()}/>}
-      {selectedRowData && selectedRowData.status === "To be Acknowledged" && <AckDrawer data={selectedRowData} isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />}
+      {selectedRowData && selectedRowData.status === "To be Acknowledged" && <AckDrawer data={selectedRowData} isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} onClose={() => fetchData()}/>}
       {/* <QuotationDrawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} /> */}
     </div>
   );

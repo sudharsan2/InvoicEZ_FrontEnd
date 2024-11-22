@@ -62,13 +62,13 @@ const columns = [
       <TableCellLayout>{item.distribution_amount}</TableCellLayout>
     ),
   }),
-  createTableColumn({
-    columnId: "creation_date",
-    renderHeaderCell: () => "Creation Date",
-    renderCell: (item) => (
-      <TableCellLayout>{item.creation_date}</TableCellLayout>
-    ),
-  }),
+  // createTableColumn({
+  //   columnId: "creation_date",
+  //   renderHeaderCell: () => "Creation Date",
+  //   renderCell: (item) => (
+  //     <TableCellLayout>{item.creation_date}</TableCellLayout>
+  //   ),
+  // }),
   createTableColumn({
     columnId: "last_update_date",
     renderHeaderCell: () => "Last Update",
@@ -109,7 +109,7 @@ const SupplierTable = ({ data }) => {
   };
 
   useEffect(() => {
-    console.log("selected table quotation", data.quotations);
+    console.log("selected table quotation", data);
   }, [data]);
 
   return (

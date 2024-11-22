@@ -171,8 +171,8 @@ const togglePopover = () => setPopoverOpen(!popoverOpen);
       </div>
 
       <div>
-        <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between",}}>
-        <div style={containerStyle}>
+        <div style={{display: "flex", flexDirection: "row", justifyContent: "flex-end",}}>
+        {/* <div style={containerStyle}>
           {counters.map((item, index) => (
             <div style={itemStyle} key={index}>
               <div style={lineStyle(item.color)} />
@@ -182,7 +182,7 @@ const togglePopover = () => setPopoverOpen(!popoverOpen);
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
         {/* Filter Part */}
         <div style={{ display: "flex", flexDirection: "column",paddingRight:"2em" }}>
             
@@ -264,9 +264,9 @@ const togglePopover = () => setPopoverOpen(!popoverOpen);
         <POTable />
       </div>
 
-      <div style={buttonContainerStyle}>
+      {/* <div style={buttonContainerStyle}>
         <button style={{color:"#0078d5",border:"none",backgroundColor:"white"}}>Submit</button>
-      </div>
+      </div> */}
     </div>
   );
 };

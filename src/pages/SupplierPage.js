@@ -235,14 +235,18 @@ const valueStyle = {
 
 const SupplierPage = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
-
+  const [statusCounts, setStatusCounts] = useState({
+    quotationCount: 0,
+    ackCount: 0,
+    
+  });
   
   const togglePopover = () => setPopoverOpen(!popoverOpen);
 
   const counters = [
-    { label: "New Request", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
-    { label: " Yet To Respond", value: <span style={{ color: "#004378" }}>2</span>, color: "#004378" },
-    // { label: "Quotation Comparison", value: <span style={{ color: "#00a2ad" }}>5</span>, color: "#00a2ad" },
+    { label: "New Request", value: <span style={{ color: "#d62727" }}>{statusCounts.quotationCount}</span>, color: "#d62727" },
+    { label: " Yet To Respond", value: <span style={{ color: "#004378" }}>{statusCounts.ackCount}</span>, color: "#004378" },
+    
   ];
 
   return (
@@ -329,7 +333,7 @@ const SupplierPage = () => {
 
         <div style={{ width: "100%", height: "5vh" }} />
         <div>
-          <QuotationTable />
+          <QuotationTable setStatusCounts={setStatusCounts}/>
         </div>
       </div>
     </div>

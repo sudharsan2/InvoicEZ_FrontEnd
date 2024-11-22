@@ -47,9 +47,9 @@ const useStyles = makeStyles({
     borderRadius: "50%",
     marginRight: "8px",
   },
-  statusRFQ: { backgroundColor: "yellow" },
-  statusTodo: { backgroundColor: "red" },
-  statusCompare: { backgroundColor: "green" },
+  statusRFQ: { backgroundColor: "#ffd966" },
+  statusTodo: { backgroundColor: "#ff6666" },
+  statusCompare: { backgroundColor: "#00d96d" },
   iconButtonContainer: {
     display: "flex",
     alignItems: "center",
@@ -99,11 +99,20 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.description}</TableCellLayout>,
   }),
   //
-  createTableColumn({
-    columnId: "status",
-    renderHeaderCell: () => "Status",
-    renderCell: (item) => <TableCellLayout>{item.status}</TableCellLayout>,
-  }),
+  // createTableColumn({
+  //   columnId: "status",
+  //   renderHeaderCell: () => "Status",
+  //   renderCell: (item) => <TableCellLayout>{item.status}</TableCellLayout>,
+  // }),
+
+  
+    createTableColumn({
+      columnId: "status",
+      renderHeaderCell: () => "Status",
+      renderCell: (item) => <StatusCell statusLabel={item.status} />, // Use StatusCell component here
+    }),
+    
+  
   createTableColumn({
     columnId: "need_by_date",
     renderHeaderCell: () => "Need By Date",
@@ -120,8 +129,24 @@ const columns = [
   }),
 ];
 
+const StatusCell = ({ statusLabel }) => {
+  const styles = useStyles();
+  const statusStyle =
+    statusLabel === "Todo"
+      ? styles.statusTodo
+      : statusLabel === "RFQ"
+      ? styles.statusRFQ
+      : styles.statusCompare;
+
+  return (
+    <TableCellLayout>
+      <span className={`${styles.statusBullet} ${statusStyle}`} />
+      {statusLabel}
+    </TableCellLayout>
+  );
+};
 // Main component
-const LoopTable = ({ data }) => {
+const LoopTable = ({ data ,setStatusCounts }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(false);
@@ -206,7 +231,12 @@ const LoopTable = ({ data }) => {
       setItems(data1); // Set the processed items in state
       console.log("Mapped Items:", mappedItems);
 
-     
+
+      const todoCount = data1.filter((item) => item.status === "Todo").length;
+      const rfqCount = data1.filter((item) => item.status === "RFQ").length;
+      const compareCount = data1.filter((item) => item.status === "Compare").length;
+
+      setStatusCounts({ todoCount, rfqCount, compareCount });
     } catch (error) {
       console.error("Error fetching data:", error);
     }

@@ -82,11 +82,17 @@ const columns = [
   }),
 ];
 
-const RFQTable = ({data}) => {
+const RFQTable = ({data,onLengthCalculated}) => {
   const defaultSortState = useMemo(
     () => ({ sortColumn: "file", sortDirection: "ascending" }),
     []
   );
+
+  useMemo(() => {
+    if (onLengthCalculated && data.lines) {
+      onLengthCalculated(data.lines.length);
+    }
+  }, [data, onLengthCalculated]);
 
   const gridContainerStyle = {
     overflowX: "hidden", // Prevents horizontal scrolling

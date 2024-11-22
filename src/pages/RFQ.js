@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -52,10 +52,11 @@ const buttonContainerStyle = {
 };
 
 const RFQPage = ({data}) => {
+  const [todoCount, setTodoCount] = useState(0);
   const counters = [
-    { label: "Todo", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
-    { label: "Requestor", value: <span style={{ color: "#004378" }}>Sudharsan</span>, color: "#004378" },
-    { label: "PR Number", value: <span style={{ color: "#00a2ad" }}>5</span>, color: "#00a2ad" },
+    { label: "Todo", value: <span style={{ color: "#d62727" }}>{todoCount}</span>, color: "#d62727" },
+    { label: "Requestor", value: <span style={{ color: "#004378" }}>{data.lines[0].requestor}</span>, color: "#004378" },
+    { label: "PR Number", value: <span style={{ color: "#00a2ad" }}>{data.document_number}</span>, color: "#00a2ad" },
   ];
 
   return (
@@ -92,7 +93,7 @@ const RFQPage = ({data}) => {
         </div>
 
         <div style={{ height: "5vh",marginTop:"4em" }} />
-        <RFQTable data={data} />
+        <RFQTable data={data} onLengthCalculated={setTodoCount}/>
       </div>
 
       

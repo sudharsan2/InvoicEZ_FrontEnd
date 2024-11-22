@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   InvoiceUploadRefresh: false,
-  drawerPosition: localStorage.getItem("userDrawerPosition") || "1", // Retrieve from localStorage
+  drawerPosition: localStorage.getItem("userDrawerPosition") || "1", 
+  secondaryDrawerPosition: localStorage.getItem("userSecondaryDrawerPosition") || "1",
   dropdown:false,
   suppliers:null,
   conformedSupplier:null,
@@ -42,11 +43,16 @@ const refreshSlice = createSlice({
    handleMessageNotify(state,action)
    {
     state.messageNotify = !state.messageNotify;
-   }
+   },
+   toggleSecondaryDrawerPosition(state, action) {
+    state.secondaryDrawerPosition = action.payload;
+    localStorage.setItem("userSecondaryDrawerPosition", action.payload); // Store second drawer position
+  },
+
   },
 });
 
-export const { toggleInvoiceUploadRefresh, toggleDrawerPosition,dropDownSubmit,dropDownValue, conformedSupplierValue,handleFreightTerm,handleMessageNotify } =
+export const { toggleInvoiceUploadRefresh, toggleDrawerPosition,dropDownSubmit,dropDownValue, conformedSupplierValue,handleFreightTerm,handleMessageNotify,toggleSecondaryDrawerPosition } =
   refreshSlice.actions;
 export const refreshReducer = refreshSlice.reducer; // Export as refreshReducer
 

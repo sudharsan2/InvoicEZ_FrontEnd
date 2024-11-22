@@ -52,6 +52,7 @@ const LoginPage = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
+
       setIsLoading(true);
       try {
         const response = await axios.post(
@@ -62,14 +63,17 @@ const LoginPage = () => {
           },
         );
 
-        const { username } = response.data;
-        localStorage.setItem("username", username);
-        // localStorage.setItem("role", role);
-
         const tokens = response.data.tokens;
-        localStorage.setItem("access_token", tokens.access_token);
+        const { access_token } = tokens;
+        localStorage.setItem("access_token", access_token);
+        localStorage.setItem("username", response.data.username);
+
+    // Decode the role directly from the access token
+    const decodedToken = jwtDecode(access_token);
+    const roleFromToken = decodedToken.role;
+    console.log("ROLE:", roleFromToken);
         console.log("ROLE", role);
-        switch (role) {
+        switch (roleFromToken) {
           case "admin":
             navigate("/matrimony");
             break;
@@ -78,6 +82,7 @@ const LoginPage = () => {
             break;
           case "supplier":
             navigate("/supplier");
+            break;
           default:
         }
 

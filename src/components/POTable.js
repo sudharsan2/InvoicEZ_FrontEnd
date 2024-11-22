@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo ,useEffect,useState} from "react";
 import {
   DataGrid,
   DataGridBody,
@@ -44,68 +44,6 @@ const useStyles = makeStyles({
     },
   });
   
-const items = [
-  {
-    file: { label: "10" },
-    author: { label: "Rice" },
-    lastUpdated: { label: "test" },
-    lastUpdate: { label: "KG" },
-    Quantity: { label: "1000" },
-    NeedByDate: { label: "18 May 2023" },
-    Description: { label: "ABC" },
-    QuantityAmount:{label:"20"},
-    UnitPrice:{label:"1"},
-    Currency:{label:"INR"},
-    Tax:{label:"20%"},
-    NBD:{label:"May 10 2023"},
-    STO:{label:"Madurai"},
-    Remarks:{label:"Good"},
-    Request :{label:"May 7 2023 "},
-    Reshedule:{label:"Nov 10 2023"},
-    Remainder:{label:"Nov 8 2023"},
-    Status:{label:"Acknowledged"}
-  },
-  {
-    file: { label: "10" },
-    author: { label: "Rice" },
-    lastUpdated: { label: "test" },
-    lastUpdate: { label: "KG" },
-    Quantity: { label: "1000" },
-    NeedByDate: { label: "18 May 2023" },
-    Description: { label: "ABC" },
-    QuantityAmount:{label:"20"},
-    UnitPrice:{label:"1"},
-    Currency:{label:"INR"},
-    Tax:{label:"20%"},
-    NBD:{label:"May 10 2023"},
-    STO:{label:"Madurai"},
-    Remarks:{label:"Good"},
-    Request :{label:"May 7 2023 "},
-    Reshedule:{label:"Nov 10 2023"},
-    Remainder:{label:"Nov 8 2023"},
-    Status:{label:"Rejected"}
-  },
-  {
-    file: { label: "10" },
-    author: { label: "Rice" },
-    lastUpdated: { label: "test" },
-    lastUpdate: { label: "KG" },
-    Quantity: { label: "1000" },
-    NeedByDate: { label: "18 May 2023" },
-    Description: { label: "ABC" },
-    QuantityAmount:{label:"20"},
-    UnitPrice:{label:"1"},
-    Currency:{label:"INR"},
-    Tax:{label:"20%"},
-    NBD:{label:"May 10 2023"},
-    STO:{label:"Madurai"},
-    Remarks:{label:"Good"},
-    Request :{label:"May 7 2023 "},
-    Reshedule:{label:"Nov 10 2023"},
-    Remainder:{label:"Nov 8 2023"},
-    Status:{label:"To be Acknowledged"}
-  },
-];
 
 
 
@@ -125,168 +63,220 @@ const StatusCell = ({ statusLabel }) => {
       </TableCellLayout>
     );
   };
-const columns = [
-  createTableColumn({
-    columnId: "file",
-    compare: (a, b) => a.file.label.localeCompare(b.file.label),
-    renderHeaderCell: () => "Type",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "100px" }}>
-        {item.file.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "author",
-    compare: (a, b) => a.author.label.localeCompare(b.author.label),
-    renderHeaderCell: () => "Supplier",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.author.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "lastUpdated",
-    renderHeaderCell: () => "PO-Rev",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "200px" }}>
-        {item.lastUpdated.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "lastUpdate",
-    renderHeaderCell: () => "Line_Shipment_No",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "100px" }}>
-        {item.lastUpdate.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "Quantity",
-    renderHeaderCell: () => "Item_Code",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "100px" }}>
-        {item.Quantity.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "Description",
-    renderHeaderCell: () => "Description",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.Description.label}
-      </TableCellLayout>
-    ),
-  }),
-  // createTableColumn({
-  //   columnId: "Status ",
-  //   renderHeaderCell: () => "Status",
-  //   renderCell: (item) => <StatusCell statusLabel={item.Status.label} />
-  // }),
-  createTableColumn({
-    columnId: "QuantityAmount",
-    renderHeaderCell: () => "QTY/Amount",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.QuantityAmount.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "UnitPrice",
-    renderHeaderCell: () => "Unit Price",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.UnitPrice.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "Currency",
-    renderHeaderCell: () => "Currency",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.Currency.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "Tax",
-    renderHeaderCell: () => "Tax%",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.Tax.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "NBD",
-    renderHeaderCell: () => "Need By Date",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.NBD.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "STO",
-    renderHeaderCell: () => "Ship To ORG",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.STO.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "Remarks",
-    renderHeaderCell: () => "Remarks",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.Remarks.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "Request",
-    renderHeaderCell: () => "Request",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.Request.label}
-      </TableCellLayout>
-    ),
-  }),
 
-  createTableColumn({
-    columnId: "Reshedule",
-    renderHeaderCell: () => "Reshedule Date",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.Reshedule.label}
-      </TableCellLayout>
-    ),
-  }),
-  createTableColumn({
-    columnId: "Remainder ",
-    renderHeaderCell: () => "Remainder Date",
-    renderCell: (item) => (
-      <TableCellLayout style={{ maxWidth: "150px" }}>
-        {item.Remainder.label}
-      </TableCellLayout>
-    ),
-  }),
- 
-];
 
 const POTable = () => {
   const defaultSortState = useMemo(
     () => ({ sortColumn: "file", sortDirection: "ascending" }),
     []
   );
+  const [data, setData] = useState([]);
 
+
+  const fetchAcknowledgeList = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch("http://172.235.21.99:57/user/acknowledgeList", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+      
+      const responseData = await response.json();
+      // Transform API data into table-friendly format
+      const formattedData = responseData.map((item) => {
+        const lineItem = item.line_items?.[0] || {}; // Use the first line item if available
+        const distribution = lineItem.distributions?.[0] || {}; // Use the first distribution if available
+        console.log("TYPE",lineItem.line_type);
+        return {
+          id: item.id,
+          supplier:item.supplier_ids,
+          requestor:item.requestor,
+          lineType: lineItem.line_type,
+          rev: distribution.distribution_number, // Extract distribution number from the first distribution
+          documentNumber: item.document_number,
+          // description: item.description,
+          currency:item.currency,
+          lastupdate:lineItem.last_update_date,
+          status: item.status,
+          lineNumber: lineItem.line_number,
+          itemNumber: lineItem.item_number,
+          lineDescription: lineItem.description,
+          uom: lineItem.uom,
+          quantity: lineItem.quantity,
+          ship:distribution.quantity,
+          price: lineItem.price,
+          totalAmount: lineItem.amount,
+          needByDate: lineItem.need_by_date,
+          site:item.site,
+        };
+        
+      });
+      
+      setData(formattedData);
+      
+    } catch (error) {
+      console.error("Failed to fetch acknowledge list:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAcknowledgeList();
+  }, []);
+
+
+  const columns = [
+    createTableColumn({
+      columnId: "lineType",
+      renderHeaderCell: () => "Type",
+      renderCell: (item) => <TableCellLayout>{item.lineType}</TableCellLayout>,
+    }),
+    createTableColumn({
+      columnId: "supplier",
+      compare: (a, b) => a.author.label.localeCompare(b.author.label),
+      renderHeaderCell: () => "Supplier",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "150px" }}>
+          {item.supplier}
+        </TableCellLayout>
+      ),
+    }),
+    createTableColumn({
+      columnId: "rev",
+      renderHeaderCell: () => "PO-Rev",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "200px" }}>
+          {item.rev}
+        </TableCellLayout>
+      ),
+    }),
+    createTableColumn({
+      columnId: "lineNumber",
+      renderHeaderCell: () => "Line_Shipment_No",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "100px" }}>
+          {item.lineNumber}
+        </TableCellLayout>
+      ),
+    }),
+    createTableColumn({
+      columnId: " itemNumber",
+      renderHeaderCell: () => "Item_Code",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "100px" }}>
+          {item. itemNumber}
+        </TableCellLayout>
+      ),
+    }),
+    createTableColumn({
+      columnId: "lineDescription",
+      renderHeaderCell: () => "Description",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "150px" }}>
+          {item.lineDescription}
+        </TableCellLayout>
+      ),
+    }),
+   
+    createTableColumn({
+      columnId: "ship",
+      renderHeaderCell: () => "QTY/Amount",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "150px" }}>
+          {item.ship}
+        </TableCellLayout>
+      ),
+    }),
+    createTableColumn({
+      columnId: "price",
+      renderHeaderCell: () => "Unit Price",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "150px" }}>
+          {item.price}
+        </TableCellLayout>
+      ),
+    }),
+    createTableColumn({
+      columnId: "currency",
+      renderHeaderCell: () => "Currency",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "150px" }}>
+          {item.currency}
+        </TableCellLayout>
+      ),
+    }),
+    // createTableColumn({
+    //   columnId: "Tax",
+    //   renderHeaderCell: () => "Tax%",
+    //   renderCell: (item) => (
+    //     <TableCellLayout style={{ maxWidth: "150px" }}>
+    //       {item.Tax.label}
+    //     </TableCellLayout>
+    //   ),
+    // }),
+    createTableColumn({
+      columnId: "needByDate",
+      renderHeaderCell: () => "Need By Date",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "150px" }}>
+          {item.needByDate}
+        </TableCellLayout>
+      ),
+    }),
+    // createTableColumn({
+    //   columnId: "site",
+    //   renderHeaderCell: () => "Ship To ORG",
+    //   renderCell: (item) => (
+    //     <TableCellLayout style={{ maxWidth: "150px" }}>
+    //       {item.site}
+    //     </TableCellLayout>
+    //   ),
+    // }),
+    // createTableColumn({
+    //   columnId: "Remarks",
+    //   renderHeaderCell: () => "Remarks",
+    //   renderCell: (item) => (
+    //     <TableCellLayout style={{ maxWidth: "150px" }}>
+    //       {item.Remarks.label}
+    //     </TableCellLayout>
+    //   ),
+    // }),
+    // createTableColumn({
+    //   columnId: "requestor",
+    //   renderHeaderCell: () => "Request",
+    //   renderCell: (item) => (
+    //     <TableCellLayout style={{ maxWidth: "150px" }}>
+    //       {item.requestor}
+    //     </TableCellLayout>
+    //   ),
+    // }),
+  
+    createTableColumn({
+      columnId: "lastupdate",
+      renderHeaderCell: () => "Reshedule Date",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "150px" }}>
+          {item.lastupdate}
+        </TableCellLayout>
+      ),
+    }),
+    createTableColumn({
+      columnId: "lastupdate",
+      renderHeaderCell: () => "Remainder Date",
+      renderCell: (item) => (
+        <TableCellLayout style={{ maxWidth: "150px" }}>
+          {item.lastupdate}
+        </TableCellLayout>
+      ),
+    }),
+   
+  ];
   const gridContainerStyle = {
     overflowX: "auto", 
     width: "90vw", 
@@ -294,7 +284,7 @@ const POTable = () => {
 
   return (
     <div style={gridContainerStyle}>
-      <DataGrid items={items} columns={columns} defaultSortState={defaultSortState}>
+      <DataGrid items={data} columns={columns} defaultSortState={defaultSortState}>
   <DataGridHeader>
     <DataGridRow>
       {({ renderHeaderCell }) => (

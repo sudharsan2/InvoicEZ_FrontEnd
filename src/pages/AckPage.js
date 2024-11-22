@@ -44,7 +44,7 @@ const useStyles = makeStyles({
   
 
   
-const AckPage = ({data}) => {
+const AckPage = ({data,onAcknowledge, onReject}) => {
     const inputId = useId("input");
   const styles = useStyles();
 
@@ -54,10 +54,10 @@ const AckPage = ({data}) => {
         
      <div style={{display:"flex",justifyContent:"space-between",width:"50%",marginLeft:"-2em",margintop:"-3em"}}>
      <div style={{display:"flex",justifyContent:"flex-start",padding:"6em"}}>
-        <Button style={{color:"white",backgroundColor:"#3d98de"}}>Acknowledge</Button>
+        <Button style={{color:"white",backgroundColor:"#3d98de"}} onClick={onAcknowledge}>Acknowledge</Button>
      </div>
      <div style={{display:"flex",justifyContent:"flex-start",padding:"6em"}}>
-        <Button style={{color:"white",backgroundColor:"#3d98de"}}>Reject</Button>
+        <Button style={{color:"white",backgroundColor:"#3d98de"}} onClick={onReject}>Reject</Button>
      </div>
      </div>
 

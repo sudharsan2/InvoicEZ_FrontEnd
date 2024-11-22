@@ -200,9 +200,9 @@ function App() {
           path="/issuefixdetails"
           element={
             <CustomLayout>
-              <NavDrawerDefault>
+              <NavDrawerDefaultLoop>
                 <IssuefixDetails />
-              </NavDrawerDefault>
+              </NavDrawerDefaultLoop>
             </CustomLayout>
           }
         />
