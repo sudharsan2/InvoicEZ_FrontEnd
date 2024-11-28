@@ -124,7 +124,7 @@ const TodoDrawer = ({data,onClose}) => {
   try {
     const suppliers = ""; 
     const response = await axios.post(
-      "http://172.235.21.99:57/user/store-purchase-details",
+      "https://invoicezapi.focusrtech.com:57/user/store-purchase-details",
       { details: [data], suppliers:suppliers1 }
     );
 

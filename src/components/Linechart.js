@@ -45,7 +45,7 @@ const LineChartPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://172.235.21.99:57/user/dashboard-supplier-totalamount",
+          "https://invoicezapi.focusrtech.com:57/user/dashboard-supplier-totalamount",
         );
         const apiData = response.data;
 

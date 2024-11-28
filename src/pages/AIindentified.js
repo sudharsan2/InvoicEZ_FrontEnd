@@ -81,19 +81,19 @@ const AIPage = () => {
             <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
-          <BreadcrumbItem>
+          {/* <BreadcrumbItem>
             <BreadcrumbButton href={path}>Issue</BreadcrumbButton>
           </BreadcrumbItem>
-          <BreadcrumbDivider />
+          <BreadcrumbDivider /> */}
           <BreadcrumbItem>
-            <BreadcrumbButton href={path2}>AI Identified</BreadcrumbButton>
+            <BreadcrumbButton href={path2}>Multiple Match Found</BreadcrumbButton>
           </BreadcrumbItem>
         </Breadcrumb>
       </div>
       <div
         style={{ display: "flex", justifyContent: "flexStart", padding: "1px" }}
       >
-        <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>AI Identified</h3>
+        <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Multiple Match Found</h3>
       </div>
 
       <div>

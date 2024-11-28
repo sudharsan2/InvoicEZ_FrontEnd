@@ -173,7 +173,7 @@ const LoopTable = ({ data ,setStatusCounts }) => {
   const fetchData = async () => {
     try {
       const response = await axios.post(
-        "http://172.235.21.99:57/user/club-pr",
+        "https://invoicezapi.focusrtech.com:57/user/club-pr",
         {
           org_id: 821,
           from_date: "11/09/24",

@@ -26,6 +26,7 @@ import Matrimony from "./pages/MatrimonyPage";
 import LoginPage from "./pages/new";
 import InLoopPage from "./pages/Inloop";
 import NavDrawerDefaultLoop from "./components/Inloopdrawer";
+import NavDrawerDefaultStore from "./components/StoreUserDrawer";
 import TodoPage from "./pages/Todo";
 import RFQPage from "./pages/RFQ";
 import TodoDrawer from "./components/TodoDrawer";
@@ -44,6 +45,14 @@ import ASNStatus from "./pages/ASNStatus";
 import ASNShipmentDrawer from "./components/ASNShipmentDrawer";
 import ASNShipmentDrawerPage from "./pages/ASNShipmentDrawerPage";
 import AckPage from "./pages/AckPage";
+import StoreUser from "./pages/storeUser";
+import StoreUserPage from "./pages/storeuserdetail";
+import SummaryPage from "./pages/Summary";
+import GateEntry from "./pages/GateEntry";
+import History from "./pages/History";
+import HistoryDetails from "./pages/HistoryDetails";
+import StoreHistoryDetails from "./pages/StoreHistoryDetails";
+import StoreHistory from "./pages/StoreHistory";
 function App() {
   return (
     <Router basename="">
@@ -98,9 +107,9 @@ function App() {
           path="/approve"
           element={
             <CustomLayout>
-               <NavDrawerDefaultLoop>
+               <NavDrawerDefault>
                 <UserApprove />
-                </NavDrawerDefaultLoop>
+                </NavDrawerDefault>
             </CustomLayout>
           }
         />
@@ -109,9 +118,9 @@ function App() {
           path="/approvepage"
           element={
             <CustomLayout>
-               <NavDrawerDefaultLoop>
+               <NavDrawerDefault>
                 <ApprovePage />
-                </NavDrawerDefaultLoop>
+                </NavDrawerDefault>
             </CustomLayout>
           }
         />
@@ -159,9 +168,9 @@ function App() {
           path="/ai"
           element={
             <CustomLayout>
-              <NavDrawerDefaultLoop>
+              <NavDrawerDefault>
                 <AIPage />
-              </NavDrawerDefaultLoop>
+              </NavDrawerDefault>
             </CustomLayout>
           }
         />
@@ -169,9 +178,9 @@ function App() {
           path="/aidetail"
           element={
             <CustomLayout>
-               <NavDrawerDefaultLoop>
+               <NavDrawerDefault>
                 <AIDetailPage />
-                </NavDrawerDefaultLoop>
+                </NavDrawerDefault>
             </CustomLayout>
           }
         />
@@ -200,9 +209,9 @@ function App() {
           path="/issuefixdetails"
           element={
             <CustomLayout>
-              <NavDrawerDefaultLoop>
+              <NavDrawerDefault>
                 <IssuefixDetails />
-              </NavDrawerDefaultLoop>
+              </NavDrawerDefault>
             </CustomLayout>
           }
         />
@@ -211,9 +220,9 @@ function App() {
           path="/issuefix"
           element={
             <CustomLayout>
-               <NavDrawerDefaultLoop>
+               <NavDrawerDefault>
                 <IssueFixPage />
-                </NavDrawerDefaultLoop>
+                </NavDrawerDefault>
             </CustomLayout>
           }
         />
@@ -397,7 +406,96 @@ function App() {
             </CustomLayoutLoop>
           }
         />
+        <Route
+          path="/storeuser"
+          element={
+            <CustomLayoutLoop>
+               <NavDrawerDefaultStore>
+                <StoreUser />
+                </NavDrawerDefaultStore>
+            </CustomLayoutLoop>
+          }
+        />
+         <Route
+          path="/storedetails"
+          element={
+            <CustomLayoutLoop>
+               <NavDrawerDefaultStore>
+                <StoreUserPage />
+                </NavDrawerDefaultStore>
+            </CustomLayoutLoop>
+          }
+        />
+        <Route
+          path="/summary"
+          element={
+            <CustomLayout>
+               <NavDrawerDefault>
+                <SummaryPage />
+                </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
+
+<Route
+          path="/gateentry"
+          element={
+            <CustomLayout>
+               <NavDrawerDefault>
+                <GateEntry />
+                </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
+
+<Route
+          path="/history"
+          element={
+            <CustomLayout>
+               <NavDrawerDefault>
+                <History />
+                </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
+
+<Route
+          path="/historypage"
+          element={
+            <CustomLayout>
+               <NavDrawerDefault>
+                <HistoryDetails />
+                </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
+
+<Route
+          path="/storehistory"
+          element={
+            <CustomLayoutLoop>
+               <NavDrawerDefaultStore>
+                <StoreHistory />
+                </NavDrawerDefaultStore>
+            </CustomLayoutLoop>
+          }
+        />
+
+<Route
+          path="/storehistorydetails"
+          element={
+            <CustomLayoutLoop>
+               <NavDrawerDefaultStore>
+                <StoreHistoryDetails />
+                </NavDrawerDefaultStore>
+            </CustomLayoutLoop>
+          }
+        />
+
+
       </Routes>
+
+
     </Router>
   );
 }

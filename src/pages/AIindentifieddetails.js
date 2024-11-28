@@ -136,7 +136,7 @@ const useStyles = makeStyles({
   },
   content: {
     fontSize: "13px",
-    marginLeft: "10px",
+    marginLeft: "12px",
   },
 });
 
@@ -249,7 +249,7 @@ const AIDetailPage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://172.235.21.99:57/user/invoices-file/${invoiceId}`,
+        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceId}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -285,7 +285,7 @@ const AIDetailPage = () => {
     console.log("test function called");
     setSelectedInvoiceNumber(poNumber);
     try {
-      // const response = await axios.get(`http://172.235.21.99:57/user/invoices-details/${invoiceNumber}/`);
+      // const response = await axios.get(`https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`);
       // const fetchedData = response.data;
 
       const selectedPoDetails = poheader.find(
@@ -323,7 +323,7 @@ const AIDetailPage = () => {
     if (invoiceNumber) {
       try {
         const response = await axios.get(
-          `http://172.235.21.99:57/user/invoices-details/${invoiceNumber}/`,
+          `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
         );
         const fetchedItem = response.data;
         console.log("R", fetchedItem);
@@ -444,7 +444,7 @@ const AIDetailPage = () => {
     // Uncomment the following block if you want to save the PO number immediately when created.
     /*
     try {
-      const response = await fetch('http://172.235.21.99:57/user/po-number', {
+      const response = await fetch('https://invoicezapi.focusrtech.com:57/user/po-number', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -488,14 +488,14 @@ const AIDetailPage = () => {
     try {
       setLoad(true);
       const response = await axios.post(
-        "http://172.235.21.99:57/user/po-number",
+        "https://invoicezapi.focusrtech.com:57/user/po-number",
         payload,
       );
 
       if (response.status === 201) {
         message.success("PO successfully Updated");
         setLoad(false);
-        navigate(`/approve`);
+        // navigate(`/approve`);
         dispatch(toggleDrawerPosition("2"));
       } else {
         message.error(`Operation Unsuccessfully Please try again`);
@@ -685,34 +685,94 @@ const AIDetailPage = () => {
             </div>
           </TabList>
         </div>
-
         {selectedtab === "tab3" && (
-          <div className={styles.content1}>
-            <div>
-              <h2>Invoice Information</h2>
-              <ul>
-                {invoiceInfo.map((info, index) => (
-                  <li key={index}>
-                    <strong>{info.label}:</strong> {info.value}
-                  </li>
-                ))}
-              </ul>
+          <div>
+            {/* Invoice Info Section */}
+            <div
+              className={styles.content}
+              style={{
+                color: themestate ? "rgb(245,245,245)" : "",
+                display: "grid",
+                  gridTemplateColumns: "repeat(6, 3fr)",
+                  gap: "20px",
+                  fontSize:"16px"
+              }}
+            >
+              {invoiceInfo.map((info, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignContent: "space-evenly",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    className={styles.heading}
+                    style={{
+                      fontWeight: "bold",
+                      color: themestate ? "white" : "",
+                      marginRight: "5px",
+                    }}
+                  >
+                    {info.label}:
+                  </div>
+                  <div>{info.value}</div>
+                </div>
+              ))}
             </div>
-            <div>
-              <h2>Vendor/Supplier Information</h2>
-              <ul>
+
+            {/* Vendor Info Section */}
+            <div
+              className={styles.content}
+              style={{
+                color: themestate ? "rgb(245,245,245)" : "",
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                gap: "15px",
+                fontSize: "17px",
+                paddingTop: "30px",
+                paddingBottom: "30px",
+              }}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(5, 3fr)",
+                  gap: "20px",
+                  fontSize:"16px"
+                }}
+              >
                 {vendorInfo.map((info, index) => (
-                  <li key={index}>
-                    <strong>{info.label}:</strong> {info.value}
-                  </li>
+                  <div
+                    key={index}
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignContent: "space-evenly",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      className={styles.heading}
+                      style={{
+                        fontWeight: "bold",
+                        color: themestate ? "white" : "",
+                        marginRight: "5px",
+                      }}
+                    >
+                      {info.label}:
+                    </div>
+                    <div>{info.value}</div>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
 
+            {/* Line Information Section */}
             <h2>Line Information</h2>
-
-            <Divider />
-
             <div
               style={{
                 width: "100%",
@@ -852,20 +912,6 @@ const AIDetailPage = () => {
                         >
                           {item.ProductCode}
                         </TableCell>
-                        {/* <TableCell
-                    style={{
-                      maxWidth: "300px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-
-                      <FaArrowUpRightFromSquare
-                        style={{ cursor: "pointer" }}
-                      />
-
-                  </TableCell> */}
                       </TableRow>
                     ))}
                   </TableBody>
@@ -1152,13 +1198,14 @@ const AIDetailPage = () => {
                       </TableBody>
                     </Table>
                   </div>
+
                 </div>
               </div>
             </div>
           </div>
         )}
       </div>
-    </div>
+    // </div>
   );
 };
 

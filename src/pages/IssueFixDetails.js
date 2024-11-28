@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import React from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import {notification} from "antd";
 import {
   makeStyles,
   Button,
@@ -21,10 +22,12 @@ import {
   TableRow,
   TableBody,
   TableHeaderCell,
+  Checkbox,
   createTableColumn,
   useTableFeatures,
   useTableSort,
 } from "@fluentui/react-components";
+import { refreshActions ,useDispatch} from "../Store/Store";
 import { TextField } from "@fluentui/react/lib/TextField";
 import line_data from "./data_approve";
 import "./dashboard.css";
@@ -124,7 +127,7 @@ const IssuefixDetails = () => {
       setHeight(divRef.current.offsetHeight); // Calculate the height of the div based on its content
     }
   }, []);
-
+  // const dispatch = useDispatch();
   const styles = useStyles();
   const themestate = false;
   const [selectedtab, setSelectedTab] = React.useState("tab1");
@@ -159,7 +162,7 @@ const IssuefixDetails = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://172.235.21.99:57/user/invoices-update/${invoiceNo}/`,
+          `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
 
@@ -190,18 +193,18 @@ const IssuefixDetails = () => {
 
     fetchData();
   }, []);
-
-  const handleInputChange = (index, key, value) => {
-    setRows((prevRows) =>
-      prevRows.map((row, i) => (i === index ? { ...row, [key]: value } : row)),
-    );
-  };
+  // 2
+  // const handleInputChange = (index, key, value) => {
+  //   setRows((prevRows) =>
+  //     prevRows.map((row, i) => (i === index ? { ...row, [key]: value } : row)),
+  //   );
+  // };
 
   const [poNumber, setPoNumber] = useState("");
 
   const handleSubmit = async () => {
     // Replace with your API endpoint
-    const apiUrl = "http://172.235.21.99:57/user/po-number";
+    const apiUrl = "https://invoicezapi.focusrtech.com:57/user/po-number";
 
     try {
       const response = await fetch(apiUrl, {
@@ -240,7 +243,7 @@ const IssuefixDetails = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://172.235.21.99:57/user/invoices-update/${invoiceNo}/`,
+          `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
         setFormData({
@@ -355,7 +358,7 @@ const IssuefixDetails = () => {
 
     try {
       const response = await fetch(
-        `http://172.235.21.99:57/user/invoices-update/${invoiceNo}/`,
+        `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
         {
           method: "PUT",
           headers: {
@@ -412,10 +415,66 @@ const IssuefixDetails = () => {
     }));
   };
 
+   
+
+  const handleSelectionChange = (event, data) => {
+    console.log("handleSelectionChange", data.selectedItems);
+    setSelectedRows(data.selectedItems);
+  };
+
+  // const handleDeleteSelectedRows = async () => {
+  //   const selectedItemsArray = Array.from(selectedRows);
+  //   if (selectedItemsArray.length === 0) {
+  //     notification.warning({
+  //       message: "No PO Selected",
+  //       description: "Please select at least one PO to delete.",
+  //     });
+  //     return;
+  //   }
+
+  //   try {
+  //     const supplierNames = selectedItemsArray
+  //       .map((item) => item.supplier_name)
+  //       .join(", ");
+
+  //     const deletePromises = selectedItemsArray.map((item) =>
+  //       axios.delete(
+  //         `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].Id}`,
+  //       ),
+  //     );
+
+  //     await Promise.all(deletePromises);
+
+  //     const newItems = items.filter(
+  //       (item) =>
+  //         !selectedItemsArray.some(
+  //           (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
+  //         ),
+  //     );
+
+  //     // setItems(newItems);
+
+  //     notification.success({
+  //       message: "Successfully deleted",
+  //       description: `You have successfully deleted: ${supplierNames}`,
+  //     });
+
+  //     dispatch(refreshActions.toggleInvoiceUploadRefresh());
+  //   } catch (error) {
+  //     const supplierNames = selectedItemsArray
+  //       .map((item) => item.supplier_name)
+  //       .join(", ");
+  //     notification.error({
+  //       message: "Deletion Failed",
+  //       description: `Deletion Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
+  //     });
+  //   }
+  // };
+
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://172.235.21.99:57/user/invoices-file/${invoiceNo}`,
+        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceNo}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -432,6 +491,68 @@ const IssuefixDetails = () => {
 
   const handlePOChange = (event) => {};
 
+  // Adding new row
+
+  const [rows1, setRows1] = useState([
+    {
+      id: 1,
+      description: "",
+      quantity: "",
+      unit: "",
+      unitPrice: "",
+      amount: "",
+      subtotal: "",
+      previousUnpaidBalance: "",
+    },
+  ]);
+
+  const handleInputChange = (index, key, value) => {
+    setRows1((prevRows) =>
+      prevRows.map((row, i) =>
+        i === index ? { ...row, [key]: value } : row
+      )
+    );
+  };
+
+  const handleAddRow = () => {
+    const newRow = {
+      id: rows.length + 1, // increment the id based on the current rows
+      description: "",
+      quantity: "",
+      unit: "",
+      unitPrice: "",
+      amount: "",
+      subtotal: "",
+      previousUnpaidBalance: "",
+    };
+    setRows((prevRows) => [...prevRows, newRow]); // Add new row to existing rows
+  };
+
+  // checkbox
+
+
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [tableData, setTableData] = useState(rows);
+  // Toggle selection of a single row
+  const toggleRowSelection = (rowId) => {
+    setSelectedRows((prevSelectedRows) =>
+      prevSelectedRows.includes(rowId)
+        ? prevSelectedRows.filter((id) => id !== rowId) // Deselect row
+        : [...prevSelectedRows, rowId] // Select row
+    );
+  };
+
+  // Toggle selection of all rows
+  const toggleSelectAll = () => {
+    if (selectedRows.length === rows.length) {
+      setSelectedRows([]); // Deselect all
+    } else {
+      setSelectedRows(rows.map((row) => row.id)); // Select all
+    }
+  };
+
+  // Check if all rows are selected
+  const areAllSelected = selectedRows.length === rows.length;
   return (
     <div>
       <div>
@@ -712,51 +833,83 @@ const IssuefixDetails = () => {
                   </div>
                 </div>
               </div>
-              <h2 style={{ marginTop: "40px" }}>Lines</h2>
+              
+              <div style={{display:"flex",justifyContent:"space-between"}}>
+              <div style={{display:"flex",marginTop:"1.5em",marginBottom:"2em"}}>
+              <h2 >Lines</h2>
+              
+                   </div>
+                   <div style={{display:"flex",justifyContent:"flex-end",marginTop:"1.5em",marginBottom:"2em",gap:"20px"}}>
+                   <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleAddRow}>Add</Button>
+                   <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} >Delete</Button>
+                   </div>
+
+              </div>
+              
+              
               <div
                 style={{
                   marginTop: "-20px",
                 }}
               >
                 <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHeaderCell>No</TableHeaderCell>
-                      <TableHeaderCell>Description</TableHeaderCell>
-                      <TableHeaderCell>Quantity</TableHeaderCell>
-                      <TableHeaderCell>Unit</TableHeaderCell>
-                      <TableHeaderCell>Unit Price</TableHeaderCell>
-
-                      <TableHeaderCell>Amount</TableHeaderCell>
-                      <TableHeaderCell>Subtotal</TableHeaderCell>
-                      <TableHeaderCell>Previous Unpaid Balance</TableHeaderCell>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {rows.map((row, index) => (
-                      <TableRow key={row.id}>
-                        {" "}
-                        {/* Use row.id for a unique key */}
-                        <TableCell>{row.id}</TableCell>
-                        {Object.keys(row)
-                          .filter((key) => key !== "id")
-                          .map((key) => (
-                            <TableCell key={key}>
-                              <Input
-                                // appearance="underline"
-                                value={row[key] || ""} // Fallback to empty string for null values
-                                onChange={(e) =>
-                                  handleInputChange(index, key, e.target.value)
-                                }
-                                style={{ width: "100%" }}
-                              />
-                            </TableCell>
-                          ))}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-
+        <TableHeader>
+          <TableRow>
+            <TableHeaderCell
+              style={{
+                padding: "0 0px", // Adjust padding for better alignment
+                textAlign: "center", // Center align the checkbox
+              }}
+            >
+              <Checkbox
+                checked={areAllSelected}
+                onChange={toggleSelectAll}
+                title="Select All"
+                style={{marginLeft:"4em"}}
+              />
+            </TableHeaderCell>
+            <TableHeaderCell>No</TableHeaderCell>
+            <TableHeaderCell>Description</TableHeaderCell>
+            <TableHeaderCell>Quantity</TableHeaderCell>
+            <TableHeaderCell>Unit</TableHeaderCell>
+            <TableHeaderCell>Unit Price</TableHeaderCell>
+            <TableHeaderCell>Amount</TableHeaderCell>
+            <TableHeaderCell>Subtotal</TableHeaderCell>
+            <TableHeaderCell>Previous Unpaid Balance</TableHeaderCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((row, index) => (
+            <TableRow key={row.id}>
+              <TableCell
+                style={{
+                  padding: "0 8px", // Adjust padding to align checkbox
+                  textAlign: "center", // Center align the checkbox
+                }}
+              >
+                <Checkbox
+                  checked={selectedRows.includes(row.id)}
+                  onChange={() => toggleRowSelection(row.id)}
+                />
+              </TableCell>
+              <TableCell>{row.id}</TableCell>
+              {Object.keys(row)
+                .filter((key) => key !== "id")
+                .map((key) => (
+                  <TableCell key={key}>
+                    <Input
+                      value={row[key] || ""} // Fallback to empty string for null values
+                      onChange={(e) => handleInputChange(index, key, e.target.value)}
+                      style={{ width: "100%" }}
+                    />
+                  </TableCell>
+                ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+ 
+ 
                 {/* <Button onClick={addLine} style={{ marginTop: "10px" }}>+ Add Line</Button> */}
               </div>
             </div>

@@ -294,7 +294,7 @@ const CustomLayoutLoop = ({ children }) => {
 
       try {
         const response = await axios.post(
-          "http://172.235.21.99:57/user/invoice-upload",
+          "https://invoicezapi.focusrtech.com:57/user/invoice-upload",
           formData,
           {
             headers: {
@@ -396,7 +396,7 @@ const CustomLayoutLoop = ({ children }) => {
             <div className="focusr-logo">
               <img src={frLogo} alt="FRLogo" className="focusr-logo-img"></img>
             </div>
-            <span className="focusR-text">Inloop FocusR</span>
+            <span className="focusR-text">InvoiceEZ</span>
           </div>
           {/* <Field
             style={

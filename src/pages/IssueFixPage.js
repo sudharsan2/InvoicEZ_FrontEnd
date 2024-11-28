@@ -106,12 +106,12 @@ const IssuefixPage = () => {
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
             </BreadcrumbItem>
             <BreadcrumbDivider />
-            <BreadcrumbItem>
+            {/* <BreadcrumbItem>
               <BreadcrumbButton href={path}>Issue</BreadcrumbButton>
             </BreadcrumbItem>
-            <BreadcrumbDivider />
+            <BreadcrumbDivider /> */}
             <BreadcrumbItem>
-              <BreadcrumbButton href={path2}>Fix</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>No Match Found</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -122,7 +122,7 @@ const IssuefixPage = () => {
             padding: "1px",
           }}
         >
-          <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Fix</h3>
+          <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>No Match Found</h3>
         </div>
         <div>
           <div style={{ display: "flex", justifyContent: "flex-start" }}>

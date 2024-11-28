@@ -11,7 +11,7 @@ import {
   bundleIcon,
 } from "@fluentui/react-icons";
 import TagCounters from "../components/gridapprove";
-import ApproveTable from "../components/approvetable";
+import TableApprove from "../components/TableApprove";
 import Search from "../components/Search";
 
 // const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
@@ -29,7 +29,7 @@ const UserApprove = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>Approve</BreadcrumbButton>
+              <BreadcrumbButton href={path}>Match Found</BreadcrumbButton>
             </BreadcrumbItem>
             <BreadcrumbDivider />
           </Breadcrumb>
@@ -44,7 +44,7 @@ const UserApprove = () => {
               padding: "1px",
             }}
           >
-            <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Approve</h3>
+            <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Match Found</h3>
           </div>
 
           <div>
@@ -54,7 +54,7 @@ const UserApprove = () => {
         </div>
         <div style={{ width: "100%", height: "5vh" }} />
         <div>
-          <ApproveTable />
+          <TableApprove />
         </div>
       </div>
     </div>

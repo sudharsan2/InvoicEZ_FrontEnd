@@ -76,7 +76,7 @@ const POTable = () => {
   const fetchAcknowledgeList = async () => {
     try {
       const token = localStorage.getItem("access_token");
-      const response = await fetch("http://172.235.21.99:57/user/acknowledgeList", {
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/acknowledgeList", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -91,15 +91,15 @@ const POTable = () => {
       const responseData = await response.json();
       // Transform API data into table-friendly format
       const formattedData = responseData.map((item) => {
-        const lineItem = item.line_items?.[0] || {}; // Use the first line item if available
-        const distribution = lineItem.distributions?.[0] || {}; // Use the first distribution if available
-        console.log("TYPE",lineItem.line_type);
+        const lineItem = item.line_items?.[0] || {}; 
+        const distribution = lineItem.distributions?.[0] || {}; 
+        console.log("TYPE",lineItem.need_by_date);
         return {
           id: item.id,
           supplier:item.supplier_ids,
           requestor:item.requestor,
           lineType: lineItem.line_type,
-          rev: distribution.distribution_number, // Extract distribution number from the first distribution
+          rev: distribution.distribution_number, 
           documentNumber: item.document_number,
           // description: item.description,
           currency:item.currency,
@@ -126,6 +126,9 @@ const POTable = () => {
     }
   };
 
+
+  
+  
   useEffect(() => {
     fetchAcknowledgeList();
   }, []);
@@ -266,15 +269,15 @@ const POTable = () => {
         </TableCellLayout>
       ),
     }),
-    createTableColumn({
-      columnId: "lastupdate",
-      renderHeaderCell: () => "Remainder Date",
-      renderCell: (item) => (
-        <TableCellLayout style={{ maxWidth: "150px" }}>
-          {item.lastupdate}
-        </TableCellLayout>
-      ),
-    }),
+    // createTableColumn({
+    //   columnId: "lastupdate",
+    //   renderHeaderCell: () => "Remainder Date",
+    //   renderCell: (item) => (
+    //     <TableCellLayout style={{ maxWidth: "150px" }}>
+    //       {item.lastupdate}
+    //     </TableCellLayout>
+    //   ),
+    // }),
    
   ];
   const gridContainerStyle = {

@@ -66,7 +66,7 @@
   
 //    const handleSubmit = async ()=>{
 //     try {
-//       const response = await axios.post('http://172.235.21.99:57/user/store-purchase-details',{details:[data],suppliers:suppliers1})
+//       const response = await axios.post('https://invoicezapi.focusrtech.com:57/user/store-purchase-details',{details:[data],suppliers:suppliers1})
 //       const fetchedItems = response.data;
 //       console.log("fecthed Items",fetchedItems);
 //       if (response.status === 200) {
@@ -217,7 +217,7 @@ const TodoPage = ({data,onSubmit }) => {
   
   //  const handleSubmit = async ()=>{
   //   try {
-  //     const response = await axios.post('http://172.235.21.99:57/user/store-purchase-details',{details:[data],suppliers:suppliers1})
+  //     const response = await axios.post('https://invoicezapi.focusrtech.com:57/user/store-purchase-details',{details:[data],suppliers:suppliers1})
   //     const fetchedItems = response.data;
   //     console.log("fecthed Items",fetchedItems);
       

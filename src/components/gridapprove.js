@@ -46,7 +46,7 @@
 //   const fetchData = async () => {
 //     try {
 //       const response = await fetch(
-//         "http://172.235.21.99:57/user/statusForApprove",
+//         "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
 //       ); // Replace with your API URL
 //       if (!response.ok) {
 //         throw new Error("Network response was not ok");
@@ -149,7 +149,7 @@ const TagCounters = ({ type }) => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://172.235.21.99:57/user/statusForApprove",
+        "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -184,7 +184,7 @@ const TagCounters = ({ type }) => {
         setData(
           allData.filter(
             (item) =>
-              item.label === "To Do" ||
+              item.label === "Total number to Process" ||
               item.label === "Crossed PO Date" ||
               item.label === "PO Number Matching" ||
               item.label === "Supplier Matching" ||

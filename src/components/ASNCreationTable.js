@@ -176,7 +176,7 @@
 //       const token = localStorage.getItem("access_token");
   
 //       // Make the GET request with the token in the Authorization header
-//       const response = await fetch("http://172.235.21.99:57/user/acknowledgeList", {
+//       const response = await fetch("https://invoicezapi.focusrtech.com:57/user/acknowledgeList", {
 //         method: "GET",
 //         headers: {
 //           "Content-Type": "application/json",
@@ -262,7 +262,7 @@ const ASNCreateTable = () => {
   const fetchAcknowledgeList = async () => {
     try {
       const token = localStorage.getItem("access_token");
-      const response = await fetch("http://172.235.21.99:57/user/acknowledgeList", {
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/acknowledgeList", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

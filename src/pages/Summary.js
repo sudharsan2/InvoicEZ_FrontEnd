@@ -1,0 +1,120 @@
+import React, { useState } from "react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbDivider,
+  BreadcrumbButton,
+} from "@fluentui/react-components";
+import {
+  CalendarMonthFilled,
+  CalendarMonthRegular,
+  bundleIcon,
+} from "@fluentui/react-icons";
+import TagCounters from "../components/gridapprove";
+import SummaryTable from "../components/approvetable";
+import Search from "../components/Search";
+
+// const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
+const path = "/summary";
+const path1 = "http://localhost:3000/";
+
+const containerStyle = {
+    width: "100%",
+    display: "flex",
+    
+    justifyContent: "space-around",
+    padding: "8px",
+    marginLeft:"-6em"
+  };
+  
+  const itemStyle = {
+    display: "flex",
+    alignItems: "flex-start",
+  };
+  
+  const lineStyle = (color) => ({
+    width: "3px",
+    height: "50px", 
+    backgroundColor: color,
+    marginRight: "12px",
+  });
+  
+  const labelStyle = {
+    fontSize: "14px",
+    fontWeight: "normal", 
+    marginBottom:"10px"
+  };
+  const valueStyle = {
+    fontSize: "28px", 
+    fontWeight: "bold",
+    color: "#333", 
+    marginLeft: "0px", 
+  };
+
+const SummaryPage = () => {
+      const[tableLength,setTableLength]=useState('');
+      const[fixCount,setFixCount]=useState('');
+      const[MatchCount,setMatchCount]=useState('');
+      const[multiple_MatchCount,setMultiple_MatchCount]=useState('');
+      
+    const counters = [
+        { label: "Total number to Process", value: tableLength, color: "#00bfbf" }, // Cyan
+        { label: "Match Found", value: MatchCount, color: "#d62727" }, // Red
+        { label: "Multiple Match Found", value: multiple_MatchCount, color: "#1f497d" }, // Dark Blue
+        { label: "No Match Found", value: fixCount, color: "#d21994" }, // Magenta
+      ];
+      
+
+  return (
+    <div style={{maxHeight:"91vh",overflowY:"auto"}}>
+      <div style={{ height: "5vh" }}>
+        <div className="Approvebreadcrump">
+          <Breadcrumb aria-label="Breadcrumb default example">
+            <BreadcrumbItem>
+              <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
+            </BreadcrumbItem>
+            <BreadcrumbDivider />
+            <BreadcrumbItem>
+              <BreadcrumbButton href={path}>Summary</BreadcrumbButton>
+            </BreadcrumbItem>
+            <BreadcrumbDivider />
+          </Breadcrumb>
+        </div>
+      </div>
+      <div>
+        <div style={{ maxHeight: "10vh" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flexStart",
+              padding: "1px",
+            }}
+          >
+            <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Summary</h3>
+          </div>
+
+          <div>
+            
+          <div style={containerStyle}>
+        {counters.map((item, index) => (
+          <div style={itemStyle} key={index}>
+            <div style={lineStyle(item.color)} />
+            <div>
+              <div style={labelStyle}>{item.label}</div>
+              <div style={valueStyle}>{item.value}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+          </div>
+        </div>
+        <div style={{ width: "100%", height: "5vh" }} />
+        <div>
+          <SummaryTable setFixCount={setFixCount} setMatchCount={setMatchCount} setTableLength={setTableLength}  setMultiple_MatchCount={setMultiple_MatchCount}/>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SummaryPage;

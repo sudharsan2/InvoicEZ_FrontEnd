@@ -60,6 +60,24 @@ import {
   DocumentCatchUp24Regular,
   WrenchSettings24Filled,
   WrenchSettings24Regular,
+  TasksApp24Regular,
+  TasksApp24Filled,
+  TargetArrow24Filled,
+  TargetArrow24Regular,
+  TargetDismiss24Filled,
+  TargetDismiss24Regular,
+  DocumentTableCheckmark24Filled,
+  DocumentTableCheckmark24Regular,
+  TaskListSquareRtl24Filled,
+  TaskListSquareRtl24Regular,
+  VehicleTruckProfile24Filled,
+  VehicleTruckProfile24Regular,
+  Form28Regular,
+  Form28Filled,
+  DocumentBulletListMultiple24Filled,
+  DocumentBulletListMultiple24Regular,
+  History24Regular,
+  History24Filled
 } from "@fluentui/react-icons";
 
 import {
@@ -187,6 +205,7 @@ const useStyles = makeStyles({
 
 const Person = bundleIcon(PersonFilled, PersonRegular);
 const Dashboard = bundleIcon(Board24Filled, Board24Regular);
+const History = bundleIcon(History24Filled,History24Regular);
 const Announcements = bundleIcon(MegaphoneLoud20Filled, MegaphoneLoud20Regular);
 const EmployeeSpotlight = bundleIcon(
   PersonLightbulb20Filled,
@@ -205,14 +224,16 @@ const PremiumPersonRegular = bundleIcon(
 const TableSearchRegular = bundleIcon(Cart24Filled, Cart24Regular);
 const Usage = bundleIcon(DocumentCatchUp24Filled, DocumentCatchUp24Regular);
 const Navi = bundleIcon(Navigation24Filled, Navigation24Regular);
-
-const Fix = bundleIcon(WrenchSettings24Filled, WrenchSettings24Regular);
-
+const Match = bundleIcon(TargetArrow24Filled,TargetArrow24Regular);
+const Multiple = bundleIcon(DocumentBulletListMultiple24Filled,DocumentBulletListMultiple24Regular)
+const Fix = bundleIcon(TargetDismiss24Filled, TargetDismiss24Regular);
+const Summary = bundleIcon(Form28Filled,Form28Regular);
 const Search = bundleIcon(PersonSearch20Filled, PersonSearch20Regular);
 const PerformanceReviews = bundleIcon(
   PreviewLink20Filled,
   PreviewLink20Regular,
 );
+const Truck = bundleIcon(VehicleTruckProfile24Filled,VehicleTruckProfile24Regular);
 const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular);
 const Interviews = bundleIcon(People20Filled, People20Regular);
 const HealthPlans = bundleIcon(HeartPulse20Filled, HeartPulse20Regular);
@@ -233,7 +254,7 @@ const NavDrawerDefault = (props) => {
   const lighttheme = useSelector((state) => state.theme.light);
 
   const darktheme = useSelector((state) => state.theme.dark);
-
+  
   const themestate = useSelector((state) => state.theme.theme);
 
   const [collapse, setCollapse] = useState(false);
@@ -302,7 +323,7 @@ const NavDrawerDefault = (props) => {
         style={
           collapse
             ? {
-                width: `59px`,
+                width: `75px`,
                 transition: "width 0.5s",
                 borderRightStyle: "none",
               }
@@ -394,7 +415,7 @@ const NavDrawerDefault = (props) => {
             </Tooltip>
 
             <Tooltip
-              content={"approve"}
+              content={"Gate Entry"}
               positioning="after"
               withArrow={true}
               appearance={themestate ? "inverted" : "normal"}
@@ -402,7 +423,7 @@ const NavDrawerDefault = (props) => {
               <NavItem
                 target="_blank"
                 icon={
-                  <LayerDiagonalPersonRegular
+                  <Truck
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark }
@@ -411,7 +432,7 @@ const NavDrawerDefault = (props) => {
                   />
                 }
                 onClick={() => {
-                  navigate("/approve");
+                  navigate("/gateentry");
                   setValue("2");
                 }}
                 value="2"
@@ -422,7 +443,7 @@ const NavDrawerDefault = (props) => {
             </Tooltip>
 
             <Tooltip
-              content={"AI Identified"}
+              content={"Summary"}
               positioning="after"
               withArrow={true}
               appearance={themestate ? "inverted" : "normal"}
@@ -430,7 +451,7 @@ const NavDrawerDefault = (props) => {
               <NavItem
                 target="_blank"
                 icon={
-                  <PersonStarRegular
+                  <Summary
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark }
@@ -439,7 +460,35 @@ const NavDrawerDefault = (props) => {
                   />
                 }
                 onClick={() => {
-                  navigate("/ai");
+                  navigate("/summary")
+                  setValue("6");
+                }}
+                value="6"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+              ></NavItem>
+            </Tooltip>
+
+            <Tooltip
+              content={"Match Found"}
+              positioning="after"
+              withArrow={true}
+              appearance={themestate ? "inverted" : "normal"}
+            >
+              <NavItem
+                target="_blank"
+                icon={
+                  <Match
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/approve");
                   setValue("3");
                 }}
                 value="3"
@@ -450,7 +499,35 @@ const NavDrawerDefault = (props) => {
             </Tooltip>
 
             <Tooltip
-              content={"Fix"}
+              content={"Multiple Match Found"}
+              positioning="after"
+              withArrow={true}
+              appearance={themestate ? "inverted" : "normal"}
+            >
+              <NavItem
+                target="_blank"
+                icon={
+                  <Multiple
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/ai");
+                  setValue("4");
+                }}
+                value="4"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+              ></NavItem>
+            </Tooltip>
+
+            <Tooltip
+              content={"No Match Found"}
               positioning="after"
               withArrow={true}
               appearance={themestate ? "inverted" : "normal"}
@@ -468,34 +545,6 @@ const NavDrawerDefault = (props) => {
                 }
                 onClick={() => {
                   navigate("/issuefix");
-                  setValue("4");
-                }}
-                value="4"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-
-            <Tooltip
-              content={"Settings"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <Settings
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={() => {
-                  navigate("/");
                   setValue("5");
                 }}
                 value="5"
@@ -504,9 +553,8 @@ const NavDrawerDefault = (props) => {
                 }
               ></NavItem>
             </Tooltip>
-
             <Tooltip
-              content={"Purchase Order"}
+              content={"History"}
               positioning="after"
               withArrow={true}
               appearance={themestate ? "inverted" : "normal"}
@@ -514,7 +562,7 @@ const NavDrawerDefault = (props) => {
               <NavItem
                 target="_blank"
                 icon={
-                  <TableSearchRegular
+                  <History
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark }
@@ -523,7 +571,7 @@ const NavDrawerDefault = (props) => {
                   />
                 }
                 onClick={() => {
-                  navigate("/");
+                  navigate("/history");
                   setValue("6");
                 }}
                 value="6"
@@ -533,33 +581,9 @@ const NavDrawerDefault = (props) => {
               ></NavItem>
             </Tooltip>
 
-            <Tooltip
-              content={"Usage"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <Usage
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={() => {
-                  navigate("/");
-                  setValue("7");
-                }}
-                value="7"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
+           
+
+            
           </NavDrawerBody>
         ) : (
           <NavDrawerBody
@@ -638,12 +662,11 @@ const NavDrawerDefault = (props) => {
                 </div>
               </NavItem>
             </div>
-            {/* 2 */}
             <div style={{ width: "100%" }}>
               <NavItem
                 target="_blank"
                 icon={
-                  <LayerDiagonalPersonRegular
+                  <Truck
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark }
@@ -652,7 +675,7 @@ const NavDrawerDefault = (props) => {
                   />
                 }
                 onClick={() => {
-                  navigate("/approve");
+                  navigate("/gateentry");
                   setValue("2");
                 }}
                 value="2"
@@ -668,11 +691,181 @@ const NavDrawerDefault = (props) => {
                       : { marginTop: "2px", color: lighttheme.fontcolorlight }
                   }
                 >
-                  Approve
+                  Gate Entry
                 </div>
               </NavItem>
             </div>
             <div style={{ width: "100%" }}>
+              <NavItem
+                target="_blank"
+                icon={
+                  <Summary
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/summary");
+                  setValue("6");
+                }}
+                value="6"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+                style={{ marginTop: "10px", fontSize: "17px" }}
+              >
+                <div
+                  style={
+                    themestate
+                      ? { marginTop: "2px", color: darktheme.fontcolordark }
+                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                  }
+                >
+                  Summary
+                </div>
+              </NavItem>
+            </div>
+            {/* 2 */}
+            <div style={{ width: "100%" }}>
+              <NavItem
+                target="_blank"
+                icon={
+                  <Match
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/approve");
+                  setValue("3");
+                }}
+                value="3"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+                style={{ marginTop: "10px", fontSize: "17px" }}
+              >
+                <div
+                  style={
+                    themestate
+                      ? { marginTop: "2px", color: darktheme.fontcolordark }
+                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                  }
+                >
+                  Match Found
+                </div>
+              </NavItem>
+            </div>
+            <div style={{ width: "100%" }}>
+              <NavItem
+                target="_blank"
+                icon={
+                  <Multiple
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/ai");
+                  setValue("4");
+                }}
+                value="4"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+                style={{ marginTop: "10px", fontSize: "17px" }}
+              >
+                <div
+                  style={
+                    themestate
+                      ? { marginTop: "2px", color: darktheme.fontcolordark }
+                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                  }
+                >
+                  Multiple Match Found
+                </div>
+              </NavItem>
+            </div>
+            <div style={{ width: "100%" }}>
+              <NavItem
+                target="_blank"
+                icon={
+                  <Fix
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/issuefix");
+                  setValue("5");
+                }}
+                value="5"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+                style={{ marginTop: "10px", fontSize: "17px" }}
+              >
+                <div
+                  style={
+                    themestate
+                      ? { marginTop: "2px", color: darktheme.fontcolordark }
+                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                  }
+                >
+                  No Match Found
+                </div>
+              </NavItem>
+            </div>
+
+            {/* History */}
+
+            <div style={{ width: "100%" }}>
+              <NavItem
+                target="_blank"
+                icon={
+                  <History
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/history");
+                  setValue("7");
+                }}
+                value="7"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+                style={{ marginTop: "10px", fontSize: "17px" }}
+              >
+                <div
+                  style={
+                    themestate
+                      ? { marginTop: "2px", color: darktheme.fontcolordark }
+                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                  }
+                >
+                  History
+                </div>
+              </NavItem>
+            </div>
+            
+            {/* <div style={{ width: "100%" }}>
               <div
                 style={
                   themestate
@@ -728,117 +921,9 @@ const NavDrawerDefault = (props) => {
                   </NavSubItemGroup>
                 </NavCategory>
               </div>
-            </div>
+            </div> */}
 
-            {/* 4 */}
-            <div style={{ width: "100%" }}>
-              <NavItem
-                target="_blank"
-                icon={
-                  <Settings
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark, fontSize: "30px" }
-                        : { color: lighttheme.fontcolorlight, fontSize: "30px" }
-                    }
-                  />
-                }
-                // onClick={someClickHandler}
-                value="6"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={
-                  themestate
-                    ? {
-                        marginTop: "10px",
-                        fontSize: "17px",
-                        color: darktheme.fontcolordark,
-                      }
-                    : {
-                        marginTop: "10px",
-                        fontSize: "17px",
-                        color: lighttheme.fontcolorlight,
-                      }
-                }
-                onClick={() => {
-                  setValue("6");
-                }}
-              >
-                <div style={{ marginTop: "2px" }}>Settings</div>
-              </NavItem>
-              {/* Newly added  */}
-              <NavItem
-                target="_blank"
-                icon={
-                  <TableSearchRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                // onClick={someClickHandler}
-                value="7"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={
-                  themestate
-                    ? {
-                        marginTop: "10px",
-                        fontSize: "17px",
-                        color: darktheme.fontcolordark,
-                      }
-                    : {
-                        marginTop: "10px",
-                        fontSize: "17px",
-                        color: lighttheme.fontcolorlight,
-                      }
-                }
-                onClick={() => {
-                  setValue("7");
-                }}
-              >
-                <div style={{ marginTop: "2px" }}>Purchase Order</div>
-              </NavItem>
-              <NavItem
-                target="_blank"
-                icon={
-                  <Usage
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                // onClick={someClickHandler}
-                value="8"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={
-                  themestate
-                    ? {
-                        marginTop: "10px",
-                        fontSize: "17px",
-                        color: darktheme.fontcolordark,
-                      }
-                    : {
-                        marginTop: "10px",
-                        fontSize: "17px",
-                        color: lighttheme.fontcolorlight,
-                      }
-                }
-                onClick={() => {
-                  setValue("8");
-                }}
-              >
-                <div style={{ marginTop: "2px" }}>Usage</div>
-              </NavItem>
-            </div>
+            
           </NavDrawerBody>
         )}
 

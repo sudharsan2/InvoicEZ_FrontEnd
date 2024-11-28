@@ -21,6 +21,7 @@ import {
   createTableColumn,
   useTableFeatures,
   useTableSort,
+  Divider,
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
 import { useLocation } from "react-router-dom";
@@ -50,10 +51,11 @@ const useStyles = makeStyles({
   },
 
   content1: {
-    overflowY: "auto",
+    overflowX: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
     maxHeight: "35vh",
+    
   },
 
   content2: {
@@ -100,6 +102,7 @@ const useStyles = makeStyles({
   },
   heading: {
     fontWeight: "bold",
+    maxWidth:"500px"
   },
   content: {
     fontSize: "13px",
@@ -149,10 +152,10 @@ const ApprovePage = () => {
 
   const [inv_id, setInv_id] = useState();
 
-  // console.log("vendor", setVendor);
+  console.log("Invoice Id", inv_id);
 
   const approvePo = async () => {
-    const url = `http://172.235.21.99:57/user/oracle-payload/${po_id}`;
+    const url = `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${inv_id}`;
 
     try {
       const response = await axios.post(url, {});
@@ -172,7 +175,7 @@ const ApprovePage = () => {
   };
 
   const deleteInvoice = async () => {
-    const url = `http://172.235.21.99:57/user/delete-pos/${inv_id}`;
+    const url = `https://invoicezapi.focusrtech.com:57/user/delete-pos/${inv_id}`;
 
     try {
       const response = await axios.delete(url);
@@ -210,7 +213,7 @@ const ApprovePage = () => {
     try {
       setLoad(true);
       const response = await axios.post(
-        "http://172.235.21.99:57/user/po-number",
+        "https://invoicezapi.focusrtech.com:57/user/po-number",
         payload,
       );
 
@@ -314,7 +317,7 @@ const ApprovePage = () => {
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
-        `http://172.235.21.99:57/user/invoices-file/${inv_id}`,
+        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -333,7 +336,7 @@ const ApprovePage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://172.235.21.99:57/user/po-details/${Id}`,
+          `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
         );
         const fetchedItems = response.data;
 
@@ -459,11 +462,11 @@ const ApprovePage = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>Approve</BreadcrumbButton>
+              <BreadcrumbButton href={path}>Match Found</BreadcrumbButton>
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path2}>PO:13466</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>PO:{poNumber}</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -656,10 +659,10 @@ const ApprovePage = () => {
             </TabList>
           </div>
           {selectedtab === "tab1" && (
-            <div style={{ marginTop: "20px" }}>
+            <div style={{ marginTop: "20px", }}>
               <div className={styles.content1}>
-                <div className={`${styles.container} ${styles.gridTemplate1}`}>
-                  <div className={`${styles.section} ${styles.poNumber}`}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 3fr)", gap: "15px"}}>
+                  <div style={{display:"flex",flexDirection:"row"}}>
                     <div
                       className={styles.heading}
                       style={{
@@ -678,7 +681,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.vendorAddress}`}>
+                  <div style={{display:"flex",flexDirection:"row",}}>
                     <div
                       className={styles.heading}
                       style={{
@@ -696,7 +699,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.poDate}`}>
+                  <div style={{display:"flex",flexDirection:"row"}}>
                     <div
                       className={styles.heading}
                       style={{
@@ -716,7 +719,7 @@ const ApprovePage = () => {
                   </div>
 
                   <div
-                    className={`${styles.section} ${styles.customerAddress}`}
+                    style={{display:"flex",flexDirection:"row"}}
                   >
                     <div
                       className={styles.heading}
@@ -736,7 +739,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.poTotalAmount}`}>
+                  <div style={{display:"flex",flexDirection:"row"}}>
                     <div
                       className={styles.heading}
                       style={{
@@ -754,7 +757,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.invoiceId}`}>
+                  <div style={{display:"flex",flexDirection:"row"}}>
                     <div
                       className={styles.heading}
                       style={{
@@ -773,7 +776,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.poCurrency}`}>
+                  <div style={{display:"flex",flexDirection:"row"}}>
                     <div
                       className={styles.heading}
                       style={{
@@ -790,7 +793,7 @@ const ApprovePage = () => {
                       {purchaseOrder.poCurrency}
                     </div>
                   </div>
-                  <div className={`${styles.section} ${styles.invoiceDate}`}>
+                  <div style={{display:"flex",flexDirection:"row"}}>
                     <div
                       className={styles.heading}
                       style={{
@@ -809,7 +812,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.poStatus}`}>
+                  <div style={{display:"flex",flexDirection:"row"}}>
                     <div
                       className={styles.heading}
                       style={{
@@ -827,7 +830,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.invoiceTotal}`}>
+                  <div style={{display:"flex",flexDirection:"row"}}>
                     <div
                       className={styles.heading}
                       style={{
@@ -846,7 +849,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.lineMatching}`}>
+                  <div style={{display:"flex",flexDirection:"row"}}>
                     <div
                       className={styles.heading}
                       style={{
@@ -867,7 +870,7 @@ const ApprovePage = () => {
                   <div
                     className={`${styles.section} ${styles.invoiceCurrency}`}
                   >
-                    {/* <div
+                    {/* <divs
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
@@ -903,9 +906,12 @@ const ApprovePage = () => {
                       {purchaseOrder.purchaseOrderNumberInInvoice}
                     </div>
                   </div> */}
+                  
                 </div>
               </div>
+              <Divider style={{marginTop:"3em"}}/>
             </div>
+           
           )}
 
           {selectedtab === "tab2" && (
