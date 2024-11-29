@@ -108,27 +108,35 @@ const StoreTable = ({setTableLength}) => {
       );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
-      set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-      setTableLength(fetchedItems.length);
-      //  console.log("InvId",InvoiceNumber);
+      // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+      
+       
       // Map fetched data to the format expected by DataGrid
-      const mappedItems = fetchedItems.map((item) => ({
-        Id: item.po_headers[0].id,
-        InvoiceId: item.id,
-        InvoiceNumber: item.InvoiceId,
-        po_number: item.po_headers[0].po_number,
-        po_type: item.po_headers[0].po_type,
-        po_status: item.po_headers[0].po_status,
-        supplier_name: item.po_headers[0].supplier_name,
-        location: item.po_headers[0].location,
-        ship_to: item.po_headers[0].ship_to,
-        bill_to: item.po_headers[0].bill_to,
-        buyer_name: item.po_headers[0].buyer_name,
-        total_amount: item.po_headers[0].total_amount,
-        status: item.po_headers[0].status,
-      }));
+      const mappedItems = fetchedItems.map((item, index) => {
+        // Ensure po_headers exists and is iterable
+        if (!item.po_headers || item.po_headers.length === 0) {
+          console.warn(`No po_headers found for index ${index}`);
+          return null; // Skip if no po_headers
+        }
+      
+        return item.po_headers.map((po_header) => ({
+          po_number: po_header.po_number,
+          po_type: po_header.po_type,
+          po_status: po_header.po_status,
+          supplier_name: po_header.supplier_name,
+          location: po_header.location,
+          ship_to: po_header.ship_to,
+          bill_to: po_header.bill_to,
+          buyer_name: po_header.buyer_name,
+          total_amount: po_header.total_amount,
+          status: po_header.status,
+        }));
+      });
+      const flattenedMappedItems = mappedItems.flat().filter(Boolean);
 
-      setItems(mappedItems);
+      setItems(flattenedMappedItems);
+      setTableLength(flattenedMappedItems.length);
+      console.log("Mapped Items",flattenedMappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -150,8 +158,8 @@ const StoreTable = ({setTableLength}) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
     return (
-      item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
-      item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
+      // item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
+      // item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
       item.po_number?.toString().toLowerCase().includes(searchLower) ||
       item.po_type?.toLowerCase().includes(searchLower) ||
       item.po_status?.toLowerCase().includes(searchLower) ||

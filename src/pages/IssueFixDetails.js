@@ -167,21 +167,23 @@ const IssuefixDetails = () => {
         const data = response.data.invoice_info;
         console.log("New ",data);
         // Assuming 'items' is the correct property from your API response
-        const items = data.items || [];
+        // const items = data || [];
+        console.log("ITEMS",data.id);
         setRows(
-          items.map((item) => ({
-            id: item.id,
-            Description: item.Description || "",
-            Quantity: item.Quantity || "",
-            Unit: item.Unit || "",
-            UnitPrice: item.UnitPrice || "",
+          data.map((item,index) => ({
+            id: index+1,
+            inv_id:item.id,
+            Description: item.items.Description || "",
+            Quantity: item.items.Quantity || "",
+            Unit: item.items.Unit || "",
+            UnitPrice: item.items.UnitPrice || "",
             // ProductCode: item.ProductCode || "",
-            Amount: item.Amount || "",
-            SubTotal: item.SubTotal || "",
+            Amount: item.items.Amount || "",
+            SubTotal: item.items.SubTotal || "",
             // TotalTax: item.TotalTax || "",
             // Date: item.Date || "",
             // Tax: item.Tax || "",
-            PreviousUnpaidBalance: item.PreviousUnpaidBalance || "",
+            PreviousUnpaidBalance: item.items.PreviousUnpaidBalance || "",
             // AmountDue: item.AmountDue || "",
             // Add any other fields here as needed
           })),
@@ -246,6 +248,8 @@ const IssuefixDetails = () => {
           `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
+        const data2 = response.data;
+        console.log("Data2",data2);
         setFormData({
           vendorName: data.VendorName,
           customerName: data.CustomerName,
@@ -288,15 +292,16 @@ const IssuefixDetails = () => {
         );
 
         setRows(
-          data.items.map((item) => ({
-            id: item.id,
-            Description: item.Description,
-            Quantity: item.Quantity,
-            Unit: item.Unit,
-            UnitPrice: item.UnitPrice,
-            Amount: item.Amount,
-            SubTotal: item.SubTotal,
-            PreviousUnpaidBalance: item.PreviousUnpaidBalance,
+          data.map((item,index) => ({
+            id: index+1,
+            inv_id:item.id,
+            Description: item.items.Description,
+            Quantity: item.items.Quantity,
+            Unit: item.items.Unit,
+            UnitPrice: item.items.UnitPrice,
+            Amount: item.items.Amount,
+            SubTotal: item.items.SubTotal,
+            PreviousUnpaidBalance: item.items.PreviousUnpaidBalance,
           })),
         );
       } catch (error) {
@@ -429,7 +434,7 @@ const IssuefixDetails = () => {
     );
     console.log("Selected Rows",selectedRows);
   };
-
+  console.log("ROWS",rows)
   const handleDeleteSelectedRows = async () => {
     
     if (selectedRows.length === 0) {

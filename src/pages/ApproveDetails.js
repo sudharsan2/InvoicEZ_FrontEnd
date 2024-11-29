@@ -165,6 +165,7 @@ const ApprovePage = () => {
         navigate(`/approve`);
       }
       console.log("Success:", response.data); // Handle the response data
+     
     } catch (error) {
       notification.error({
         message: "Approved Failed",
