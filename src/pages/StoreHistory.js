@@ -87,7 +87,7 @@ const StoreHistory = () => {
     
     const counters = [
         { label: "Total Invoice Processed", value: rows, color: "#00bfbf" }, // Cyan
-        { label: "Number of Invoice Processed", value: 2, color: "#d62727" }, // Red
+        // { label: "Number of Invoice Processed", value: 2, color: "#d62727" }, // Red
         
       ];
   return (

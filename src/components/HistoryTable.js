@@ -25,47 +25,38 @@ import { refreshActions } from "../Store/Store";
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({
-    columnId: "po_number",
+    columnId: "grn_num",
     renderHeaderCell: () => "Generate Gate Entry Number",
-    renderCell: (item) => <TableCellLayout>{item.po_number}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "po_type",
-    renderHeaderCell: () => "Supplier Name",
-    renderCell: (item) => <TableCellLayout>{item.po_type}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "po_status",
-    renderHeaderCell: () => "Location",
-    renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "supplier_name",
-    renderHeaderCell: () => "Received Date",
-    renderCell: (item) => (
-      <TableCellLayout>{item.supplier_name}</TableCellLayout>
-    ),
+    renderCell: (item) => <TableCellLayout>{item.grn_num}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "location",
-    renderHeaderCell: () => "Line Count",
+    renderHeaderCell: () => "Location",
     renderCell: (item) => <TableCellLayout>{item.location}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "ship_to",
-    renderHeaderCell: () => "Invoice Amount",
-    renderCell: (item) => <TableCellLayout>{item.ship_to}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "bill_to",
-    renderHeaderCell: () => "Receipt Number",
-    renderCell: (item) => <TableCellLayout>{item.bill_to}</TableCellLayout>,
-  }),
-  createTableColumn({
-    columnId: "buyer_name",
+    columnId: "po_number",
     renderHeaderCell: () => "PO Number",
-    renderCell: (item) => <TableCellLayout>{item.buyer_name}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.po_number}</TableCellLayout>,
   }),
+  createTableColumn({
+    columnId: "received_date",
+    renderHeaderCell: () => "Received Date",
+    renderCell: (item) => (
+      <TableCellLayout>{item.received_date}</TableCellLayout>
+    ),
+  }),
+  createTableColumn({
+    columnId: "supplier_name",
+    renderHeaderCell: () => "Supplier Name",
+    renderCell: (item) => <TableCellLayout>{item.supplier_name}</TableCellLayout>,
+  }),
+  createTableColumn({
+    columnId: "total_amount",
+    renderHeaderCell: () => "Invoice Amount",
+    renderCell: (item) => <TableCellLayout>{item.total_amount}</TableCellLayout>,
+  }),
+ 
   
 ];
 
@@ -89,27 +80,20 @@ const HistoryTable = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/one-invoice-list",
+        "https://invoicezapi.focusrtech.com:57/user/grn-history",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
-      set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-      //  console.log("InvId",InvoiceNumber);
-      // Map fetched data to the format expected by DataGrid
+      // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+    
       const mappedItems = fetchedItems.map((item) => ({
-        Id: item.po_headers[0].id,
-        InvoiceId: item.id,
-        InvoiceNumber: item.InvoiceId,
-        po_number: item.po_headers[0].po_number,
-        po_type: item.po_headers[0].po_type,
-        po_status: item.po_headers[0].po_status,
-        supplier_name: item.po_headers[0].supplier_name,
-        location: item.po_headers[0].location,
-        ship_to: item.po_headers[0].ship_to,
-        bill_to: item.po_headers[0].bill_to,
-        buyer_name: item.po_headers[0].buyer_name,
-        total_amount: item.po_headers[0].total_amount,
-        status: item.po_headers[0].status,
+        grn_num: item.grn_no,
+        location: item.location,
+        po_number: item.po_number,
+        received_date: item.received_date,
+        supplier_name: item.supplier_name,
+        total_amount: item.total_amount,
+       
       }));
 
       setItems(mappedItems);
@@ -134,18 +118,14 @@ const HistoryTable = () => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
     return (
-      item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
-      item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
+      item.grn_num?.toString().toLowerCase().includes(searchLower) ||
+      item.location?.toString().toLowerCase().includes(searchLower) ||
       item.po_number?.toString().toLowerCase().includes(searchLower) ||
-      item.po_type?.toLowerCase().includes(searchLower) ||
+      item.received_date?.toLowerCase().includes(searchLower) ||
       item.po_status?.toLowerCase().includes(searchLower) ||
       item.supplier_name?.toLowerCase().includes(searchLower) ||
-      item.location?.toLowerCase().includes(searchLower) ||
-      item.ship_to?.toLowerCase().includes(searchLower) ||
-      item.bill_to?.toLowerCase().includes(searchLower) ||
-      item.buyer_name?.toLowerCase().includes(searchLower) ||
-      item.total_amount?.toString().toLowerCase().includes(searchLower) ||
-      item.status?.toLowerCase().includes(searchLower)
+      item.total_amount?.toLowerCase().includes(searchLower)
+      
     );
   });
 
