@@ -353,55 +353,50 @@ const StoreUserPage = () => {
         
         console.log("Learn", fetchedItems.po_lineitems);
 
-        const invoice_items = fetchedItems.invoice_info.items.map((item,index)=>{
-          console.log("IGST",item.Igst)
-          console.log("CGST",item.Cgst)
-          console.log("SGST",item.Sgst);
-
-
+        const invoice_items = fetchedItems.invoice_info.items.map((item, index) => {
+          console.log("IGST", item.Igst);
+          console.log("CGST", item.Cgst);
+          console.log("SGST", item.Sgst);
+        
           return {
             Igst: item.Igst,
-            Cgst:item.Cgst,
-            Sgst:item.Sgst
-            
-            
-            
+            Cgst: item.Cgst,
+            Sgst: item.Sgst,
+            index: index, // Include the index to match with po_lineitems
           };
         });
         
-        const normalizedPoLineItems = fetchedItems.po_lineitems.map(
-          (poItem, index) => {
-            console.log("PO", poItem);
-
-            const matchingInvoiceItems = fetchedItems.invoice_info.items;
-            const PO_Num = fetchedItems.po_header.po_number;
-            
-            const matchingQuantity = matchingInvoiceItems[index]
-              ? matchingInvoiceItems[index].Quantity
-              : null;
-
-            
-            return {
-              id: poItem.id,
-              item_name: poItem.item_name,
-              item_description: poItem.item_description,
-              quantity: poItem.quantity,
-              unit_price: poItem.unit_price,
-              Quantity: matchingQuantity,
-              po_number:PO_Num,
-              line_value:poItem.line_num,
-              note:input
-              
-              
-            };
-          },
-        );
-
-        // Log or process the combined data as needed
+        const normalizedPoLineItems = fetchedItems.po_lineitems.map((poItem, index) => {
+          console.log("PO", poItem);
         
-        console.log("---------",normalizedPoLineItems);
+          const matchingInvoiceItem = invoice_items[index]; // Find the corresponding invoice item
+          const PO_Num = fetchedItems.po_header.po_number;
+          const matchingQuantity = matchingInvoiceItem
+            ? matchingInvoiceItem.Quantity
+            : null;
+        
+          return {
+            id: poItem.id,
+            item_name: poItem.item_name,
+            item_description: poItem.item_description,
+            quantity: poItem.quantity,
+            unit_price: poItem.unit_price,
+            Quantity: matchingQuantity,
+            po_number: PO_Num,
+            line_value: poItem.line_num,
+            note: input, // Assuming `input` is a variable you defined earlier
+            Igst: matchingInvoiceItem ? matchingInvoiceItem.Igst : null,
+            Cgst: matchingInvoiceItem ? matchingInvoiceItem.Cgst : null,
+            Sgst: matchingInvoiceItem ? matchingInvoiceItem.Sgst : null,
+          };
+        });
+        
+        // Log or process the combined data as needed
+        console.log("Invoice Items:", invoice_items);
+        console.log("Normalized PO Line Items:", normalizedPoLineItems);
+        
 
-        setData([...normalizedPoLineItems, ...invoice_items]);
+        setData(normalizedPoLineItems);
           
         // setData(normalizedPoLineItems);
         
@@ -1029,7 +1024,7 @@ const StoreUserPage = () => {
                       >
                         Unit Price
                       </TableHeaderCell>
-                      <TableHeaderCell
+                      {/* <TableHeaderCell
                         style={{
                           fontWeight: "bold",
                           cursor: "pointer",
@@ -1038,7 +1033,7 @@ const StoreUserPage = () => {
                         {...headerSortProps("quantity")}
                       >
                         UOM
-                      </TableHeaderCell>
+                      </TableHeaderCell> */}
                       <TableHeaderCell
                         style={{
                           fontWeight: "bold",
@@ -1181,16 +1176,7 @@ const StoreUserPage = () => {
                         >
                           {item.quantity}
                         </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Quantity}
-                        </TableCell>
+                        
                         
                         <TableCell
                           style={{
