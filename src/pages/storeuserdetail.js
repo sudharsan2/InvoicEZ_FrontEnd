@@ -402,7 +402,7 @@ const StoreUserPage = () => {
         console.log("---------",normalizedPoLineItems);
 
         setData([...normalizedPoLineItems, ...invoice_items]);
-        
+          
         // setData(normalizedPoLineItems);
         
         setTotal(fetchedItems.po_header.total_amount);
@@ -417,7 +417,7 @@ const StoreUserPage = () => {
         fetchedItems.po_lineitems.forEach((item) => {
           setClosedCode(item.closed_code);
         });
-        console.log("---------data",data);
+       
         // vendor address
         const vendorAddressObj = fetchedItems.invoice_info.VendorAddress;
         console.log("obj1", vendorAddressObj);
@@ -438,7 +438,7 @@ const StoreUserPage = () => {
           setVendor("NULL");
           console.error("VendorAddress is missing");
         }
-
+        console.log("data",data);
         const vendorCustomerObj = fetchedItems.invoice_info.ShippingAddress;
         console.log("obj", vendorAddressObj);
 
