@@ -66,15 +66,17 @@ const AITable = ({ setTableLength }) => {
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [invoiceId, setInvoiceId] = useState(null);
   const navigate = useNavigate();
-
+  
   const location2 = useLocation();
   const { invoiceNumber } = location2.state || {};
   console.log("inn", invoiceNumber);
 
   const dispatch = useDispatch();
+  const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
+  
 
   const fetchData = async () => {
     try {
@@ -101,6 +103,7 @@ const AITable = ({ setTableLength }) => {
     }
   };
   useEffect(() => {
+    console.log("InvoiceUploadRefresh has changed:", InvoiceUploadRefresh);
     fetchData();
   }, [isInvoiceUploadRefreshed]);
 
@@ -117,8 +120,8 @@ const AITable = ({ setTableLength }) => {
       item.supplier_name?.toLowerCase().includes(searchLower) ||
       item.city?.toLowerCase().includes(searchLower) ||
       item.InvoiceDate?.toLowerCase().includes(searchLower) ||
-      item.InvoiceTotal?.toLowerCase().includes(searchLower) ||
-      item.ship_to?.toLowerCase().includes(searchLower)
+      item.InvoiceTotal?.toLowerCase().includes(searchLower) 
+      // item.ship_to?.toLowerCase().includes(searchLower)
     );
   });
 

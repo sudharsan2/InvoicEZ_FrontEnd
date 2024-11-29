@@ -572,9 +572,9 @@ const NavDrawerDefault = (props) => {
                 }
                 onClick={() => {
                   navigate("/history");
-                  setValue("6");
+                  setValue("8");
                 }}
-                value="6"
+                value="8"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
                 }

@@ -136,7 +136,7 @@ const useStyles = makeStyles({
   },
   content: {
     fontSize: "13px",
-    marginLeft: "12px",
+    marginLeft: "10px",
   },
 });
 
@@ -411,9 +411,9 @@ const AIDetailPage = () => {
     },
     {
       label: "Vendor Contact Information",
-      value: invoiceData.VendorContact || "N/A",
+      value: invoiceData.VendorContact || "",
     },
-    { label: "Vendor Tax ID", value: invoiceData.VendorTaxId || "N/A" },
+    { label: "Vendor Tax ID", value: invoiceData.VendorTaxId || "" },
   ];
 
   // const renderPopover = (props) => (
@@ -704,8 +704,7 @@ const AIDetailPage = () => {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    alignContent: "space-evenly",
-                    alignItems: "center",
+                    
                   }}
                 >
                   <div
@@ -727,32 +726,25 @@ const AIDetailPage = () => {
             <div
               className={styles.content}
               style={{
-                color: themestate ? "rgb(245,245,245)" : "",
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                gap: "15px",
-                fontSize: "17px",
-                paddingTop: "30px",
-                paddingBottom: "30px",
+                
+                  color: themestate ? "rgb(245,245,245)" : "",
+                  display: "grid",
+                    gridTemplateColumns: "repeat(6, 3fr)",
+                    gap: "20px",
+                    fontSize:"15px"
+                
               }}
             >
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(5, 3fr)",
-                  gap: "20px",
-                  fontSize:"16px"
-                }}
-              >
+              
                 {vendorInfo.map((info, index) => (
                   <div
                     key={index}
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      alignContent: "space-evenly",
-                      alignItems: "center",
+                      justifyContent:"space-between",
+                      marginTop:"3em"
+                      
                     }}
                   >
                     <div
@@ -768,18 +760,18 @@ const AIDetailPage = () => {
                     <div>{info.value}</div>
                   </div>
                 ))}
-              </div>
+              {/* </div> */}
             </div>
 
             {/* Line Information Section */}
-            <h2>Line Information</h2>
+            <h2 style={{marginTop:"3em"}}>Line Information</h2>
             <div
               style={{
                 width: "100%",
                 display: "flex",
                 overflowY: "auto",
                 height: "40vh",
-                marginTop: "10px",
+                marginTop: "2em",
               }}
             >
               <div style={{ flex: 2 }}>
@@ -936,31 +928,33 @@ const AIDetailPage = () => {
               }}
             >
               <div>
-                <div
-                  style={{
-                    width: "90%",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    paddingLeft: "2em",
-                  }}
-                >
-                  <ul>
-                    {invoiceData && (
-                      <>
-                        <li>PO Number: {selectedInvoiceNumber}</li>
-                        <li>PO Type: {dataitem.po_type}</li>
-                        <li>Supplier Name: {dataitem.supplier_name}</li>
-                        <li>Site: {dataitem.location}</li>
-                        <li>Status: {dataitem.po_status}</li>
-                        <li>Total Amount: {dataitem.total_amount}</li>
-                        <li>Buyer Name: {dataitem.buyer_name}</li>
-                        <li>Invoice Detail: {dataitem.invoice_detail}</li>
-                        <li>Shipping Address: {dataitem.ship_to}</li>
-                        <li>Billing Address: {dataitem.ship_to}</li>
-                      </>
-                    )}
-                  </ul>
-                </div>
+              <div
+  style={{
+    width: "90%",
+    display: "grid",
+    gridTemplateColumns: "repeat(5, 2fr)", // 5 equal columns
+    gridTemplateRows: "auto auto", // 2 rows with auto height based on content
+    gap: "1rem", // Adds spacing between grid items
+    paddingLeft: "2em",
+  }}
+>
+{invoiceData && (
+    <>
+      <div><b>PO Number:</b> {selectedInvoiceNumber}</div>
+      <div><b>PO Type:</b> {dataitem.po_type}</div>
+      <div><b>Supplier Name:</b> {dataitem.supplier_name}</div>
+      <div><b>Site:</b> {dataitem.location}</div>
+      <div><b>Status: </b>{dataitem.po_status}</div>
+
+      <div><b>Total Amount:</b> {dataitem.total_amount}</div>
+      <div><b>Buyer Name:</b> {dataitem.buyer_name}</div>
+      <div><b>Invoice Detail:</b> {dataitem.invoice_detail}</div>
+      <div><b>Shipping Address:</b> {dataitem.ship_to}</div>
+      <div><b>Billing Address:</b> {dataitem.ship_to}</div>
+    </>
+  )}
+</div>
+
                 <div
                   style={{
                     width: "100%",

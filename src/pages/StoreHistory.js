@@ -91,7 +91,7 @@ const StoreHistory = () => {
         
       ];
   return (
-    <div >
+    <div style={{overflowY:"auto",height:"90vh"}}>
       <div style={{ height: "5vh" }}>
         <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
@@ -139,10 +139,10 @@ const StoreHistory = () => {
       
           </div>
         </div>
-        {/* <div style={{ width: "100%", height: "5vh" ,marginTop:"4em"}} /> */}
-        {/* <div style={{marginTop:"16em"}}>
+        <div style={{ width: "100%", height: "5vh" ,marginTop:"4em"}} />
+        <div style={{marginTop:"16em"}}>
           <StoreHistoryTable />
-        </div> */}
+        </div>
       </div>
     </div>
   );

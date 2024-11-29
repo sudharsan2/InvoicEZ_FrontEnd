@@ -420,9 +420,9 @@ import { refreshActions } from "../Store/Store";
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({
-    columnId: "inv_number",
+    columnId: "id",
     renderHeaderCell: () => "Invoice number ",
-    renderCell: (item) => <TableCellLayout>{item.inv_number}</TableCellLayout>,
+    renderCell: (item) => <TableCellLayout>{item.id}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "supplier",
@@ -442,11 +442,11 @@ const columns = [
       const getStatusStyle = (status) => {
         switch (status) {
           case "Match Found":
-            return { backgroundColor: "#107c10",  color: "#fff", borderRadius: "10px",textShadow: "0 1px 3px rgba(0,0,0,0.2)", padding: "4px 8px", textAlign: "center" };
+            return { backgroundColor: "#107c10",  color: "#fff", borderRadius: "8px",textShadow: "0 1px 3px rgba(0,0,0,0.2)", padding: "4px 8px", textAlign: "center" };
           case "Multiple Match Found":
-            return { backgroundColor: "#fdea3d", color: "black", borderRadius: "10px", padding: "4px 8px", textAlign: "center" };
+            return { backgroundColor: "#f2c661", color: "black", borderRadius: "8px", padding: "4px 8px", textAlign: "center" };
           case "No Match Found":
-            return { backgroundColor: "#c50f1f", color: "white", borderRadius: "10px", padding: "4px 8px", textAlign: "center" };
+            return { backgroundColor: "#c50f1f", color: "white", borderRadius: "8px", padding: "4px 8px", textAlign: "center" };
           // default:
           //   return { backgroundColor: "gray", color: "white", borderRadius: "10px", padding: "4px 8px", textAlign: "center" };
         }
@@ -541,7 +541,7 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
         
         
         return {
-          inv_number: item.InvoiceId,
+          id: item.id,
           supplier: item.VendorName,
           amount: item.InvoiceTotal,
           lines: item.items.length,
@@ -582,11 +582,11 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
     return (
-      item.inv_number?.toString().toLowerCase().includes(searchLower) ||
-      item.VendorName?.toString().toLowerCase().includes(searchLower) ||
-      item.InvoiceTotal?.toString().toLowerCase().includes(searchLower) ||
+      item.id?.toString().toLowerCase().includes(searchLower) ||
+      item.supplier?.toString().toLowerCase().includes(searchLower) ||
+      item.amount?.toString().toLowerCase().includes(searchLower) ||
       item.Status?.toString().toLowerCase().includes(searchLower) ||
-      item.lines?.toLowerCase().includes(searchLower) ||
+      // item.lines?.toLowerCase().includes(searchLower) ||
       item.buyer?.toLowerCase().includes(searchLower) 
       
     );
@@ -647,7 +647,7 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
 
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].id}`,
         ),
       );
 

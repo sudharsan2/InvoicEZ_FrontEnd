@@ -385,7 +385,7 @@ const NavDrawerDefaultStore = (props) => {
                   />
                 }
                 onClick={() => {
-                //   navigate("/dashboard");
+                  navigate("/storedashboard");
                   setValue("1");
                 }}
                 value="1"
@@ -515,7 +515,7 @@ const NavDrawerDefaultStore = (props) => {
                 }
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
-                //   navigate("/dashboard");
+                  navigate("/storedashboard");
                   setValue("1");
                 }}
               >

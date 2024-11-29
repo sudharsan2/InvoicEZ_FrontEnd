@@ -53,6 +53,7 @@ import History from "./pages/History";
 import HistoryDetails from "./pages/HistoryDetails";
 import StoreHistoryDetails from "./pages/StoreHistoryDetails";
 import StoreHistory from "./pages/StoreHistory";
+import StoreTagCounters from "./pages/StoreDashboard";
 function App() {
   return (
     <Router basename="">
@@ -487,6 +488,17 @@ function App() {
             <CustomLayoutLoop>
                <NavDrawerDefaultStore>
                 <StoreHistoryDetails />
+                </NavDrawerDefaultStore>
+            </CustomLayoutLoop>
+          }
+        />
+
+<Route
+          path="/storedashboard"
+          element={
+            <CustomLayoutLoop>
+               <NavDrawerDefaultStore>
+                <StoreTagCounters />
                 </NavDrawerDefaultStore>
             </CustomLayoutLoop>
           }

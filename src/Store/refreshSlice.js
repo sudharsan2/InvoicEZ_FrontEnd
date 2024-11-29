@@ -17,7 +17,9 @@ const refreshSlice = createSlice({
   initialState,
   reducers: {
     toggleInvoiceUploadRefresh(state) {
-      state.InvoiceUploadRefresh = !state.InvoiceUploadRefresh;
+      console.log("Before toggling:", state.InvoiceUploadRefresh);
+  state.InvoiceUploadRefresh = !state.InvoiceUploadRefresh;
+  console.log("After toggling:", state.InvoiceUploadRefresh);
     },
 
     dropDownSubmit(state,action){

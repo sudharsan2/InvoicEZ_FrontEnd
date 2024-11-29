@@ -92,6 +92,7 @@ const TableApprove = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+  const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
@@ -99,6 +100,11 @@ const TableApprove = () => {
   const [RefreshUpload, SetRefreshUpload] = useState(null);
 
   const [DeleteRefresh, SetDeleteRefresh] = useState(false);
+
+
+ 
+  
+ 
 
   // Fetch data from the API when the component mounts
   const fetchData = async () => {
@@ -138,6 +144,7 @@ const TableApprove = () => {
   }, []);
 
   useEffect(() => {
+    console.log("Refreshed!!!");
     fetchData();
   }, [isInvoiceUploadRefreshed]);
 

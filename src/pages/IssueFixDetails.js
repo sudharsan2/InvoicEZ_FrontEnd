@@ -165,7 +165,7 @@ const IssuefixDetails = () => {
           `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
-
+        console.log("New ",data);
         // Assuming 'items' is the correct property from your API response
         const items = data.items || [];
         setRows(
@@ -417,60 +417,67 @@ const IssuefixDetails = () => {
 
    
 
-  const handleSelectionChange = (event, data) => {
-    console.log("handleSelectionChange", data.selectedItems);
-    setSelectedRows(data.selectedItems);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [tableData, setTableData] = useState(rows);
+  // Toggle selection of a single row
+  const toggleRowSelection = (rowId) => {
+    console.log("Row ID",rowId);
+    setSelectedRows((prevSelectedRows) =>
+      prevSelectedRows.includes(rowId)
+        ? prevSelectedRows.filter((id) => id !== rowId) // Deselect row
+        : [...prevSelectedRows, rowId] // Select row
+    );
+    console.log("Selected Rows",selectedRows);
   };
 
-  // const handleDeleteSelectedRows = async () => {
-  //   const selectedItemsArray = Array.from(selectedRows);
-  //   if (selectedItemsArray.length === 0) {
-  //     notification.warning({
-  //       message: "No PO Selected",
-  //       description: "Please select at least one PO to delete.",
-  //     });
-  //     return;
-  //   }
+  const handleDeleteSelectedRows = async () => {
+    
+    if (selectedRows.length === 0) {
+      notification.warning({
+        message: "No PO Selected",
+        description: "Please select at least one PO to delete.",
+      });
+      return;
+    }
 
-  //   try {
-  //     const supplierNames = selectedItemsArray
-  //       .map((item) => item.supplier_name)
-  //       .join(", ");
+    try {
+      
 
-  //     const deletePromises = selectedItemsArray.map((item) =>
-  //       axios.delete(
-  //         `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].Id}`,
-  //       ),
-  //     );
+      const deletePromises = selectedRows.map((rowId) =>
+        axios.delete(
+          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${rowId}`,
+        ),
+      );
 
-  //     await Promise.all(deletePromises);
+      await Promise.all(deletePromises);
 
-  //     const newItems = items.filter(
-  //       (item) =>
-  //         !selectedItemsArray.some(
-  //           (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
-  //         ),
-  //     );
+      // const newItems = items.filter(
+      //   (item) =>
+      //     !selectedItemsArray.some(
+      //       (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
+      //     ),
+      // );
 
-  //     // setItems(newItems);
+      // setItems(newItems);
 
-  //     notification.success({
-  //       message: "Successfully deleted",
-  //       description: `You have successfully deleted: ${supplierNames}`,
-  //     });
+      notification.success({
+        message: "Successfully deleted",
+        
+      });
 
-  //     dispatch(refreshActions.toggleInvoiceUploadRefresh());
-  //   } catch (error) {
-  //     const supplierNames = selectedItemsArray
-  //       .map((item) => item.supplier_name)
-  //       .join(", ");
-  //     notification.error({
-  //       message: "Deletion Failed",
-  //       description: `Deletion Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
-  //     });
-  //   }
-  // };
+      // dispatch(refreshActions.toggleInvoiceUploadRefresh());
+    } catch (error) {
+     
+      notification.error({
+        message: "Deletion Failed",
+        
+      });
+    }
+  };
 
+
+
+  
   const handleViewInvoice = async () => {
     try {
       const response = await fetch(
@@ -531,16 +538,7 @@ const IssuefixDetails = () => {
   // checkbox
 
 
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [tableData, setTableData] = useState(rows);
-  // Toggle selection of a single row
-  const toggleRowSelection = (rowId) => {
-    setSelectedRows((prevSelectedRows) =>
-      prevSelectedRows.includes(rowId)
-        ? prevSelectedRows.filter((id) => id !== rowId) // Deselect row
-        : [...prevSelectedRows, rowId] // Select row
-    );
-  };
+  
 
   // Toggle selection of all rows
   const toggleSelectAll = () => {
@@ -841,7 +839,7 @@ const IssuefixDetails = () => {
                    </div>
                    <div style={{display:"flex",justifyContent:"flex-end",marginTop:"1.5em",marginBottom:"2em",gap:"20px"}}>
                    <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleAddRow}>Add</Button>
-                   <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} >Delete</Button>
+                   <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button>
                    </div>
 
               </div>
@@ -858,14 +856,14 @@ const IssuefixDetails = () => {
             <TableHeaderCell
               style={{
                 padding: "0 0px", // Adjust padding for better alignment
-                textAlign: "center", // Center align the checkbox
+                 // Center align the checkbox
               }}
             >
               <Checkbox
                 checked={areAllSelected}
                 onChange={toggleSelectAll}
                 title="Select All"
-                style={{marginLeft:"4em"}}
+               
               />
             </TableHeaderCell>
             <TableHeaderCell>No</TableHeaderCell>
@@ -883,8 +881,8 @@ const IssuefixDetails = () => {
             <TableRow key={row.id}>
               <TableCell
                 style={{
-                  padding: "0 8px", // Adjust padding to align checkbox
-                  textAlign: "center", // Center align the checkbox
+                  padding: "0 0px", // Adjust padding to align checkbox
+                   // Center align the checkbox
                 }}
               >
                 <Checkbox

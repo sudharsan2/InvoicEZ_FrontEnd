@@ -62,6 +62,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
   const [items, setItems] = useState([]); // Initialize items state
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRows, setSelectedRows] = useState(new Set());
+  const [rowselect,setRowSelect]=useState(true);
   const navigate = useNavigate();
   const [refreshKey, setRefreshKey] = useState(0);
   const getNumberOfLines = (invoice) => {
@@ -138,10 +139,9 @@ const IssuefixTable = ({ height, setTableLength }) => {
     console.log("del");
     const idsToDelete = [...selectedRows]; // Convert Set to array
     console.log("IDs to delete:", idsToDelete);
-
+  
     if (idsToDelete.length > 0) {
       const deletePromises = idsToDelete.map((id) => {
-        // Check if id is defined
         console.log(`Deleting item with ID: ${id}`);
         console.log("//", filteredItems[id].invid);
         return fetch(
@@ -151,17 +151,18 @@ const IssuefixTable = ({ height, setTableLength }) => {
           },
         );
       });
-
+  
       Promise.all(deletePromises)
         .then((responses) => {
           const allDeleted = responses.every((response) => response.ok);
           if (allDeleted) {
-            message.success(" successfully Deleted");
+            message.success("Successfully Deleted");
             const updatedItems = items.filter(
               (item) => !idsToDelete.includes(item.id),
             ); // Use item.id here
+            setRowSelect(false);
             setItems(updatedItems);
-            setSelectedRows(new Set());
+            setSelectedRows((prev) => new Set([])); // Ensure state updates correctly
             dispatch(refreshActions.toggleInvoiceUploadRefresh());
           } else {
             throw new Error("Some deletions failed");
@@ -169,13 +170,13 @@ const IssuefixTable = ({ height, setTableLength }) => {
         })
         .catch((error) => {
           console.error("Error deleting items:", error);
-          message.error("  Deletion failed");
+          message.error("Deletion failed");
         });
     } else {
       console.warn("No rows selected for deletion");
     }
   };
-
+  
   const filteredItems = items.filter((item) => {
     return (
       item.invid
@@ -204,6 +205,25 @@ const IssuefixTable = ({ height, setTableLength }) => {
   };
 
   const handleSelectionChange = (event, data) => {
+    const newSelectedRows = new Set(selectedRows);
+    
+      data.selectedItems.forEach((item) => {
+        // if (item) {
+        //   // Ensure invid is defined
+        newSelectedRows.add(item); // Store item.invid instead of item.invoiceNo
+        // } else {
+        //   console.warn("Selected item does not have an invid:", item);
+        console.log(item);
+      });
+      setSelectedRows(newSelectedRows);
+
+    
+     // Update state
+    // console.log("Selected IDs:", Array.from(newSelectedRows)); // Log selected IDs for debugging
+  };
+
+
+  const handleUnSelectionChange = (event, data) => {
     const newSelectedRows = new Set(selectedRows); // Create a copy of the selected rows
     data.selectedItems.forEach((item) => {
       // if (item) {
