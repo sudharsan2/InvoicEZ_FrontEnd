@@ -110,16 +110,19 @@ const StoreTable = ({setTableLength}) => {
       console.log("fetchedItems", fetchedItems);
       // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
       
-       
+      
       // Map fetched data to the format expected by DataGrid
       const mappedItems = fetchedItems.map((item, index) => {
-        // Ensure po_headers exists and is iterable
+        
+           
+      
         if (!item.po_headers || item.po_headers.length === 0) {
           console.warn(`No po_headers found for index ${index}`);
           return null; // Skip if no po_headers
         }
       
         return item.po_headers.map((po_header) => ({
+          Id:po_header.id,
           po_number: po_header.po_number,
           po_type: po_header.po_type,
           po_status: po_header.po_status,
@@ -178,7 +181,7 @@ const StoreTable = ({setTableLength}) => {
       navigate(`/storedetails`, {
         state: { poNumber: item.po_number, Id: item.Id },
       });
-      console.log("ItemId", item.Id);
+      console.log("ItemId", item);
     }
   };
 

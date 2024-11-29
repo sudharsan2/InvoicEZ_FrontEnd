@@ -248,8 +248,6 @@ const IssuefixDetails = () => {
           `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
         );
         const data = response.data.invoice_info;
-        const data2 = response.data;
-        console.log("Data2",data2);
         setFormData({
           vendorName: data.VendorName,
           customerName: data.CustomerName,
@@ -292,16 +290,16 @@ const IssuefixDetails = () => {
         );
 
         setRows(
-          data.map((item,index) => ({
+          data.items.map((item,index) => ({
             id: index+1,
-            inv_id:item.id,
-            Description: item.items.Description,
-            Quantity: item.items.Quantity,
-            Unit: item.items.Unit,
-            UnitPrice: item.items.UnitPrice,
-            Amount: item.items.Amount,
-            SubTotal: item.items.SubTotal,
-            PreviousUnpaidBalance: item.items.PreviousUnpaidBalance,
+            inv_id:data.id,
+            Description: item.Description,
+            Quantity: item.Quantity,
+            Unit: item.Unit,
+            UnitPrice: item.UnitPrice,
+            Amount: item.Amount,
+            SubTotal: item.SubTotal,
+            PreviousUnpaidBalance: item.PreviousUnpaidBalance,
           })),
         );
       } catch (error) {
@@ -425,15 +423,15 @@ const IssuefixDetails = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [tableData, setTableData] = useState(rows);
   // Toggle selection of a single row
-  const toggleRowSelection = (rowId) => {
-    console.log("Row ID",rowId);
-    setSelectedRows((prevSelectedRows) =>
-      prevSelectedRows.includes(rowId)
-        ? prevSelectedRows.filter((id) => id !== rowId) // Deselect row
-        : [...prevSelectedRows, rowId] // Select row
-    );
-    console.log("Selected Rows",selectedRows);
-  };
+  // const toggleRowSelection = (rowId) => {
+  //   console.log("Row ID",rowId);
+  //   setSelectedRows((prevSelectedRows) =>
+  //     prevSelectedRows.includes(rowId)
+  //       ? prevSelectedRows.filter((id) => id !== rowId) // Deselect row
+  //       : [...prevSelectedRows, rowId] // Select row
+  //   );
+  //   console.log("Selected Rows",selectedRows);
+  // };
   console.log("ROWS",rows)
   const handleDeleteSelectedRows = async () => {
     
@@ -448,9 +446,9 @@ const IssuefixDetails = () => {
     try {
       
 
-      const deletePromises = selectedRows.map((rowId) =>
+      const deletePromises = selectedRows.map((inv_id) =>
         axios.delete(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${rowId}`,
+          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${inv_id}`,
         ),
       );
 
@@ -545,18 +543,28 @@ const IssuefixDetails = () => {
 
   
 
-  // Toggle selection of all rows
+  const toggleRowSelection = (rowid,inv_id) => {
+    console.log("Invoice ID:", rowid,inv_id);
+  
+    setSelectedRows((prevSelectedRows) =>
+      prevSelectedRows.includes(rowid)
+        ? prevSelectedRows.filter((id) => id !== rowid) // Deselect row
+        : [...prevSelectedRows, rowid,inv_id] // Select row
+    );
+  
+    console.log("Selected Rows:", selectedRows);
+  };
+  
   const toggleSelectAll = () => {
     if (selectedRows.length === rows.length) {
       setSelectedRows([]); // Deselect all
     } else {
-      setSelectedRows(rows.map((row) => row.id)); // Select all
+      setSelectedRows(rows.map((row) => row.rowid)); // Select all rows by their `inv_id`
     }
   };
-
-  // Check if all rows are selected
+  
   const areAllSelected = selectedRows.length === rows.length;
-  return (
+    return (
     <div>
       <div>
         <div ref={divRef}>
@@ -856,61 +864,51 @@ const IssuefixDetails = () => {
                 }}
               >
                 <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHeaderCell
-              style={{
-                padding: "0 0px", // Adjust padding for better alignment
-                 // Center align the checkbox
-              }}
-            >
-              <Checkbox
-                checked={areAllSelected}
-                onChange={toggleSelectAll}
-                title="Select All"
-               
+  <TableHeader>
+    <TableRow>
+      <TableHeaderCell>
+        <Checkbox
+          checked={areAllSelected}
+          onChange={toggleSelectAll}
+          title="Select All"
+        />
+      </TableHeaderCell>
+      <TableHeaderCell>No</TableHeaderCell>
+      <TableHeaderCell>Description</TableHeaderCell>
+      <TableHeaderCell>Quantity</TableHeaderCell>
+      <TableHeaderCell>Unit</TableHeaderCell>
+      <TableHeaderCell>Unit Price</TableHeaderCell>
+      <TableHeaderCell>Amount</TableHeaderCell>
+      <TableHeaderCell>Subtotal</TableHeaderCell>
+      <TableHeaderCell>Previous Unpaid Balance</TableHeaderCell>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {rows.map((row, index) => (
+      <TableRow key={row.id}>
+        <TableCell>
+          <Checkbox
+            checked={selectedRows.includes(row.id)}
+            onChange={() => toggleRowSelection(row.id,row.inv_id)}
+          />
+        </TableCell>
+        <TableCell>{row.id}</TableCell>
+        {Object.keys(row)
+          .filter((key) => key !== "id")
+          .map((key) => (
+            <TableCell key={key}>
+              <Input
+                value={row[key] || ""} // Fallback to empty string for null values
+                onChange={(e) => handleInputChange(index, key, e.target.value)}
+                style={{ width: "100%" }}
               />
-            </TableHeaderCell>
-            <TableHeaderCell>No</TableHeaderCell>
-            <TableHeaderCell>Description</TableHeaderCell>
-            <TableHeaderCell>Quantity</TableHeaderCell>
-            <TableHeaderCell>Unit</TableHeaderCell>
-            <TableHeaderCell>Unit Price</TableHeaderCell>
-            <TableHeaderCell>Amount</TableHeaderCell>
-            <TableHeaderCell>Subtotal</TableHeaderCell>
-            <TableHeaderCell>Previous Unpaid Balance</TableHeaderCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {rows.map((row, index) => (
-            <TableRow key={row.id}>
-              <TableCell
-                style={{
-                  padding: "0 0px", // Adjust padding to align checkbox
-                   // Center align the checkbox
-                }}
-              >
-                <Checkbox
-                  checked={selectedRows.includes(row.id)}
-                  onChange={() => toggleRowSelection(row.id)}
-                />
-              </TableCell>
-              <TableCell>{row.id}</TableCell>
-              {Object.keys(row)
-                .filter((key) => key !== "id")
-                .map((key) => (
-                  <TableCell key={key}>
-                    <Input
-                      value={row[key] || ""} // Fallback to empty string for null values
-                      onChange={(e) => handleInputChange(index, key, e.target.value)}
-                      style={{ width: "100%" }}
-                    />
-                  </TableCell>
-                ))}
-            </TableRow>
+            </TableCell>
           ))}
-        </TableBody>
-      </Table>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>
+
  
  
                 {/* <Button onClick={addLine} style={{ marginTop: "10px" }}>+ Add Line</Button> */}

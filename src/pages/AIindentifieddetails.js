@@ -942,7 +942,7 @@ const AIDetailPage = () => {
     <>
       <div><b>PO Number:</b> {selectedInvoiceNumber}</div>
       <div><b>PO Type:</b> {dataitem.po_type}</div>
-      <div><b>Supplier Name:</b> {dataitem.supplier_name}</div>
+      <div><b>Supplier Name:</b> {invoiceData.invoice_info.VendorName}</div>
       <div><b>Site:</b> {dataitem.location}</div>
       <div><b>Status: </b>{dataitem.po_status}</div>
 
