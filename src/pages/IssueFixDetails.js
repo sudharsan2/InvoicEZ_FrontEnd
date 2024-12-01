@@ -516,12 +516,19 @@ const IssuefixDetails = () => {
     },
   ]);
 
+  // const handleInputChange = (index, key, value) => {
+  //   setRows1((prevRows) =>
+  //     prevRows.map((row, i) =>
+  //       i === index ? { ...row, [key]: value } : row
+  //     )
+  //   );
+  // };
+
+
   const handleInputChange = (index, key, value) => {
-    setRows1((prevRows) =>
-      prevRows.map((row, i) =>
-        i === index ? { ...row, [key]: value } : row
-      )
-    );
+    const updatedRows = [...rows];
+    updatedRows[index][key] = value;
+    setRows(updatedRows);
   };
 
   const handleAddRow = () => {
@@ -543,13 +550,13 @@ const IssuefixDetails = () => {
 
   
 
-  const toggleRowSelection = (rowid,inv_id) => {
-    console.log("Invoice ID:", rowid,inv_id);
+  const toggleRowSelection = (rowid) => {
+    console.log("Invoice ID:", rowid);
   
     setSelectedRows((prevSelectedRows) =>
       prevSelectedRows.includes(rowid)
         ? prevSelectedRows.filter((id) => id !== rowid) // Deselect row
-        : [...prevSelectedRows, rowid,inv_id] // Select row
+        : [...prevSelectedRows, rowid] // Select row
     );
   
     console.log("Selected Rows:", selectedRows);
@@ -558,8 +565,11 @@ const IssuefixDetails = () => {
   const toggleSelectAll = () => {
     if (selectedRows.length === rows.length) {
       setSelectedRows([]); // Deselect all
+      console.log("Deselect All");
     } else {
-      setSelectedRows(rows.map((row) => row.rowid)); // Select all rows by their `inv_id`
+      const allSelectedRows = rows.map((row) => row.id);
+      setSelectedRows(allSelectedRows); // Select all rows by their `id`
+      console.log("Selected Rows:", allSelectedRows); // Log selected rows
     }
   };
   
@@ -868,7 +878,7 @@ const IssuefixDetails = () => {
     <TableRow>
       <TableHeaderCell>
         <Checkbox
-          checked={areAllSelected}
+          checked={selectedRows.length === rows.length}
           onChange={toggleSelectAll}
           title="Select All"
         />
@@ -888,8 +898,8 @@ const IssuefixDetails = () => {
       <TableRow key={row.id}>
         <TableCell>
           <Checkbox
-            checked={selectedRows.includes(row.id)}
-            onChange={() => toggleRowSelection(row.id,row.inv_id)}
+            checked={selectedRows.includes(row.id)} // Use `id` consistently
+            onChange={() => toggleRowSelection(row.id)}
           />
         </TableCell>
         <TableCell>{row.id}</TableCell>
@@ -908,6 +918,7 @@ const IssuefixDetails = () => {
     ))}
   </TableBody>
 </Table>
+
 
  
  
