@@ -131,7 +131,7 @@ const StoreHistoryTable = () => {
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/historypage`, {
+      navigate(`/storehistorypage`, {
         state: { poNumber: item.po_number, Id: item.Id },
       });
       console.log("ItemId", item.Id);
