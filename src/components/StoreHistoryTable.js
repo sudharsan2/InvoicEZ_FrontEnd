@@ -56,6 +56,11 @@ const columns = [
     renderHeaderCell: () => "Invoice Amount",
     renderCell: (item) => <TableCellLayout>{item.total_amount}</TableCellLayout>,
   }),
+  createTableColumn({
+    columnId: "receipt",
+    renderHeaderCell: () => "Receipt Number",
+    renderCell: (item) => <TableCellLayout>{item.receipt}</TableCellLayout>,
+  }),
  
   
 ];
@@ -89,17 +94,25 @@ const StoreHistoryTable = () => {
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
       // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-    
-      const mappedItems = fetchedItems.map((item) => ({
-        grn_num: item.grn_no,
-        location: item.location,
-        po_number: item.po_number,
-        received_date: item.received_date,
-        supplier_name: item.supplier_name,
-        total_amount: item.total_amount,
-       
-      }));
 
+      
+    
+      const mappedItems = fetchedItems.map((item,index) => {
+        // Map over po_headers to get all po_numbers
+        
+        
+        return {
+          Id: item.po_headers[0].id,
+          grn_num: item.gate_entry_no,
+          location: item.po_headers[0].ship_to,
+          po_number: item.po_headers[0].po_number,
+          received_date: item.receivedDate,
+          supplier_name: item.VendorName,
+          total_amount: item.InvoiceTotal,
+          receipt:item.receipt_number
+        };
+      });
+      
       setItems(mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -128,14 +141,19 @@ const StoreHistoryTable = () => {
       item.received_date?.toLowerCase().includes(searchLower) ||
       item.po_status?.toLowerCase().includes(searchLower) ||
       item.supplier_name?.toLowerCase().includes(searchLower) ||
-      item.total_amount?.toLowerCase().includes(searchLower)
+      item.total_amount?.toLowerCase().includes(searchLower)||
+      item.receipt?.toLowerCase().includes(searchLower)
+
       
     );
   });
 
+  const handleRefreshClick = () => {
+    fetchData(true); // Pass `true` to show the message when button is clicked
+  };
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/storehistorypage`, {
+      navigate(`/historypage`, {
         state: { poNumber: item.po_number, Id: item.Id },
       });
       console.log("ItemId", item.Id);
@@ -145,11 +163,6 @@ const StoreHistoryTable = () => {
   const handleSelectionChange = (event, data) => {
     console.log("handleSelectionChange", data.selectedItems);
     setSelectedRows(data.selectedItems);
-  };
-
-
-  const handleRefreshClick = () => {
-    fetchData(true); // Pass `true` to show the message when button is clicked
   };
 
   //  delete API

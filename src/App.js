@@ -56,6 +56,7 @@ import StoreHistory from "./pages/StoreHistory";
 import StoreTagCounters from "./pages/StoreDashboard";
 import StoreHistoryNavigate from "./pages/StoreHistoryNavigate";
 import UserPage from "./pages/UserPage";
+import SankeyChart from "./components/SankeyChart";
 function App() {
   return (
     <Router basename="">
@@ -523,6 +524,17 @@ function App() {
             <CustomLayoutLoop>
                <NavDrawerDefaultStore>
                 <StoreHistoryNavigate />
+                </NavDrawerDefaultStore>
+            </CustomLayoutLoop>
+          }
+        />
+
+<Route
+          path="/sanky"
+          element={
+            <CustomLayoutLoop>
+               <NavDrawerDefaultStore>
+                <SankeyChart />
                 </NavDrawerDefaultStore>
             </CustomLayoutLoop>
           }

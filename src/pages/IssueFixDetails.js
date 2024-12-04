@@ -385,6 +385,8 @@ const IssuefixDetails = () => {
       if (response.ok) {
         console.log("Form data updated successfully");
         message.success("Updated Successfully!!!");
+         dispatch(refreshActions.toggleInvoiceUploadRefresh());
+
       } else {
         console.error("Error updating form data");
       }
@@ -970,7 +972,7 @@ const IssuefixDetails = () => {
     <TableRow>
       <TableHeaderCell>
         <Checkbox
-         checked={areAllSelected}
+          checked={areAllSelected}
           onChange={toggleSelectAll}
           title="Select All"
         />
@@ -990,11 +992,11 @@ const IssuefixDetails = () => {
       <TableRow key={row.id}>
         <TableCell>
           <Checkbox
-             checked={selectedRows.has(row.id)} // Use `id` consistently
+            checked={selectedRows.has(row.id)}
             onChange={() => toggleRowSelection(row.id)}
           />
         </TableCell>
-        <TableCell>{index+1}</TableCell>
+        <TableCell>{index + 1}</TableCell> {/* Dynamic numbering */}
         {Object.keys(row)
           .filter((key) => key !== "id")
           .map((key) => (
@@ -1010,6 +1012,7 @@ const IssuefixDetails = () => {
     ))}
   </TableBody>
 </Table>
+
 
 
  

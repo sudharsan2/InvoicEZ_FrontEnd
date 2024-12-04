@@ -125,7 +125,8 @@ const GateEntryTable = ({setTableLength}) => {
         invoice_amount:item.InvoiceTotal,
         location:item.VendorAddress.city,
         line_count:item.items.length,
-        tax_amount:item.InvoiceTotal
+        tax_amount:item.InvoiceTotal,
+        ReceivedDate:item.receivedDate
         
       }));
 

@@ -256,7 +256,7 @@ const NavDrawerDefaultAdmin = (props) => {
         style={
           collapse
             ? {
-                width: `59px`,
+                width: `56px`,
                 transition: "width 0.5s",
                 borderRightStyle: "none",
               }

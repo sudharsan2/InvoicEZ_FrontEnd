@@ -15,22 +15,22 @@ import { makeStyles } from "@fluentui/react-components";
 // Styles
 const useStyles = makeStyles({
   root: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "60vh",
-    padding: "4.5em",
-    width: "80%",
+    borderTop: "1px solid #FFFFFF",
     backgroundColor: "white",
-    borderRadius: "10px",
+    borderRadius: "5px",
+    padding: "10px",
+    width: "98%",
+    maxWidth: "1100px",
+    height: "85vh",
+    maxHeight: "100vh",
+    overflow: "hidden",
   },
   chartContainer: {
-    width: "90%",
+    width: "100%",
     height: "400px",
   },
   heading: {
-    marginBottom: "20px",
+    marginBottom: "10px",
     fontSize: "24px",
     fontWeight: "bold",
   },
@@ -72,14 +72,35 @@ const LineChartPage = () => {
       {/* <h2 className={styles.heading}>Line Chart of Supplier Amounts</h2> */}
       {data.length > 0 ? (
         <div className={styles.chartContainer}>
+          
+          <h3
+            style={{
+              margintop: "0px",
+              padding: "0px",
+              marginLeft: "10px"
+            }}>
+
+            Supplier
+          </h3>
+          <hr
+            style={{
+              border: "none",
+              borderTop: "1px solid #ccc",
+              marginBottom: "20px",
+              width:"100%"
+            }}
+          />
           <h2
             style={{
-              textAlign: "center",
-              fontWeight: "normal",
-              fontSize: "15px",
+              textAlign: "left",
+              marginLeft: "10px",
+              fontWeight: "bold",
+              fontSize: "20px",
+              marginTop:'2px',
+              marginBottom:"3em"
             }}
           >
-            Supplier Total Amount
+             Amount Processed
           </h2>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
