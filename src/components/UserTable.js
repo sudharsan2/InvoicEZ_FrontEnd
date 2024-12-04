@@ -255,16 +255,16 @@ const UserTable = () => {
   
   const handleSave = async () => {
     try {
-      // Prepare the updated data payload
+      
       const updatedData = {
-        ...selectedRow, // Spread the current selected row data
-        // Add or modify any specific fields here if needed
+        ...selectedRow, 
+        
       };
   
-      // Make the PUT request with the updated data
+      
       const response = await axios.put(
         `https://invoicezapi.focusrtech.com:57/user/edit-user/${selectedRow.Id}`,
-        updatedData // Pass the updated data as payload
+        updatedData 
       );
   
       if (response.status === 200) {
