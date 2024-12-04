@@ -524,7 +524,7 @@ const IssuefixDetails = () => {
   
       notification.success({
         message: "Successfully deleted",
-        // description: `Deleted items: ${selectedItemsArray.join(", ")}`,
+        description: `Deleted items: ${selectedItemsArray.join(", ")}`,
       });
   
       dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Trigger refresh action if necessary
