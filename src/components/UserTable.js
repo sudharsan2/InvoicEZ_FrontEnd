@@ -70,45 +70,47 @@ const UserTable = () => {
       renderHeaderCell: () => "Edit User",
       renderCell: (item) => (
         <TableCellLayout>
-          <button
-            onClick={() => {
-              handleEdit(item);  
-              setPopupVisible(true);  
-            }}
-           
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-            }}
-            aria-label="Edit"
-          >
-            <Edit24Filled />
-          </button>
+          {item.Id !== null && ( // Show the button only if Id is not null
+            <button
+              onClick={() => {
+                handleEdit(item);
+                setPopupVisible(true);
+              }}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+              aria-label="Edit"
+            >
+              <Edit24Filled />
+            </button>
+          )}
         </TableCellLayout>
       ),
     }),
-    createTableColumn({
-      columnId: "reset",
-      renderHeaderCell: () => "Reset Password",
-      renderCell: (item) => (
+    
+    // createTableColumn({
+    //   columnId: "reset",
+    //   renderHeaderCell: () => "Reset Password",
+    //   renderCell: (item) => (
         
-        <TableCellLayout>
-          <button
+    //     <TableCellLayout>
+    //       <button
           
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-            }}
-            aria-label="Edit"
-            onClick={() => navigate('/forgotPassword')}
-          >
-            <Key24Regular/>
-          </button>
-        </TableCellLayout>
-      ),
-    }),
+    //         style={{
+    //           background: "none",
+    //           border: "none",
+    //           cursor: "pointer",
+    //         }}
+    //         aria-label="Edit"
+    //         onClick={() => navigate('/forgotPassword')}
+    //       >
+    //         <Key24Regular/>
+    //       </button>
+    //     </TableCellLayout>
+    //   ),
+    // }),
   ];
 
   
@@ -195,8 +197,8 @@ const UserTable = () => {
             email: item.email,
             empId: item.empId,
             role:role,
-            Edit: item.id !== null ? "Edit" : "",
-            reset: item.id !== null ? "reset" : "",
+            // Edit: item.id !== null ? "Edit" : "",
+            // reset: item.id !== null ? "reset" : "",
         };
       });
       setItems(mappedItems);
@@ -247,36 +249,46 @@ const UserTable = () => {
 
 
   const handleEdit = (item) => {
-    setSelectedRow(item); // Set the selected row details
-    setPopupVisible(true); // Show the popup
+    setSelectedRow(item); 
+    setPopupVisible(true); 
   };
-
+  
   const handleSave = async () => {
     try {
-     
-     const payload = { id: selectedRow.Id }; 
-
-      // Make the PUT request
+      // Prepare the updated data payload
+      const updatedData = {
+        ...selectedRow, // Spread the current selected row data
+        // Add or modify any specific fields here if needed
+      };
+  
+      // Make the PUT request with the updated data
       const response = await axios.put(
-        "https://invoicezapi.focusrtech.com:57/user/edit-user", 
-        payload
+        `https://invoicezapi.focusrtech.com:57/user/edit-user/${selectedRow.Id}`,
+        updatedData // Pass the updated data as payload
       );
-
-      notification.success({
-        message: "Successfully Updated",
-        description: `You have successfully updated`,
-      });
-      
-      setPopupVisible(false); 
+  
+      if (response.status === 200) {
+        notification.success({
+          message: "Successfully Updated",
+          description: "You have successfully updated the user.",
+        });
+        setPopupVisible(false); 
+        dispatch(refreshActions.toggleInvoiceUploadRefresh());
+      } else {
+        notification.error({
+          message: "Failed to Update",
+          description: "There was an issue updating the user data.",
+        });
+      }
     } catch (error) {
       notification.error({
-        message: "Error while  Updation",
-        
+        message: "Error while Updating",
+        description: "An error occurred while trying to update the user data.",
       });
-      
-      
-    } 
+      console.error("Update Error: ", error);
+    }
   };
+  
 
 
   const [selectedRow, setSelectedRow] = useState(null);

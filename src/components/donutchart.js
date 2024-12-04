@@ -97,7 +97,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    height: "73vh",
+    height: "71vh",
     padding: "20px",
     backgroundColor: "white",
     borderRadius: "10px",
@@ -115,7 +115,7 @@ const useStyles = makeStyles({
 });
 
 // Define the set of blue colors
-const COLORS = ["#a3d2d9", "#83c1d9", "#60aada", "#2475be"];
+const COLORS = ["#e81123","#ffb900"];
 
 const DonutChartPage = () => {
   const styles = useStyles();

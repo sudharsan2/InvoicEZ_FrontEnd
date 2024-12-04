@@ -115,7 +115,7 @@ const useStyles = makeStyles({
   },
 });
 
-const COLORS = ["#bbc3f2", "#5476d8"];
+const COLORS = ["#107c10", "#0078d4"];
 
 const InvoiceStatusPieChart = () => {
   const styles = useStyles();
@@ -148,7 +148,7 @@ const InvoiceStatusPieChart = () => {
           Invoice Status
         </h2>
         {invoiceData.length > 0 ? (
-          <PieChart width={400} height={400}>
+          <PieChart width={500} height={400}>
             <Pie
               data={invoiceData}
               cx="50%"

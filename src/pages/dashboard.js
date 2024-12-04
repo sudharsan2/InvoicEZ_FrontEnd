@@ -28,34 +28,27 @@ const TagCounters = () => {
   const openPOCounts = [5, 8, 12, 7, 9];
 
   return (
-    <div style={{ maxHeight: "86vh", overflowY: "auto", padding: "20px",backgroundColor:"#f5f5f5" }}>
-      <div style={{ marginBottom: "130px" }}>
+    <div style={{ maxHeight: "86vh", overflowY: "auto", padding: "20px",backgroundColor:"#c9c9c9" }}>
+      <div style={{ marginBottom: "20px" ,backgroundColor:"white",height:"100vh",padding:"2em",borderRadius:"10px"}}>
         <CalendarComponent />
       </div>
-      <div
-        style={{ marginBottom: "3em", display: "flex", alignItems: "center",justifyContent:"space-between",gap:"10px" }}
-      >
-        
-        <InvoiceStatusPieChart />
-        {/* <FunnelChartPage/> */}
-        <ApexChart/>
-        <DonutChartPage />
-      </div>
-      <div>
+      
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-            gap:"10px"
-          }}
-        >
-          <BarChartComponent
-        />
-          <LineChartPage/>
-        </div>
-      </div>
+      <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)", // Two columns with equal width
+    gap: "20px", // Space between components
+  }}
+>
+  <LineChartPage />
+  <DonutChartPage />
+  <ApexChart />
+  <InvoiceStatusPieChart />
+</div>
+
+     
+
     </div>
   );
 };

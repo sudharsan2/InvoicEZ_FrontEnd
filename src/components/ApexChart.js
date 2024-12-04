@@ -22,17 +22,17 @@ const ApexChart = () => {
           {
             y: apiData.PONumberMatchingCount,
             label: "PO Number Matching Count",
-            color: "#6495ed",
+            color: "#f44879",
           },
           {
             y: apiData.SupplierMatchingCount,
             label: "Supplier Matching Count",
-            color: "#45b6fe",
+            color: "#32c1a4",
           },
           {
             y: apiData.LineItemsMatchingCount,
             label: "Line Items Matching Count",
-            color: "#8fd3fe",
+            color: "#fabc1c",
           },
         ];
 
@@ -110,7 +110,7 @@ const ApexChart = () => {
           backgroundColor: "white",
           borderRadius: "10px",
           padding: "40px",
-          width: "80%",
+          width: "100%",
           maxWidth: "1200px",
           height: "auto",
           maxHeight: "100vh",

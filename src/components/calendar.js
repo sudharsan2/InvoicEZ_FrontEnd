@@ -78,7 +78,7 @@ const CalendarComponent = () => {
         startAccessor="start"
         endAccessor="end"
         titleAccessor="title"
-        style={{ height: 500, margin: "50px" }}
+        style={{ height: 500, marginLeft: "50px",marginBottom:"10px" }}
         views={["month", "week"]}
         defaultView={Views.MONTH}
         components={{

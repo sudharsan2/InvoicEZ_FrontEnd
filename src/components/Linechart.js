@@ -19,9 +19,9 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    height: "54vh",
+    height: "60vh",
     padding: "4.5em",
-    width: "50%",
+    width: "80%",
     backgroundColor: "white",
     borderRadius: "10px",
   },
@@ -100,7 +100,7 @@ const LineChartPage = () => {
               <Line
                 type="monotone"
                 dataKey="amountToPay"
-                stroke="#bbc3f2"
+                stroke="#0b4678"
                 strokeWidth={2}
               />
             </LineChart>
