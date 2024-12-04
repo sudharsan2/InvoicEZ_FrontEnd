@@ -27,13 +27,15 @@ import {
   useTableFeatures,
   useTableSort,
 } from "@fluentui/react-components";
-import { refreshActions ,useDispatch} from "../Store/Store";
+import { refreshActions} from "../Store/Store";
+import { useDispatch, useSelector } from "react-redux";
 import { TextField } from "@fluentui/react/lib/TextField";
 import line_data from "./data_approve";
 import "./dashboard.css";
 import { message } from "antd";
 import { ArrowDownload28Regular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
+// import { refreshActions } from "../Store/Store";
 const path = "/issuefix";
 const path1 = "http://localhost:3000/";
 
@@ -171,7 +173,7 @@ const IssuefixDetails = () => {
         console.log("ITEMS",data.id);
         setRows(
           data.map((item,index) => ({
-            id: index+1,
+            id: item.id,
             inv_id:item.id,
             Description: item.items.Description || "",
             Quantity: item.items.Quantity || "",
@@ -240,7 +242,7 @@ const IssuefixDetails = () => {
   const [completedata, setCompletedata] = useState({});
   const [oldrow, setOldrow] = useState([]);
 
-  useEffect(() => {
+ 
     // Fetch data from the API when the component mounts
     const fetchData = async () => {
       try {
@@ -291,8 +293,9 @@ const IssuefixDetails = () => {
 
         setRows(
           data.items.map((item,index) => ({
-            id: index+1,
-            inv_id:data.id,
+            // id: index+1,
+            // inv_id:data.id,
+            id:item.id,
             Description: item.Description,
             Quantity: item.Quantity,
             Unit: item.Unit,
@@ -300,16 +303,21 @@ const IssuefixDetails = () => {
             Amount: item.Amount,
             SubTotal: item.SubTotal,
             PreviousUnpaidBalance: item.PreviousUnpaidBalance,
+            
+
           })),
         );
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+    useEffect(() => {
+      
+      fetchData();
+    }, []);
+   
 
-    fetchData();
-  }, []); // Empty dependency array means this runs once when the component mounts
-
+  
   const handleformSubmit = async () => {
     // Update the full data state based on formData and rows
     const updatedFulldata = {
@@ -358,7 +366,7 @@ const IssuefixDetails = () => {
       }),
       // Add any other properties like po_headers, if needed
     };
-
+    console.log("ITEMS",updatedFulldata);
     try {
       const response = await fetch(
         `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
@@ -392,23 +400,23 @@ const IssuefixDetails = () => {
   //   setRows(newRows);
   // };
 
-  const addLine = () => {
-    setRows([
-      ...rows,
-      {
-        no: rows.length + 1,
-        type: "",
-        amount: "",
-        description: "",
-        poLine: "",
-        unitPrice: "",
-        quantity: "",
-        unitOfMeasurement: "",
-        taxAmount: "",
-        hsnCode: "",
-      },
-    ]);
-  };
+  // const addLine = () => {
+  //   setRows([
+  //     ...rows,
+  //     {
+  //       no: rows.length + 1,
+  //       type: "",
+  //       amount: "",
+  //       description: "",
+  //       poLine: "",
+  //       unitPrice: "",
+  //       quantity: "",
+  //       unitOfMeasurement: "",
+  //       taxAmount: "",
+  //       hsnCode: "",
+  //     },
+  //   ]);
+  // };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -418,9 +426,22 @@ const IssuefixDetails = () => {
     }));
   };
 
-   
+  const dispatch = useDispatch();
+  const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
+  const isInvoiceUploadRefreshed = useSelector(
+    (state) => state.refresh.InvoiceUploadRefresh,
+  );
 
-  const [selectedRows, setSelectedRows] = useState([]);
+  useEffect(() => {
+    console.log("InvoiceUploadRefresh has changed:", InvoiceUploadRefresh);
+    fetchData();
+  }, [isInvoiceUploadRefreshed]);
+  
+
+  // const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState(new Set());
+
+
   const [tableData, setTableData] = useState(rows);
   // Toggle selection of a single row
   // const toggleRowSelection = (rowId) => {
@@ -433,51 +454,90 @@ const IssuefixDetails = () => {
   //   console.log("Selected Rows",selectedRows);
   // };
   console.log("ROWS",rows)
-  const handleDeleteSelectedRows = async () => {
+
+
+  // const handleDeleteSelectedRows = async () => {
     
-    if (selectedRows.length === 0) {
+  //   if (selectedRows.length === 0) {
+  //     notification.warning({
+  //       message: "No PO Selected",
+  //       description: "Please select at least one PO to delete.",
+  //     });
+  //     return;
+  //   }
+
+  //   try {
+      
+
+  //     const deletePromises = selectedRows.map((inv_id) =>
+  //       axios.delete(
+  //         `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
+  //       ),
+  //     );
+
+  //     await Promise.all(deletePromises);
+
+      
+     
+
+  //     notification.success({
+  //       message: "Successfully deleted",
+        
+  //     });
+
+  //     // dispatch(refreshActions.toggleInvoiceUploadRefresh());
+  //   } catch (error) {
+     
+  //     notification.error({
+  //       message: "Deletion Failed",
+        
+  //     });
+  //   }
+  // };
+
+ 
+  const handleDeleteSelectedRows = async () => {
+    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
+    if (selectedItemsArray.length === 0) {
       notification.warning({
         message: "No PO Selected",
         description: "Please select at least one PO to delete.",
       });
       return;
     }
-
+  
     try {
-      
-
-      const deletePromises = selectedRows.map((inv_id) =>
+      const deletePromises = selectedItemsArray.map((inv_id) =>
         axios.delete(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${inv_id}`,
+          `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
         ),
       );
-
-      await Promise.all(deletePromises);
-
-      // const newItems = items.filter(
-      //   (item) =>
-      //     !selectedItemsArray.some(
-      //       (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
-      //     ),
-      // );
-
-      // setItems(newItems);
-
+  
+      await Promise.all(deletePromises); // Wait for all deletions to complete
+  
+      const updatedRows = rows.filter(
+        (item) => !selectedItemsArray.includes(item.inv_id), // Filter out deleted rows
+      );
+  
+      setRows(updatedRows); // Update the state with filtered rows
+      setSelectedRows(new Set()); // Clear selected rows
+  
       notification.success({
         message: "Successfully deleted",
-        
+        description: `Deleted items: ${selectedItemsArray.join(", ")}`,
       });
-
-      // dispatch(refreshActions.toggleInvoiceUploadRefresh());
+  
+      dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Trigger refresh action if necessary
     } catch (error) {
-     
       notification.error({
         message: "Deletion Failed",
-        
+        description: `Deletion failed. ${
+          error.response?.data?.message || "An error occurred."
+        }`,
       });
     }
   };
-
+  
 
 
   
@@ -533,45 +593,77 @@ const IssuefixDetails = () => {
 
   const handleAddRow = () => {
     const newRow = {
-      id: rows.length + 1, // increment the id based on the current rows
-      description: "",
-      quantity: "",
-      unit: "",
-      unitPrice: "",
-      amount: "",
-      subtotal: "",
-      previousUnpaidBalance: "",
+      // id: rows.length + 1, // increment the id based on the current rows
+      Description: "",
+      Quantity: "",
+      Unit: "",
+      UnitPrice: "",
+      Amount: "",
+      Subtotal: "",
+      PreviousUnpaidBalance: "",
     };
-    setRows((prevRows) => [...prevRows, newRow]); // Add new row to existing rows
+    setRows((prevRows) => [...prevRows, newRow]); 
   };
+
+  console.log("Update Row",rows)
+
+
 
   // checkbox
 
 
   
 
+  // const toggleRowSelection = (rowid) => {
+  //   console.log("Invoice ID:", rowid);
+  
+  //   setSelectedRows((prevSelectedRows) =>
+  //     prevSelectedRows.includes(rowid)
+  //       ? prevSelectedRows.filter((id) => id !== rowid) // Deselect row
+  //       : [...prevSelectedRows, rowid] // Select row
+  //   );
+  
+  //   console.log("Selected Rows:", selectedRows);
+  // };
+  
   const toggleRowSelection = (rowid) => {
     console.log("Invoice ID:", rowid);
   
-    setSelectedRows((prevSelectedRows) =>
-      prevSelectedRows.includes(rowid)
-        ? prevSelectedRows.filter((id) => id !== rowid) // Deselect row
-        : [...prevSelectedRows, rowid] // Select row
-    );
+    setSelectedRows((prevSelectedRows) => {
+      const newSet = new Set(prevSelectedRows);
+      if (newSet.has(rowid)) {
+        newSet.delete(rowid); // Deselect row
+      } else {
+        newSet.add(rowid); // Select row
+      }
+      return newSet;
+    });
   
-    console.log("Selected Rows:", selectedRows);
+    console.log("Selected Rows:", Array.from(selectedRows));
   };
-  
+  // const toggleSelectAll = () => {
+  //   if (selectedRows.length === rows.length) {
+  //     setSelectedRows([]); // Deselect all
+  //     console.log("Deselect All");
+  //   } else {
+  //     const allSelectedRows = rows.map((row) => row.id);
+  //     setSelectedRows(allSelectedRows); // Select all rows by their `id`
+  //     console.log("Selected Rows:", allSelectedRows); // Log selected rows
+  //   }
+  // };
+
   const toggleSelectAll = () => {
-    if (selectedRows.length === rows.length) {
-      setSelectedRows([]); // Deselect all
+    if (selectedRows.size === rows.length) {
+      setSelectedRows(new Set()); // Deselect all rows
       console.log("Deselect All");
     } else {
-      const allSelectedRows = rows.map((row) => row.id);
-      setSelectedRows(allSelectedRows); // Select all rows by their `id`
-      console.log("Selected Rows:", allSelectedRows); // Log selected rows
+      const allSelectedRows = new Set(rows.map((row) => row.id)); // Map `row.id` for consistency
+      setSelectedRows(allSelectedRows); // Select all rows
+      console.log("Selected Rows:", Array.from(allSelectedRows)); // Log selected rows
     }
   };
+  
+  
   
   const areAllSelected = selectedRows.length === rows.length;
     return (
@@ -878,7 +970,7 @@ const IssuefixDetails = () => {
     <TableRow>
       <TableHeaderCell>
         <Checkbox
-          checked={selectedRows.length === rows.length}
+         checked={areAllSelected}
           onChange={toggleSelectAll}
           title="Select All"
         />
@@ -898,11 +990,11 @@ const IssuefixDetails = () => {
       <TableRow key={row.id}>
         <TableCell>
           <Checkbox
-            checked={selectedRows.includes(row.id)} // Use `id` consistently
+             checked={selectedRows.has(row.id)} // Use `id` consistently
             onChange={() => toggleRowSelection(row.id)}
           />
         </TableCell>
-        <TableCell>{row.id}</TableCell>
+        <TableCell>{index+1}</TableCell>
         {Object.keys(row)
           .filter((key) => key !== "id")
           .map((key) => (

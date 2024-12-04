@@ -55,6 +55,7 @@ import StoreHistoryDetails from "./pages/StoreHistoryDetails";
 import StoreHistory from "./pages/StoreHistory";
 import StoreTagCounters from "./pages/StoreDashboard";
 import StoreHistoryNavigate from "./pages/StoreHistoryNavigate";
+import UserPage from "./pages/UserPage";
 function App() {
   return (
     <Router basename="">
@@ -203,6 +204,17 @@ function App() {
             <CustomLayout>
               <NavDrawerDefaultAdmin>
                 <Matrimony />
+                </NavDrawerDefaultAdmin>
+            </CustomLayout>
+          }
+        />
+
+<Route
+          path="/user"
+          element={
+            <CustomLayout>
+              <NavDrawerDefaultAdmin>
+                <UserPage />
                 </NavDrawerDefaultAdmin>
             </CustomLayout>
           }

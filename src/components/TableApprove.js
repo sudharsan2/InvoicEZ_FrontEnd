@@ -21,7 +21,7 @@ import Search from "./Search"; // Assuming your search component is imported her
 import { Button, notification } from "antd"; // Import Ant Design components
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-
+import {message} from "antd";
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({
@@ -107,7 +107,10 @@ const TableApprove = () => {
  
 
   // Fetch data from the API when the component mounts
-  const fetchData = async () => {
+  const fetchData = async (showMessage = false) => {
+    if (showMessage) {
+      message.success("Refreshing...");
+    }
     try {
       const response = await axios.get(
         "https://invoicezapi.focusrtech.com:57/user/one-invoice-list",
@@ -185,6 +188,10 @@ const TableApprove = () => {
     setSelectedRows(data.selectedItems);
   };
 
+  const handleRefreshClick = () => {
+    fetchData(true); // Pass `true` to show the message when button is clicked
+  };
+
   //  delete API
   const handleDeleteSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows);
@@ -217,6 +224,7 @@ const TableApprove = () => {
       );
 
       setItems(newItems);
+      setSelectedRows(new Set());
 
       notification.success({
         message: "Successfully deleted",
@@ -336,7 +344,9 @@ const TableApprove = () => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          onClick={fetchData}
+          // onClick={fetchData}
+          onClick={handleRefreshClick}
+          
         >
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
@@ -355,6 +365,7 @@ const TableApprove = () => {
         }}
       >
         <DataGrid
+          key={items.length}
           items={filteredItems}
           columns={columns}
           sortable

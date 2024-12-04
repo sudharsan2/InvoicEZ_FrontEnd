@@ -209,7 +209,7 @@ const ApprovePage = () => {
       invoice_id: inv_id,
     };
 
-    console.log("payload", payload);
+    console.log("payload ", payload);
 
     try {
       setLoad(true);

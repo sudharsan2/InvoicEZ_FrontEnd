@@ -375,7 +375,7 @@ const ResetPassword = () => {
 
         setMessage("Password updated successfully!");
 
-        // Optionally, redirect the user after success
+       
         setTimeout(() => {
           navigate("");
         }, 2000);

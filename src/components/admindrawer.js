@@ -482,11 +482,11 @@ const NavDrawerDefaultAdmin = (props) => {
                       value="4"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        // navigate("/issuefix");
+                        navigate("/user");
                         setValue("4");
                       }}
                     >
-                      Bilt
+                      User Management
                     </NavSubItem>
                   </NavSubItemGroup>
                 </NavCategory>
@@ -574,11 +574,11 @@ const NavDrawerDefaultAdmin = (props) => {
                       value="4"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        navigate("/matrimony");
+                        navigate("/user");
                         setValue("4");
                       }}
                     >
-                      Bilt
+                      User Management
                     </NavSubItem>
                   </NavSubItemGroup>
                 </NavCategory>

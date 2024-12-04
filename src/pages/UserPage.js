@@ -13,19 +13,20 @@ import {
 import TagCounters from "../components/gridapprove";
 import ApproveTable from "../components/approvetable";
 import Search from "../components/Search";
-import IssuefixTable from "../components/issuefixtable";
+import UserTable from "../components/UserTable";
 import { Button, makeStyles } from "@fluentui/react-components";
 import { FilterRegular, DismissCircleRegular } from "@fluentui/react-icons"; // Import icons
+import { User } from "lucide-react";
 
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/approve";
 const path1 = "http://localhost:3000/";
-const path2 = "/issuefix";
+const path2 = "/user";
 
 const containerStyle = {
   width: "100%",
   display: "flex",
-  
+  gap:"30px",
   // justifyContent: "space-around",
   padding: "8px",
   marginLeft:"0em"
@@ -65,7 +66,7 @@ const divstyle ={
 
   
 }
-const IssuefixPage = () => {
+const UserPage = () => {
   const [height, setHeight] = useState(0);
   const divRef1 = useRef(null);
   const [tableLength, setTableLength] = useState(0);
@@ -92,8 +93,8 @@ const IssuefixPage = () => {
 
    console.log("tablelength",tableLength);
   const counters = [
-    { label: "To Do", value: tableLength, color: "#00bfbf" }, // Cyan
-    // { label: "AI Identified", value: 2, color: "#d62727" }, // Red
+    { label: "Gate User Count", value: tableLength, color: "#00bfbf" }, // Cyan
+    { label: "Store User Count", value: 2, color: "#d62727" }, // Red
     // { label: "User Resolved", value: 9, color: "#1f497d" }, // Dark Blue
     // { label: "Refix", value: 4, color: "#d21994" }, // Magenta
   ];
@@ -111,7 +112,7 @@ const IssuefixPage = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider /> */}
             <BreadcrumbItem>
-              <BreadcrumbButton href={path2}>No Match Found</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>User Management</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -122,7 +123,7 @@ const IssuefixPage = () => {
             padding: "1px",
           }}
         >
-          <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>No Match Found</h3>
+          <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>User Management</h3>
         </div>
         <div>
           <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -169,10 +170,10 @@ const IssuefixPage = () => {
         </div>
       </div>
       <div>
-        {height > 0 ? <IssuefixTable height={height} setTableLength={setTableLength}/> : <p>Loading...</p>}
+        {height > 0 ? <UserTable height={height} setTableLength={setTableLength}/> : <p>Loading...</p>}
       </div>
     </div>
   );
 };
 
-export default IssuefixPage;
+export default UserPage;

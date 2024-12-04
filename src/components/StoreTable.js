@@ -120,8 +120,16 @@ const StoreTable = ({setTableLength}) => {
           console.warn(`No po_headers found for index ${index}`);
           return null; // Skip if no po_headers
         }
+        
+        const val = item.items.map((item)=>({
+              Igst:item.Igst
+        }));
+       
+        console.log("IGST",val);
       
         return item.po_headers.map((po_header) => ({
+          
+          
           Id:po_header.id,
           po_number: po_header.po_number,
           po_type: po_header.po_type,
@@ -133,6 +141,12 @@ const StoreTable = ({setTableLength}) => {
           buyer_name: po_header.buyer_name,
           total_amount: po_header.total_amount,
           status: po_header.status,
+          customer:item.CustomerName,
+          invoice:item.InvoiceFile,
+          Igst_val:val.Igst
+          
+          
+
         }));
       });
       const flattenedMappedItems = mappedItems.flat().filter(Boolean);

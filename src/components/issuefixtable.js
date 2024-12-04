@@ -103,7 +103,10 @@ const IssuefixTable = ({ height, setTableLength }) => {
   //     });
   // },  [refreshKey]);
 
-  const fetchData = () => {
+  const fetchData = (showMessage = false) => {
+    if (showMessage) {
+      message.success("Refreshing...");
+    }
     fetch("https://invoicezapi.focusrtech.com:57/user/no-invoice-list")
       .then((response) => response.json())
       .then((data) => {
@@ -128,11 +131,17 @@ const IssuefixTable = ({ height, setTableLength }) => {
     fetchData(); // Fetch the data when component is mounted
   }, [isInvoiceUploadRefreshed]);
 
-  const handleRefresh = () => {
-    setRefreshKey((prevKey) => prevKey + 1); // Increment the refreshKey to trigger useEffect
-  };
+  // const handleRefresh = () => {
+  //   setRefreshKey((prevKey) => prevKey + 1); // Increment the refreshKey to trigger useEffect
+  // };
+
+  
   const handleSearchChange = (value) => {
     setSearchQuery(value);
+  };
+
+  const handleRefreshClick = () => {
+    fetchData(true); // Pass `true` to show the message when button is clicked
   };
 
   const handleDelete = () => {
@@ -162,6 +171,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
             ); // Use item.id here
             setRowSelect(false);
             setItems(updatedItems);
+
             setSelectedRows((prev) => new Set([])); // Ensure state updates correctly
             dispatch(refreshActions.toggleInvoiceUploadRefresh());
           } else {
@@ -277,7 +287,9 @@ const IssuefixTable = ({ height, setTableLength }) => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          onClick={handleRefresh}
+          // onClick={handleRefresh}
+          onClick={handleRefreshClick}
+          
         >
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
@@ -296,6 +308,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
         }}
       >
         <DataGrid
+          key={items.length}
           items={filteredItems}
           columns={columns}
           sortable

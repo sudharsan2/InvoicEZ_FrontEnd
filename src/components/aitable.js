@@ -22,7 +22,7 @@ import { Button, notification } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-
+import {message} from "antd";
 const columns = [
   createTableColumn({
     columnId: "InvoiceId",
@@ -78,7 +78,10 @@ const AITable = ({ setTableLength }) => {
   );
   
 
-  const fetchData = async () => {
+  const fetchData = async (showMessage = false) => {
+    if (showMessage) {
+      message.success("Refreshing...");
+    }
     try {
       const response = await axios.get(
         "https://invoicezapi.focusrtech.com:57/user/morethanone-invoice-list",
@@ -111,6 +114,9 @@ const AITable = ({ setTableLength }) => {
     setSearchQuery(value);
   };
 
+  const handleRefreshClick = () => {
+    fetchData(true); // Pass `true` to show the message when button is clicked
+  };
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
@@ -167,6 +173,7 @@ const AITable = ({ setTableLength }) => {
       );
 
       setItems(newItems);
+      setSelectedRows(new Set());
 
       notification.success({
         message: "Successfully deleted",
@@ -260,7 +267,8 @@ const AITable = ({ setTableLength }) => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          onClick={fetchData}
+          // onClick={fetchData}
+          onClick={handleRefreshClick}
         >
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
@@ -279,6 +287,7 @@ const AITable = ({ setTableLength }) => {
         }}
       >
         <DataGrid
+          key={items.length}
           items={filteredItems}
           columns={columns}
           sortable
