@@ -14,6 +14,7 @@ import TagCounters from "../components/gridapprove";
 import GateEntryTable from "../components/GateEntryTable";
 import Search from "../components/Search";
 import { ShareIos24Filled } from "@fluentui/react-icons";
+import StoreTable from "../components/StoreTable";
 
 // const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/gateentry";
@@ -21,10 +22,10 @@ const path1 = "http://localhost:3000/";
 const containerStyle = {
   width: "100%",
   display: "flex",
-  
+
   // justifyContent: "space-around",
   padding: "8px",
-  marginLeft:"0em"
+  marginLeft: "0em",
 };
 
 const itemStyle = {
@@ -34,33 +35,31 @@ const itemStyle = {
 
 const lineStyle = (color) => ({
   width: "3px",
-  height: "50px", 
+  height: "50px",
   backgroundColor: color,
   marginRight: "12px",
 });
 
 const labelStyle = {
   fontSize: "14px",
-  fontWeight: "normal", 
-  marginBottom:"10px"
+  fontWeight: "normal",
+  marginBottom: "10px",
 };
 
 const valueStyle = {
-  fontSize: "28px", 
+  fontSize: "28px",
   fontWeight: "bold",
-  color: "#333", 
-  marginLeft: "0px", 
+  color: "#333",
+  marginLeft: "0px",
 };
 
-const divstyle ={
-  display:"flex",
-  flexDirection:"column",
-  marginLeft:"20px",
-  paddingTop:"6em",
-  fontWeight:"bold",
-
-  
-}
+const divstyle = {
+  display: "flex",
+  flexDirection: "column",
+  marginLeft: "20px",
+  paddingTop: "6em",
+  fontWeight: "bold",
+};
 const GateEntry = () => {
   const [tableLength, setTableLength] = useState(0);
   const counters = [
@@ -94,30 +93,29 @@ const GateEntry = () => {
               padding: "1px",
             }}
           >
-            <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>
-              Gate Entry 
-            </h3>
+            <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Gate Entry</h3>
           </div>
 
           {/* <div>
             <TagCounters type="approve" />
           </div> */}
 
-<div style={containerStyle}>
-        {counters.map((item, index) => (
-          <div style={itemStyle} key={index}>
-            <div style={lineStyle(item.color)} />
-            <div>
-              <div style={labelStyle}>{item.label}</div>
-              <div style={valueStyle}>{item.value}</div>
-            </div>
+          <div style={containerStyle}>
+            {counters.map((item, index) => (
+              <div style={itemStyle} key={index}>
+                <div style={lineStyle(item.color)} />
+                <div>
+                  <div style={labelStyle}>{item.label}</div>
+                  <div style={valueStyle}>{item.value}</div>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
         </div>
         <div style={{ width: "100%", height: "5vh" }} />
         <div>
-          <GateEntryTable setTableLength={setTableLength}/>
+          <StoreTable setTableLength={setTableLength} />
+          {/* <GateEntryTable setTableLength={setTableLength}/> */}
         </div>
       </div>
     </div>
