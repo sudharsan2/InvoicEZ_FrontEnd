@@ -417,6 +417,9 @@ import { Button, notification } from "antd"; // Import Ant Design components
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
 import {message} from "antd";
+import { ShareIos24Filled } from "@fluentui/react-icons";
+import { Modal } from "antd";
+import WalkInCandidate from "./WalkinCandidate";
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({
@@ -491,6 +494,9 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [po_id, set_Po_id] = useState("");
+  const [isWalkinUpload, setIsWalkinUpload] = useState(false);
+  const [newCandidate, setNewCandidate] = useState(false);
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -732,6 +738,19 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
     }
   };
 
+  const handleIsWalkinUpload = () => {
+    console.log("yes it works");
+    setIsWalkinUpload(true);
+    setNewCandidate(false);
+  };
+  const handleNewCandidate = () => {
+    setNewCandidate(false);
+  };
+  const handleNewCandidateBtn = () => {
+    console.log("btn clicked");
+    setNewCandidate(true);
+  };
+
   return (
     <>
       <div
@@ -796,6 +815,26 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
           <span>Refresh</span>
         </button>
 
+        <button
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center", // Ensures alignment in case of larger button dimensions
+            backgroundColor: "transparent",
+            border: "1px solid #fff",
+            padding: "6px 12px",
+            cursor: "pointer",
+            gap: "8px",
+            marginLeft: "2em",
+            whiteSpace: "nowrap", // Prevents wrapping of content
+          }}
+          onClick={handleNewCandidateBtn}
+        >
+          <ShareIos24Filled style={{ color: "#1281d7" }} />
+          {/* <TasksApp28Regular style={{ color: "#1281d7" }} /> */}
+          <span>Upload-Invoice</span>
+        </button>
+
         <Search
           placeholder="Search PO or Supplier"
           onSearchChange={handleSearchChange}
@@ -849,6 +888,15 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
           </DataGridBody>
         </DataGrid>
       </div>
+
+      <Modal
+        open={newCandidate}
+        onCancel={handleNewCandidate}
+        width={540}
+        footer={[]}
+      >
+        <WalkInCandidate isWalkinUpload={handleIsWalkinUpload} />
+      </Modal>
     </>
   );
 };

@@ -85,35 +85,32 @@
 
 
 
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Sankey, Tooltip } from "recharts";
-
 const SankeyChart = () => {
   const [chartData, setChartData] = useState({
     nodes: [
-      { name: "Invoice Processed", value: 0 }, // This will be the total of invoices
+      { name: "Invoice Processed", value: 0 }, // Total invoices
       { name: "Match Found", value: 0 },
       { name: "Multiple Match Found", value: 0 },
       { name: "No Match Found", value: 0 },
-      // { name: "Supplier Line Matching", value: 0 },
+      // { name: "Line Items Matching", value: 0 },
       // { name: "Supplier Matching", value: 0 },
-      // { name: "PO Number Matching", value: 0 }, 
+      // { name: "PO Number Matching", value: 0 },
     ],
     links: [
-      { source: 0, target: 1, value: 10 }, 
-      { source: 0, target: 2, value: 15 }, 
-      { source: 0, target: 3, value: 20 }, 
-      // { source: 1, target: 4, value: 5 }, 
-      // { source: 1, target: 5, value: 3 }, 
-      // { source: 1, target: 6, value: 2 }, 
+      { source: 0, target: 1, value: 10 },
+      { source: 0, target: 2, value: 15 },
+      { source: 0, target: 3, value: 20 },
+      // { source: 1, target: 4, value: 0 },
+      // { source: 1, target: 5, value: 0 },
+      // { source: 1, target: 6, value: 0 },
     ],
   });
 
   const fetchData = async () => {
     try {
-      // Fetch main data for match counts
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/invoices");
       const fetchedItems = response.data;
 
@@ -131,30 +128,28 @@ const SankeyChart = () => {
         }
       });
 
-      // Fetch additional data for Line Items, Supplier Matching, etc.
       const statusResponse = await axios.get("https://invoicezapi.focusrtech.com:57/user/statusForApprove");
-      const statusData = statusResponse.data;
+      const statusData = statusResponse.data || {};
 
-      // Update chart data
       setChartData((prevState) => ({
         ...prevState,
         nodes: prevState.nodes.map((node, index) => {
-          if (index === 0) return { ...node, value: fixCount + MatchCount + multiple_MatchCount }; // Total invoices
-          if (index === 1) return { ...node, value: MatchCount }; // Match Found
-          if (index === 2) return { ...node, value: multiple_MatchCount }; // Multiple Match Found
-          if (index === 3) return { ...node, value: fixCount }; // No Match Found
-          if (index === 4) return { ...node, value: statusData.LineItemsMatchingCount }; // Line Items Matching
-          if (index === 5) return { ...node, value: statusData.SupplierMatchingCount }; // Supplier Matching
-          if (index === 6) return { ...node, value: statusData.PONumberMatchingCount }; // PO Number Matching
+          if (index === 0) return { ...node, value: fixCount + MatchCount + multiple_MatchCount };
+          if (index === 1) return { ...node, value: MatchCount };
+          if (index === 2) return { ...node, value: multiple_MatchCount };
+          if (index === 3) return { ...node, value: fixCount };
+          if (index === 4) return { ...node, value: statusData.LineItemsMatchingCount || 0 };
+          if (index === 5) return { ...node, value: statusData.SupplierMatchingCount || 0 };
+          if (index === 6) return { ...node, value: statusData.PONumberMatchingCount || 0 };
           return node;
         }),
         links: prevState.links.map((link) => {
-          if (link.target === 1) return { ...link, value: MatchCount }; // Link: Invoice Processed -> Match Found
-          if (link.target === 2) return { ...link, value: multiple_MatchCount }; // Link: Invoice Processed -> Multiple Match Found
-          if (link.target === 3) return { ...link, value: fixCount }; // Link: Invoice Processed -> No Match Found
-          if (link.target === 4) return { ...link, value: statusData.LineItemsMatchingCount }; // Match Found -> Supplier Line Matching
-          if (link.target === 5) return { ...link, value: statusData.SupplierMatchingCount }; // Match Found -> Supplier Matching
-          if (link.target === 6) return { ...link, value: statusData.PONumberMatchingCount }; // Match Found -> PO Number Matching
+          if (link.target === 1) return { ...link, value: MatchCount };
+          if (link.target === 2) return { ...link, value: multiple_MatchCount };
+          if (link.target === 3) return { ...link, value: fixCount };
+          if (link.target === 4) return { ...link, value: statusData.LineItemsMatchingCount || 0 };
+          if (link.target === 5) return { ...link, value: statusData.SupplierMatchingCount || 0 };
+          if (link.target === 6) return { ...link, value: statusData.PONumberMatchingCount || 0 };
           return link;
         }),
       }));
@@ -173,14 +168,7 @@ const SankeyChart = () => {
 
     return (
       <g>
-        <rect
-          x={x}
-          y={y}
-          width={width}
-          height={height}
-          fill="#0078D4"
-          strokeWidth={1}
-        />
+        <rect x={x} y={y} width={width} height={height} fill="#0078D4" strokeWidth={1} />
         <text
           x={x + width + 5}
           y={y + height / 2}
@@ -194,42 +182,38 @@ const SankeyChart = () => {
         </text>
       </g>
     );
-};
+  };
 
-const calculateLinkWidth = (link) => {
-  // Get the max value from nodes for scaling
-  const maxNodeValue = Math.max(...chartData.nodes.map(node => node.value));
-  
-  // Scale the link width based on the node values
-  const linkWidth = (link.value / maxNodeValue) * 100;  // Scale factor of 100 for visibility
-  return linkWidth;
-};
+  const calculateLinkWidth = (link) => {
+    const maxNodeValue = Math.max(...chartData.nodes.map((node) => node.value));
+    const linkWidth = Math.max((link.value / maxNodeValue) * 100, 1); // Minimum width of 1
+    return linkWidth;
+  };
 
-return (
-  <div >
-    <Sankey
-      width={1000}
-      height={500}
-      data={chartData}
-      nodePadding={40}
-      margin={{
-        left: 200,
-        right: 200,
-        top: 50,
-        bottom: 50,
-      }}
-      node={renderNode}
-      link={{
-        stroke: "#77c878", // Green color for links
-        strokeWidth: (link) => calculateLinkWidth(link), // Dynamically set strokeWidth based on link value
-        opacity: 0.7,
-      }}
-    >
-      <Tooltip />
-    </Sankey>
-  </div>
-);
-
+  return (
+    <div>
+      <Sankey
+        width={1000}
+        height={500}
+        data={chartData}
+        nodePadding={40}
+        margin={{
+          left: 200,
+          right: 200,
+          top: 50,
+          bottom: 50,
+        }}
+        node={renderNode}
+        link={{
+          stroke: "#77c878",
+          strokeWidth: (link) => calculateLinkWidth(link),
+          opacity: 0.7,
+        }}
+      >
+        <Tooltip />
+      </Sankey>
+    </div>
+  );
 };
 
 export default SankeyChart;

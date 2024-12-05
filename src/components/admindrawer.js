@@ -564,7 +564,7 @@ const NavDrawerDefaultAdmin = (props) => {
                       value="3"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        // navigate("/ai");
+                        navigate("/matrimony");
                         setValue("3");
                       }}
                     >

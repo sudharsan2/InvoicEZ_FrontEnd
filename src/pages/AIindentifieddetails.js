@@ -209,6 +209,18 @@ const AIDetailPage = () => {
       columnId: "ProductCode",
       compare: (a, b) => a.ProductCode - b.ProductCode,
     }),
+    createTableColumn({
+      columnId: "Igst",
+      compare: (a, b) => a.Igst - b.Igst,
+    }),
+    createTableColumn({
+      columnId: "Cgst",
+      compare: (a, b) => a.Cgst - b.Cgst,
+    }),
+    createTableColumn({
+      columnId: "Sgst",
+      compare: (a, b) => a.Sgst - b.Sgst,
+    }),
   ];
 
   const {
@@ -431,7 +443,13 @@ const AIDetailPage = () => {
     Amount: item.Amount || "Null",
     Discount: item.Discount || "Null",
     ProductCode: item.ProductCode || "Null",
+    Igst:item.Igst||"Null",
+    Sgst:item.Sgst||"Null",
+    Cgst:item.Cgst||"Null",
+
   }));
+
+  console.log("Line Items",lineItems)
 
   const handleCreate = (inputValue) => {
     const newOption = { value: inputValue, label: inputValue };
@@ -842,6 +860,36 @@ const AIDetailPage = () => {
                       >
                         Product Code
                       </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("Igst")}
+                      >
+                        Igst
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("Cgst")}
+                      >
+                        Cgst
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("Sgst")}
+                      >
+                        Sgst
+                      </TableHeaderCell>
                     </TableRow>
                   </TableHeader>
 
@@ -903,6 +951,36 @@ const AIDetailPage = () => {
                           }}
                         >
                           {item.ProductCode}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Igst}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Cgst}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Sgst}
                         </TableCell>
                       </TableRow>
                     ))}

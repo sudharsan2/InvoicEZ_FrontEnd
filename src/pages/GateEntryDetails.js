@@ -110,7 +110,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ApprovePage = () => {
+const GateEntryDetails = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const navigate = useNavigate();
 
@@ -161,14 +161,14 @@ const ApprovePage = () => {
       const response = await axios.post(url, {});
 
       if (response.status === 200) {
-        message.success("Gate Entry successfully Updated");
+        message.success("PO successfully Updated");
         navigate(`/approve`);
       }
       console.log("Success:", response.data); // Handle the response data
      
     } catch (error) {
       notification.error({
-        message: "Gate Entry Failed",
+        message: "Approved Failed",
         // description: `You have successfully Approved: ${po_id}`,
       });
       console.error("Error:", error);
@@ -346,28 +346,12 @@ const ApprovePage = () => {
 
         console.log("InvoiceId", fetchedItems.invoice_info.id);
 
-
-        const invoice_items = fetchedItems.invoice_info.items.map((item, index) => {
-          console.log("IGST", item.Igst);
-          console.log("CGST", item.Cgst);
-          console.log("SGST", item.Sgst);
-        
-          return {
-            Igst: item.Igst,
-            Cgst: item.Cgst,
-            Sgst: item.Sgst,
-            index: index, // Include the index to match with po_lineitems
-          };
-        });
-        
-
         const normalizedPoLineItems = fetchedItems.po_lineitems.map(
           (poItem, index) => {
             console.log("PO", poItem);
 
             const matchingInvoiceItems = fetchedItems.invoice_info.items;
-            
-            const matchingInvoiceItem = invoice_items[index];
+
             const matchingQuantity = matchingInvoiceItems[index]
               ? matchingInvoiceItems[index].Quantity
               : null;
@@ -378,10 +362,6 @@ const ApprovePage = () => {
               quantity: poItem.quantity,
               unit_price: poItem.unit_price,
               Quantity: matchingQuantity,
-              Igst: matchingInvoiceItem ? matchingInvoiceItem.Igst : null,
-              Cgst: matchingInvoiceItem ? matchingInvoiceItem.Cgst : null,
-              Sgst: matchingInvoiceItem ? matchingInvoiceItem.Sgst : null,
-              
             };
           },
         );
@@ -510,7 +490,7 @@ const ApprovePage = () => {
                     style={{ backgroundColor: "#3570c3", color: "white" }}
                     onClick={() => approvePo()}
                   >
-                    Gate Entry
+                    Approve
                   </Button>
                 </div>
               </div>
@@ -1033,36 +1013,6 @@ const ApprovePage = () => {
                       >
                         Invoice Quantity
                       </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Igst
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Cgst
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Sgst
-                      </TableHeaderCell>
                     </TableRow>
                   </TableHeader>
 
@@ -1145,36 +1095,6 @@ const ApprovePage = () => {
                         >
                           {item.Quantity}
                         </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Igst}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Cgst}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Sgst}
-                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -1188,4 +1108,4 @@ const ApprovePage = () => {
   );
 };
 
-export default ApprovePage;
+export default GateEntryDetails;

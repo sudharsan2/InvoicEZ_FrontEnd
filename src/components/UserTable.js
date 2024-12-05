@@ -90,27 +90,29 @@ const UserTable = () => {
       ),
     }),
     
-    // createTableColumn({
-    //   columnId: "reset",
-    //   renderHeaderCell: () => "Reset Password",
-    //   renderCell: (item) => (
-        
-    //     <TableCellLayout>
-    //       <button
-          
-    //         style={{
-    //           background: "none",
-    //           border: "none",
-    //           cursor: "pointer",
-    //         }}
-    //         aria-label="Edit"
-    //         onClick={() => navigate('/forgotPassword')}
-    //       >
-    //         <Key24Regular/>
-    //       </button>
-    //     </TableCellLayout>
-    //   ),
-    // }),
+
+    createTableColumn({
+      columnId: "reset",
+      renderHeaderCell: () => "Reset Password",
+      renderCell: (item) => (
+        <TableCellLayout>
+          {item.Id !== null && ( // Show the button only if Id is not null
+            <button
+              onClick={() => handleResetPassword(item)} // Open the reset password popup
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+              aria-label="Reset Password"
+            >
+              <Key24Regular />
+            </button>
+          )}
+        </TableCellLayout>
+      ),
+    }),
+   
   ];
 
   
@@ -119,6 +121,10 @@ const UserTable = () => {
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [po_id, set_Po_id] = useState("");
   const [isPopupVisible, setPopupVisible] = useState(false);
+  const [showResetPopup, setShowResetPopup] = useState(false);
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [selectedUser, setSelectedUser] = useState(null);
  
 
   const dispatch = useDispatch();
@@ -151,6 +157,53 @@ const UserTable = () => {
 
   
 
+  const handleResetPassword = (item) => {
+    setSelectedUser(item); // Set the selected user
+    setShowResetPopup(true); // Show the reset password popup
+  };
+
+
+
+  const handleResetSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Payload for the POST request
+    const payload = {
+      email: email,
+      password: password,
+    };
+  
+    try {
+      // Replace with your actual API endpoint
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/usermanagement-reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      if (response.ok) {
+       
+        notification.success({
+          message: "Successfully Reset the password",
+          // description: "You have successfully updated the user.",
+        });
+      } else {
+        notification.error({
+          message: "Error while reset the password",
+          // description: "You have successfully updated the user.",
+        });
+        
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      
+    }
+  
+    
+    setShowResetPopup(false);
+  };
 
   // Fetch data from the API when the component mounts
   const fetchData = async () => {
@@ -691,7 +744,7 @@ const UserTable = () => {
           <DataGridHeader>
             <DataGridRow>
               {({ renderHeaderCell }) => (
-                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+                <DataGridHeaderCell >{renderHeaderCell()}</DataGridHeaderCell>
               )}
             </DataGridRow>
           </DataGridHeader>
@@ -864,6 +917,95 @@ const UserTable = () => {
         </div>
       )}
       </div>
+
+      {/* Reset Password Popup */}
+
+      {showResetPopup && (
+  <div
+    style={{
+      padding: "2em",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      background: "rgba(0, 0, 0, 0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+    onClick={() => setShowResetPopup(false)} // Close the popup when clicking outside
+  >
+    <div
+      style={{
+        background: "white",
+        padding: "60px",
+        borderRadius: "8px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+        width: "400px",
+      }}
+      onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
+    >
+      {/* <h3 style={{ marginBottom: "15px" }}>Reset Password</h3> */}
+      <form onSubmit={handleResetSubmit}>
+        <label style={{ display: "block", marginBottom: "10px" }}>
+          Email:
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{
+              width: "100%",
+              padding: "8px",
+              marginTop: "5px",
+              marginBottom: "15px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+            }}
+          />
+        </label>
+        <label style={{ display: "block", marginBottom: "10px" }}>
+          New Password:
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{
+              width: "100%",
+              padding: "8px",
+              marginTop: "5px",
+              marginBottom: "15px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+            }}
+          />
+        </label>
+        <div style={{display:"flex",justifyContent:"center"}}>
+        <button
+          type="submit"
+          style={{
+            padding: "10px 15px",
+            backgroundColor: "#1281d7",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            width: "50%",
+            
+          }}
+        >
+          Reset Password
+        </button>
+
+        </div>
+        
+      </form>
+    </div>
+  </div>
+)}
     </>
   );
 };

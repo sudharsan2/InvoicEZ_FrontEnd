@@ -126,7 +126,8 @@ const GateEntryTable = ({setTableLength}) => {
         location:item.VendorAddress.city,
         line_count:item.items.length,
         tax_amount:item.InvoiceTotal,
-        ReceivedDate:item.receivedDate
+        ReceivedDate:item.receivedDate,
+        // po_id:item.po_headers[0].po_number,
         
       }));
 
@@ -171,8 +172,8 @@ const GateEntryTable = ({setTableLength}) => {
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/approvepage`, {
-        state: { poNumber: item.po_number, Id: item.Id },
+      navigate(`/gate-entry-det`, {
+        state: { poNumber: item.po_number, Id: item.po_id },
       });
       console.log("ItemId", item.Id);
     }
@@ -386,7 +387,7 @@ const GateEntryTable = ({setTableLength}) => {
           <span>Delete</span>
         </button> */}
 
-        <button
+        {/* <button
           style={{
             display: "flex",
             alignItems: "center",
@@ -400,11 +401,11 @@ const GateEntryTable = ({setTableLength}) => {
             whiteSpace: "nowrap", // Prevents wrapping of content
           }}
           onClick={handleNewCandidateBtn}
-        >
-          <ShareIos24Filled style={{ color: "#1281d7" }} />
+        > */}
+          {/* <ShareIos24Filled style={{ color: "#1281d7" }} /> */}
           {/* <TasksApp28Regular style={{ color: "#1281d7" }} /> */}
-          <span>Upload-Invoice</span>
-        </button>
+          {/* <span>Upload-Invoice</span> */}
+        {/* </button> */}
 
         {/* <button
           style={{

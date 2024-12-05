@@ -56,6 +56,7 @@ import StoreHistory from "./pages/StoreHistory";
 import StoreTagCounters from "./pages/StoreDashboard";
 import StoreHistoryNavigate from "./pages/StoreHistoryNavigate";
 import UserPage from "./pages/UserPage";
+import GateEntryDetails from "./pages/GateEntryDetails";
 import SankeyChart from "./components/SankeyChart";
 function App() {
   return (
@@ -124,6 +125,17 @@ function App() {
             <CustomLayout>
                <NavDrawerDefault>
                 <ApprovePage />
+                </NavDrawerDefault>
+            </CustomLayout>
+          }
+        />
+
+<Route
+          path="/gate-entry-det"
+          element={
+            <CustomLayout>
+               <NavDrawerDefault>
+                <GateEntryDetails />
                 </NavDrawerDefault>
             </CustomLayout>
           }
