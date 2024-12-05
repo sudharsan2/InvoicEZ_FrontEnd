@@ -488,7 +488,7 @@ const ApprovePage = () => {
                     style={{ backgroundColor: "#3570c3", color: "white" }}
                     onClick={() => approvePo()}
                   >
-                    Generate GRN
+                    Approve
                   </Button>
                 </div>
               </div>
