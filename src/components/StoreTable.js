@@ -342,7 +342,7 @@ const StoreTable = ({setTableLength}) => {
         >
           <TasksApp28Regular style={{ color: "#1281d7" }} />
           <span>Approve</span>
-        </button>
+        </button> */}
 
         <button
           style={{
@@ -364,7 +364,7 @@ const StoreTable = ({setTableLength}) => {
         <Search
           placeholder="Search PO or Supplier"
           onSearchChange={handleSearchChange}
-        /> */}
+        />
       </div>
       <div
         style={{

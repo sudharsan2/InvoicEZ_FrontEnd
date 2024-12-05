@@ -55,7 +55,6 @@ const useStyles = makeStyles({
     paddingTop: "3vh",
     padding: "0 20px",
     maxHeight: "35vh",
-    
   },
 
   content2: {
@@ -102,7 +101,7 @@ const useStyles = makeStyles({
   },
   heading: {
     fontWeight: "bold",
-    maxWidth:"500px"
+    maxWidth: "500px",
   },
   content: {
     fontSize: "13px",
@@ -165,7 +164,6 @@ const ApprovePage = () => {
         navigate(`/approve`);
       }
       console.log("Success:", response.data); // Handle the response data
-     
     } catch (error) {
       notification.error({
         message: "Gate Entry Failed",
@@ -510,7 +508,7 @@ const ApprovePage = () => {
                     style={{ backgroundColor: "#3570c3", color: "white" }}
                     onClick={() => approvePo()}
                   >
-                    Gate Entry
+                    Create Gate Entry
                   </Button>
                 </div>
               </div>
@@ -680,10 +678,16 @@ const ApprovePage = () => {
             </TabList>
           </div>
           {selectedtab === "tab1" && (
-            <div style={{ marginTop: "20px", }}>
+            <div style={{ marginTop: "20px" }}>
               <div className={styles.content1}>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 3fr)", gap: "15px"}}>
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(6, 3fr)",
+                    gap: "15px",
+                  }}
+                >
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -702,7 +706,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row",}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -720,7 +724,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -739,9 +743,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div
-                    style={{display:"flex",flexDirection:"row"}}
-                  >
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -760,7 +762,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -778,7 +780,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -797,7 +799,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -814,7 +816,7 @@ const ApprovePage = () => {
                       {purchaseOrder.poCurrency}
                     </div>
                   </div>
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -833,7 +835,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -851,7 +853,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -870,7 +872,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -927,12 +929,10 @@ const ApprovePage = () => {
                       {purchaseOrder.purchaseOrderNumberInInvoice}
                     </div>
                   </div> */}
-                  
                 </div>
               </div>
-              <Divider style={{marginTop:"3em"}}/>
+              <Divider style={{ marginTop: "3em" }} />
             </div>
-           
           )}
 
           {selectedtab === "tab2" && (

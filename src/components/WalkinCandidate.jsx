@@ -37,7 +37,17 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
     } catch (error) {
       // Handle error
       console.error("Error uploading file:", error);
-      message.error(`${file.name} upload failed.`);
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.error === "Invoice already exists"
+      ) {
+        message.error("Invoice already exists.");
+      } else {
+        message.error(`${file.name} upload failed.`);
+      }
+
       file.status = "error";
       onError();
     } finally {

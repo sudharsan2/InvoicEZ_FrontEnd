@@ -9,6 +9,8 @@ import {
   PeopleAdd28Regular,
   Edit24Filled,
   Key24Regular,
+  Eye24Filled ,
+  EyeOff24Filled
 } from "@fluentui/react-icons";
 import { UserAddOutlined, UserDeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -125,8 +127,11 @@ const UserTable = () => {
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 const [selectedUser, setSelectedUser] = useState(null);
+const [isPasswordVisible, setIsPasswordVisible] = useState(false);
  
-
+const togglePasswordVisibility = () => {
+  setIsPasswordVisible((prev) => !prev);
+};
   const dispatch = useDispatch();
   const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
   const isInvoiceUploadRefreshed = useSelector(
@@ -966,23 +971,38 @@ const [selectedUser, setSelectedUser] = useState(null);
             }}
           />
         </label>
-        <label style={{ display: "block", marginBottom: "10px" }}>
-          New Password:
+        <label style={{ display: 'block', marginBottom: '10px' }}>
+        New Password:
+        <div style={{ position: 'relative' }}>
           <input
-            type="password"
+            type={isPasswordVisible ? 'text' : 'password'} // Toggle input type
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             style={{
-              width: "100%",
-              padding: "8px",
-              marginTop: "5px",
-              marginBottom: "15px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
+              width: '100%',
+              padding: '8px',
+              marginTop: '5px',
+              marginBottom: '15px',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
             }}
           />
-        </label>
+          <span
+            onClick={togglePasswordVisibility}
+            style={{
+              position: 'absolute',
+              right: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              cursor: 'pointer',
+            }}
+          >
+            {isPasswordVisible ? <Eye24Filled /> : <EyeOff24Filled />}
+          </span>
+        </div>
+      </label>
+    
         <div style={{display:"flex",justifyContent:"center"}}>
         <button
           type="submit"

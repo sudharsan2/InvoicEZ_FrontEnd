@@ -21,7 +21,7 @@ import Search from "./Search"; // Assuming your search component is imported her
 import { Button, notification } from "antd"; // Import Ant Design components
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-import {message} from "antd";
+import { message } from "antd";
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({
@@ -49,20 +49,22 @@ const columns = [
   createTableColumn({
     columnId: "supplier_name",
     renderHeaderCell: () => "Supplier Name",
-    renderCell: (item) => <TableCellLayout>{item.supplier_name}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.supplier_name}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "total_amount",
     renderHeaderCell: () => "Invoice Amount",
-    renderCell: (item) => <TableCellLayout>{item.total_amount}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.total_amount}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "receipt",
     renderHeaderCell: () => "Receipt Number",
     renderCell: (item) => <TableCellLayout>{item.receipt}</TableCellLayout>,
   }),
- 
-  
 ];
 
 const HistoryTable = () => {
@@ -83,7 +85,6 @@ const HistoryTable = () => {
 
   // Fetch data from the API when the component mounts
   const fetchData = async (showMessage = false) => {
-
     if (showMessage) {
       message.success("Refreshing...");
     }
@@ -95,12 +96,9 @@ const HistoryTable = () => {
       console.log("fetchedItems", fetchedItems);
       // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
 
-      
-    
-      const mappedItems = fetchedItems.map((item,index) => {
+      const mappedItems = fetchedItems.map((item, index) => {
         // Map over po_headers to get all po_numbers
-        
-        
+
         return {
           Id: item.po_headers[0].id,
           grn_num: item.gate_entry_no,
@@ -109,10 +107,10 @@ const HistoryTable = () => {
           received_date: item.receivedDate,
           supplier_name: item.VendorName,
           total_amount: item.InvoiceTotal,
-          receipt:item.receipt_number
+          receipt: item.receipt_number,
         };
       });
-      
+
       setItems(mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -141,10 +139,8 @@ const HistoryTable = () => {
       item.received_date?.toLowerCase().includes(searchLower) ||
       item.po_status?.toLowerCase().includes(searchLower) ||
       item.supplier_name?.toLowerCase().includes(searchLower) ||
-      item.total_amount?.toLowerCase().includes(searchLower)||
+      item.total_amount?.toLowerCase().includes(searchLower) ||
       item.receipt?.toLowerCase().includes(searchLower)
-
-      
     );
   });
 
@@ -235,7 +231,9 @@ const HistoryTable = () => {
       // Make API call to delete selected POs
       await Promise.all(
         selectedItemsArray.map((item) =>
-          axios.post(`https://invoicezapi.focusrtech.com:57/user/oracle-payload/${po_id}`),
+          axios.post(
+            `https://invoicezapi.focusrtech.com:57/user/oracle-payload/${po_id}`,
+          ),
         ),
       );
 
@@ -270,7 +268,7 @@ const HistoryTable = () => {
           marginLeft: "-3em",
         }}
       >
-        <button
+        {/* <button
           style={{
             display: "flex",
             alignItems: "center",
@@ -286,7 +284,7 @@ const HistoryTable = () => {
         >
           <Delete28Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
-        </button>
+        </button> */}
 
         {/* <button
           style={{

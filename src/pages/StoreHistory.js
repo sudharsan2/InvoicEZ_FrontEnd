@@ -16,7 +16,7 @@ import Search from "../components/Search";
 import Example from "./ExampleLineChart";
 // const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/history";
-const path1 = "http://localhost:3000/";
+const path1 = "/dashboard";
 
 
 const containerStyle = {

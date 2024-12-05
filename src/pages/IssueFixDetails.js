@@ -303,6 +303,9 @@ const IssuefixDetails = () => {
             Amount: item.Amount,
             SubTotal: item.SubTotal,
             PreviousUnpaidBalance: item.PreviousUnpaidBalance,
+            Igst:item.Igst,
+            Cgst:item.Cgst,
+            Sgst:item.Sgst
             
 
           })),
@@ -603,6 +606,9 @@ const IssuefixDetails = () => {
       Amount: "",
       Subtotal: "",
       PreviousUnpaidBalance: "",
+      Igst:"",
+      Cgst:"",
+      Sgst:"",
     };
     setRows((prevRows) => [...prevRows, newRow]); 
   };
@@ -985,6 +991,9 @@ const IssuefixDetails = () => {
       <TableHeaderCell>Amount</TableHeaderCell>
       <TableHeaderCell>Subtotal</TableHeaderCell>
       <TableHeaderCell>Previous Unpaid Balance</TableHeaderCell>
+      <TableHeaderCell>Igst</TableHeaderCell>
+      <TableHeaderCell>Cgst</TableHeaderCell>
+      <TableHeaderCell>Sgst</TableHeaderCell>
     </TableRow>
   </TableHeader>
   <TableBody>

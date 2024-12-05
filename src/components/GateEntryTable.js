@@ -21,28 +21,24 @@ import Search from "./Search"; // Assuming your search component is imported her
 import { Button, notification } from "antd"; // Import Ant Design components
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-import { ShareIos24Filled } from "@fluentui/react-icons";
-import { useRef } from "react";
-import { Modal } from "antd";
-import WalkInCandidate from "./WalkinCandidate";
 
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({
-    columnId: "GateEntryNumber",
-    renderHeaderCell: () => "Gate Entry Number",
-    renderCell: (item) => <TableCellLayout>{item.Id}</TableCellLayout>,
+    columnId: "po_number",
+    renderHeaderCell: () => "PO Number",
+    renderCell: (item) => <TableCellLayout>{item.po_number}</TableCellLayout>,
   }),
-  // createTableColumn({
-  //   columnId: "po_type",
-  //   renderHeaderCell: () => "PO Type",
-  //   renderCell: (item) => <TableCellLayout>{item.po_type}</TableCellLayout>,
-  // }),
-  // createTableColumn({
-  //   columnId: "po_status",
-  //   renderHeaderCell: () => "PO Status",
-  //   renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
-  // }),
+  createTableColumn({
+    columnId: "po_type",
+    renderHeaderCell: () => "PO Type",
+    renderCell: (item) => <TableCellLayout>{item.po_type}</TableCellLayout>,
+  }),
+  createTableColumn({
+    columnId: "po_status",
+    renderHeaderCell: () => "PO Status",
+    renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
+  }),
   createTableColumn({
     columnId: "supplier_name",
     renderHeaderCell: () => "Supplier Name",
@@ -55,35 +51,35 @@ const columns = [
     renderHeaderCell: () => "Location",
     renderCell: (item) => <TableCellLayout>{item.location}</TableCellLayout>,
   }),
-  // createTableColumn({
-  //   columnId: "ship_to",
-  //   renderHeaderCell: () => "Ship To",
-  //   renderCell: (item) => <TableCellLayout>{item.ship_to}</TableCellLayout>,
-  // }),
   createTableColumn({
-    columnId: "ReceivedDate",
-    renderHeaderCell: () => "Received Date",
-    renderCell: (item) => <TableCellLayout>{item.ReceivedDate}</TableCellLayout>,
+    columnId: "ship_to",
+    renderHeaderCell: () => "Ship To",
+    renderCell: (item) => <TableCellLayout>{item.ship_to}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "line_count",
-    renderHeaderCell: () => "Line Count",
-    renderCell: (item) => <TableCellLayout>{item.line_count}</TableCellLayout>,
+    columnId: "bill_to",
+    renderHeaderCell: () => "Bill To",
+    renderCell: (item) => <TableCellLayout>{item.bill_to}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "invoice_amount",
-    renderHeaderCell: () => "Invoice Amount",
+    columnId: "buyer_name",
+    renderHeaderCell: () => "Buyer Name",
+    renderCell: (item) => <TableCellLayout>{item.buyer_name}</TableCellLayout>,
+  }),
+  createTableColumn({
+    columnId: "total_amount",
+    renderHeaderCell: () => "Total Amount",
     renderCell: (item) => (
       <TableCellLayout>
-        {item.invoice_amount}
+        {item.total_amount !== null ? item.total_amount : "N/A"}
       </TableCellLayout>
     ),
   }),
   createTableColumn({
-    columnId: "tax_amount",
-    renderHeaderCell: () => "Tax Net Amount",
+    columnId: "status",
+    renderHeaderCell: () => "Status",
     renderCell: (item) => (
-      <TableCellLayout>{item.tax_amount || "N/A"}</TableCellLayout>
+      <TableCellLayout>{item.status || "N/A"}</TableCellLayout>
     ),
   }),
 ];
@@ -108,34 +104,56 @@ const GateEntryTable = ({setTableLength}) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/invoices",
+        "https://invoicezapi.focusrtech.com:57/user/storetrue-invoice",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
-      set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-      let supplierName = fetchedItems[0].po_headers[0]?.supplier_name;
-      let location = fetchedItems[0].po_headers?.[0]?.location || '';
-      setTableLength(fetchedItems.length);
-      const mappedItems = fetchedItems.map((item) => ({
-        Id: item.id,
-        InvoiceId: item.id,
-        InvoiceNumber: item.InvoiceId,
-        GateEntryNumber:item.po_headers.po_number,
-        supplier_name: item.VendorName,
-        invoice_amount:item.InvoiceTotal,
-        location:item.VendorAddress.city,
-        line_count:item.items.length,
-        tax_amount:item.InvoiceTotal,
-        ReceivedDate:item.receivedDate,
-        // po_id:item.po_headers[0].po_number,
-        
-      }));
-
-      // const purchase = fetchedItems.po_headers.map((item)=>({
-      //    po_num:item.po_number
-      // }))
+      // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
       
-      setItems(mappedItems);
+      
+      // Map fetched data to the format expected by DataGrid
+      const mappedItems = fetchedItems.map((item, index) => {
+        
+           
+      
+        if (!item.po_headers || item.po_headers.length === 0) {
+          console.warn(`No po_headers found for index ${index}`);
+          return null; // Skip if no po_headers
+        }
+        
+        const val = item.items.map((item)=>({
+              Igst:item.Igst
+        }));
+       
+        console.log("IGST",val);
+      
+        return item.po_headers.map((po_header) => ({
+          
+          
+          Id:po_header.id,
+          po_number: po_header.po_number,
+          po_type: po_header.po_type,
+          po_status: po_header.po_status,
+          supplier_name: po_header.supplier_name,
+          location: po_header.location,
+          ship_to: po_header.ship_to,
+          bill_to: po_header.bill_to,
+          buyer_name: po_header.buyer_name,
+          total_amount: po_header.total_amount,
+          status: po_header.status,
+          customer:item.CustomerName,
+          invoice:item.InvoiceFile,
+          Igst_val:val.Igst
+          
+          
+
+        }));
+      });
+      const flattenedMappedItems = mappedItems.flat().filter(Boolean);
+
+      setItems(flattenedMappedItems);
+      setTableLength(flattenedMappedItems.length);
+      console.log("Mapped Items",flattenedMappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -157,25 +175,27 @@ const GateEntryTable = ({setTableLength}) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
     return (
-      
-      item.GateEntryNumber?.toLowerCase().includes(searchLower) ||
+      // item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
+      // item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
+      item.po_number?.toString().toLowerCase().includes(searchLower) ||
+      item.po_type?.toLowerCase().includes(searchLower) ||
       item.po_status?.toLowerCase().includes(searchLower) ||
       item.supplier_name?.toLowerCase().includes(searchLower) ||
       item.location?.toLowerCase().includes(searchLower) ||
-      item.supplier_site?.toLowerCase().includes(searchLower) ||
-      item.ReceivedDate?.toLowerCase().includes(searchLower) ||
-      // item.line_count?.toLowerCase().includes(searchLower) ||
-      item.tax_amount?.toLowerCase().includes(searchLower) 
-      
+      item.ship_to?.toLowerCase().includes(searchLower) ||
+      item.bill_to?.toLowerCase().includes(searchLower) ||
+      item.buyer_name?.toLowerCase().includes(searchLower) ||
+      item.total_amount?.toString().toLowerCase().includes(searchLower) ||
+      item.status?.toLowerCase().includes(searchLower)
     );
   });
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
       navigate(`/gate-entry-det`, {
-        state: { poNumber: item.po_number, Id: item.po_id },
+        state: { poNumber: item.po_number, Id: item.Id },
       });
-      console.log("ItemId", item.Id);
+      console.log("ItemId", item);
     }
   };
 
@@ -202,7 +222,7 @@ const GateEntryTable = ({setTableLength}) => {
 
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
         ),
       );
 
@@ -254,7 +274,7 @@ const GateEntryTable = ({setTableLength}) => {
       // Make API call to delete selected POs
       await Promise.all(
         selectedItemsArray.map((item) =>
-          axios.post(`http://127.0.0.1:8000/user/oracle-payload/${po_id}`),
+          axios.post(`https://invoicezapi.focusrtech.com:57/user/oracle-payload/${po_id}`),
         ),
       );
 
@@ -278,86 +298,6 @@ const GateEntryTable = ({setTableLength}) => {
     }
   };
 
-  //Invoice Upload
-  const [isWalkinUpload, setIsWalkinUpload] = useState(false);
-  const [newCandidate, setNewCandidate] = useState(false);
-
-  const fileInputRef = useRef(null);
-
-  const handleButtonClick = () => {
-    // Trigger the file input click
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleFileChange = async (info) => {
-    const { status, originFileObj: file } = info.file;
-
-    if (status === "uploading") {
-      // Ignore this, as we're handling the file manually
-      return;
-    }
-
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        const response = await axios.post(
-          "http://127.0.0.1:8000/user/invoice-upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          },
-        );
-
-        notification.success({
-          message: "Upload Successful",
-          description: `File ${file.name} uploaded successfully!`,
-        });
-        // handleToggle();
-      } catch (error) {
-        console.error("Upload failed:", error);
-        notification.error({
-          message: "Upload Failed",
-          description:
-            "There was an error uploading the file. Please try again.",
-        });
-      }
-    }
-  };
-
-  // const handleNewCandidateBtn = () => {
-  //   console.log("btn clicked");
-  //   setNewCandidate(true);
-  // };
-
-  const handleIsWalkinUpload = () => {
-    console.log("yes it works");
-    setIsWalkinUpload(true);
-    setNewCandidate(false);
-  };
-  const handleNewCandidate = () => {
-    setNewCandidate(false);
-  };
-  const handleNewCandidateBtn = () => {
-    console.log("btn clicked");
-    setNewCandidate(true);
-  };
-
   return (
     <>
       <div
@@ -366,7 +306,7 @@ const GateEntryTable = ({setTableLength}) => {
           alignItems: "center",
           gap: "20px",
           fontWeight: "bold",
-          // marginLeft: "-3em",
+          marginLeft: "-3em",
         }}
       >
         {/* <button
@@ -385,29 +325,26 @@ const GateEntryTable = ({setTableLength}) => {
         >
           <Delete28Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
-        </button> */}
+        </button>
 
-        {/* <button
+        <button
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center", // Ensures alignment in case of larger button dimensions
             backgroundColor: "transparent",
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
-            whiteSpace: "nowrap", // Prevents wrapping of content
           }}
-          onClick={handleNewCandidateBtn}
-        > */}
-          {/* <ShareIos24Filled style={{ color: "#1281d7" }} /> */}
-          {/* <TasksApp28Regular style={{ color: "#1281d7" }} /> */}
-          {/* <span>Upload-Invoice</span> */}
-        {/* </button> */}
+          onClick={handleApproveSelectedRows}
+        >
+          <TasksApp28Regular style={{ color: "#1281d7" }} />
+          <span>Approve</span>
+        </button> */}
 
-        {/* <button
+        <button
           style={{
             display: "flex",
             alignItems: "center",
@@ -422,16 +359,16 @@ const GateEntryTable = ({setTableLength}) => {
         >
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
-        </button> */}
+        </button>
 
-        <Search placeholder="Search" onSearchChange={handleSearchChange} />
+        <Search
+          placeholder="Search PO or Supplier"
+          onSearchChange={handleSearchChange}
+        />
       </div>
-      {/* <div>
-
-      </div> */}
       <div
         style={{
-          height: "60vh",
+          height: "100vh",
           overflow: "scroll",
           marginTop: "20px",
         }}
@@ -457,8 +394,8 @@ const GateEntryTable = ({setTableLength}) => {
             {({ item, rowId }) => (
               <DataGridRow
                 key={rowId}
-                // onClick={(e) => handleRowClick(e, item)}
-                // selected={selectedRows.has(rowId)}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(rowId)}
               >
                 {({ renderCell }) => (
                   <DataGridCell
@@ -476,15 +413,6 @@ const GateEntryTable = ({setTableLength}) => {
           </DataGridBody>
         </DataGrid>
       </div>
-
-      <Modal
-        open={newCandidate}
-        onCancel={handleNewCandidate}
-        width={540}
-        footer={[]}
-      >
-        <WalkInCandidate isWalkinUpload={handleIsWalkinUpload} />
-      </Modal>
     </>
   );
 };

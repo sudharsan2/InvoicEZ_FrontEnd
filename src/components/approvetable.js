@@ -393,7 +393,6 @@
 
 // export default ApproveTable;
 
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -445,16 +444,35 @@ const columns = [
       const getStatusStyle = (status) => {
         switch (status) {
           case "Match Found":
-            return { backgroundColor: "#107c10",  color: "#fff", borderRadius: "8px",textShadow: "0 1px 3px rgba(0,0,0,0.2)", padding: "4px 8px", textAlign: "center" };
+            return {
+              backgroundColor: "#107c10",
+              color: "#fff",
+              borderRadius: "8px",
+              textShadow: "0 1px 3px rgba(0,0,0,0.2)",
+              padding: "4px 8px",
+              textAlign: "center",
+            };
           case "Multiple Match Found":
-            return { backgroundColor: "#f2c661", color: "black", borderRadius: "8px", padding: "4px 8px", textAlign: "center" };
+            return {
+              backgroundColor: "#f2c661",
+              color: "black",
+              borderRadius: "8px",
+              padding: "4px 8px",
+              textAlign: "center",
+            };
           case "No Match Found":
-            return { backgroundColor: "#c50f1f", color: "white", borderRadius: "8px", padding: "4px 8px", textAlign: "center" };
+            return {
+              backgroundColor: "#c50f1f",
+              color: "white",
+              borderRadius: "8px",
+              padding: "4px 8px",
+              textAlign: "center",
+            };
           // default:
           //   return { backgroundColor: "gray", color: "white", borderRadius: "10px", padding: "4px 8px", textAlign: "center" };
         }
       };
-  
+
       return (
         <TableCellLayout>
           <span style={getStatusStyle(item.Status)}>{item.Status}</span>
@@ -462,14 +480,11 @@ const columns = [
       );
     },
   }),
-  
-    
+
   createTableColumn({
     columnId: "amount",
     renderHeaderCell: () => "Amount",
-    renderCell: (item) => (
-      <TableCellLayout>{item.amount}</TableCellLayout>
-    ),
+    renderCell: (item) => <TableCellLayout>{item.amount}</TableCellLayout>,
   }),
   createTableColumn({
     columnId: "lines",
@@ -486,10 +501,14 @@ const columns = [
   //   renderHeaderCell: () => "PO Number",
   //   renderCell: (item) => <TableCellLayout>{item.bill_to}</TableCellLayout>,
   // }),
-  
 ];
 
-const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_MatchCount}) => {
+const SummaryTable = ({
+  setFixCount,
+  setMatchCount,
+  setTableLength,
+  setMultiple_MatchCount,
+}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -520,35 +539,32 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems Summary", fetchedItems);
       const tablelength = fetchedItems.length;
-      console.log("Table length",tablelength);
+      console.log("Table length", tablelength);
       let Status = "";
-      
+
       let MatchCount = 0;
       let multiple_MatchCount = 0;
       let fixCount = 0;
-      
+
       const mappedItems = fetchedItems.map((item) => {
         let Status = "";
-       
 
         if (item.po_headers.length === 0) {
           Status = "No Match Found";
-          fixCount+=1;
+          fixCount += 1;
         } else if (item.po_headers.length === 1) {
           Status = "Match Found";
-          MatchCount+=1;
+          MatchCount += 1;
         } else if (item.po_headers.length > 1) {
           Status = "Multiple Match Found";
-          multiple_MatchCount+=1;
+          multiple_MatchCount += 1;
         }
-        
+
         // setTableLength(tablelength);
         // setFixCount(fixCount);
         // setMatchCount(MatchCount);
         // setMultiple_MatchCount(multiple_MatchCount);
-  
-        
-        
+
         return {
           id: item.id,
           supplier: item.VendorName,
@@ -558,24 +574,21 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
           Status: Status, // Add Status to the mapped item
         };
       });
-      console.log("FIX ",fixCount);
-      console.log("Match",MatchCount)
-      console.log("Multiple",multiple_MatchCount)
+      console.log("FIX ", fixCount);
+      console.log("Match", MatchCount);
+      console.log("Multiple", multiple_MatchCount);
       setFixCount(fixCount);
       setMatchCount(MatchCount);
       setMultiple_MatchCount(multiple_MatchCount);
       setTableLength(tablelength);
 
-
       setItems(mappedItems);
-      
-      
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  console.log("Fiiiii",items);
+  console.log("Fiiiii", items);
 
   useEffect(() => {
     SetRefreshUpload(isInvoiceUploadRefreshed);
@@ -595,17 +608,23 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
+    if (
+      searchLower === "match" ||
+      searchLower === "match found" ||
+      searchLower === "matc"
+    ) {
+      return item.Status?.toString().toLowerCase() === "match found";
+    }
+
     return (
       item.id?.toString().toLowerCase().includes(searchLower) ||
       item.supplier?.toString().toLowerCase().includes(searchLower) ||
       item.amount?.toString().toLowerCase().includes(searchLower) ||
       item.Status?.toString().toLowerCase().includes(searchLower) ||
-      // item.lines?.toLowerCase().includes(searchLower) ||
-      item.buyer?.toLowerCase().includes(searchLower) 
-      
+      item.buyer?.toLowerCase().includes(searchLower)
     );
   });
-  console.log("Filtered ",filteredItems);
+  console.log("Filtered ", filteredItems);
 
   // const handleRowClick = (e, item) => {
   //   if (e.target.type !== "checkbox") {
@@ -616,27 +635,24 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
   //   }
   // };
 
-
   const handleRowClick = (e, item) => {
-    
     if (e.target.type !== "checkbox") {
-     
       const status = item.Status;
-      console.log("Status",status);
-      
+      console.log("Status", status);
+
       if (status === "Match Found") {
-        navigate("/approve", { state: { poNumber: item.po_number, Id: item.Id } });
-       
+        navigate("/approve", {
+          state: { poNumber: item.po_number, Id: item.Id },
+        });
       } else if (status === "No Match Found") {
-        navigate("/issuefix", { state: { poNumber: item.po_number, Id: item.Id } });
-        
-      } 
-      else if(status ==="Multiple Match Found") {
+        navigate("/issuefix", {
+          state: { poNumber: item.po_number, Id: item.Id },
+        });
+      } else if (status === "Multiple Match Found") {
         navigate("/ai", { state: { poNumber: item.po_number, Id: item.Id } });
       }
     }
   };
-  
 
   const handleSelectionChange = (event, data) => {
     console.log("handleSelectionChange", data.selectedItems);
@@ -714,7 +730,9 @@ const SummaryTable = ({setFixCount,setMatchCount,setTableLength,setMultiple_Matc
       // Make API call to delete selected POs
       await Promise.all(
         selectedItemsArray.map((item) =>
-          axios.post(`https://invoicezapi.focusrtech.com:57/user/update-storeuser/${filteredItems[item].id}`),
+          axios.post(
+            `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${filteredItems[item].id}`,
+          ),
         ),
       );
 

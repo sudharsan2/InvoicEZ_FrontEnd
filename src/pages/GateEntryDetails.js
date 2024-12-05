@@ -21,7 +21,8 @@ import {
   createTableColumn,
   useTableFeatures,
   useTableSort,
-  Divider,
+  Input,
+  Divider
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
 import { useLocation } from "react-router-dom";
@@ -33,7 +34,7 @@ import CreatableSelect from "react-select/creatable";
 import { message } from "antd";
 import { notification } from "antd";
 
-const path = "/approve";
+const path = "/storeuser";
 const path2 = "/approvepage";
 const path1 = "http://localhost:3000/";
 
@@ -51,11 +52,10 @@ const useStyles = makeStyles({
   },
 
   content1: {
-    overflowX: "auto",
+    overflowY: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
     maxHeight: "35vh",
-    
   },
 
   content2: {
@@ -102,7 +102,6 @@ const useStyles = makeStyles({
   },
   heading: {
     fontWeight: "bold",
-    maxWidth:"500px"
   },
   content: {
     fontSize: "13px",
@@ -152,20 +151,19 @@ const GateEntryDetails = () => {
 
   const [inv_id, setInv_id] = useState();
 
-  console.log("Invoice Id", inv_id);
+  // console.log("vendor", setVendor);
 
   const approvePo = async () => {
-    const url = `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${inv_id}`;
+    const url = `https://invoicezapi.focusrtech.com:57/user/GRNGeneration/${po_id}`;
 
     try {
       const response = await axios.post(url, {});
 
       if (response.status === 200) {
-        message.success("PO successfully Updated");
-        navigate(`/approve`);
+        message.success("GRN successfully Updated");
+        navigate(`/storeuser`);
       }
       console.log("Success:", response.data); // Handle the response data
-     
     } catch (error) {
       notification.error({
         message: "Approved Failed",
@@ -209,7 +207,7 @@ const GateEntryDetails = () => {
       invoice_id: inv_id,
     };
 
-    console.log("payload ", payload);
+    console.log("payload", payload);
 
     try {
       setLoad(true);
@@ -251,15 +249,24 @@ const GateEntryDetails = () => {
     sortColumn: "empid",
   });
   const [load, setLoad] = useState(false);
-
-  const [data, setData] = useState("");
+  const [input,setInput] = useState("");
+  // const [data, setData] = useState("");
+  const [data, setData] = useState([]);
   // console.log("data", data);
 
   const handleTabSelect2 = (event, data) => {
     // console.log({"currentmonth":currentMonthEmployees})
     setSelectedTab(data.value);
   };
+  
 
+  const handleInputChange = (e, fieldName) => {
+    const value = e.target.value;
+    setInput(value);
+    console.log(`Changed`,input);
+   
+  };
+  
   const columns = [
     createTableColumn({
       columnId: "id",
@@ -332,7 +339,7 @@ const GateEntryDetails = () => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -340,36 +347,59 @@ const GateEntryDetails = () => {
           `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
         );
         const fetchedItems = response.data;
-
+        console.log("FETCHED ITEMS",fetchedItems);
         setInv_id(fetchedItems.invoice_info.id);
         set_Po_id(fetchedItems.po_header.id);
+        
+        console.log("Learn", fetchedItems.po_lineitems);
 
-        console.log("InvoiceId", fetchedItems.invoice_info.id);
-
-        const normalizedPoLineItems = fetchedItems.po_lineitems.map(
-          (poItem, index) => {
-            console.log("PO", poItem);
-
-            const matchingInvoiceItems = fetchedItems.invoice_info.items;
-
-            const matchingQuantity = matchingInvoiceItems[index]
-              ? matchingInvoiceItems[index].Quantity
-              : null;
-            return {
-              id: poItem.id,
-              item_name: poItem.item_name,
-              item_description: poItem.item_description,
-              quantity: poItem.quantity,
-              unit_price: poItem.unit_price,
-              Quantity: matchingQuantity,
-            };
-          },
-        );
-
+        const invoice_items = fetchedItems.invoice_info.items.map((item, index) => {
+          console.log("IGST", item.Igst);
+          console.log("CGST", item.Cgst);
+          console.log("SGST", item.Sgst);
+        
+          return {
+            Igst: item.Igst,
+            Cgst: item.Cgst,
+            Sgst: item.Sgst,
+            index: index, // Include the index to match with po_lineitems
+          };
+        });
+        
+        const normalizedPoLineItems = fetchedItems.po_lineitems.map((poItem, index) => {
+          console.log("PO", poItem);
+        
+          const matchingInvoiceItem = invoice_items[index]; // Find the corresponding invoice item
+          const PO_Num = fetchedItems.po_header.po_number;
+          const matchingQuantity = matchingInvoiceItem
+            ? matchingInvoiceItem.Quantity
+            : null;
+        
+          return {
+            id: poItem.id,
+            item_name: poItem.item_name,
+            item_description: poItem.item_description,
+            quantity: poItem.quantity,
+            unit_price: poItem.unit_price,
+            Quantity: matchingQuantity,
+            po_number: PO_Num,
+            line_value: poItem.line_num,
+            note: input, // Assuming `input` is a variable you defined earlier
+            Igst: matchingInvoiceItem ? matchingInvoiceItem.Igst : null,
+            Cgst: matchingInvoiceItem ? matchingInvoiceItem.Cgst : null,
+            Sgst: matchingInvoiceItem ? matchingInvoiceItem.Sgst : null,
+          };
+        });
+        
         // Log or process the combined data as needed
-        console.log(normalizedPoLineItems);
+        console.log("Invoice Items:", invoice_items);
+        console.log("Normalized PO Line Items:", normalizedPoLineItems);
+        
 
         setData(normalizedPoLineItems);
+          
+        // setData(normalizedPoLineItems);
+        
         setTotal(fetchedItems.po_header.total_amount);
         setPoDate(fetchedItems.po_lineitems[0]?.promised_date || "N/A"); // Assuming the first date is used
         setPoStatus(fetchedItems.po_header.po_status);
@@ -382,6 +412,7 @@ const GateEntryDetails = () => {
         fetchedItems.po_lineitems.forEach((item) => {
           setClosedCode(item.closed_code);
         });
+       
         // vendor address
         const vendorAddressObj = fetchedItems.invoice_info.VendorAddress;
         console.log("obj1", vendorAddressObj);
@@ -402,7 +433,7 @@ const GateEntryDetails = () => {
           setVendor("NULL");
           console.error("VendorAddress is missing");
         }
-
+        console.log("data",data);
         const vendorCustomerObj = fetchedItems.invoice_info.ShippingAddress;
         console.log("obj", vendorAddressObj);
 
@@ -463,11 +494,11 @@ const GateEntryDetails = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>Match Found</BreadcrumbButton>
+              <BreadcrumbButton href={path}> Gate Entry</BreadcrumbButton>
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path2}>PO:{poNumber}</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>PO:{purchaseOrder.poNumber}</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -483,19 +514,19 @@ const GateEntryDetails = () => {
                   marginTop: "0px",
                 }}
               >
-                <div style={{ right: "5%", display: "flex", gap: "10px" }}>
-                  <Button onClick={() => deleteInvoice()}>Revoke</Button>
+                {/* <div style={{ right: "5%", display: "flex", gap: "10px" }}>
+                  <Button onClick={() => deleteInvoice()}>Generate GRN</Button>
                   <Button
                     className=" buttoncolor"
                     style={{ backgroundColor: "#3570c3", color: "white" }}
                     onClick={() => approvePo()}
                   >
-                    Approve
+                    Generate GRN
                   </Button>
-                </div>
+                </div> */}
               </div>
 
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   justifyContent: "end",
@@ -561,7 +592,7 @@ const GateEntryDetails = () => {
                 `}
                   </style>
                 </Button>
-              </div>
+              </div> */}
 
               <h2 style={{ margin: "20px 0 20px 0" }}>
                 PO:{purchaseOrder.poNumber}
@@ -660,7 +691,7 @@ const GateEntryDetails = () => {
             </TabList>
           </div>
           {selectedtab === "tab1" && (
-            <div style={{ marginTop: "20px", }}>
+            <div style={{ marginTop: "20px" }}>
               <div className={styles.content1}>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 3fr)", gap: "15px"}}>
                   <div style={{display:"flex",flexDirection:"row"}}>
@@ -682,12 +713,13 @@ const GateEntryDetails = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row",}}>
+                  <div style={{display:"flex",flexDirection:"row"}}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
                         color: themestate ? "white" : "",
+                        whiteSpace: "noWrap"
                       }}
                     >
                       Vendor Address:
@@ -727,6 +759,7 @@ const GateEntryDetails = () => {
                       style={{
                         fontWeight: "bold",
                         color: themestate ? "white" : "",
+                        whiteSpace: "noWrap"
                       }}
                     >
                       Customer Address:
@@ -871,7 +904,7 @@ const GateEntryDetails = () => {
                   <div
                     className={`${styles.section} ${styles.invoiceCurrency}`}
                   >
-                    {/* <divs
+                    {/* <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
@@ -907,12 +940,10 @@ const GateEntryDetails = () => {
                       {purchaseOrder.purchaseOrderNumberInInvoice}
                     </div>
                   </div> */}
-                  
                 </div>
+                <Divider style={{marginTop:"3em",width:"100%"}}/>
               </div>
-              <Divider style={{marginTop:"3em"}}/>
             </div>
-           
           )}
 
           {selectedtab === "tab2" && (
@@ -951,7 +982,7 @@ const GateEntryDetails = () => {
                         }}
                         {...headerSortProps("PO_line_id")}
                       >
-                        PO Line ID
+                        Line Number
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -961,7 +992,7 @@ const GateEntryDetails = () => {
                         }}
                         {...headerSortProps("name")}
                       >
-                        Name
+                        PO Number in Supplier Invoice
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -981,7 +1012,7 @@ const GateEntryDetails = () => {
                         }}
                         {...headerSortProps("invoice_item_name")}
                       >
-                        Invc Item Name
+                         Item 
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -993,7 +1024,7 @@ const GateEntryDetails = () => {
                       >
                         Unit Price
                       </TableHeaderCell>
-                      <TableHeaderCell
+                      {/* <TableHeaderCell
                         style={{
                           fontWeight: "bold",
                           cursor: "pointer",
@@ -1001,7 +1032,37 @@ const GateEntryDetails = () => {
                         }}
                         {...headerSortProps("quantity")}
                       >
+                        UOM
+                      </TableHeaderCell> */}
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
                         Quantity
+                      </TableHeaderCell>
+                      {/* <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Unit Price
+                      </TableHeaderCell> */}
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Line Value
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1011,8 +1072,38 @@ const GateEntryDetails = () => {
                         }}
                         {...headerSortProps("invoice_quantity")}
                       >
-                        Invoice Quantity
+                        IGST
                       </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        CGST
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        SGST
+                      </TableHeaderCell>
+                      {/* <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Note
+                      </TableHeaderCell> */}
                     </TableRow>
                   </TableHeader>
 
@@ -1043,7 +1134,7 @@ const GateEntryDetails = () => {
                             textOverflow: "ellipsis",
                           }}
                         >
-                          {item.item_name}
+                          {item.po_number}
                         </TableCell>
                         <TableCell
                           style={{
@@ -1085,6 +1176,8 @@ const GateEntryDetails = () => {
                         >
                           {item.quantity}
                         </TableCell>
+                        
+                        
                         <TableCell
                           style={{
                             maxWidth: "300px",
@@ -1093,8 +1186,58 @@ const GateEntryDetails = () => {
                             textOverflow: "ellipsis",
                           }}
                         >
-                          {item.Quantity}
+                          {item.line_value}
                         </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Igst}
+                        </TableCell><TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Cgst}
+                        </TableCell><TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Sgst}
+                        </TableCell>
+
+                        {/* {item.id &&(
+                          <TableCell
+                          style={{
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                            maxWidth: "150px",
+                          }}
+                        >
+                        
+                                  <Input
+                                    onChange={(e) => handleInputChange(e, "invoice_quantity")} 
+                                    type="text"
+                                    size="small"
+                                    style={{ width: "100%" }}
+                                  />
+                        </TableCell>
+                        )
+
+                        } */}
+                        
+
                       </TableRow>
                     ))}
                   </TableBody>
