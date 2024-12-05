@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "../pages/dashboard.css";
-
+import axios from "axios";
 // Setup the localizer by providing the moment (or globalize) Object
 const localizer = momentLocalizer(moment);
 
@@ -14,9 +14,18 @@ const CalendarComponent = () => {
   useEffect(() => {
     const fetchPurchaseOrders = async () => {
       try {
-        const response = await fetch(
-          "https://invoicezapi.focusrtech.com:57/user/no-invoice-list",
-        );
+        // const response = await fetch(
+        //   "https://invoicezapi.focusrtech.com:57/user/no-invoice-list",
+        // );
+
+        const token = localStorage.getItem("access_token");
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/no-invoice-list", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
         const data = await response.json();
 
         const formattedOrders = data.map((order) => ({

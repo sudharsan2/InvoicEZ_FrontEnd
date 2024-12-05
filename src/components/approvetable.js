@@ -533,9 +533,14 @@ const SummaryTable = ({
       message.success("Refreshing...");
     }
     try {
-      const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/invoices",
-      );
+      const token = localStorage.getItem("access_token");
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/invoices", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems Summary", fetchedItems);
       const tablelength = fetchedItems.length;
@@ -675,10 +680,21 @@ const SummaryTable = ({
         .map((item) => item.supplier_name)
         .join(", ");
 
+      // const deletePromises = selectedItemsArray.map((item) =>
+      //   axios.delete(
+      //     `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].id}`,
+      //   ),
+      // );
+      const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
           `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].id}`,
-        ),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the authorization header
+            },
+          }
+        )
       );
 
       await Promise.all(deletePromises);
@@ -727,14 +743,21 @@ const SummaryTable = ({
         .map((item) => item.supplier_name)
         .join(", ");
 
-      // Make API call to delete selected POs
-      await Promise.all(
+        const token = localStorage.getItem("access_token");
+             await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
             `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${filteredItems[item].id}`,
-          ),
-        ),
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the authorization header
+              },
+            }
+          )
+        )
       );
+  
 
       // Remove deleted items from the state
       setItems(items.filter((item) => !selectedItemsArray.includes(item)));

@@ -30,14 +30,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
 import { message } from "antd";
 import { Modal, TextField, PrimaryButton, DefaultButton } from "@fluentui/react";
-
+import {
+  Dropdown,
+  Option,
+  useId,
+} from "@fluentui/react-components";
 
 const path = "/UserManagement";
 
 
 // Define columns for the DataGrid
 
-const UserTable = () => {
+const UserTable = ({setGateCount,setStoreCount}) => {
   const navigate = useNavigate();
   const columns = [
     createTableColumn({
@@ -117,7 +121,17 @@ const UserTable = () => {
    
   ];
 
-  
+  const dropdownId = useId("dropdown-role");
+  const options = [
+    "Invoice Manager",
+    "Admin",
+    "Store User",
+    "Supplier",
+  ];
+
+  const handleRoleChange = (_, option) => {
+    setFormData({ ...formData, role: option });
+  };
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -179,11 +193,12 @@ const togglePasswordVisibility = () => {
     };
   
     try {
-      // Replace with your actual API endpoint
+      const token = localStorage.getItem("access_token");
       const response = await fetch("https://invoicezapi.focusrtech.com:57/user/usermanagement-reset-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -213,20 +228,33 @@ const togglePasswordVisibility = () => {
   // Fetch data from the API when the component mounts
   const fetchData = async () => {
     try {
+      // const response = await axios.get(
+      //   "https://invoicezapi.focusrtech.com:57/user/user-list",
+      // );
+      const token = localStorage.getItem("access_token"); 
+
       const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/user-list",
+        `https://invoicezapi.focusrtech.com:57/user/user-list`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
       );
-      const fetchedItems = response.data; // Assuming data is in response.data
+      const fetchedItems = response.data; 
       console.log("fetchedItems", fetchedItems);
     //   set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
       //  console.log("InvId",InvoiceNumber);
       // Map fetched data to the format expected by DataGrid
+      let Gate = 0;
+        let Store = 0;
       const mappedItems = fetchedItems.map((item) => {
         let role = "";
-       
+        
 
         if (item.role === 1) {
           role = "Invoice Manager";
+          Gate+=1;
         
         } else if (item.role === 2) {
           role = "Admin";
@@ -237,16 +265,9 @@ const togglePasswordVisibility = () => {
         }
         else if (item.role === 4) {
             role = "Store User";
+            Store+=1;
         
         }
-        
-        
-        // setTableLength(tablelength);
-        // setFixCount(fixCount);
-        // setMatchCount(MatchCount);
-        // setMultiple_MatchCount(multiple_MatchCount);
-  
-        
         
         return {
             Id: item.id,
@@ -259,7 +280,12 @@ const togglePasswordVisibility = () => {
             // reset: item.id !== null ? "reset" : "",
         };
       });
+      
+
+      console.log("Gate / store",Gate,Store)
       setItems(mappedItems);
+      setGateCount(Gate);
+      setStoreCount(Store);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -314,16 +340,40 @@ const togglePasswordVisibility = () => {
   const handleSave = async () => {
     try {
       
-      const updatedData = {
-        ...selectedRow, 
+      // const updatedData = {
+      //   ...selectedRow, 
         
+      // };
+
+      const roleMapping = {
+        "Invoice Manager": 1,
+        Admin: 2,
+        Supplier: 3,
+        "Store User": 4,
+      };
+  
+      const updatedData = {
+        ...selectedRow,
+        role: roleMapping[selectedRow.role] || selectedRow.role, 
       };
   
       
+      // const response = await axios.put(
+      //   `https://invoicezapi.focusrtech.com:57/user/edit-user/${selectedRow.Id}`,
+      //   updatedData 
+      // );
+
       const response = await axios.put(
         `https://invoicezapi.focusrtech.com:57/user/edit-user/${selectedRow.Id}`,
-        updatedData 
+        updatedData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("access_token")}`, 
+          },
+        }
       );
+      
   
       if (response.status === 200) {
         notification.success({
@@ -374,10 +424,21 @@ const togglePasswordVisibility = () => {
         .map((item) => item.supplier_name)
         .join(", ");
 
+      // const deletePromises = selectedItemsArray.map((item) =>
+      //   axios.delete(
+      //     `https://invoicezapi.focusrtech.com:57/user/delete-user/${filteredItems[item].Id}`,
+      //   ),
+      // );
+      const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
           `https://invoicezapi.focusrtech.com:57/user/delete-user/${filteredItems[item].Id}`,
-        ),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the authorization header
+            },
+          }
+        )
       );
 
       await Promise.all(deletePromises);
@@ -472,10 +533,14 @@ const togglePasswordVisibility = () => {
 
   const handleAddUser = async () => {
     try {
+      
+        const token = localStorage.getItem("access_token"); 
+
       const response = await fetch("https://invoicezapi.focusrtech.com:57/user/registration", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
@@ -580,7 +645,7 @@ const togglePasswordVisibility = () => {
             value={formData.username}
             onChange={handleInputChange}
             style={{
-              width: "100%",
+              width: "95%",
               padding: "8px",
               marginTop: "5px",
               marginBottom: "15px",
@@ -589,23 +654,20 @@ const togglePasswordVisibility = () => {
             }}
           />
         </label>
-        <label style={{ display: "block", marginBottom: "10px" }}>
-                Role:
-                <input
-                  type="text"
-                  name="role"
-                  value={formData.role}
-                  onChange={handleInputChange}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    marginTop: "5px",
-                    marginBottom: "15px",
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                  }}
-                />
-              </label>
+        <div style={{ display: "grid", gap: "2px", maxWidth: "400px" ,marginBottom:"10px"}}>
+      <label id={dropdownId}>Role</label>
+      <Dropdown
+        aria-labelledby={dropdownId}
+        placeholder="Select a role"
+        onOptionSelect={(e, data) => handleRoleChange(e, data.optionText)}
+        selectedOptions={[formData.role]} 
+        style={{width:"100%",padding:"8px"}}
+      >
+        {options.map((role) => (
+          <Option key={role}>{role}</Option>
+        ))}
+      </Dropdown>
+    </div>
               <label style={{ display: "block", marginBottom: "10px" }}>
                 Email:
                 <input
@@ -614,7 +676,7 @@ const togglePasswordVisibility = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   style={{
-                    width: "100%",
+                    width: "95%",
                     padding: "8px",
                     marginTop: "5px",
                     marginBottom: "15px",
@@ -631,7 +693,7 @@ const togglePasswordVisibility = () => {
                   value={formData.password}
                   onChange={handleInputChange}
                   style={{
-                    width: "100%",
+                    width: "95%",
                     padding: "8px",
                     marginTop: "5px",
                     marginBottom: "15px",
@@ -648,7 +710,7 @@ const togglePasswordVisibility = () => {
                   value={formData.empId}
                   onChange={handleInputChange}
                   style={{
-                    width: "100%",
+                    width: "95%",
                     padding: "8px",
                     marginTop: "5px",
                     marginBottom: "15px",
@@ -856,6 +918,7 @@ const togglePasswordVisibility = () => {
                 type="text"
                 value={selectedRow?.role || ""}
                 onChange={(e) => handleChange(e, "role")}
+                disabled
               />
             </label>
             <label

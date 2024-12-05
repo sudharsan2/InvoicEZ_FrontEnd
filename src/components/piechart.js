@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
 // Define colors for pie chart slices
@@ -10,11 +11,25 @@ const InvoiceStatusPieChart = () => {
   useEffect(() => {
     const fetchInvoiceData = async () => {
       try {
+        const authToken = localStorage.getItem("access_token"); 
+  
         const response = await fetch(
-          "https://invoicezapi.focusrtech.com:57/user/dashboard-invoice-status"
+          "https://invoicezapi.focusrtech.com:57/user/dashboard-invoice-status",
+          {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
         const data = await response.json();
-
+  
         setInvoiceData([
           { status: "InApprove", count: data.approved_count },
           { status: "Pending", count: data.pending_count },
@@ -23,9 +38,10 @@ const InvoiceStatusPieChart = () => {
         console.error("Error fetching invoice status counts:", error);
       }
     };
-
+  
     fetchInvoiceData();
   }, []);
+  
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "83vh", padding: "20px", backgroundColor: "white", borderRadius: "10px" }}>

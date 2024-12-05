@@ -89,9 +89,17 @@ const StoreHistoryTable = () => {
       message.success("Refreshing...");
     }
     try {
-      const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/grn-history",
-      );
+      // const response = await axios.get(
+      //   "https://invoicezapi.focusrtech.com:57/user/grn-history",
+      // );
+      const token = localStorage.getItem("access_token");
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
       // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
@@ -142,14 +150,14 @@ const StoreHistoryTable = () => {
       item.total_amount?.toLowerCase().includes(searchLower) ||
       item.receipt?.toLowerCase().includes(searchLower)
     );
-  });
+  }).sort((a, b) => a.po_number.localeCompare(b.po_number));;
 
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
   };
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/historypage`, {
+      navigate(`/storehistorydetails`, {
         state: { poNumber: item.po_number, Id: item.Id },
       });
       console.log("ItemId", item.Id);

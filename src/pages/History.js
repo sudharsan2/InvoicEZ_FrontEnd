@@ -73,14 +73,28 @@ const History = () => {
         // Fetch data from the API on component mount
         const fetchData = async () => {
           try {
-            const response = await fetch("https://invoicezapi.focusrtech.com:57/user/dashboard-count-of-this-month"); // Replace with your actual API URL
+            const token = localStorage.getItem("access_token"); // Retrieve the token securely
+        
+            const response = await fetch("https://invoicezapi.focusrtech.com:57/user/dashboard-count-of-this-month", {
+              method: "GET", // Specify the method explicitly
+              headers: {
+                "Content-Type": "application/json", // Optional for GET requests
+                Authorization: `Bearer ${token}`, // Add the authorization header
+              },
+            });
+        
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        
             const data = await response.json();
-            console.log("Data",data.invoices_processed_this_month)
-            setRows(data.invoices_processed_this_month);
+            console.log("Data", data.invoices_processed_this_month);
+            setRows(data.invoices_processed_this_month); // Update state with the fetched data
           } catch (error) {
             console.error("Error fetching data:", error);
           }
         };
+        
     
         fetchData();
       }, []);

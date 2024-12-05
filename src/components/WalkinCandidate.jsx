@@ -9,7 +9,7 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
   const dispatch = useDispatch();
 
   const handleUpload = async ({ file, onSuccess, onError }) => {
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("access_token");
 
     try {
       const formData = new FormData();
@@ -21,7 +21,7 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            // Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );

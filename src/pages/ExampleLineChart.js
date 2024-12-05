@@ -17,20 +17,34 @@ const Example = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://invoicezapi.focusrtech.com:57/user/dashboard-monthwise-invoice');
+        const token = localStorage.getItem("access_token"); // Retrieve the token securely
+    
+        const response = await fetch('https://invoicezapi.focusrtech.com:57/user/dashboard-monthwise-invoice', {
+          method: "GET", 
+          headers: {
+            "Content-Type": "application/json", 
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+    
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    
         const result = await response.json();
-
-        // Transform the API response into an array of objects
+    
+        
         const formattedData = Object.keys(result).map(month => ({
-          name: month,  // This will be used for the X-Axis
-          invoices: result[month],  // This will be used for the Y-Axis
+          name: month, 
+          invoices: result[month], 
         }));
-
-        setData(formattedData); // Update the state with formatted data
+    
+        setData(formattedData); 
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
+    
 
     fetchData();
   }, []);

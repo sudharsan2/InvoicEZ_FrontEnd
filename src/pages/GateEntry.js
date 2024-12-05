@@ -114,8 +114,8 @@ const GateEntry = () => {
         </div>
         <div style={{ width: "100%", height: "5vh" }} />
         <div>
-          <StoreTable setTableLength={setTableLength} />
-          {/* <GateEntryTable setTableLength={setTableLength}/> */}
+          {/* <StoreTable setTableLength={setTableLength} /> */}
+          <GateEntryTable setTableLength={setTableLength}/>
         </div>
       </div>
     </div>

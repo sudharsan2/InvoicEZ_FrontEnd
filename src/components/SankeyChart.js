@@ -111,13 +111,22 @@ const SankeyChart = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/invoices");
+      const authToken = localStorage.getItem("access_token"); // Replace with your token retrieval method
+  
+      // Fetch invoices data
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/invoices", {
+        headers: {
+          "Authorization": `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+  
       const fetchedItems = response.data;
-
+  
       let fixCount = 0;
       let MatchCount = 0;
       let multiple_MatchCount = 0;
-
+  
       fetchedItems.forEach((item) => {
         if (item.po_headers.length === 0) {
           fixCount += 1; // No Match Found
@@ -127,10 +136,16 @@ const SankeyChart = () => {
           multiple_MatchCount += 1; // Multiple Match Found
         }
       });
-
-      const statusResponse = await axios.get("https://invoicezapi.focusrtech.com:57/user/statusForApprove");
+  
+      // Fetch status data
+      const statusResponse = await axios.get("https://invoicezapi.focusrtech.com:57/user/statusForApprove", {
+        headers: {
+          "Authorization": `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      });
       const statusData = statusResponse.data || {};
-
+  
       setChartData((prevState) => ({
         ...prevState,
         nodes: prevState.nodes.map((node, index) => {
@@ -157,6 +172,7 @@ const SankeyChart = () => {
       console.error("Error fetching data:", error);
     }
   };
+  
 
   useEffect(() => {
     fetchData();

@@ -155,10 +155,21 @@ const ApprovePage = () => {
 
   const approvePo = async () => {
     const url = `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${inv_id}`;
-
+  
     try {
-      const response = await axios.post(url, {});
-
+     
+      const token = localStorage.getItem("access_token");
+  
+      const response = await axios.post(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+  
       if (response.status === 200) {
         message.success("Gate Entry successfully Updated");
         navigate(`/approve`);
@@ -167,27 +178,35 @@ const ApprovePage = () => {
     } catch (error) {
       notification.error({
         message: "Gate Entry Failed",
-        // description: `You have successfully Approved: ${po_id}`,
+        description: error.response?.data?.message || "An error occurred.",
       });
       console.error("Error:", error);
     }
   };
-
+  
   const deleteInvoice = async () => {
     const url = `https://invoicezapi.focusrtech.com:57/user/delete-pos/${inv_id}`;
-
+  
     try {
-      const response = await axios.delete(url);
+      
+      const token = localStorage.getItem("access_token");
+  
+      const response = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+  
       if (response.status === 204) {
         message.success("Revoked successfully");
         navigate(`/approve`);
       }
     } catch (error) {
-      message.error(`Operation Unsuccessfull Please try again`);
-
+      message.error(`Operation Unsuccessful. Please try again`);
       console.error("Error:", error);
     }
   };
+  
 
   const handlePostApi = async () => {
     console.log("Button clicked!");
@@ -211,11 +230,20 @@ const ApprovePage = () => {
 
     try {
       setLoad(true);
+      
+      
+      const token = localStorage.getItem("access_token");
+    
       const response = await axios.post(
         "https://invoicezapi.focusrtech.com:57/user/po-number",
         payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
       );
-
+    
       if (response.status === 201) {
         message.success("PO successfully Updated");
         setLoad(false);
@@ -315,9 +343,17 @@ const ApprovePage = () => {
 
   const handleViewInvoice = async () => {
     try {
-      const response = await fetch(
-        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
-      );
+      const token = localStorage.getItem("access_token"); 
+
+        const response = await fetch(
+          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+          {
+            method: "GET", 
+            headers: {
+              Authorization: `Bearer ${token}`, 
+            },
+          }
+        );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -334,9 +370,16 @@ const ApprovePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
-        );
+        const token = localStorage.getItem("access_token"); 
+
+    const response = await axios.get(
+      `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      }
+    );
         const fetchedItems = response.data;
 
         setInv_id(fetchedItems.invoice_info.id);

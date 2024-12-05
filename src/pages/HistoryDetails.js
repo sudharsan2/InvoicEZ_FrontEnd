@@ -316,9 +316,20 @@ const HistoryDetails = () => {
 
   const handleViewInvoice = async () => {
     try {
-      const response = await fetch(
-        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
-      );
+      // const response = await fetch(
+      //   `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+      // );
+      const token = localStorage.getItem("access_token"); // Retrieve the token securely
+
+        const response = await fetch(
+          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+          {
+            method: "GET", // Specify the HTTP method explicitly
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the authorization header
+            },
+          }
+        );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -335,9 +346,19 @@ const HistoryDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
-        );
+        // const response = await axios.get(
+        //   `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
+        // );
+        const token = localStorage.getItem("access_token"); // Retrieve the token securely
+
+    const response = await axios.get(
+      `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the authorization header
+        },
+      }
+    );
         const fetchedItems = response.data;
 
         setInv_id(fetchedItems.invoice_info.id);

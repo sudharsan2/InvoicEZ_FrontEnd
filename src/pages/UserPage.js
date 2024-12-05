@@ -91,10 +91,12 @@ const UserPage = () => {
     };
   }, []);
 
-   console.log("tablelength",tableLength);
+  //  console.log("tablelength",tableLength);
+  const[gateCount,setGateCount]=useState(0);
+  const[storeCount,setStoreCount]=useState(0);
   const counters = [
-    { label: "Gate User Count", value: tableLength, color: "#00bfbf" }, // Cyan
-    { label: "Store User Count", value: 2, color: "#d62727" }, // Red
+    { label: "Gate User Count", value: gateCount, color: "#00bfbf" }, // Cyan
+    { label: "Store User Count", value: storeCount, color: "#d62727" }, // Red
     // { label: "User Resolved", value: 9, color: "#1f497d" }, // Dark Blue
     // { label: "Refix", value: 4, color: "#d21994" }, // Magenta
   ];
@@ -170,7 +172,7 @@ const UserPage = () => {
         </div>
       </div>
       <div>
-        {height > 0 ? <UserTable height={height} setTableLength={setTableLength}/> : <p>Loading...</p>}
+        {height > 0 ? <UserTable height={height} setTableLength={setTableLength} setStoreCount={setStoreCount}  setGateCount={setGateCount}/> : <p>Loading...</p>}
       </div>
     </div>
   );

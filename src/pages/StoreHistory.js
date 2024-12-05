@@ -70,20 +70,35 @@ const containerStyle = {
 const StoreHistory = () => {
     const[rows,setRows]=useState("");
     useEffect(() => {
-        // Fetch data from the API on component mount
-        const fetchData = async () => {
-          try {
-            const response = await fetch("https://invoicezapi.focusrtech.com:57/user/dashboard-count-of-this-month"); // Replace with your actual API URL
-            const data = await response.json();
-            console.log("Data",data.invoices_processed_this_month)
-            setRows(data.invoices_processed_this_month);
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
-        };
+      
+      const fetchData = async () => {
+        try {
+          
+          const token = localStorage.getItem("access_token");
     
-        fetchData();
-      }, []);
+          const response = await fetch("https://invoicezapi.focusrtech.com:57/user/dashboard-count-of-this-month", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`, 
+            },
+          });
+    
+          if (!response.ok) {
+            throw new Error("Failed to fetch data");
+          }
+    
+          const data = await response.json();
+          console.log("Data", data.invoices_processed_this_month);
+          setRows(data.invoices_processed_this_month);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+    
+      fetchData();
+    }, []);
+    
     
     const counters = [
         { label: "Total Invoice Processed", value: rows, color: "#00bfbf" }, // Cyan

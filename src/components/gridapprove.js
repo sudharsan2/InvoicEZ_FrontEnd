@@ -108,7 +108,7 @@
 // export default TagCounters;
 
 import React, { useEffect, useState } from "react";
-
+import axios from "axios";
 const TagCounters = ({ type }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -148,9 +148,24 @@ const TagCounters = ({ type }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
-      );
+      // const response = await fetch(
+      //   "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
+      // );
+
+      const authToken = localStorage.getItem("access_token"); 
+
+  const response = await fetch(
+    "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
+    {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+      
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }

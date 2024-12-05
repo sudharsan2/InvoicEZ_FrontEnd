@@ -112,9 +112,18 @@ const TableApprove = () => {
       message.success("Refreshing...");
     }
     try {
-      const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/one-invoice-list",
-      );
+      // const response = await axios.get(
+      //   "https://invoicezapi.focusrtech.com:57/user/one-invoice-list",
+      // );
+
+      const token = localStorage.getItem("access_token");
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/one-invoice-list", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
       set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
@@ -172,7 +181,7 @@ const TableApprove = () => {
       item.total_amount?.toString().toLowerCase().includes(searchLower) ||
       item.status?.toLowerCase().includes(searchLower)
     );
-  });
+  }).sort((a, b) => a.po_number.localeCompare(b.po_number));
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
@@ -208,10 +217,21 @@ const TableApprove = () => {
         .map((item) => item.supplier_name)
         .join(", ");
 
+      // const deletePromises = selectedItemsArray.map((item) =>
+      //   axios.delete(
+      //     `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+      //   ),
+      // );
+      const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
           `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
-        ),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the authorization header
+            },
+          }
+        )
       );
 
       await Promise.all(deletePromises);

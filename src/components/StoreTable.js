@@ -103,9 +103,14 @@ const StoreTable = ({setTableLength}) => {
   // Fetch data from the API when the component mounts
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/storetrue-invoice",
-      );
+      const token = localStorage.getItem("access_token");
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/storetrue-invoice", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
       // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
@@ -149,7 +154,11 @@ const StoreTable = ({setTableLength}) => {
 
         }));
       });
-      const flattenedMappedItems = mappedItems.flat().filter(Boolean);
+      // const flattenedMappedItems = mappedItems.flat().filter(Boolean);
+      const flattenedMappedItems = mappedItems
+  .flat() 
+  .filter(Boolean)
+  .sort((a, b) => a.po_number.localeCompare(b.po_number));
 
       setItems(flattenedMappedItems);
       setTableLength(flattenedMappedItems.length);

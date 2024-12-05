@@ -44,9 +44,18 @@ const LineChartPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://invoicezapi.focusrtech.com:57/user/dashboard-supplier-totalamount",
-        );
+        // const response = await axios.get(
+        //   "https://invoicezapi.focusrtech.com:57/user/dashboard-supplier-totalamount",
+        // );
+
+        const token = localStorage.getItem("access_token");
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/dashboard-supplier-totalamount", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
         const apiData = response.data;
 
         // Transform the API data into a format suitable for the chart

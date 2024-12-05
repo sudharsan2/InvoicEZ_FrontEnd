@@ -107,8 +107,22 @@ const IssuefixTable = ({ height, setTableLength }) => {
     if (showMessage) {
       message.success("Refreshing...");
     }
-    fetch("https://invoicezapi.focusrtech.com:57/user/no-invoice-list")
-      .then((response) => response.json())
+  
+    const token = localStorage.getItem("access_token"); // Retrieve the token securely
+  
+    fetch("https://invoicezapi.focusrtech.com:57/user/no-invoice-list", {
+      method: "GET", 
+      headers: {
+        "Content-Type": "application/json", 
+        Authorization: `Bearer ${token}`, 
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         const formattedItems = data.map((invoice) => ({
           invid: invoice.id,
@@ -127,7 +141,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
         console.error("Error fetching data:", error);
       });
   };
-  useEffect(() => {
+    useEffect(() => {
     fetchData(); // Fetch the data when component is mounted
   }, [isInvoiceUploadRefreshed]);
 
@@ -145,6 +159,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
   };
 
   const handleDelete = () => {
+    const token = localStorage.getItem("access_token");
     console.log("del");
     const idsToDelete = [...selectedRows]; // Convert Set to array
     console.log("IDs to delete:", idsToDelete);
@@ -157,6 +172,9 @@ const IssuefixTable = ({ height, setTableLength }) => {
           `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[id].invid}`,
           {
             method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the authorization header
+            },
           },
         );
       });

@@ -157,13 +157,23 @@ const StoreUserPage = () => {
     const url = `https://invoicezapi.focusrtech.com:57/user/GRNGeneration/${po_id}`;
 
     try {
-      const response = await axios.post(url, {});
+      const token = localStorage.getItem("access_token");
+
+    const response = await axios.post(url, {}, {
+      headers: {
+        "Authorization": `Bearer ${token}`, 
+      }
+
+    });
+    // const response = await axios.post(url, {});
+
+      
 
       if (response.status === 200) {
         message.success("GRN successfully Updated");
         navigate(`/storeuser`);
       }
-      console.log("Success:", response.data); // Handle the response data
+      console.log("Success:", response.data); 
     } catch (error) {
       notification.error({
         message: "Approved Failed",
@@ -324,9 +334,20 @@ const StoreUserPage = () => {
 
   const handleViewInvoice = async () => {
     try {
-      const response = await fetch(
-        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
-      );
+      // const response = await fetch(
+      //   `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+      // );
+      const token = localStorage.getItem("access_token"); 
+
+        const response = await fetch(
+          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+          {
+            method: "GET", 
+            headers: {
+              Authorization: `Bearer ${token}`, 
+            },
+          }
+        );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -343,9 +364,20 @@ const StoreUserPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
-        );
+        // const response = await axios.get(
+        //   `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
+        // );
+
+        const token = localStorage.getItem("access_token"); 
+
+    const response = await axios.get(
+      `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      }
+    );
         const fetchedItems = response.data;
         console.log("FETCHED ITEMS",fetchedItems);
         setInv_id(fetchedItems.invoice_info.id);

@@ -163,9 +163,19 @@ const IssuefixDetails = () => {
     // Fetch data from the API
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
-        );
+        // const response = await axios.get(
+        //   `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+        // );
+        const token = localStorage.getItem("access_token"); // Retrieve the token securely
+
+    const response = await axios.get(
+      `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the authorization header
+        },
+      }
+    );
         const data = response.data.invoice_info;
         console.log("New ",data);
         // Assuming 'items' is the correct property from your API response
@@ -207,32 +217,37 @@ const IssuefixDetails = () => {
   const [poNumber, setPoNumber] = useState("");
 
   const handleSubmit = async () => {
-    // Replace with your API endpoint
+    
     const apiUrl = "https://invoicezapi.focusrtech.com:57/user/po-number";
 
-    try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          po_number: poNumber,
-          invoice_id: invoiceNo,
-        }), // send PO number as a JSON payload
-      });
+try {
+ 
+  const token = localStorage.getItem("access_token");
 
-      if (!response.ok) {
-        throw new Error("Failed to submit PO");
-      }
+  const response = await fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`, 
+    },
+    body: JSON.stringify({
+      po_number: poNumber,
+      invoice_id: invoiceNo,
+    }), 
+  });
 
-      if (response.status === 201) {
-        message.success("PO successfully Updated");
-        navigate(`/approve`);
-      }
-      const data = await response.json();
-      console.log("API response:", data);
-    } catch (error) {
+  if (!response.ok) {
+    throw new Error("Failed to submit PO");
+  }
+
+  if (response.status === 201) {
+    message.success("PO successfully Updated");
+    navigate(`/approve`);
+  }
+
+  const data = await response.json();
+  console.log("API response:", data);
+} catch (error) {
       message.error(error);
       console.error("Error submitting PO:", error);
     }
@@ -246,9 +261,19 @@ const IssuefixDetails = () => {
     // Fetch data from the API when the component mounts
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
-        );
+        // const response = await axios.get(
+        //   `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+        // );
+        const token = localStorage.getItem("access_token"); // Retrieve the token securely
+
+    const response = await axios.get(
+      `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      }
+    );
         const data = response.data.invoice_info;
         setFormData({
           vendorName: data.VendorName,
@@ -371,23 +396,28 @@ const IssuefixDetails = () => {
     };
     console.log("ITEMS",updatedFulldata);
     try {
+  
+      const token = localStorage.getItem("access_token");
+
+  
       const response = await fetch(
         `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
           },
           body: JSON.stringify({
             invoice_info: updatedFulldata,
             po_headers: [],
-          }), // Send the updated full data
+          }), 
         },
       );
 
       if (response.ok) {
-        console.log("Form data updated successfully");
-        message.success("Updated Successfully!!!");
+         console.log("Form data updated successfully");
+         message.success("Updated Successfully!!!");
          dispatch(refreshActions.toggleInvoiceUploadRefresh());
 
       } else {
@@ -512,20 +542,27 @@ const IssuefixDetails = () => {
     }
   
     try {
-      const deletePromises = selectedItemsArray.map((inv_id) =>
-        axios.delete(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
-        ),
-      );
+      const token = localStorage.getItem("access_token"); // Retrieve the token securely
+
+  const deletePromises = selectedItemsArray.map((inv_id) =>
+    axios.delete(
+      `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the authorization header
+        },
+      }
+    )
+  );
   
-      await Promise.all(deletePromises); // Wait for all deletions to complete
+      await Promise.all(deletePromises); 
   
       const updatedRows = rows.filter(
-        (item) => !selectedItemsArray.includes(item.inv_id), // Filter out deleted rows
+        (item) => !selectedItemsArray.includes(item.inv_id), 
       );
   
-      setRows(updatedRows); // Update the state with filtered rows
-      setSelectedRows(new Set()); // Clear selected rows
+      setRows(updatedRows); 
+      setSelectedRows(new Set()); 
   
       notification.success({
         message: "Successfully deleted",
@@ -548,9 +585,17 @@ const IssuefixDetails = () => {
   
   const handleViewInvoice = async () => {
     try {
-      const response = await fetch(
-        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceNo}`,
-      );
+      const token = localStorage.getItem("access_token"); // Retrieve the token securely
+
+        const response = await fetch(
+          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceNo}`,
+          {
+            method: "GET", // Specify the HTTP method explicitly
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the authorization header
+            },
+          }
+        );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }

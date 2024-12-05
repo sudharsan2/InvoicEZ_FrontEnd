@@ -260,9 +260,17 @@ const AIDetailPage = () => {
 
   const handleViewInvoice = async () => {
     try {
-      const response = await fetch(
-        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceId}`,
-      );
+      const token = localStorage.getItem("access_token"); 
+
+        const response = await fetch(
+          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+          {
+            method: "GET", 
+            headers: {
+              Authorization: `Bearer ${token}`, 
+            },
+          }
+        );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -334,9 +342,19 @@ const AIDetailPage = () => {
   const fetchInvoiceDetails = async () => {
     if (invoiceNumber) {
       try {
-        const response = await axios.get(
-          `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
-        );
+        // const response = await axios.get(
+        //   `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
+        // );
+        const token = localStorage.getItem("access_token"); // Retrieve the token securely
+
+    const response = await axios.get(
+      `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the authorization header
+        },
+      }
+    );
         const fetchedItem = response.data;
         console.log("R", fetchedItem);
         setInvoiceId(fetchedItem.invoice_info.id);
@@ -505,20 +523,29 @@ const AIDetailPage = () => {
 
     try {
       setLoad(true);
+      
+      
+      const token = localStorage.getItem("access_token");
+    
       const response = await axios.post(
         "https://invoicezapi.focusrtech.com:57/user/po-number",
         payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
       );
-
+    
       if (response.status === 201) {
         message.success("PO successfully Updated");
         setLoad(false);
-        // navigate(`/approve`);
+        // navigate(`/approve`); 
         dispatch(toggleDrawerPosition("2"));
       } else {
-        message.error(`Operation Unsuccessfully Please try again`);
+        message.error("Operation Unsuccessfully. Please try again.");
       }
-    } catch (error) {
+    }catch (error) {
       message.error("Unknown error Occured");
     }
   };
