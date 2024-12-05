@@ -63,7 +63,9 @@ const columns = [
   createTableColumn({
     columnId: "ReceivedDate",
     renderHeaderCell: () => "Received Date",
-    renderCell: (item) => <TableCellLayout>{item.ReceivedDate}</TableCellLayout>,
+    renderCell: (item) => (
+      <TableCellLayout>{item.ReceivedDate}</TableCellLayout>
+    ),
   }),
   createTableColumn({
     columnId: "line_count",
@@ -74,9 +76,7 @@ const columns = [
     columnId: "invoice_amount",
     renderHeaderCell: () => "Invoice Amount",
     renderCell: (item) => (
-      <TableCellLayout>
-        {item.invoice_amount}
-      </TableCellLayout>
+      <TableCellLayout>{item.invoice_amount}</TableCellLayout>
     ),
   }),
   createTableColumn({
@@ -88,7 +88,7 @@ const columns = [
   }),
 ];
 
-const GateEntryTable = ({setTableLength}) => {
+const GateEntryTable = ({ setTableLength }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -108,32 +108,32 @@ const GateEntryTable = ({setTableLength}) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/invoices",
+        // "https://invoicezapi.focusrtech.com:57/user/invoices",
+        "https://invoicezapi.focusrtech.com:57/user/storetrue-invoice",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
       set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
       let supplierName = fetchedItems[0].po_headers[0]?.supplier_name;
-      let location = fetchedItems[0].po_headers?.[0]?.location || '';
+      let location = fetchedItems[0].po_headers?.[0]?.location || "";
       setTableLength(fetchedItems.length);
       const mappedItems = fetchedItems.map((item) => ({
         Id: item.id,
         InvoiceId: item.id,
         InvoiceNumber: item.InvoiceId,
-        GateEntryNumber:item.po_headers.po_number,
+        GateEntryNumber: item.po_headers.po_number,
         supplier_name: item.VendorName,
-        invoice_amount:item.InvoiceTotal,
-        location:item.VendorAddress.city,
-        line_count:item.items.length,
-        tax_amount:item.InvoiceTotal,
-        ReceivedDate:item.receivedDate
-        
+        invoice_amount: item.InvoiceTotal,
+        location: item.VendorAddress.city,
+        line_count: item.items.length,
+        tax_amount: item.InvoiceTotal,
+        ReceivedDate: item.receivedDate,
       }));
 
       // const purchase = fetchedItems.po_headers.map((item)=>({
       //    po_num:item.po_number
       // }))
-      
+
       setItems(mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -156,7 +156,6 @@ const GateEntryTable = ({setTableLength}) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
     return (
-      
       item.GateEntryNumber?.toLowerCase().includes(searchLower) ||
       item.po_status?.toLowerCase().includes(searchLower) ||
       item.supplier_name?.toLowerCase().includes(searchLower) ||
@@ -164,8 +163,7 @@ const GateEntryTable = ({setTableLength}) => {
       item.supplier_site?.toLowerCase().includes(searchLower) ||
       item.ReceivedDate?.toLowerCase().includes(searchLower) ||
       // item.line_count?.toLowerCase().includes(searchLower) ||
-      item.tax_amount?.toLowerCase().includes(searchLower) 
-      
+      item.tax_amount?.toLowerCase().includes(searchLower)
     );
   });
 
@@ -201,7 +199,7 @@ const GateEntryTable = ({setTableLength}) => {
 
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `http://127.0.0.1:8000/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
         ),
       );
 
@@ -253,7 +251,9 @@ const GateEntryTable = ({setTableLength}) => {
       // Make API call to delete selected POs
       await Promise.all(
         selectedItemsArray.map((item) =>
-          axios.post(`http://127.0.0.1:8000/user/oracle-payload/${po_id}`),
+          axios.post(
+            `https://invoicezapi.focusrtech.com:57/user/oracle-payload/${po_id}`,
+          ),
         ),
       );
 
@@ -314,7 +314,7 @@ const GateEntryTable = ({setTableLength}) => {
 
       try {
         const response = await axios.post(
-          "http://127.0.0.1:8000/user/invoice-upload",
+          "https://invoicezapi.focusrtech.com:57/user/invoice-upload",
           formData,
           {
             headers: {
@@ -386,25 +386,25 @@ const GateEntryTable = ({setTableLength}) => {
           <span>Delete</span>
         </button> */}
 
-        <button
+        {/* <button
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center", // Ensures alignment in case of larger button dimensions
+            justifyContent: "center",
             backgroundColor: "transparent",
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
-            whiteSpace: "nowrap", // Prevents wrapping of content
+            whiteSpace: "nowrap",
           }}
           onClick={handleNewCandidateBtn}
         >
           <ShareIos24Filled style={{ color: "#1281d7" }} />
-          {/* <TasksApp28Regular style={{ color: "#1281d7" }} /> */}
+
           <span>Upload-Invoice</span>
-        </button>
+        </button> */}
 
         {/* <button
           style={{
