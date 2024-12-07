@@ -6,6 +6,7 @@ import {
   Delete28Regular,
   TasksApp28Regular,
 } from "@fluentui/react-icons";
+import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -307,6 +308,40 @@ const StoreTable = ({setTableLength}) => {
     }
   };
 
+  const [filtered, setFilteredItems] = useState([]);
+  useEffect(() => {
+    setFilteredItems(items); 
+  }, [items])
+
+  const [sortState, setSortState] = useState({
+    columnId: "",
+    sortDirection: "ascending",
+  });
+  
+  const handleSort = (columnId) => {
+    let newSortDirection = "ascending";
+
+    if (sortState.columnId === columnId) {
+      newSortDirection =
+        sortState.sortDirection === "ascending" ? "descending" : "ascending";
+    }
+
+    setSortState({ columnId, sortDirection: newSortDirection });
+    
+
+    const sortedItems = [...filteredItems].sort((a, b) => {
+      const aValue = a[columnId];
+      const bValue = b[columnId];
+
+      if (aValue < bValue) return newSortDirection === "ascending" ? -1 : 1;
+      if (aValue > bValue) return newSortDirection === "ascending" ? 1 : -1;
+      return 0;
+    });
+    console.log("SORTED",sortedItems);
+    
+    setFilteredItems(sortedItems); 
+  };
+
   return (
     <>
       <div
@@ -383,44 +418,55 @@ const StoreTable = ({setTableLength}) => {
         }}
       >
         <DataGrid
-          items={filteredItems}
-          columns={columns}
-          sortable
-          selectionMode="multiselect"
-          onSelectionChange={handleSelectionChange}
-          getRowId={(_, index) => index}
-          focusMode="composite"
-          style={{ minWidth: "600px" }}
-        >
-          <DataGridHeader>
-            <DataGridRow>
-              {({ renderHeaderCell }) => (
-                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-              )}
-            </DataGridRow>
-          </DataGridHeader>
-          <DataGridBody>
-            {({ item, rowId }) => (
-              <DataGridRow
-                key={rowId}
-                onClick={(e) => handleRowClick(e, item)}
-                selected={selectedRows.has(rowId)}
+      items={filtered}
+      columns={columns}
+      sortable
+      selectionMode="multiselect"
+      onSelectionChange={handleSelectionChange}
+      getRowId={(_, index) => index}
+      focusMode="composite"
+      style={{ minWidth: "600px" }}
+    >
+      <DataGridHeader>
+        <DataGridRow>
+          {({ renderHeaderCell, columnId }) => (
+            <DataGridHeaderCell
+              onClick={() => handleSort(columnId)}
+              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+            >
+              {renderHeaderCell()}
+              {sortState.columnId === columnId &&
+                (sortState.sortDirection === "ascending" ? (
+                  <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
+                ) : (
+                  <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
+                ))}
+            </DataGridHeaderCell>
+          )}
+        </DataGridRow>
+      </DataGridHeader>
+      <DataGridBody>
+        {({ item, rowId }) => (
+          <DataGridRow
+            key={rowId}
+            onClick={(e) => handleRowClick(e, item)}
+            selected={selectedRows.has(rowId)}
+          >
+            {({ renderCell }) => (
+              <DataGridCell
+                style={{
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                  overflow: "hidden",
+                }}
               >
-                {({ renderCell }) => (
-                  <DataGridCell
-                    style={{
-                      wordWrap: "break-word",
-                      whiteSpace: "normal",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {renderCell(item)}
-                  </DataGridCell>
-                )}
-              </DataGridRow>
+                {renderCell(item)}
+              </DataGridCell>
             )}
-          </DataGridBody>
-        </DataGrid>
+          </DataGridRow>
+        )}
+      </DataGridBody>
+    </DataGrid>
       </div>
     </>
   );

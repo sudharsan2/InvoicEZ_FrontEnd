@@ -65,7 +65,7 @@ const Admin = () => {
       <div className="Approvebreadcrump">
         <Breadcrumb aria-label="Breadcrumb default example">
           <BreadcrumbItem>
-            <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
+            <BreadcrumbButton>Control Center</BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>

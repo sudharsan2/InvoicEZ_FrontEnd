@@ -168,9 +168,9 @@ const LoginPage = () => {
     >
       <div style={{ marginBottom: "1rem",display:"flex"}}>
         <div>
-        <img src={logo} alt="Description" style={{ width: "100px", height: "50px" }} />
+        <img src={logo} alt="Description" style={{ width: "9vw", height: "50px" }} />
         </div>
-        <div style={{display:"flex",justifyContent:"center",marginLeft:"6em"}}>
+        <div style={{display:"flex",justifyContent:"center",marginLeft:"4em"}}>
           <h2>InvoiceEZ</h2>
         </div>
       </div>

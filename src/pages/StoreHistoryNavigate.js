@@ -35,7 +35,7 @@ import { notification } from "antd";
 
 const path = "/approve";
 const path2 = "/approvepage";
-const path1 = "http://localhost:3000/";
+const path1 = "/dashboard";
 
 const useStyles = makeStyles({
   root: {

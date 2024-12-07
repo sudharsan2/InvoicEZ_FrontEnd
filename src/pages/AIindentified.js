@@ -78,7 +78,7 @@ const AIPage = () => {
       <div className="Approvebreadcrump">
         <Breadcrumb aria-label="Breadcrumb default example">
           <BreadcrumbItem>
-            <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
+            <BreadcrumbButton href={path}>Home</BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
           {/* <BreadcrumbItem>

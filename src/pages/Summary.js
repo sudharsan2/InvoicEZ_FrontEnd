@@ -16,7 +16,7 @@ import Search from "../components/Search";
 
 // const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/summary";
-const path1 = "http://localhost:3000/";
+const path1 = "/dashboard";
 
 const containerStyle = {
     width: "100%",

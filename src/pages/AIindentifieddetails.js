@@ -2,7 +2,8 @@
 // import React from "react";
 import { message } from "antd";
 import { OverlayTrigger } from "react-bootstrap";
-
+import { TableContainer, TableHead, TableSortLabel, Paper } from '@mui/material';
+import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
@@ -43,7 +44,7 @@ import { toggleDrawerPosition } from "../Store/refreshSlice";
 import { useDispatch } from "react-redux";
 
 const path = "/aidetail";
-const path1 = "http://localhost:3000/";
+const path1 = "/Dashboard";
 const Checkbox = ({ children, ...props }) => (
   <label style={{ marginRight: "1em" }}>
     <input type="checkbox" {...props} />
@@ -145,7 +146,8 @@ const useStyles = makeStyles({
 const AIDetailPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState('asc');
   const [colourOptions, setColourOptions] = useState([
     { value: "1009", label: "1009" },
     { value: "1010", label: "1010" },
@@ -238,39 +240,39 @@ const AIDetailPage = () => {
     ],
   );
 
-  const headerSortProps = (columnId) => ({
-    onClick: (e) => toggleColumnSort(e, columnId),
-    sortDirection: getSortDirection(columnId),
-  });
+  // const headerSortProps = (columnId) => ({
+  //   onClick: (e) => toggleColumnSort(e, columnId),
+  //   sortDirection: getSortDirection(columnId),
+  // });
 
-  const sortedData = [...data].sort((a, b) => {
-    const aValue = a[sortState.sortColumn];
-    const bValue = b[sortState.sortColumn];
+  // const sortedData = [...data].sort((a, b) => {
+  //   const aValue = a[sortState.sortColumn];
+  //   const bValue = b[sortState.sortColumn];
 
-    if (typeof aValue === "string" && typeof bValue === "string") {
-      return sortState.sortDirection === "ascending"
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
-    }
+  //   if (typeof aValue === "string" && typeof bValue === "string") {
+  //     return sortState.sortDirection === "ascending"
+  //       ? aValue.localeCompare(bValue)
+  //       : bValue.localeCompare(aValue);
+  //   }
 
-    return sortState.sortDirection === "ascending"
-      ? aValue - bValue
-      : bValue - aValue;
-  });
+  //   return sortState.sortDirection === "ascending"
+  //     ? aValue - bValue
+  //     : bValue - aValue;
+  // });
 
   const handleViewInvoice = async () => {
     try {
-      const token = localStorage.getItem("access_token"); 
+      const token = localStorage.getItem("access_token");
 
-        const response = await fetch(
-          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
-          {
-            method: "GET", 
-            headers: {
-              Authorization: `Bearer ${token}`, 
-            },
-          }
-        );
+      const response = await fetch(
+        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -347,14 +349,14 @@ const AIDetailPage = () => {
         // );
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
-    const response = await axios.get(
-      `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Add the authorization header
-        },
-      }
-    );
+        const response = await axios.get(
+          `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the authorization header
+            },
+          }
+        );
         const fetchedItem = response.data;
         console.log("R", fetchedItem);
         setInvoiceId(fetchedItem.invoice_info.id);
@@ -461,13 +463,13 @@ const AIDetailPage = () => {
     Amount: item.Amount || "Null",
     Discount: item.Discount || "Null",
     ProductCode: item.ProductCode || "Null",
-    Igst:item.Igst||"Null",
-    Sgst:item.Sgst||"Null",
-    Cgst:item.Cgst||"Null",
+    Igst: item.Igst || "Null",
+    Sgst: item.Sgst || "Null",
+    Cgst: item.Cgst || "Null",
 
   }));
 
-  console.log("Line Items",lineItems)
+  console.log("Line Items", lineItems)
 
   const handleCreate = (inputValue) => {
     const newOption = { value: inputValue, label: inputValue };
@@ -523,20 +525,20 @@ const AIDetailPage = () => {
 
     try {
       setLoad(true);
-      
-      
+
+
       const token = localStorage.getItem("access_token");
-    
+
       const response = await axios.post(
         "https://invoicezapi.focusrtech.com:57/user/po-number",
         payload,
         {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-    
+
       if (response.status === 201) {
         message.success("PO successfully Updated");
         setLoad(false);
@@ -545,7 +547,7 @@ const AIDetailPage = () => {
       } else {
         message.error("Operation Unsuccessfully. Please try again.");
       }
-    }catch (error) {
+    } catch (error) {
       message.error("Unknown error Occured");
     }
   };
@@ -554,6 +556,64 @@ const AIDetailPage = () => {
     setSelectedOption(option);
     // console.log("Selected PO Number:", option ? option.value : null);
   };
+
+  // Function to handle sorting
+  const handleSort = (column) => {
+    if (sortedColumn === column) {
+      // Toggle sorting direction if the same column is clicked
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      // Set sorting direction to ascending if a new column is clicked
+      setSortedColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+  // Sorting function for header props
+  const headerSortProps = (column) => ({
+    onClick: () => handleSort(column),
+    style: {
+      fontWeight: "bold",
+      cursor: "pointer",
+      maxWidth: column === "Description" ? "150px" : "200px", // Adjust width as needed
+    },
+  });
+
+  
+
+  const sortedLineItems = [...invoiceData.invoice_info.items].sort((a, b) => {
+    if (!sortedColumn) return 0;
+
+    const aValue = a[sortedColumn] || "";  
+    const bValue = b[sortedColumn] || "";
+
+    // Determine if the values are numeric
+    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
+    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
+
+    // Numeric comparison
+    if (isANumeric && isBNumeric) {
+      const aNumeric = parseFloat(aValue);
+      const bNumeric = parseFloat(bValue);
+      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+    }
+
+    // String comparison using localeCompare for case-insensitive sorting
+    if (!isANumeric && !isBNumeric) {
+      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
+      const bString = String(bValue).toLowerCase();
+      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+    }
+
+    // Mixed types: If one is numeric and the other is not, treat the numeric value as smaller
+    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
+    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
+
+    return 0; // If values are still equal
+  });
+
+
+
 
   return (
     <div>
@@ -738,9 +798,9 @@ const AIDetailPage = () => {
               style={{
                 color: themestate ? "rgb(245,245,245)" : "",
                 display: "grid",
-                  gridTemplateColumns: "repeat(6, 3fr)",
-                  gap: "20px",
-                  fontSize:"16px"
+                gridTemplateColumns: "repeat(6, 3fr)",
+                gap: "20px",
+                fontSize: "16px"
               }}
             >
               {invoiceInfo.map((info, index) => (
@@ -749,7 +809,7 @@ const AIDetailPage = () => {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    
+
                   }}
                 >
                   <div
@@ -771,45 +831,45 @@ const AIDetailPage = () => {
             <div
               className={styles.content}
               style={{
-                
-                  color: themestate ? "rgb(245,245,245)" : "",
-                  display: "grid",
-                    gridTemplateColumns: "repeat(6, 3fr)",
-                    gap: "20px",
-                    fontSize:"15px"
-                
+
+                color: themestate ? "rgb(245,245,245)" : "",
+                display: "grid",
+                gridTemplateColumns: "repeat(6, 3fr)",
+                gap: "20px",
+                fontSize: "15px"
+
               }}
             >
-              
-                {vendorInfo.map((info, index) => (
+
+              {vendorInfo.map((info, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: "3em"
+
+                  }}
+                >
                   <div
-                    key={index}
+                    className={styles.heading}
                     style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent:"space-between",
-                      marginTop:"3em"
-                      
+                      fontWeight: "bold",
+                      color: themestate ? "white" : "",
+                      marginRight: "5px",
                     }}
                   >
-                    <div
-                      className={styles.heading}
-                      style={{
-                        fontWeight: "bold",
-                        color: themestate ? "white" : "",
-                        marginRight: "5px",
-                      }}
-                    >
-                      {info.label}:
-                    </div>
-                    <div>{info.value}</div>
+                    {info.label}:
                   </div>
-                ))}
+                  <div>{info.value}</div>
+                </div>
+              ))}
               {/* </div> */}
             </div>
 
             {/* Line Information Section */}
-            <h2 style={{marginTop:"3em"}}>Line Information</h2>
+            <h2 style={{ marginTop: "3em" }}>Line Information</h2>
             <div
               style={{
                 width: "100%",
@@ -820,7 +880,7 @@ const AIDetailPage = () => {
               }}
             >
               <div style={{ flex: 2 }}>
-                <Table>
+                {/*  <Table>
                   <TableHeader
                     style={{
                       position: "sticky",
@@ -918,9 +978,91 @@ const AIDetailPage = () => {
                         Sgst
                       </TableHeaderCell>
                     </TableRow>
+                  </TableHeader> */}
+
+                <Table>
+                  <TableHeader
+                    style={{
+                      position: "sticky",
+                      top: 0,
+                      backgroundColor: themestate ? "#383838" : "white",
+                      zIndex: 1,
+                      color: themestate ? "white" : "black",
+                    }}
+                  >
+                    <TableRow
+                      style={
+                        themestate ? { color: "white", borderBottomColor: "#383838" } : {}
+                      }
+                    >
+                      <TableHeaderCell {...headerSortProps("Description")}>
+                        Description
+                        {sortedColumn === "Description" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Quantity")}>
+                        Quantity
+                        {sortedColumn === "Quantity" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("UnitPrice")}>
+                        Unit Price
+                        {sortedColumn === "UnitPrice" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Discount")}>
+                        Discount
+                        {sortedColumn === "Discount" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("ProductCode")}>
+                        Product Code
+                        {sortedColumn === "ProductCode" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Igst")}>
+                        Igst
+                        {sortedColumn === "Igst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Cgst")}>
+                        Cgst
+                        {sortedColumn === "Cgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                        Sgst
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                    </TableRow>
                   </TableHeader>
 
-                  <TableBody style={themestate ? { color: "white" } : {}}>
+                  <TableBody>
+                    {sortedLineItems.map((item, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{item.Description || "Null"}</TableCell>
+                        <TableCell>{item.Quantity || "Null"}</TableCell>
+                        <TableCell>{item.UnitPrice || "Null"}</TableCell>
+                        <TableCell>{item.Discount || "Null"}</TableCell>
+                        <TableCell>{item.ProductCode || "Null"}</TableCell>
+                        <TableCell>{item.Igst || "Null"}</TableCell>
+                        <TableCell>{item.Cgst || "Null"}</TableCell>
+                        <TableCell>{item.Sgst || "Null"}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+
+
+                  {/* <TableBody style={themestate ? { color: "white" } : {}}>
                     {lineItems.map((item) => (
                       <TableRow
                         key={item.id}
@@ -1011,7 +1153,7 @@ const AIDetailPage = () => {
                         </TableCell>
                       </TableRow>
                     ))}
-                  </TableBody>
+                  </TableBody> */}
                 </Table>
               </div>
             </div>
@@ -1033,32 +1175,32 @@ const AIDetailPage = () => {
               }}
             >
               <div>
-              <div
-  style={{
-    width: "90%",
-    display: "grid",
-    gridTemplateColumns: "repeat(5, 2fr)", // 5 equal columns
-    gridTemplateRows: "auto auto", // 2 rows with auto height based on content
-    gap: "1rem", // Adds spacing between grid items
-    paddingLeft: "2em",
-  }}
->
-{invoiceData && (
-    <>
-      <div><b>PO Number:</b> {selectedInvoiceNumber}</div>
-      <div><b>PO Type:</b> {dataitem.po_type}</div>
-      <div><b>Supplier Name:</b> {invoiceData.invoice_info.VendorName}</div>
-      <div><b>Site:</b> {dataitem.location}</div>
-      <div><b>Status: </b>{dataitem.po_status}</div>
+                <div
+                  style={{
+                    width: "90%",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(5, 2fr)", // 5 equal columns
+                    gridTemplateRows: "auto auto", // 2 rows with auto height based on content
+                    gap: "1rem", // Adds spacing between grid items
+                    paddingLeft: "2em",
+                  }}
+                >
+                  {invoiceData && (
+                    <>
+                      <div><b>PO Number:</b> {selectedInvoiceNumber}</div>
+                      <div><b>PO Type:</b> {dataitem.po_type}</div>
+                      <div><b>Supplier Name:</b> {invoiceData.invoice_info.VendorName}</div>
+                      <div><b>Site:</b> {dataitem.location}</div>
+                      <div><b>Status: </b>{dataitem.po_status}</div>
 
-      <div><b>Total Amount:</b> {dataitem.total_amount}</div>
-      <div><b>Buyer Name:</b> {dataitem.buyer_name}</div>
-      <div><b>Invoice Detail:</b> {dataitem.invoice_detail}</div>
-      <div><b>Shipping Address:</b> {dataitem.ship_to}</div>
-      <div><b>Billing Address:</b> {dataitem.ship_to}</div>
-    </>
-  )}
-</div>
+                      <div><b>Total Amount:</b> {dataitem.total_amount}</div>
+                      <div><b>Buyer Name:</b> {dataitem.buyer_name}</div>
+                      <div><b>Invoice Detail:</b> {dataitem.invoice_detail}</div>
+                      <div><b>Shipping Address:</b> {dataitem.ship_to}</div>
+                      <div><b>Billing Address:</b> {dataitem.ship_to}</div>
+                    </>
+                  )}
+                </div>
 
                 <div
                   style={{

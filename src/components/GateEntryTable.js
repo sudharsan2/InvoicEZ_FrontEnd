@@ -21,6 +21,7 @@ import Search from "./Search"; // Assuming your search component is imported her
 import { Button, notification } from "antd"; // Import Ant Design components
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
+import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 
 // Define columns for the DataGrid
 const columns = [
@@ -88,6 +89,7 @@ const GateEntryTable = ({setTableLength}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
+  const [filtered, setFilteredItems] = useState([]);
   const [po_id, set_Po_id] = useState("");
   const navigate = useNavigate();
 
@@ -171,6 +173,10 @@ const GateEntryTable = ({setTableLength}) => {
       console.error("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    setFilteredItems(items); 
+  }, [items])
 
   useEffect(() => {
     SetRefreshUpload(isInvoiceUploadRefreshed);
@@ -310,6 +316,40 @@ const GateEntryTable = ({setTableLength}) => {
       });
     }
   };
+  
+
+  const [sortState, setSortState] = useState({
+    columnId: "",
+    sortDirection: "ascending",
+  });
+  
+  const handleSort = (columnId) => {
+    let newSortDirection = "ascending";
+
+    if (sortState.columnId === columnId) {
+      newSortDirection =
+        sortState.sortDirection === "ascending" ? "descending" : "ascending";
+    }
+
+    setSortState({ columnId, sortDirection: newSortDirection });
+    
+
+    const sortedItems = [...filteredItems].sort((a, b) => {
+      const aValue = a[columnId];
+      const bValue = b[columnId];
+
+      if (aValue < bValue) return newSortDirection === "ascending" ? -1 : 1;
+      if (aValue > bValue) return newSortDirection === "ascending" ? 1 : -1;
+      return 0;
+    });
+    console.log("SORTED",sortedItems);
+    
+    setFilteredItems(sortedItems); 
+  };
+  
+  
+  console.log("12345",filtered);
+  
 
   return (
     <>
@@ -387,44 +427,55 @@ const GateEntryTable = ({setTableLength}) => {
         }}
       >
         <DataGrid
-          items={filteredItems}
-          columns={columns}
-          sortable
-          selectionMode="multiselect"
-          onSelectionChange={handleSelectionChange}
-          getRowId={(_, index) => index}
-          focusMode="composite"
-          style={{ minWidth: "600px" }}
-        >
-          <DataGridHeader>
-            <DataGridRow>
-              {({ renderHeaderCell }) => (
-                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-              )}
-            </DataGridRow>
-          </DataGridHeader>
-          <DataGridBody>
-            {({ item, rowId }) => (
-              <DataGridRow
-                key={rowId}
-                onClick={(e) => handleRowClick(e, item)}
-                selected={selectedRows.has(rowId)}
+      items={filtered}
+      columns={columns}
+      sortable
+      selectionMode="multiselect"
+      onSelectionChange={handleSelectionChange}
+      getRowId={(_, index) => index}
+      focusMode="composite"
+      style={{ minWidth: "600px" }}
+    >
+      <DataGridHeader>
+        <DataGridRow>
+          {({ renderHeaderCell, columnId }) => (
+            <DataGridHeaderCell
+              onClick={() => handleSort(columnId)}
+              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+            >
+              {renderHeaderCell()}
+              {sortState.columnId === columnId &&
+                (sortState.sortDirection === "ascending" ? (
+                  <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
+                ) : (
+                  <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
+                ))}
+            </DataGridHeaderCell>
+          )}
+        </DataGridRow>
+      </DataGridHeader>
+      <DataGridBody>
+        {({ item, rowId }) => (
+          <DataGridRow
+            key={rowId}
+            onClick={(e) => handleRowClick(e, item)}
+            selected={selectedRows.has(rowId)}
+          >
+            {({ renderCell }) => (
+              <DataGridCell
+                style={{
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                  overflow: "hidden",
+                }}
               >
-                {({ renderCell }) => (
-                  <DataGridCell
-                    style={{
-                      wordWrap: "break-word",
-                      whiteSpace: "normal",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {renderCell(item)}
-                  </DataGridCell>
-                )}
-              </DataGridRow>
+                {renderCell(item)}
+              </DataGridCell>
             )}
-          </DataGridBody>
-        </DataGrid>
+          </DataGridRow>
+        )}
+      </DataGridBody>
+    </DataGrid>
       </div>
     </>
   );

@@ -18,7 +18,7 @@ import StoreTable from "../components/StoreTable";
 
 // const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/gateentry";
-const path1 = "http://localhost:3000/";
+const path1 = "/dashboard";
 const containerStyle = {
   width: "100%",
   display: "flex",

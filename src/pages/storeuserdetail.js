@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import {
+
   makeStyles,
   Button,
   Link,
@@ -36,7 +38,7 @@ import { notification } from "antd";
 
 const path = "/storeuser";
 const path2 = "/approvepage";
-const path1 = "http://localhost:3000/";
+const path1 = "/storedashboard";
 
 const useStyles = makeStyles({
   root: {
@@ -327,10 +329,10 @@ const StoreUserPage = () => {
     ],
   );
 
-  const headerSortProps = (columnId) => ({
-    onClick: (e) => toggleColumnSort(e, columnId),
-    sortDirection: getSortDirection(columnId),
-  });
+  // const headerSortProps = (columnId) => ({
+  //   onClick: (e) => toggleColumnSort(e, columnId),
+  //   sortDirection: getSortDirection(columnId),
+  // });
 
   const handleViewInvoice = async () => {
     try {
@@ -501,20 +503,81 @@ const StoreUserPage = () => {
     }
   }, [poNumber]);
 
-  const sortedData = [...data].sort((a, b) => {
-    const aValue = a[sortState.sortColumn];
-    const bValue = b[sortState.sortColumn];
+  // const sortedData = [...data].sort((a, b) => {
+  //   const aValue = a[sortState.sortColumn];
+  //   const bValue = b[sortState.sortColumn];
 
-    if (typeof aValue === "string" && typeof bValue === "string") {
-      return sortState.sortDirection === "ascending"
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
+  //   if (typeof aValue === "string" && typeof bValue === "string") {
+  //     return sortState.sortDirection === "ascending"
+  //       ? aValue.localeCompare(bValue)
+  //       : bValue.localeCompare(aValue);
+  //   }
+
+  //   return sortState.sortDirection === "ascending"
+  //     ? aValue - bValue
+  //     : bValue - aValue;
+  // });
+
+
+  const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState('asc');
+
+
+   
+   const handleSort = (column) => {
+    if (sortedColumn === column) {
+     
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      
+      setSortedColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+  
+  const headerSortProps = (column) => ({
+    onClick: () => handleSort(column),
+    style: {
+      fontWeight: "bold",
+      cursor: "pointer",
+      maxWidth: column === "Description" ? "150px" : "200px", 
+    },
+  });
+
+  
+
+  const sortedData = [...data].sort((a, b) => {
+    if (!sortedColumn) return 0;
+
+    const aValue = a[sortedColumn] || "";  
+    const bValue = b[sortedColumn] || "";
+
+    // Determine if the values are numeric
+    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
+    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
+
+    // Numeric comparison
+    if (isANumeric && isBNumeric) {
+      const aNumeric = parseFloat(aValue);
+      const bNumeric = parseFloat(bValue);
+      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
     }
 
-    return sortState.sortDirection === "ascending"
-      ? aValue - bValue
-      : bValue - aValue;
+    // String comparison using localeCompare for case-insensitive sorting
+    if (!isANumeric && !isBNumeric) {
+      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
+      const bString = String(bValue).toLowerCase();
+      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+    }
+
+    // Mixed types: If one is numeric and the other is not, treat the numeric value as smaller
+    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
+    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
+
+    return 0; // If values are still equal
   });
+
 
   return (
     <div style={{ height: "88vh", overflowY: "auto" }}>
@@ -1006,15 +1069,17 @@ const StoreUserPage = () => {
                           : {}
                       }
                     >
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("PO_line_id")}
-                      >
-                        Line Number
+                      <TableHeaderCell 
+                       style={{
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        maxWidth: "200px",
+                      }}
+                      {...headerSortProps("id")}>
+                      Line Number
+                        {sortedColumn === "id" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1022,9 +1087,12 @@ const StoreUserPage = () => {
                           cursor: "pointer",
                           maxWidth: "200px",
                         }}
-                        {...headerSortProps("name")}
+                        {...headerSortProps("po_number")}
                       >
                         PO Number in Supplier Invoice
+                        {sortedColumn === "po_number" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1032,9 +1100,12 @@ const StoreUserPage = () => {
                           cursor: "pointer",
                           maxWidth: "300px",
                         }}
-                        {...headerSortProps("description")}
+                        {...headerSortProps("item_description")}
                       >
                         Description
+                        {sortedColumn === "item_description" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1042,9 +1113,12 @@ const StoreUserPage = () => {
                           cursor: "pointer",
                           maxWidth: "250px",
                         }}
-                        {...headerSortProps("invoice_item_name")}
+                        {...headerSortProps("item_name")}
                       >
                          Item 
+                         {sortedColumn === "item_name" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1055,6 +1129,9 @@ const StoreUserPage = () => {
                         {...headerSortProps("unit_price")}
                       >
                         Unit Price
+                        {sortedColumn === "unit_price" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                       {/* <TableHeaderCell
                         style={{
@@ -1072,9 +1149,12 @@ const StoreUserPage = () => {
                           cursor: "pointer",
                           maxWidth: "150px",
                         }}
-                        {...headerSortProps("invoice_quantity")}
+                        {...headerSortProps("quantity")}
                       >
                         Quantity
+                        {sortedColumn === "quantity" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                       {/* <TableHeaderCell
                         style={{
@@ -1092,9 +1172,12 @@ const StoreUserPage = () => {
                           cursor: "pointer",
                           maxWidth: "150px",
                         }}
-                        {...headerSortProps("invoice_quantity")}
+                        {...headerSortProps("line_value")}
                       >
                         Line Value
+                        {sortedColumn === "line_value" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1102,9 +1185,12 @@ const StoreUserPage = () => {
                           cursor: "pointer",
                           maxWidth: "150px",
                         }}
-                        {...headerSortProps("invoice_quantity")}
+                        {...headerSortProps("Igst")}
                       >
                         IGST
+                        {sortedColumn === "Igst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1112,9 +1198,12 @@ const StoreUserPage = () => {
                           cursor: "pointer",
                           maxWidth: "150px",
                         }}
-                        {...headerSortProps("invoice_quantity")}
+                        {...headerSortProps("Cgst")}
                       >
                         CGST
+                        {sortedColumn === "Cgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1122,9 +1211,12 @@ const StoreUserPage = () => {
                           cursor: "pointer",
                           maxWidth: "150px",
                         }}
-                        {...headerSortProps("invoice_quantity")}
+                        {...headerSortProps("Sgst")}
                       >
                         SGST
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1135,6 +1227,9 @@ const StoreUserPage = () => {
                         {...headerSortProps("invoice_quantity")}
                       >
                         Note
+                        {sortedColumn === "id" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
                       </TableHeaderCell>
                     </TableRow>
                   </TableHeader>
