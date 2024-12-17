@@ -8,6 +8,7 @@ import { EyeOutlined } from "@ant-design/icons";
 import axios from "axios";
 import useIsMountedRef from "../hooks/useIsMountedRef";
 import "./login.css";
+import App from '../App';
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchLoginDetailsAsync,
@@ -19,7 +20,7 @@ import { jwtDecode } from "jwt-decode";
 import logo from "../media/logo1000.png";
 
 
-const LoginPage = () => {
+const LoginPage = ({ setRoleFromChild }) => {
   const navigate = useNavigate();
   const isMountedRef = useIsMountedRef();
   const [showPassword, setShowPassword] = useState(false);
@@ -35,6 +36,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
+   
     console.log(typeof token);
     if (token) {
       try {
@@ -48,6 +50,86 @@ const LoginPage = () => {
       }
     }
   }, []);
+  // const formik = useFormik({
+  //   initialValues: {
+  //     username: "",
+  //     password: "",
+  //   },
+  //   validationSchema: LoginSchema,
+  //   onSubmit: async (values, { setErrors, setSubmitting }) => {
+
+  //     setIsLoading(true);
+  //     try {
+  //       const response = await axios.post(
+  //         "https://invoicezapi.focusrtech.com:57/user/signin",
+  //         {
+  //           username: values.username,
+  //           password: values.password,
+  //         },
+  //       );
+
+  //       const tokens = response.data.tokens;
+  //       const { access_token } = tokens;
+  //       localStorage.setItem("access_token", access_token);
+  //       localStorage.setItem("username", response.data.username);
+                          
+  //   // Decode the role directly from the access token
+  //   const decodedToken = jwtDecode(access_token);
+  //   const roleFromToken = decodedToken.role;
+  
+  //   console.log("ROLE:", roleFromToken);
+    
+   
+  //       console.log("ROLE", role);
+  //       switch (roleFromToken) {
+  //         case "admin":
+  //           navigate("/matrimony");
+  //           break;
+  //         case "invoice manager":
+  //           navigate("/dashboard");
+  //           break;
+  //         case "supplier":
+  //           navigate("/supplier");
+  //           break;
+  //           case "storeuser":
+  //             navigate("/storeuser");
+  //             break;
+  //         default:
+  //       }
+
+  //       notification.success({
+  //         message: "Login Successful",
+  //         description: "You have successfully logged in.",
+  //       });
+  //     } catch (error) {
+  //       console.error("Login failed:", error);
+  //       if (error.response) {
+  //         console.error("Error data:", error.response.data);
+  //         console.error("Error status:", error.response.status);
+  //       } else if (error.request) {
+  //         console.error("No response received:", error.request);
+  //       } else {
+  //         console.error("Error setting up request:", error.message);
+  //       }
+
+  //       notification.error({
+  //         message: "Login Failed",
+  //         description:
+  //           error.response?.data?.message || "An error occurred during login.",
+  //       });
+
+  //       setErrors({
+  //         auth:
+  //           error.response?.data?.message || "An error occurred during login.",
+  //       });
+  //     } finally {
+  //       setIsLoading(false);
+  //       setSubmitting(false);
+  //     }
+  //   },
+  // });
+
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -55,7 +137,6 @@ const LoginPage = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
-
       setIsLoading(true);
       try {
         const response = await axios.post(
@@ -63,7 +144,7 @@ const LoginPage = () => {
           {
             username: values.username,
             password: values.password,
-          },
+          }
         );
 
         const tokens = response.data.tokens;
@@ -71,11 +152,14 @@ const LoginPage = () => {
         localStorage.setItem("access_token", access_token);
         localStorage.setItem("username", response.data.username);
 
-    // Decode the role directly from the access token
-    const decodedToken = jwtDecode(access_token);
-    const roleFromToken = decodedToken.role;
-    console.log("ROLE:", roleFromToken);
-        console.log("ROLE", role);
+        // Decode the role directly from the access token
+        const decodedToken = jwtDecode(access_token);
+        const roleFromToken = decodedToken.role;
+
+        // Update role in App.js immediately
+        setRoleFromChild(roleFromToken);
+
+        // Navigate based on role
         switch (roleFromToken) {
           case "admin":
             navigate("/matrimony");
@@ -86,44 +170,26 @@ const LoginPage = () => {
           case "supplier":
             navigate("/supplier");
             break;
-            case "storeuser":
-              navigate("/storeuser");
-              break;
+          case "storeuser":
+            navigate("/storeuser");
+            break;
           default:
+            navigate("/unauthorized");
         }
-
-        notification.success({
-          message: "Login Successful",
-          description: "You have successfully logged in.",
-        });
       } catch (error) {
         console.error("Login failed:", error);
         if (error.response) {
-          console.error("Error data:", error.response.data);
-          console.error("Error status:", error.response.status);
-        } else if (error.request) {
-          console.error("No response received:", error.request);
+          setErrors({ auth: error.response.data.message });
         } else {
-          console.error("Error setting up request:", error.message);
+          setErrors({ auth: "An error occurred during login." });
         }
-
-        notification.error({
-          message: "Login Failed",
-          description:
-            error.response?.data?.message || "An error occurred during login.",
-        });
-
-        setErrors({
-          auth:
-            error.response?.data?.message || "An error occurred during login.",
-        });
       } finally {
         setIsLoading(false);
         setSubmitting(false);
       }
     },
   });
-
+  
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
@@ -285,6 +351,7 @@ const LoginPage = () => {
       </form>
     </div>
   </div>
+  
 </div>
 
   );

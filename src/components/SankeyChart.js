@@ -233,3 +233,81 @@ const SankeyChart = () => {
 };
 
 export default SankeyChart;
+
+
+
+// import React, { useState } from 'react';
+// import { SankeyChart } from '@fluentui/react-charting'; // Import from Fluent UI
+
+// const SankeyChartComponent = () => {
+//   const [width, setWidth] = useState(820);
+//   const [height, setHeight] = useState(412);
+
+//   const onWidthChange = (e) => {
+//     setWidth(parseInt(e.target.value, 10));
+//   };
+
+//   const onHeightChange = (e) => {
+//     setHeight(parseInt(e.target.value, 10));
+//   };
+
+//   const data = {
+//     chartTitle: 'Invoice Sankey Chart',
+//     SankeyChartData: {
+//       nodes: [
+//         { nodeId: 0, name: 'Invoice Count', color: '#005A8D', borderColor: '#003A5D' },
+//         { nodeId: 1, name: 'Match Found', color: '#00758F', borderColor: '#002E39' },
+//         { nodeId: 2, name: 'Multiple Match Found', color: '#77004D', borderColor: '#43002C' },
+//         { nodeId: 3, name: 'No Match Found', color: '#4F6BED', borderColor: '#3B52B4' },
+//         { nodeId: 4, name: 'Supplier Count', color: '#937600', borderColor: '#6D5700' },
+//         { nodeId: 5, name: 'Line Count', color: '#286EA8', borderColor: '#00457E' },
+//         { nodeId: 6, name: 'PO Number Count', color: '#A43FB1', borderColor: '#7C158A' },
+//       ],
+//       links: [
+//         { source: 0, target: 1, value: 100 },
+//         { source: 0, target: 2, value: 50 },
+//         { source: 0, target: 3, value: 30 },
+//         { source: 1, target: 4, value: 60 },
+//         { source: 1, target: 5, value: 30 },
+//         { source: 1, target: 6, value: 10 },
+//       ],
+//     },
+//   };
+
+//   const rootStyle = { width: `${width}px`, height: `${height}px` };
+
+//   return (
+//     <>
+//       <label htmlFor="changeWidth_Invoice">Change Width:</label>
+//       <input
+//         type="range"
+//         value={width}
+//         min={400}
+//         max={1000}
+//         id="changeWidth_Invoice"
+//         onChange={onWidthChange}
+//         aria-valuetext={`ChangeWidthSlider${width}`}
+//       />
+//       <label htmlFor="changeHeight_Invoice">Change Height:</label>
+//       <input
+//         type="range"
+//         value={height}
+//         min={312}
+//         max={400}
+//         id="changeHeight_Invoice"
+//         onChange={onHeightChange}
+//         aria-valuetext={`ChangeHeightSlider${height}`}
+//       />
+//       <div style={rootStyle}>
+//         <SankeyChart
+//           data={data}
+//           height={height}
+//           width={width}
+//           shouldResize={width + height}
+//         />
+//       </div>
+//     </>
+//   );
+// };
+
+// export default SankeyChartComponent;

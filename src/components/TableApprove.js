@@ -418,6 +418,7 @@ const TableApprove = () => {
         }}
       >
        <DataGrid
+      key={items.length}
       items={filtered}
       columns={columns}
       sortable

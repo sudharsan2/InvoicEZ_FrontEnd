@@ -28,7 +28,16 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
 
       // Handle success
       console.log("File uploaded successfully:", response.data);
-      message.success(`${file.name} uploaded successfully.`);
+      const poHeadersLength = response.data.po_headers.length;
+
+      if (poHeadersLength === 0) {
+        message.success(`${file.name} uploaded successfully at No Match Found.`);
+      } else if (poHeadersLength === 1) {
+        message.success(`${file.name} uploaded successfully at Match Found.`);
+      } else if (poHeadersLength > 1) {
+        message.success(`${file.name} uploaded successfully at Multiple Match Found.`);
+      }
+      // message.success(`${file.name} uploaded successfully.`);
       file.status = "done";
       onSuccess();
 

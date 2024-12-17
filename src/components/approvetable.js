@@ -925,6 +925,7 @@ const SummaryTable = ({
       >
         <DataGrid
       items={filtered}
+      key={items.length}
       columns={columns}
       sortable
       selectionMode="multiselect"

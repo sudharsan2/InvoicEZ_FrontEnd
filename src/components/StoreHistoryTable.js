@@ -109,10 +109,10 @@ const StoreHistoryTable = () => {
         // Map over po_headers to get all po_numbers
 
         return {
-          Id: item.po_headers[0].id,
+          Id: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].id : null,
           grn_num: item.gate_entry_no,
-          location: item.po_headers[0].ship_to,
-          po_number: item.po_headers[0].po_number,
+          location: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].ship_to : null,
+          po_number: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].po_number : null,
           received_date: item.receivedDate,
           supplier_name: item.VendorName,
           total_amount: item.InvoiceTotal,
@@ -151,7 +151,7 @@ const StoreHistoryTable = () => {
       item.total_amount?.toLowerCase().includes(searchLower) ||
       item.receipt?.toLowerCase().includes(searchLower)
     );
-  }).sort((a, b) => a.po_number.localeCompare(b.po_number));;
+  })
 
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
@@ -378,6 +378,7 @@ const StoreHistoryTable = () => {
       >
         <DataGrid
       items={filtered}
+      key={items.length}
       columns={columns}
       sortable
       selectionMode="multiselect"

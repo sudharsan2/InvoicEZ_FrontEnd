@@ -53,7 +53,7 @@ const StoreTagCounters = () => {
   <Divider/>
   <div style={{display:"flex"}}><h2>Invoice Processed</h2></div>
 
-  <SankeyChart/>
+  {/* <SankeyChart/> */}
 </div>
 
 

@@ -58,20 +58,83 @@ import StoreHistoryNavigate from "./pages/StoreHistoryNavigate";
 import UserPage from "./pages/UserPage";
 import GateEntryDetails from "./pages/GateEntryDetails";
 import SankeyChart from "./components/SankeyChart";
+import {  Navigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+import React, {useState,useEffect} from "react";
+
+// const getUserRoleFromToken = () => {
+//   const token = localStorage.getItem("access_token");
+//   if (token) {
+//     try {
+//       const decodedToken = jwtDecode(token);
+//       return decodedToken.role; 
+//     } catch (error) {
+//       console.error("Error decoding token", error);
+//       return null;
+//     }
+//   }
+//   return null;
+// };
+
+// const userRole = getUserRoleFromToken();
+
+// console.log("roleAPP",userRole);
+
 function App() {
+
+
+  const [userRole, setUserRole] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const getUserRoleFromToken = () => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        return decodedToken.role; 
+      } catch (error) {
+        console.error("Error decoding token", error);
+        return null;
+      }
+    }
+    return null;
+  };
+
+  // Effect to fetch role on app load or token change
+  useEffect(() => {
+    const roleFromToken = getUserRoleFromToken();
+    setUserRole(roleFromToken);
+    setLoading(false);
+  }, []);
+
+  // Function to update role dynamically (for child components like Login)
+  const setRoleFromChild = (role) => {
+    setUserRole(role);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+ 
   return (
+  
     <Router basename="">
+      
       <Routes>
-        <Route path="" element={<LoginPage />} />
+        <Route path="" element={<LoginPage setRoleFromChild={setRoleFromChild}/>} />
         {/* <Route path='dashboard'  element={<CustomLayout><Dashboard/></CustomLayout>}/> */}
         <Route
           path="dashboard"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
               <NavDrawerDefault>
                 <Dashboard />
               </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
         <Route
@@ -111,53 +174,73 @@ function App() {
         <Route
           path="/approve"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
                <NavDrawerDefault>
                 <UserApprove />
                 </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
         <Route path="form/:token" element={<EmployeeForm />} />
         <Route
           path="/approvepage"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
                <NavDrawerDefault>
                 <ApprovePage />
                 </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
 <Route
           path="/gate-entry-det"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
                <NavDrawerDefault>
                 <GateEntryDetails />
                 </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
         <Route
           path="/admin"
           element={
+            userRole === 'admin' ? (
             <CustomLayout>
               <NavDrawerDefaultAdmin>
                 <Admin />
               </NavDrawerDefaultAdmin>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
         <Route
           path="/llm"
           element={
+            userRole === 'admin' ? (
             <CustomLayout>
               <NavDrawerDefaultAdmin>
                 <LLMPage />
               </NavDrawerDefaultAdmin>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
         <Route
@@ -173,84 +256,117 @@ function App() {
         <Route
           path="/blob"
           element={
+            userRole === 'admin' ? (
             <CustomLayout>
               <NavDrawerDefaultAdmin>
                 <BlobPage />
               </NavDrawerDefaultAdmin>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
         <Route
           path="/ai"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
               <NavDrawerDefault>
                 <AIPage />
               </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
         <Route
           path="/aidetail"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
                <NavDrawerDefault>
                 <AIDetailPage />
                 </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
         <Route
           path="/aidetail"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
               <NavDrawerDefault>
                 <AIDetailPage />
               </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
         <Route
           path="/matrimony"
           element={
+            userRole === 'admin' ? (
+              
             <CustomLayout>
               <NavDrawerDefaultAdmin>
                 <Matrimony />
                 </NavDrawerDefaultAdmin>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
 <Route
           path="/user"
           element={
+            userRole === 'admin' ? (
             <CustomLayout>
               <NavDrawerDefaultAdmin>
                 <UserPage />
                 </NavDrawerDefaultAdmin>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
         <Route
           path="/issuefixdetails"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
               <NavDrawerDefault>
                 <IssuefixDetails />
               </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
 <Route
           path="/issuefix"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
                <NavDrawerDefault>
                 <IssueFixPage />
                 </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
@@ -436,121 +552,152 @@ function App() {
         <Route
           path="/storeuser"
           element={
+            userRole === 'storeuser' ? (
             <CustomLayoutLoop>
                <NavDrawerDefaultStore>
                 <StoreUser />
                 </NavDrawerDefaultStore>
             </CustomLayoutLoop>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
          <Route
           path="/storedetails"
           element={
+            userRole === 'storeuser' ? (
             <CustomLayoutLoop>
                <NavDrawerDefaultStore>
                 <StoreUserPage />
                 </NavDrawerDefaultStore>
             </CustomLayoutLoop>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
         <Route
           path="/summary"
           element={
+              userRole === 'invoice manager' ? (
             <CustomLayout>
                <NavDrawerDefault>
                 <SummaryPage />
                 </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
 <Route
           path="/gateentry"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
                <NavDrawerDefault>
                 <GateEntry />
                 </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
 <Route
           path="/history"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
                <NavDrawerDefault>
                 <History />
                 </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
 <Route
           path="/historypage"
           element={
+            userRole === 'invoice manager' ? (
             <CustomLayout>
                <NavDrawerDefault>
                 <HistoryDetails />
                 </NavDrawerDefault>
             </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
 <Route
           path="/storehistory"
           element={
+            userRole === 'storeuser' ? (
             <CustomLayoutLoop>
                <NavDrawerDefaultStore>
                 <StoreHistory />
                 </NavDrawerDefaultStore>
             </CustomLayoutLoop>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
 <Route
           path="/storehistorydetails"
           element={
+            userRole === 'storeuser' ? (
             <CustomLayoutLoop>
                <NavDrawerDefaultStore>
                 <StoreHistoryDetails />
                 </NavDrawerDefaultStore>
             </CustomLayoutLoop>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
 <Route
           path="/storedashboard"
           element={
+            userRole === 'storeuser' ? (
             <CustomLayoutLoop>
                <NavDrawerDefaultStore>
                 <StoreTagCounters />
                 </NavDrawerDefaultStore>
             </CustomLayoutLoop>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
 <Route
           path="/storehistorypage"
           element={
+            userRole === 'storeuser' ? (
             <CustomLayoutLoop>
                <NavDrawerDefaultStore>
                 <StoreHistoryNavigate />
                 </NavDrawerDefaultStore>
             </CustomLayoutLoop>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
           }
         />
 
-<Route
-          path="/sanky"
-          element={
-            <CustomLayoutLoop>
-               <NavDrawerDefaultStore>
-                <SankeyChart />
-                </NavDrawerDefaultStore>
-            </CustomLayoutLoop>
-          }
-        />
+
 
 
       </Routes>
