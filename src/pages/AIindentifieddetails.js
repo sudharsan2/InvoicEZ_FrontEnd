@@ -3,7 +3,6 @@
 import { message } from "antd";
 import { OverlayTrigger } from "react-bootstrap";
 import { TableContainer, TableHead, TableSortLabel, Paper } from '@mui/material';
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
@@ -147,7 +146,10 @@ const AIDetailPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortedColumn2, setSortedColumn2] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
+  
+
   const [colourOptions, setColourOptions] = useState([
     { value: "1009", label: "1009" },
     { value: "1010", label: "1010" },
@@ -176,6 +178,7 @@ const AIDetailPage = () => {
   const [selectedtab, setSelectedTab] = React.useState("tab3");
 
   const [selectedItem, setSelectedItem] = useState(null);
+  
 
   const [sortState, setSortState] = useState({
     sortDirection: "ascending",
@@ -568,7 +571,16 @@ const AIDetailPage = () => {
       setSortDirection("asc");
     }
   };
-
+  const handleSort2 = (column) => {
+    if (sortedColumn2=== column) {
+      // Toggle sorting direction if the same column is clicked
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      // Set sorting direction to ascending if a new column is clicked
+      setSortedColumn2(column);
+      setSortDirection("asc");
+    }
+  };
   // Sorting function for header props
   const headerSortProps = (column) => ({
     onClick: () => handleSort(column),
@@ -578,40 +590,73 @@ const AIDetailPage = () => {
       maxWidth: column === "Description" ? "150px" : "200px", // Adjust width as needed
     },
   });
+  const headerSortProps2 = (column) => ({
+    onClick: () => handleSort2(column),
+    style: {
+      fontWeight: "bold",
+      cursor: "pointer",
+      maxWidth: column === "Description" ? "150px" : "200px", // Adjust width as needed
+    },
+  });
 
-  
+  // Sort lineItems based on the current sorting column and direction
+  // const sortedLineItems = [...invoiceData.invoice_info.items].sort((a, b) => {
+  //   if (!sortedColumn) return 0;
 
+  //   const aValue = a[sortedColumn] || "";
+  //   const bValue = b[sortedColumn] || "";
+
+  //   if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
+  //   if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
+  //   return 0;
+  // });
   const sortedLineItems = [...invoiceData.invoice_info.items].sort((a, b) => {
     if (!sortedColumn) return 0;
 
-    const aValue = a[sortedColumn] || "";  
+    // Get the values for comparison
+    const aValue = a[sortedColumn] || ""; // Use empty string for undefined or null
     const bValue = b[sortedColumn] || "";
 
-    // Determine if the values are numeric
-    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
+    // Convert to numbers if they are numeric values (e.g., Quantity, UnitPrice, etc.)
+    const aNumericValue = isNaN(aValue) ? aValue : parseFloat(aValue);
+    const bNumericValue = isNaN(bValue) ? bValue : parseFloat(bValue);
 
-    // Numeric comparison
-    if (isANumeric && isBNumeric) {
-      const aNumeric = parseFloat(aValue);
-      const bNumeric = parseFloat(bValue);
-      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
-    }
-
-    // String comparison using localeCompare for case-insensitive sorting
-    if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
-      const bString = String(bValue).toLowerCase();
-      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
-    }
-
-    // Mixed types: If one is numeric and the other is not, treat the numeric value as smaller
-    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
-    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
-
-    return 0; // If values are still equal
+    if (aNumericValue < bNumericValue) return sortDirection === "asc" ? -1 : 1;
+    if (aNumericValue > bNumericValue) return sortDirection === "asc" ? 1 : -1;
+    return 0;
   });
 
+
+ // Mapping object: Display names to data keys
+const columnKeyMap = {
+  "Line Number": "line_num",
+  "Item Name": "item_name",
+  "Quantity": "quantity",
+  "Unit Price": "unit_price",
+  "Amount Billed": "amount_billed",
+};
+
+// Sorting function
+const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
+  if (!sortedColumn) return 0; // No sorting if no column is selected
+
+  // Map the sorted column name to the actual data key
+  const dataKey = columnKeyMap[sortedColumn];
+  if (!dataKey) return 0; // Skip sorting if no mapping exists for the column
+
+  // Get the values for comparison, default to empty string for null/undefined
+  const aValue = a[dataKey] || "";
+  const bValue = b[dataKey] || "";
+
+  // Convert numeric values for proper comparison
+  const aNumericValue = isNaN(aValue) ? aValue : parseFloat(aValue);
+  const bNumericValue = isNaN(bValue) ? bValue : parseFloat(bValue);
+
+  // Sort logic: Compare based on the current direction
+  if (aNumericValue < bNumericValue) return sortDirection === "asc" ? -1 : 1;
+  if (aNumericValue > bNumericValue) return sortDirection === "asc" ? 1 : -1;
+  return 0; // Equal values
+});
 
 
 
@@ -743,6 +788,16 @@ const AIDetailPage = () => {
             >
               <p>Potential PO</p>
               <h2>{poheader.length}</h2>
+            </div>
+            <div
+              style={{
+                marginLeft: "3vw",
+                borderLeft: "5px solid #FF7F7F",
+                paddingLeft: "10px",
+              }}
+            >
+              <p>Entry Time</p>
+              <h2>{invoiceData.invoice_info.created_at}</h2>
             </div>
           </div>
 
@@ -880,7 +935,7 @@ const AIDetailPage = () => {
               }}
             >
               <div style={{ flex: 2 }}>
-                {/*  <Table>
+               {/*  <Table>
                   <TableHeader
                     style={{
                       position: "sticky",
@@ -980,89 +1035,89 @@ const AIDetailPage = () => {
                     </TableRow>
                   </TableHeader> */}
 
-                <Table>
-                  <TableHeader
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      backgroundColor: themestate ? "#383838" : "white",
-                      zIndex: 1,
-                      color: themestate ? "white" : "black",
-                    }}
-                  >
-                    <TableRow
-                      style={
-                        themestate ? { color: "white", borderBottomColor: "#383838" } : {}
-                      }
-                    >
-                      <TableHeaderCell {...headerSortProps("Description")}>
-                        Description
-                        {sortedColumn === "Description" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Quantity")}>
-                        Quantity
-                        {sortedColumn === "Quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("UnitPrice")}>
-                        Unit Price
-                        {sortedColumn === "UnitPrice" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Discount")}>
-                        Discount
-                        {sortedColumn === "Discount" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("ProductCode")}>
-                        Product Code
-                        {sortedColumn === "ProductCode" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Igst")}>
-                        Igst
-                        {sortedColumn === "Igst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Cgst")}>
-                        Cgst
-                        {sortedColumn === "Cgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
-                        Sgst
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                    </TableRow>
-                  </TableHeader>
+<Table>
+      <TableHeader
+        style={{
+          position: "sticky",
+          top: 0,
+          backgroundColor: themestate ? "#383838" : "white",
+          zIndex: 1,
+          color: themestate ? "white" : "black",
+        }}
+      >
+        <TableRow
+          style={
+            themestate ? { color: "white", borderBottomColor: "#383838" } : {}
+          }
+        >
+          <TableHeaderCell {...headerSortProps("Description")}>
+            Description
+            {sortedColumn === "Description" && (
+              sortDirection === "asc" ? "▲" : "▼"
+            )}
+          </TableHeaderCell>
+          <TableHeaderCell {...headerSortProps("Quantity")}>
+            Quantity
+            {sortedColumn === "Quantity" && (
+              sortDirection === "asc" ? "▲" : "▼"
+            )}
+          </TableHeaderCell>
+          <TableHeaderCell {...headerSortProps("UnitPrice")}>
+            Unit Price
+            {sortedColumn === "UnitPrice" && (
+              sortDirection === "asc" ? "▲" : "▼"
+            )}
+          </TableHeaderCell>
+          <TableHeaderCell {...headerSortProps("Discount")}>
+            Discount
+            {sortedColumn === "Discount" && (
+              sortDirection === "asc" ? "▲" : "▼"
+            )}
+          </TableHeaderCell>
+          <TableHeaderCell {...headerSortProps("ProductCode")}>
+            Product Code
+            {sortedColumn === "ProductCode" && (
+              sortDirection === "asc" ? "▲" : "▼"
+            )}
+          </TableHeaderCell>
+          <TableHeaderCell {...headerSortProps("Igst")}>
+            Igst
+            {sortedColumn === "Igst" && (
+              sortDirection === "asc" ? "▲" : "▼"
+            )}
+          </TableHeaderCell>
+          <TableHeaderCell {...headerSortProps("Cgst")}>
+            Cgst
+            {sortedColumn === "Cgst" && (
+              sortDirection === "asc" ? "▲" : "▼"
+            )}
+          </TableHeaderCell>
+          <TableHeaderCell {...headerSortProps("Sgst")}>
+            Sgst
+            {sortedColumn === "Sgst" && (
+              sortDirection === "asc" ? "" : "▼"
+            )}
+          </TableHeaderCell>
+        </TableRow>
+      </TableHeader>
 
-                  <TableBody>
-                    {sortedLineItems.map((item, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{item.Description || "Null"}</TableCell>
-                        <TableCell>{item.Quantity || "Null"}</TableCell>
-                        <TableCell>{item.UnitPrice || "Null"}</TableCell>
-                        <TableCell>{item.Discount || "Null"}</TableCell>
-                        <TableCell>{item.ProductCode || "Null"}</TableCell>
-                        <TableCell>{item.Igst || "Null"}</TableCell>
-                        <TableCell>{item.Cgst || "Null"}</TableCell>
-                        <TableCell>{item.Sgst || "Null"}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
+      <TableBody>
+        {sortedLineItems.map((item, index) => (
+          <TableRow key={index}>
+            <TableCell>{item.Description || "Null"}</TableCell>
+            <TableCell>{item.Quantity || "Null"}</TableCell>
+            <TableCell>{item.UnitPrice || "Null"}</TableCell>
+            <TableCell>{item.Discount || "Null"}</TableCell>
+            <TableCell>{item.ProductCode || "Null"}</TableCell>
+            <TableCell>{item.Igst || "Null"}</TableCell>
+            <TableCell>{item.Cgst || "Null"}</TableCell>
+            <TableCell>{item.Sgst || "Null"}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    
 
-
-                  {/* <TableBody style={themestate ? { color: "white" } : {}}>
+                  <TableBody style={themestate ? { color: "white" } : {}}>
                     {lineItems.map((item) => (
                       <TableRow
                         key={item.id}
@@ -1153,7 +1208,7 @@ const AIDetailPage = () => {
                         </TableCell>
                       </TableRow>
                     ))}
-                  </TableBody> */}
+                  </TableBody>
                 </Table>
               </div>
             </div>
@@ -1213,230 +1268,133 @@ const AIDetailPage = () => {
                 >
                   <div style={{ flex: 1 }}>
                     <Table>
-                      <TableHeader
-                        style={{
-                          position: "sticky",
-                          top: 0,
-                          backgroundColor: themestate ? "#383838" : "white",
-                          zIndex: 1,
-                          color: themestate ? "white" : "black",
-                        }}
-                      >
-                        <TableRow
-                          style={
-                            themestate
-                              ? { color: "white", borderBottomColor: "#383838" }
-                              : {}
-                          }
-                        >
-                          <TableHeaderCell
-                            style={{
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                              maxWidth: "200px",
-                            }}
-                            {...headerSortProps("Line Number")}
-                          >
-                            Line Number
-                          </TableHeaderCell>
-                          <TableHeaderCell
-                            style={{
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                              maxWidth: "150px",
-                            }}
-                            {...headerSortProps("Item Name")}
-                          >
-                            Item Name
-                          </TableHeaderCell>
-                          <TableHeaderCell
-                            style={{
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                              maxWidth: "300px",
-                            }}
-                            {...headerSortProps("Quantity")}
-                          >
-                            Quantity
-                          </TableHeaderCell>
-                          <TableHeaderCell
-                            style={{
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                              maxWidth: "250px",
-                            }}
-                            {...headerSortProps("Unit Price")}
-                          >
-                            Unit Price
-                          </TableHeaderCell>
-                          <TableHeaderCell
-                            style={{
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                              maxWidth: "150px",
-                            }}
-                            {...headerSortProps("Amount Billed")}
-                          >
-                            Amount Billed
-                          </TableHeaderCell>
-                          <TableHeaderCell
-                            style={{
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                              maxWidth: "150px",
-                            }}
-                          >
-                            See more
-                          </TableHeaderCell>
-                        </TableRow>
-                      </TableHeader>
+                    <TableHeader
+    style={{
+      position: "sticky",
+      top: 0,
+      backgroundColor: themestate ? "#383838" : "white",
+      zIndex: 1,
+      color: themestate ? "white" : "black",
+    }}
+  >
+    <TableRow
+      style={
+        themestate
+          ? { color: "white", borderBottomColor: "#383838" }
+          : {}
+      }
+    >
+      <TableHeaderCell {...headerSortProps2("Line Number")}>
+        Line Number
+        {sortedColumn2 === "Line Number" && (
+          sortDirection === "asc" ? "▲" : "▼"
+        )}
+      </TableHeaderCell>
+      <TableHeaderCell {...headerSortProps2("Item Name")}>
+        Item Name
+        {sortedColumn2 === "Item Name" && (
+          sortDirection === "asc" ? "▲" : "▼"
+        )}
+      </TableHeaderCell>
+      <TableHeaderCell {...headerSortProps2("Quantity")}>
+        Quantity
+        {sortedColumn2 === "Quantity" && (
+          sortDirection === "asc" ? "▲" : "▼"
+        )}
+      </TableHeaderCell>
+      <TableHeaderCell {...headerSortProps2("Unit Price")}>
+        Unit Price
+        {sortedColumn2 === "Unit Price" && (
+          sortDirection === "asc" ? "▲" : "▼"
+        )}
+      </TableHeaderCell>
+      <TableHeaderCell {...headerSortProps2("Amount Billed")}>
+        Amount Billed
+        {sortedColumn2 === "Amount Billed" && (
+          sortDirection === "asc" ? "▲" : "▼"
+        )}
+      </TableHeaderCell>
+      <TableHeaderCell style={{ fontWeight: "bold" }}>
+        Actions
+      </TableHeaderCell>
+    </TableRow>
+  </TableHeader>
 
-                      <TableBody style={themestate ? { color: "white" } : {}}>
-                        {dataitem.po_items &&
-                          dataitem.po_items.map((item) => (
-                            <TableRow
-                              key={item.id}
-                              style={themestate ? { color: "white" } : {}}
-                              className={
-                                themestate ? "hovereffect dark" : "hovereffect"
-                              }
-                            >
-                              <TableCell
-                                style={{
-                                  maxWidth: "300px",
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                {item.line_num || "Null"}
-                              </TableCell>
-                              <TableCell
-                                style={{
-                                  maxWidth: "300px",
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                {item.item_name || "Null"}
-                              </TableCell>
-                              <TableCell
-                                style={{
-                                  maxWidth: "300px",
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                {item.quantity || "Null"}
-                              </TableCell>
-                              <TableCell
-                                style={{
-                                  maxWidth: "300px",
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                {item.unit_price || "Null"}
-                              </TableCell>
-                              <TableCell
-                                style={{
-                                  maxWidth: "300px",
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                {item.amount_billed || "Null"}
-                              </TableCell>
-                              <TableCell
-                                style={{
-                                  maxWidth: "300px",
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                <FaArrowUpRightFromSquare
-                                  style={{ cursor: "pointer" }}
-                                  onClick={(event) => handleClick(event, item)}
-                                />
 
-                                {/* Popover component */}
-                                <Popover
-                                  id={id}
-                                  open={open}
-                                  anchorEl={anchorEl}
-                                  onClose={handleClose}
-                                  anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "center",
-                                  }}
-                                  transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "center",
-                                  }}
-                                >
-                                  <div
-                                    style={{
-                                      padding: "30px",
-                                      maxWidth: "300px",
-                                      marginLeft: "-1em",
-                                      fontFamily: "Segoe UI",
-                                    }}
-                                  >
-                                    {selectedItem ? (
-                                      <ul key={selectedItem.id}>
-                                        <h3>Item Details</h3>
-                                        <ul>
-                                          <li>
-                                            <b>Line Number:</b>{" "}
-                                            {selectedItem.line_num}
-                                          </li>
-                                          <li>
-                                            <b>Order Type:</b>{" "}
-                                            {
-                                              selectedItem.order_type_lookup_code
-                                            }
-                                          </li>
-                                          <li>
-                                            <b>Purchase Basis:</b>{" "}
-                                            {selectedItem.purchase_basis}
-                                          </li>
-                                          <li>
-                                            <b>Category:</b>{" "}
-                                            {selectedItem.category_name}
-                                          </li>
-                                          <li>
-                                            <b>Status:</b>{" "}
-                                            {selectedItem.closed_code}
-                                          </li>
-                                          <li>
-                                            <b>Description:</b>{" "}
-                                            {selectedItem.item_description}
-                                          </li>
-                                          <li>
-                                            <b>Need By Date:</b>{" "}
-                                            {selectedItem.need_by_date || "N/A"}
-                                          </li>
-                                          <li>
-                                            <b>Promised Date:</b>{" "}
-                                            {selectedItem.promised_date ||
-                                              "N/A"}
-                                          </li>
-                                        </ul>
-                                      </ul>
-                                    ) : (
-                                      <p>No item selected.</p>
-                                    )}
-                                  </div>
-                                </Popover>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                      </TableBody>
+  <TableBody style={themestate ? { color: "white" } : {}}>
+  {sortedPoItems.map((item) => (
+    <TableRow
+      key={item.id}
+      style={themestate ? { color: "white" } : {}}
+      className={themestate ? "hovereffect dark" : "hovereffect"}
+    >
+      <TableCell
+        style={{
+          maxWidth: "300px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
+        {item.line_num || "Null"}
+      </TableCell>
+      <TableCell
+        style={{
+          maxWidth: "300px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
+        {item.item_name || "Null"}
+      </TableCell>
+      <TableCell
+        style={{
+          maxWidth: "300px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
+        {item.quantity || "Null"}
+      </TableCell>
+      <TableCell
+        style={{
+          maxWidth: "300px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
+        {item.unit_price || "Null"}
+      </TableCell>
+      <TableCell
+        style={{
+          maxWidth: "300px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
+        {item.amount_billed || "Null"}
+      </TableCell>
+      <TableCell
+        style={{
+          maxWidth: "300px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
+        <FaArrowUpRightFromSquare
+          style={{ cursor: "pointer" }}
+          onClick={(event) => handleClick(event, item)}
+        />
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+
                     </Table>
                   </div>
 
@@ -1446,7 +1404,7 @@ const AIDetailPage = () => {
           </div>
         )}
       </div>
-    // </div>
+     </div>
   );
 };
 

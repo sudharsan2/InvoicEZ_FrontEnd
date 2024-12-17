@@ -3,7 +3,6 @@ import React from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import {notification} from "antd";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
@@ -38,7 +37,7 @@ import { ArrowDownload28Regular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 // import { refreshActions } from "../Store/Store";
 const path = "/issuefix";
-const path1 = "/dashboard";
+const path1 = "http://localhost:3000/";
 
 const useStyles = makeStyles({
   root: {
@@ -153,6 +152,7 @@ const IssuefixDetails = () => {
     shippingAddressRecipient: "",
     dueDate: "",
     purchaseOrder: "",
+    entrytime: "",
   });
 
   const location = useLocation();
@@ -289,6 +289,8 @@ try {
           shippingAddressRecipient: data.ShippingAddressRecipient,
           dueDate: data.DueDate,
           purchaseOrder: data.PurchaseOrder,
+          entrytime: data.created_at,
+
         });
         setCompletedata(data);
         // Update the full data in state
@@ -363,6 +365,8 @@ try {
       ShippingAddressRecipient: formData.shippingAddressRecipient,
       DueDate: formData.dueDate,
       PurchaseOrder: formData.purchaseOrder,
+      created_at: formData.entrytime,
+      
       items: rows.map((item, index) => {
         const oldItem = oldrow[index]; // Match the index of rows with oldrow
 
@@ -716,63 +720,7 @@ try {
       console.log("Selected Rows:", Array.from(allSelectedRows)); // Log selected rows
     }
   };
-
-  // sorting
-  const handleSort = (column) => {
-    if (sortedColumn === column) {
-      
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      
-      setSortedColumn(column);
-      setSortDirection("asc");
-    }
-  };
-
   
-  const headerSortProps = (column) => ({
-    onClick: () => handleSort(column),
-    style: {
-      fontWeight: "bold",
-      cursor: "pointer",
-      maxWidth: column === "Description" ? "150px" : "200px", 
-    },
-  });
-
-  const [sortedColumn, setSortedColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState('asc');
-
-  const sortedData = [...rows].sort((a, b) => {
-    if (!sortedColumn) return 0;
-
-    const aValue = a[sortedColumn] || "";  
-    const bValue = b[sortedColumn] || "";
-
-   
-    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
-
-    
-    if (isANumeric && isBNumeric) {
-      const aNumeric = parseFloat(aValue);
-      const bNumeric = parseFloat(bValue);
-      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
-    }
-
-    
-    if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase(); 
-      const bString = String(bValue).toLowerCase();
-      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
-    }
-
-    
-    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
-    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
-
-    return 0; 
-  });
-
   
   
   const areAllSelected = selectedRows.length === rows.length;
@@ -866,6 +814,16 @@ try {
                   >
                     <p>Potential PO</p>
                     <h2>0</h2>
+                  </div>
+                  <div
+                    style={{
+                      marginLeft: "3vw",
+                      borderLeft: "5px solid #FF7F7F",
+                      paddingLeft: "10px",
+                    }}
+                  >
+                    <p>Entry Time</p>
+                    <h2>{formData.entrytime}</h2>
                   </div>
                 </div>
                 <div
@@ -1085,65 +1043,21 @@ try {
           title="Select All"
         />
       </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("id")}>No
-      {sortedColumn === "id" && (
-      sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("Description")}>Description
-      {sortedColumn === "Description" && (
-      sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("Quantity")}>Quantity
-      {sortedColumn === "Quantity" && (
-      sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("Unit")}>Unit
-      {sortedColumn === "Unit" && (
-      sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("UnitPrice")}>Unit Price
-      {sortedColumn === "UnitPrice" && (
-      sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("Amount")}>Amount
-      {sortedColumn === "Amount" && (
-      sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("SubTotal")}>Subtotal
-      {sortedColumn === "SubTotal" && (
-        sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("PreviousUnpaidBalance")}>Previous Unpaid Balance
-      {sortedColumn === "PreviousUnpaidBalance" && (
-      sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("Igst")}>Igst
-      {sortedColumn === "Igst" && (
-      sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("Cgst")}>Cgst
-      {sortedColumn === "Cgst" && (
-      sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
-      <TableHeaderCell {...headerSortProps("Sgst")}>Sgst
-      {sortedColumn === "Sgst" && (
-      sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-      </TableHeaderCell>
+      <TableHeaderCell>No</TableHeaderCell>
+      <TableHeaderCell>Description</TableHeaderCell>
+      <TableHeaderCell>Quantity</TableHeaderCell>
+      <TableHeaderCell>Unit</TableHeaderCell>
+      <TableHeaderCell>Unit Price</TableHeaderCell>
+      <TableHeaderCell>Amount</TableHeaderCell>
+      <TableHeaderCell>Subtotal</TableHeaderCell>
+      <TableHeaderCell>Previous Unpaid Balance</TableHeaderCell>
+      <TableHeaderCell>Igst</TableHeaderCell>
+      <TableHeaderCell>Cgst</TableHeaderCell>
+      <TableHeaderCell>Sgst</TableHeaderCell>
     </TableRow>
   </TableHeader>
   <TableBody>
-    {sortedData.map((row, index) => (
+    {rows.map((row, index) => (
       <TableRow key={row.id}>
         <TableCell>
           <Checkbox

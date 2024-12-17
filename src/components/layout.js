@@ -66,7 +66,7 @@ const useStyles = makeStyles({
     display: "flex",
   },
 });
- 
+
 const ExampleContent = () => {
   const styles = useStyles();
   const lighttheme = useSelector((state) => state.theme.light);
@@ -94,7 +94,7 @@ const ExampleContent = () => {
         const emailFromToken = decodedToken.email;
         const empIdFromToken = decodedToken.empId;
         const userid = decodedToken.user_id;
- 
+
         setEmail(emailFromToken);
         setEmpId(empIdFromToken);
         setId(userid);
@@ -134,7 +134,7 @@ const ExampleContent = () => {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
             localStorage.removeItem("username");
- 
+
             // Navigate to the login page
             navigate("/");
           }}
@@ -233,13 +233,12 @@ const ExampleContent = () => {
     </div>
   );
 };
- 
+
 // export default ExampleContent;
- 
+
 const CustomLayout = ({ children }) => {
   const [isDarkMode, setDarkMode] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
- 
   const [logoutPopoverVisible, setLogoutPopoverVisible] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState("Dashboard");
   const navigate = useNavigate();
@@ -251,9 +250,22 @@ const CustomLayout = ({ children }) => {
   const [isWalkinUpload, setIsWalkinUpload] = useState(false);
   const [newCandidate, setNewCandidate] = useState(false);
   const [isCardOpen, setIsCardOpen] = useState(false);
-  const [items,setItems]=useState([]);
-  
- const[data,setData] = useState([]);
+  const [items, setItems] = useState([]);
+  const notificationRef = useRef(null);
+
+  useEffect(() => {
+    const toggleCard = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setIsCardOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", toggleCard);
+    return () => document.removeEventListener("mousedown", toggleCard);
+  }, []);
+
+
+
+  const [data, setData] = useState([]);
   const fetchData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
@@ -270,7 +282,7 @@ const CustomLayout = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const fetchedItems = response.data; 
+      const fetchedItems = response.data;
       console.log("fetchedItems", fetchedItems);
       // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
 
@@ -282,12 +294,12 @@ const CustomLayout = ({ children }) => {
           grn_num: item.gate_entry_no,
           location: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].ship_to : null,
           supplier_name: item.VendorName,
-          
+
         };
       });
 
       setItems(mappedItems);
-      console.log("FETCHED",fetchedItems)
+      console.log("FETCHED", mappedItems)
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -310,98 +322,98 @@ const CustomLayout = ({ children }) => {
           // Authorization: `Bearer ${token}`,
         },
       });
-      const fetchedItems = response.data; 
+      const fetchedItems = response.data;
       console.log("fetchedItems...", fetchedItems);
       // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
 
       const mappedItems = fetchedItems.map((item, index) => {
         let Status = "";
-        
+
         if (item.invoiceInfo.po_headers.length === 0) {
           Status = "No Match Found";
-          
+
         } else if (item.invoiceInfo.po_headers.length === 1) {
           Status = "Match Found";
-          
+
         } else if (item.invoiceInfo.po_headers.length > 1) {
           Status = "Multiple Match Found";
-          
+
         }
 
         return {
           Id: item.invoiceInfo.InvoiceId,
           supplier_name: item.invoiceInfo.VendorName,
-          Status:Status,
-          
-          
+          Status: Status,
+
+
         };
       });
 
       setData(mappedItems);
-      console.log("FETCHED",fetchedItems)
+      console.log("FETCHED", mappedItems)
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-      fetchData();
-      GetData();
-    }, []);
-  
- 
+    fetchData();
+    GetData();
+  }, []);
+
+
   const toggleCard = () => {
     setIsCardOpen((prevState) => !prevState);
   }
- 
+
   const navigateToPage = () => {
     // Add your navigation logic here
     window.location.href = "/your-target-page"; // Replace with your route
   };
- 
+
   // const fileInputRef = useRef(null);
- 
+
   // const handleButtonClick = () => {
   //     if (fileInputRef.current) {
   //         fileInputRef.current.click();
   //     }
   // };
- 
+
   const fileInputRef = useRef(null);
- 
+
   const handleButtonClick = () => {
     // Trigger the file input click
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
- 
+
   const [isModalVisible, setIsModalVisible] = useState(false);
- 
+
   const showModal = () => {
     setIsModalVisible(true);
   };
- 
+
   const handleCancel = () => {
     setIsModalVisible(false);
   };
- 
+
   const handleToggle = () => {
     dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Dispatch the action to toggle the state
   };
- 
+
   const handleFileChange = async (info) => {
     const { status, originFileObj: file } = info.file;
- 
+
     if (status === "uploading") {
       // Ignore this, as we're handling the file manually
       return;
     }
- 
+
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
- 
+
       try {
         const response = await axios.post(
           "https://invoicezapi.focusrtech.com:57/user/invoice-upload",
@@ -412,7 +424,7 @@ const CustomLayout = ({ children }) => {
             },
           },
         );
- 
+
         notification.success({
           message: "Upload Successful",
           description: `File ${file.name} uploaded successfully!`,
@@ -428,41 +440,41 @@ const CustomLayout = ({ children }) => {
       }
     }
   };
- 
+
   const uploadProps = {
     name: "file",
     multiple: false, // Single file upload
     onChange: handleFileChange, // This is where we handle the file change
   };
- 
+
   const toggleDarkMode = (checked) => {
     setDarkMode(checked);
   };
- 
+
   const handleTheme = () => {
     dispatch(themeActions.toggletheme());
   };
- 
+
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
       setUsername(storedUsername);
     }
   }, []);
- 
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
       console.log(window.innerWidth);
     };
- 
+
     window.addEventListener("resize", handleResize);
- 
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
- 
+
   const getSearchBoxStyle = () => {
     if (windowWidth < 500) {
       return {
@@ -484,7 +496,7 @@ const CustomLayout = ({ children }) => {
       };
     }
   };
- 
+
   const handleIsWalkinUpload = () => {
     console.log("yes it works");
     setIsWalkinUpload(true);
@@ -497,7 +509,7 @@ const CustomLayout = ({ children }) => {
     console.log("btn clicked");
     setNewCandidate(true);
   };
- 
+
   return (
     <div>
       {/* Navbar */}
@@ -509,7 +521,7 @@ const CustomLayout = ({ children }) => {
           </div>
           <span className="focusR-text">InvoicEZ</span>
         </div>
- 
+
         {/* Right Part */}
         <div className="right-part">
           {/* Share Button */}
@@ -525,10 +537,11 @@ const CustomLayout = ({ children }) => {
           >
             <ShareIos24Filled />
           </div>
- 
+
           {/* Notification Icon and Popover Card */}
           <div style={{ position: "relative", display: "inline-block" }}>
             <div
+              ref={notificationRef}
               className="notification-container"
               onClick={toggleCard}
               style={{ cursor: "pointer", display: "inline-block" }}
@@ -542,7 +555,7 @@ const CustomLayout = ({ children }) => {
                 }}
               />
             </div>
- 
+
             {isCardOpen && (
               <div
                 style={{
@@ -595,9 +608,9 @@ const CustomLayout = ({ children }) => {
                     >
                       New Upload
                     </h3>
- 
+
                     {/* Right Header */}
-                   
+
                     <h3
                       style={{
                         fontSize: "1.3em",
@@ -607,13 +620,13 @@ const CustomLayout = ({ children }) => {
                         paddingBottom: "5px",
                         display: "flex",
                         justifyContent: "flex-start",
-                        width:"49%"
+                        width: "49%"
                       }}
                     >
                       GRN Created
                     </h3>
                   </div>
- 
+
                   {/* Tables Section */}
                   <div
                     style={{
@@ -675,77 +688,105 @@ const CustomLayout = ({ children }) => {
                         </tr>
                       </thead>
                       <tbody>
-        {data.map((row, index) => (
-          <tr key={index}>
-            <td
-              style={{
-                padding: "5px",
-                borderBottom: "1px solid #ddd",
-                color: "#333",
-              }}
-            >
-              {row.Id}
-            </td>
-            <td
-              style={{
-                padding: "5px",
-                borderBottom: "1px solid #ddd",
-                color: "#333",
-              }}
-            >
-              {row.supplier_name}
-            </td>
-            <td
-  style={{
-    padding: "5px",
-    borderBottom: "1px solid #ddd",
-    color: "#fff",
-    backgroundColor: 
-      row.Status === "Match Found" ? "#107c10" : 
-      row.Status === "Multiple Match Found" ? "#107c10" : 
-      row.Status === "No Match Found" ? "#c50f1f" : 
-      "transparent", 
-  }}
->
-  {row.Status}
-</td>
+                        {data.map((row, index) => (
+                          <tr key={index}>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              {row.Id}
+                            </td>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              {row.supplier_name}
+                            </td>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#fff",
+                                backgroundColor:
+                                  row.Status === "Match Found" ? "#107c10" :
+                                    row.Status === "Multiple Match Found" ? "#107c10" :
+                                      row.Status === "No Match Found" ? "#c50f1f" :
+                                        "transparent",
+                              }}
+                            >
+                              {row.Status}
+                            </td>
 
-<td
-  style={{
-    padding: "5px",
-    borderBottom: "1px solid #ddd",
-    color: "#333",
-  }}
->
-  <Button
-    style={{
-      marginRight: "10px",
-      padding: "5px 10px",
-      backgroundColor: "#007bff",
-      color: "#fff",
-      border: "none",
-      borderRadius: "3px",
-      cursor: "pointer",
-    }}
-    onClick={() => {
-      if (row.Status === "Match found") {
-        navigate('/approve');
-      } else if (row.Status === "Multiple Match found") {
-        navigate('/ai');
-      } else if (row.Status === "No Match Found") {
-        navigate('/issuefix');
-      } 
-    }}
-  >
-    Status
-  </Button>
-</td>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              <Button
+                                style={{
+                                  marginRight: "10px",
+                                  padding: "5px 10px",
+                                  backgroundColor: "#007bff",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "3px",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => {
+                                  if (row.Status === "Match found") {
+                                    navigate('/approve');
+                                  } else if (row.Status === "Multiple Match found") {
+                                    navigate('/ai');
+                                  } else if (row.Status === "No Match Found") {
+                                    navigate('/issuefix');
+                                  }
+                                }}
+                              >
+                                Status
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      {/* Bottom Button Section */}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center", // Centers the button horizontally
+                          marginTop: "20px", // Adds spacing between table and button
+                          marginBottom: "20px", // Ensures some spacing at the bottom
+                        }}
+                      >
+                        <button
+                          style={{
+                            padding: "10px 20px",
+                            backgroundColor: "#007bff",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            fontSize: "1em",
+                          }}
+                          
+                          onClick={(e) => {
+                            e.stopPropagation();  
+                            setData([]);
+                          }}
+                        >
+                          Clear
+                        </button>
+                      </div>
 
-          </tr>
-        ))}
-      </tbody>
                     </table>
- 
+
                     {/* Right Table */}
                     <table
                       style={{
@@ -798,108 +839,135 @@ const CustomLayout = ({ children }) => {
                         </tr>
                       </thead>
                       <tbody>
-        {items.map((row, index) => (
-          <tr key={index}>
-            <td
-              style={{
-                padding: "5px",
-                borderBottom: "1px solid #ddd",
-                color: "#333",
-              }}
-            >
-              {row.Id}
-            </td>
-            <td
-              style={{
-                padding: "5px",
-                borderBottom: "1px solid #ddd",
-                color: "#333",
-              }}
-            >
-              {row.supplier_name}
-            </td>
-            <td
-              style={{
-                padding: "5px",
-                borderBottom: "1px solid #ddd",
-                color: "#333",
-              }}
-            >
-              {row.grn_num}
-            </td>
-            <td
-              style={{
-                padding: "5px",
-                borderBottom: "1px solid #ddd",
-                color: "#333",
-              }}
-            >
-              <Button
-                style={{
-                  marginRight: "10px",
-                  padding: "5px 10px",
-                  backgroundColor: "#007bff",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "3px",
-                  cursor: "pointer",
-                }}
-                onClick={() => navigate('/history')}
-              >
-                History
-              </Button>
-              
-            </td>
-          </tr>
-        ))}
-      </tbody>
+                        {items.map((row, index) => (
+                          <tr key={index}>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              {row.Id}
+                            </td>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              {row.supplier_name}
+                            </td>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              {row.grn_num}
+                            </td>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              <Button
+                                style={{
+                                  marginRight: "10px",
+                                  padding: "5px 10px",
+                                  backgroundColor: "#007bff",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "3px",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => navigate('/history')}
+                              >
+                                History
+                              </Button>
+
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "left", // Centers the button horizontally
+                          marginTop: "20px", // Adds spacing between table and button
+                          marginBottom: "20px", // Ensures some spacing at the bottom
+                        }}
+                      >
+                        <button
+                          style={{
+                            padding: "10px 20px",
+                            backgroundColor: "#007bff",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            fontSize: "1em",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation(); 
+                            setData([]); // Closes the notification container
+                          }}
+                        >
+                          Clear
+                        </button>
+                      </div>
                     </table>
                   </div>
                 </div>
               </div>
             )}
- 
+
           </div>
           {/* Question Mark Icon */}
           <div className="questionmark-container">
-              <a
-                href="https://focusrtech.com/"
-                target="_blank"
-                rel="noopener noreferrer"
+            <a
+              href="https://focusrtech.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <QuestionRegular
+                style={{ color: "#fff", height: "38px", width: "38px" }}
+              />
+            </a>
+          </div>
+
+          <Popover appearance={themestate ? "inverted" : ""}>
+            <PopoverTrigger disableButtonEnhancement>
+              <div
+                style={{
+                  marginRight: "15px",
+                  height: "48px",
+                  width: "48px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  WebkitTapHighlightColor: "transparent",
+                }}
               >
-                <QuestionRegular
-                  style={{ color: "#fff", height: "38px", width: "38px" }}
-                />
-              </a>
-            </div>
- 
-            <Popover appearance={themestate ? "inverted" : ""}>
-              <PopoverTrigger disableButtonEnhancement>
-                <div
-                  style={{
-                    marginRight: "15px",
-                    height: "48px",
-                    width: "48px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }}
-                >
-                  <Avatar color="colorful" name={username} size={36} />
-                </div>
-              </PopoverTrigger>
-              <PopoverSurface tabIndex={-5}>
-                <ExampleContent />
-              </PopoverSurface>
-            </Popover>
+                <Avatar color="colorful" name={username} size={36} />
+              </div>
+            </PopoverTrigger>
+            <PopoverSurface tabIndex={-5}>
+              <ExampleContent />
+            </PopoverSurface>
+          </Popover>
+
         </div>
       </div>
- 
+
       {/* Children Components */}
       <div style={{ marginTop: "48px" }}>{children}</div>
- 
+
       {/* Modal */}
       <Modal
         open={newCandidate}
@@ -912,7 +980,7 @@ const CustomLayout = ({ children }) => {
     </div>
   );
 };
- 
- 
+
+
 export default CustomLayout;
- 
+

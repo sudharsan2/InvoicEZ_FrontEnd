@@ -1,57 +1,96 @@
-import { Layout, Button } from "antd";
-import {
-  SearchOutlined,
-  BellOutlined,
-  LogoutOutlined,
-} from "@ant-design/icons";
-import "./layout.css";
-import {
-  UserOutlined,
-  BarChartOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
-import frLogo from "../media/frlogo.png";
+// import { Layout, Button } from "antd";
+// import {
+//   SearchOutlined,
+//   BellOutlined,
+//   LogoutOutlined,
+// } from "@ant-design/icons";
+// import "./layout.css";
+// import {
+//   UserOutlined,
+//   BarChartOutlined,
+//   TeamOutlined,
+// } from "@ant-design/icons";
+// import frLogo from "../media/frlogo.png";
+// import React, { useState, useEffect } from "react";
+// import Login from "../pages/Login";
+// import { useSelector, useDispatch } from "react-redux";
+// import { useNavigate } from "react-router-dom";
+// import Drawer1 from "./drawer";
+// import {
+//   SearchBox,
+//   Field,
+//   Avatar,
+//   PopoverTrigger,
+//   PopoverSurface,
+//   makeStyles,
+//   Popover,
+//   Text,
+//   shorthands,
+//   Link,
+//   InfoLabel,
+// } from "@fluentui/react-components";
+// import {
+//   AlertBadgeRegular,
+//   QuestionRegular,
+//   WeatherSunnyRegular,
+//   WeatherMoonRegular,
+// } from "@fluentui/react-icons";
+// import { themeActions, refreshActions } from "../Store/Store";
+// import { calc } from "antd/es/theme/internal";
+// import { DarkModeSwitch } from "react-toggle-dark-mode";
+// // import { useNavigate } from "react-router-dom";
+// import { jwtDecode } from "jwt-decode";
+// import { ShareIos24Filled } from "@fluentui/react-icons";
+// import axios from "axios";
+// import InvoiceUpload from "./UploadInvoice";
+// import { useRef } from "react";
+
+// import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
+// import { Modal, Upload, notification, message } from "antd";
+// import WalkInCandidate from "./WalkinCandidate.jsx";
+
+// const { Header, Content, Footer, Sider } = Layout;
+// const { Dragger } = Upload;
+// const useStyles = makeStyles({
+//   contentHeader: {
+//     marginTop: "0",
+//   },
+//   text: {
+//     ...shorthands.overflow("hidden"),
+//     width: "240px",
+//     display: "block",
+//     color: "#424242",
+//   },
+//   r1572tok: {
+//     boxSizing: "border-box",
+//     color: "white",
+//     display: "flex",
+//   },
+// });
+import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect } from "react";
-import Login from "../pages/Login";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import Drawer1 from "./drawer";
+import { Layout, Modal } from "antd";
 import {
   SearchBox,
   Field,
-  Avatar,
   PopoverTrigger,
   PopoverSurface,
-  makeStyles,
   Popover,
-  Text,
+  Avatar,
   shorthands,
   Link,
   InfoLabel,
 } from "@fluentui/react-components";
-import {
-  AlertBadgeRegular,
-  QuestionRegular,
-  WeatherSunnyRegular,
-  WeatherMoonRegular,
-} from "@fluentui/react-icons";
-import { themeActions, refreshActions } from "../Store/Store";
-import { calc } from "antd/es/theme/internal";
-import { DarkModeSwitch } from "react-toggle-dark-mode";
-// import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import { ShareIos24Filled } from "@fluentui/react-icons";
-import axios from "axios";
-import InvoiceUpload from "./UploadInvoice";
+
+import { AlertBadgeRegular } from "@fluentui/react-icons";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "./layout.css";
 import { useRef } from "react";
-
-import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
-import { Modal, Upload, notification, message } from "antd";
-import WalkInCandidate from "./WalkinCandidate.jsx";
-
-const { Header, Content, Footer, Sider } = Layout;
-const { Dragger } = Upload;
-const useStyles = makeStyles({
+import axios from "axios";
+import frLogo from "../media/frlogo.png";
+import { makeStyles, Text } from "@fluentui/react-components";
+const useStyles2 = makeStyles({
   contentHeader: {
     marginTop: "0",
   },
@@ -67,9 +106,8 @@ const useStyles = makeStyles({
     display: "flex",
   },
 });
-
 const ExampleContent = () => {
-  const styles = useStyles();
+  const styles = useStyles2();
   const lighttheme = useSelector((state) => state.theme.light);
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
@@ -77,6 +115,7 @@ const ExampleContent = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
+  // Define the table columns and data  
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -139,16 +178,16 @@ const ExampleContent = () => {
           style={
             themestate
               ? {
-                  width: "25%",
-                  textAlign: "right",
-                  color: darktheme.fontcolordark,
-                  WebkitTapHighlightColor: "transparent",
-                }
+                width: "25%",
+                textAlign: "right",
+                color: darktheme.fontcolordark,
+                WebkitTapHighlightColor: "transparent",
+              }
               : {
-                  width: "25%",
-                  textAlign: "right",
-                  WebkitTapHighlightColor: "transparent",
-                }
+                width: "25%",
+                textAlign: "right",
+                WebkitTapHighlightColor: "transparent",
+              }
           }
         >
           Sign out
@@ -178,11 +217,11 @@ const ExampleContent = () => {
             style={
               themestate
                 ? {
-                    fontSize: "20px",
-                    width: "100%",
-                    marginBottom: "10px",
-                    color: darktheme.fontcolordark,
-                  }
+                  fontSize: "20px",
+                  width: "100%",
+                  marginBottom: "10px",
+                  color: darktheme.fontcolordark,
+                }
                 : { fontSize: "1.5 em", width: "100%", marginBottom: "10px" }
             }
           >
@@ -194,17 +233,17 @@ const ExampleContent = () => {
             style={
               themestate
                 ? {
-                    fontSize: "14px",
-                    width: "100%",
-                    marginBottom: "10px",
-                    color: darktheme.fontcolordark,
-                  }
+                  fontSize: "14px",
+                  width: "100%",
+                  marginBottom: "10px",
+                  color: darktheme.fontcolordark,
+                }
                 : {
-                    fontSize: "14px",
-                    width: "100%",
-                    marginBottom: "10px",
-                    color: "#424242",
-                  }
+                  fontSize: "14px",
+                  width: "100%",
+                  marginBottom: "10px",
+                  color: "#424242",
+                }
             }
           >
             {email} {/* Dynamically generate email based on username */}
@@ -216,10 +255,10 @@ const ExampleContent = () => {
             style={
               themestate
                 ? {
-                    fontSize: "14px",
-                    width: "100%",
-                    color: darktheme.fontcolordark,
-                  }
+                  fontSize: "14px",
+                  width: "100%",
+                  color: darktheme.fontcolordark,
+                }
                 : { fontSize: "14px", width: "100%" }
             }
           >
@@ -232,106 +271,83 @@ const ExampleContent = () => {
   );
 };
 
-// export default ExampleContent;
+// const { Header, Content } = Layout;
+
+// const useStyles = makeStyles({
+//   text: {
+//     width: "240px",
+//     color: "#424242",
+//   },
+// });
 
 const CustomLayoutLoop = ({ children }) => {
-  const [isDarkMode, setDarkMode] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  const [logoutPopoverVisible, setLogoutPopoverVisible] = useState(false);
-  const [selectedMenuItem, setSelectedMenuItem] = useState("Dashboard");
+  // const styles = useStyles();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const lighttheme = useSelector((state) => state.theme.light);
-  const darktheme = useSelector((state) => state.theme.dark);
-  const themestate = useSelector((state) => state.theme.theme);
   const [username, setUsername] = useState("");
-  const [isWalkinUpload, setIsWalkinUpload] = useState(false);
-  const [newCandidate, setNewCandidate] = useState(false);
+  const [notificationsVisible, setNotificationsVisible] = useState(false);
+  const [newCandidate, setNewCandidate] = useState(false); // State for Modal
+  const themestate = useSelector((state) => state.theme.theme);
+  const [data, setData] = useState([]);
+  const notificationRef = useRef(null); // Create a ref for the notification container
 
-  // const fileInputRef = useRef(null);
 
-  // const handleButtonClick = () => {
-  //     if (fileInputRef.current) {
-  //         fileInputRef.current.click();
-  //     }
-  // };
-
-  const fileInputRef = useRef(null);
-
-  const handleButtonClick = () => {
-    // Trigger the file input click
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+  const handleNotificationClick = () => {
+    setNotificationsVisible((prevState) => !prevState); // Toggle visibility
   };
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleToggle = () => {
-    dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Dispatch the action to toggle the state
-  };
-
-  const handleFileChange = async (info) => {
-    const { status, originFileObj: file } = info.file;
-
-    if (status === "uploading") {
-      // Ignore this, as we're handling the file manually
-      return;
-    }
-
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        const response = await axios.post(
-          "https://invoicezapi.focusrtech.com:57/user/invoice-upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          },
-        );
-
-        notification.success({
-          message: "Upload Successful",
-          description: `File ${file.name} uploaded successfully!`,
-        });
-        handleToggle();
-      } catch (error) {
-        console.error("Upload failed:", error);
-        notification.error({
-          message: "Upload Failed",
-          description:
-            "There was an error uploading the file. Please try again.",
-        });
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if click is outside the notification container
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setNotificationsVisible(false); // Close notifications
       }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      // Cleanup event listener on component unmount
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const GetData = async (showMessage = false) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/storetrue-invoice", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const fetchedItems = response.data;
+      console.log("fetchedItems...", fetchedItems);
+      // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+
+
+
+      const mappedItems = fetchedItems.map((item, index) => {
+        return {
+          Id: item.InvoiceId,
+          supplier_name: item.po_headers[0].supplier_name,
+          po_number: item.po_headers[0].po_number,
+          amount: item.po_headers[0].total_amount,
+          date: item.InvoiceDate
+        };
+      });
+
+      setData(mappedItems);
+      console.log("mappedItems", mappedItems)
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
-
-  const uploadProps = {
-    name: "file",
-    multiple: false, // Single file upload
-    onChange: handleFileChange, // This is where we handle the file change
-  };
-
-  const toggleDarkMode = (checked) => {
-    setDarkMode(checked);
-  };
-
-  const handleTheme = () => {
-    dispatch(themeActions.toggletheme());
-  };
+  useEffect(() => {
+    GetData()
+  }, [])
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -340,212 +356,262 @@ const CustomLayoutLoop = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-      console.log(window.innerWidth);
-    };
 
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const getSearchBoxStyle = () => {
-    if (windowWidth < 500) {
-      return {
-        width: "30vw",
-        height: "",
-        backgroundColor: themestate ? "rgb(41,41,41)" : "#fff",
-      };
-    } else if (windowWidth < 863) {
-      return {
-        width: "40vw",
-        height: "",
-        backgroundColor: themestate ? "rgb(41,41,41)" : "#fff",
-      };
-    } else {
-      return {
-        width: "100vw",
-        height: "",
-        backgroundColor: themestate ? "rgb(41,41,41)" : "#fff",
-      };
-    }
+  const handleSignOut = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("username");
+    navigate("/");
   };
 
-  const handleIsWalkinUpload = () => {
-    console.log("yes it works");
-    setIsWalkinUpload(true);
-    setNewCandidate(false);
-  };
   const handleNewCandidate = () => {
-    setNewCandidate(false);
-  };
-  const handleNewCandidateBtn = () => {
-    console.log("btn clicked");
-    setNewCandidate(true);
+    setNewCandidate(!newCandidate); // Toggle the modal visibility
   };
 
   return (
-    <div style={{}}>
-      <div>
-        <div className={themestate ? "navbardark" : "navbarlight"}>
-          <div className="left-part">
-            <div className="focusr-logo">
-              <img src={frLogo} alt="FRLogo" className="focusr-logo-img"></img>
-            </div>
-            <span className="focusR-text">InvoiceEZ</span>
+    <div>
+      {/* Navbar */}
+
+
+      <div className={themestate ? "navbardark" : "navbarlight"}>
+        {/* Left Part */}
+        <div className="left-part">
+          <div className="focusr-logo">
+            <img src={frLogo} alt="FRLogo" className="focusr-logo-img" />
           </div>
-          {/* <Field
-            style={
-              themestate
-                ? {
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "rgb(41,41,41)",
-                    borderRadius: "5px",
-                  }
-                : {
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "#fff",
-                    borderRadius: "5px",
-                  }
-            }
+          <span className="focusR-text">InvoicEZ</span>
+        </div>
+
+        {/* Right Part */}
+        <div className="right-part">
+          {/* Share Button */}
+          <div
+            ref={notificationRef} // Attach ref here
+            className="notification-container"
+            onClick={handleNotificationClick}
+            style={{
+              position: "relative",
+              cursor: "pointer",
+              marginRight: "20px",
+              marginBottom: "10px"// Add spacing between elements
+            }}
           >
-            <SearchBox
-              placeholder="Search..."
-              style={getSearchBoxStyle()}
-              className={
-                themestate &&
-                "searchboxicon searchboxinputtext searchboxinputplaceholder"
-              }
-              size="medium"
-              appearance="filled-darker"
+            <AlertBadgeRegular
+              style={{
+                color: "#fff",
+                height: "30px",
+                width: "50px",
+                marginTop: "-4px"
+              }}
             />
-          </Field> */}
-          <div className="right-part">
-            {/* <div
-              className="theme-container"
-              onClick={handleTheme}
-              style={{ WebkitTapHighlightColor: "transparent" }}
-            >
-              <DarkModeSwitch
-                checked={isDarkMode}
-                onChange={toggleDarkMode}
-                sunColor="rgb(239, 213, 112)"
-                moonColor="rgb(246, 241, 150)"
-                size={26}
-              />
-            </div> */}
-            {/* <input type="file" onChange={handleFileChange} /> */}
-            <div>
-              {/* The button that triggers file selection */}
-              {/* <div
-                style={{ color: "#fff", cursor: "pointer", height: "100%",
-                  width: "100%", }}
-                onClick={handleButtonClick}
-            >
-                <ShareIos24Filled />
-                <InvoiceUpload fileInputRef={fileInputRef} />
-            </div> */}
+            {notificationsVisible && (
               <div
                 style={{
-                  color: "#fff",
-                  cursor: "pointer",
-                  height: "100%",
-                  width: "100%",
-                  position: "relative", // To position the hidden input
+                  position: "fixed",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "60%",
+                  background: themestate ? "#333" : "#fff",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                  borderRadius: "8px",
+                  padding: "20px",
+                  zIndex: 1000,
                 }}
-                onClick={handleButtonClick}
+                onclick={handleNotificationClick}
+
               >
-                {/* <ShareIos24Filled onClick={handleNewCandidateBtn} /> */}
-                {/* <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{ display: "none" }} // Hide the file input
-                  onChange={showModal} // Add the onChange prop to handle file input changes
-                /> */}
-              </div>
-            </div>
-            <div className="notification-container">
-              <AlertBadgeRegular
-                style={{
-                  color: "#fff",
-                  height: "100%",
-                  width: "100%",
-                  cursor: "pointer",
-                }}
-              />
-            </div>
-            {/* <div className="questionmark-container">
-              <a
-                href="https://focusrtech.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <QuestionRegular
-                  style={{ color: "#fff", height: "100%", width: "100%" }}
-                />
-              </a>
-            </div> */}
-            <Popover appearance={themestate ? "inverted" : ""}>
-              <PopoverTrigger disableButtonEnhancement>
-                <div
+                <Text
+                  weight="bold"
                   style={{
-                    marginRight: "15px",
-                    height: "48px",
                     display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
+                    fontSize: "20px",
+                    justifyContent: "space-between",
+                    alignItems: "center", // Ensures vertical alignment
+                    borderBottom: "1px solid #ddd",
+                    paddingBottom: "10px",
+                    marginBottom: "20px",
+                    gap: "20px",
+
+
                   }}
                 >
-                  <Avatar color="colorful" name={username} size={36} />
+                  New Gate Entry
+                </Text>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between", // Space between tables
+                    alignItems: "flex-start", // Ensures tables align to the top
+                    gap: "20px", // Adds consistent spacing between tables
+                  }}
+                >
+                  <table
+                    style={{
+                      width: "100%", // Adjust table width for proper alignment
+                      borderCollapse: "collapse",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          style={{
+                            textAlign: "left",
+                            padding: "8px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#555",
+                          }}
+                        >
+                          Invoice No
+                        </th>
+                        <th
+                          style={{
+                            textAlign: "left",
+                            padding: "8px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#555",
+                          }}
+                        >
+                          Supplier Name
+                        </th>
+                        <th
+                          style={{
+                            textAlign: "left",
+                            padding: "8px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#555",
+                          }}
+                        >
+                          PO Number
+                        </th>
+                        <th
+                          style={{
+                            textAlign: "left",
+                            padding: "8px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#555",
+                          }}
+                        >
+                          Amount
+                        </th>
+                        <th
+                          style={{
+                            textAlign: "left",
+                            padding: "8px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#555",
+                          }}
+                        >
+                          Date
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map((item, index) => (
+                        <tr key={index}>
+                          <td style={{
+                            padding: "5px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#333",
+                          }}>
+                            {item.Id}
+                          </td>
+
+                          <td style={{
+                            padding: "5px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#333",
+                          }}>
+                            {item.amount}
+                          </td>
+                          <td style={{
+                            padding: "5px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#333",
+                          }}>
+                            {item.date}
+                          </td>
+                          <td style={{
+                            padding: "5px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#333",
+                          }}>
+                            {item.po_number}
+                          </td>
+                          <td style={{
+                            padding: "5px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#333",
+                          }}>
+                            {item.supplier_name}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "left", // Centers the button horizontally
+                          marginTop: "20px", // Adds spacing between table and button
+                          marginBottom: "20px", // Ensures some spacing at the bottom
+                        }}
+                      >
+                        <button
+                          style={{
+                            padding: "10px 20px",
+                            backgroundColor: "#007bff",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            fontSize: "1em",
+                          }}
+                          onClick={() => {
+                            setData([]); // Closes the notification container
+                            setNotificationsVisible(false); // Clears notifications
+                          }}
+                        >
+                          Clear
+                        </button>
+                      </div>
+                  </table>
                 </div>
-              </PopoverTrigger>
-              <PopoverSurface tabIndex={-5}>
-                <ExampleContent />
-              </PopoverSurface>
-            </Popover>
+              </div>
+            )}
+
           </div>
+
+          <Popover appearance={themestate ? "inverted" : ""}>
+            <PopoverTrigger disableButtonEnhancement>
+              <div
+                style={{
+                  marginRight: "15px",
+                  height: "48px",
+                  width: "48px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  WebkitTapHighlightColor: "transparent",
+                }}
+              >
+                <Avatar color="colorful" name={username} size={36} />
+              </div>
+            </PopoverTrigger>
+            <PopoverSurface tabIndex={-5}>
+              <ExampleContent />
+            </PopoverSurface>
+          </Popover>
+
         </div>
       </div>
-      <div style={{ marginTop: "48px" }}>{children}</div>
-      {/* <Modal
-        title="Upload File"
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Dragger {...uploadProps}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p className="ant-upload-hint">
-            Support for a single file upload. Strictly prohibited from uploading
-            company data or other banned files.
-          </p>
-        </Dragger>
-      </Modal> */}
-      {/* <Modal
-        open={newCandidate}
-        onCancel={handleNewCandidate}
-        width={540}
-        footer={[]}
-      >
-        <WalkInCandidate isWalkinUpload={handleIsWalkinUpload} />
-      </Modal> */}
-    </div>
+
+      Children Components
+      < div style={{ marginTop: "48px" }}> {children}</div >
+    </div >
   );
 };
 
 export default CustomLayoutLoop;
+

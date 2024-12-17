@@ -32,11 +32,10 @@ import { ArrowDownload28Regular } from "@fluentui/react-icons";
 import CreatableSelect from "react-select/creatable";
 import { message } from "antd";
 import { notification } from "antd";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 
 const path = "/approve";
 const path2 = "/approvepage";
-const path1 = "/dashboard";
+const path1 = "/Dashboard";
 
 const useStyles = makeStyles({
   root: {
@@ -142,6 +141,7 @@ const ApprovePage = () => {
   const [total, setTotal] = useState();
   const [status, setStatus] = useState();
   const [supplier, setSupplier] = useState();
+  const [entrytime, setentrytime] =useState();
   const [vendor, setVendor] = useState("");
   const [customer, setCustomer] = useState();
   const [invoiceid, setInvoiceId] = useState();
@@ -337,30 +337,9 @@ const ApprovePage = () => {
     ],
   );
 
-  // const headerSortProps = (columnId) => ({
-  //   onClick: (e) => toggleColumnSort(e, columnId),
-  //   sortDirection: getSortDirection(columnId),
-  // });
-
-
-  const handleSort = (column) => {
-    if (sortedColumn === column) {
-     
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      // Set sorting direction to ascending if a new column is clicked
-      setSortedColumn(column);
-      setSortDirection("asc");
-    }
-  };
-
-  const headerSortProps = (column) => ({
-    onClick: () => handleSort(column),
-    style: {
-      fontWeight: "bold",
-      cursor: "pointer",
-      maxWidth: column === "Description" ? "150px" : "200px", // Adjust width as needed
-    },
+  const headerSortProps = (columnId) => ({
+    onClick: (e) => toggleColumnSort(e, columnId),
+    sortDirection: getSortDirection(columnId),
   });
 
   const handleViewInvoice = async () => {
@@ -411,9 +390,9 @@ const ApprovePage = () => {
 
 
         const invoice_items = fetchedItems.invoice_info.items.map((item, index) => {
-          // console.log("IGST", item.Igst);
-          // console.log("CGST", item.Cgst);
-          // console.log("SGST", item.Sgst);
+          console.log("IGST", item.Igst);
+          console.log("CGST", item.Cgst);
+          console.log("SGST", item.Sgst);
         
           return {
             Igst: item.Igst,
@@ -450,7 +429,7 @@ const ApprovePage = () => {
         );
 
         // Log or process the combined data as needed
-        console.log("NORMAL",normalizedPoLineItems);
+        console.log(normalizedPoLineItems);
 
         setData(normalizedPoLineItems);
         setTotal(fetchedItems.po_header.total_amount);
@@ -462,6 +441,7 @@ const ApprovePage = () => {
         setInvoiceDate(fetchedItems.invoice_info.InvoiceDate);
         setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
         setSupplier(fetchedItems.po_header.supplier_name);
+        setentrytime(fetchedItems.invoice_info.created_at);
         fetchedItems.po_lineitems.forEach((item) => {
           setClosedCode(item.closed_code);
         });
@@ -521,56 +501,20 @@ const ApprovePage = () => {
     }
   }, [poNumber]);
 
-  // const sortedData = [...data].sort((a, b) => {
-  //   const aValue = a[sortState.sortColumn];
-  //   const bValue = b[sortState.sortColumn];
-
-  //   if (typeof aValue === "string" && typeof bValue === "string") {
-  //     return sortState.sortDirection === "ascending"
-  //       ? aValue.localeCompare(bValue)
-  //       : bValue.localeCompare(aValue);
-  //   }
-
-  //   return sortState.sortDirection === "ascending"
-  //     ? aValue - bValue
-  //     : bValue - aValue;
-  // });
-
-  const [sortedColumn, setSortedColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState('asc');
-
   const sortedData = [...data].sort((a, b) => {
-    if (!sortedColumn) return 0;
+    const aValue = a[sortState.sortColumn];
+    const bValue = b[sortState.sortColumn];
 
-    const aValue = a[sortedColumn] || "";  
-    const bValue = b[sortedColumn] || "";
-
-    
-    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
-
-   
-    if (isANumeric && isBNumeric) {
-      const aNumeric = parseFloat(aValue);
-      const bNumeric = parseFloat(bValue);
-      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+    if (typeof aValue === "string" && typeof bValue === "string") {
+      return sortState.sortDirection === "ascending"
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
     }
 
-    // String comparison using localeCompare for case-insensitive sorting
-    if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
-      const bString = String(bValue).toLowerCase();
-      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
-    }
-
-    // Mixed types: If one is numeric and the other is not, treat the numeric value as smaller
-    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
-    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
-
-    return 0; // If values are still equal
+    return sortState.sortDirection === "ascending"
+      ? aValue - bValue
+      : bValue - aValue;
   });
-
-  
 
   return (
     <div style={{ height: "88vh", overflowY: "auto" }}>
@@ -716,6 +660,16 @@ const ApprovePage = () => {
                 >
                   <p>Line Matching</p>
                   <h2>FULL</h2>
+                </div>
+                <div
+                  style={{
+                    marginLeft: "3vw",
+                    borderLeft: "5px solid #FF7F7F",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  <p>Entry Time</p>
+                  <h2>{entrytime}</h2>
                 </div>
               </div>
             </div>
@@ -1048,7 +1002,7 @@ const ApprovePage = () => {
             >
               <div style={{ flex: 1 }}>
                 <Table>
-                  {/* <TableHeader
+                  <TableHeader
                     style={{
                       position: "sticky",
                       top: 0,
@@ -1165,87 +1119,7 @@ const ApprovePage = () => {
                         Sgst
                       </TableHeaderCell>
                     </TableRow>
-                  </TableHeader> */}
-
-
-
-                  <TableHeader
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      backgroundColor: themestate ? "#383838" : "white",
-                      zIndex: 1,
-                      color: themestate ? "white" : "black",
-                    }}
-                  >
-                    <TableRow
-                      style={
-                        themestate ? { color: "white", borderBottomColor: "#383838" } : {}
-                      }
-                    >
-                      <TableHeaderCell {...headerSortProps("id")}>
-                      PO_line_id
-                        {sortedColumn === "id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("item_name")}>
-                      Name
-                        {sortedColumn === "item_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("item_description")}>
-                      Description
-                        {sortedColumn === "item_description" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("item_name")}>
-                      Invc Item Name
-                        {sortedColumn === "item_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("unit_price")}>
-                      Unit Price
-                        {sortedColumn === "unit_price" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("quantity")}>
-                      Quantity
-                        {sortedColumn === "quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Quantity")}>
-                      Invoice Quantity
-                        {sortedColumn === "Quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Igst")}>
-                        Igst
-                        {sortedColumn === "Igst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Cgst")}>
-                        Cgst
-                        {sortedColumn === "Cgst" && (
-                          sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
-                        Sgst
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                    </TableRow>
                   </TableHeader>
-
 
                   <TableBody style={themestate ? { color: "white" } : {}}>
                     {sortedData.map((item) => (
