@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
-  ArrowClockwise28Regular,
-  Delete28Regular,
+  ArrowClockwise24Regular,
+  Delete24Regular,
 } from "@fluentui/react-icons";
 import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
@@ -323,7 +323,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
           }}
           onClick={() => handleDelete()}
         >
-          <Delete28Regular style={{ color: "#1281d7" }} />
+          <Delete24Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
         </button>
 
@@ -343,7 +343,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
           onClick={handleRefreshClick}
           
         >
-          <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
+          <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
 

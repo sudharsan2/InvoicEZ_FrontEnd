@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import React from "react";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
   makeStyles,
@@ -36,7 +35,7 @@ import { notification } from "antd";
 
 const path = "/approve";
 const path2 = "/approvepage";
-const path1 = "/dashboard";
+const path1 = "http://localhost:3000/";
 
 const useStyles = makeStyles({
   root: {
@@ -149,6 +148,8 @@ const HistoryDetails = () => {
   const [invoicedate, setInvoiceDate] = useState();
   const [invoicetot, setInvoicetot] = useState();
   const [closedcode, setClosedCode] = useState();
+  const [entrytime, setEntrytime] = useState();
+  
   const [po_id, set_Po_id] = useState("");
 
   const [inv_id, setInv_id] = useState();
@@ -310,10 +311,10 @@ const HistoryDetails = () => {
     ],
   );
 
-  // const headerSortProps = (columnId) => ({
-  //   onClick: (e) => toggleColumnSort(e, columnId),
-  //   sortDirection: getSortDirection(columnId),
-  // });
+  const headerSortProps = (columnId) => ({
+    onClick: (e) => toggleColumnSort(e, columnId),
+    sortDirection: getSortDirection(columnId),
+  });
 
   const handleViewInvoice = async () => {
     try {
@@ -367,27 +368,12 @@ const HistoryDetails = () => {
 
         console.log("InvoiceId", fetchedItems.invoice_info.id);
 
-        const invoice_items = fetchedItems.invoice_info.items.map((item, index) => {
-          // console.log("IGST", item.Igst);
-          // console.log("CGST", item.Cgst);
-          // console.log("SGST", item.Sgst);
-        
-          return {
-            Igst: item.Igst,
-            Cgst: item.Cgst,
-            Sgst: item.Sgst,
-            index: index, // Include the index to match with po_lineitems
-          };
-        });
-        
-
         const normalizedPoLineItems = fetchedItems.po_lineitems.map(
           (poItem, index) => {
             console.log("PO", poItem);
 
             const matchingInvoiceItems = fetchedItems.invoice_info.items;
-            
-            const matchingInvoiceItem = invoice_items[index];
+
             const matchingQuantity = matchingInvoiceItems[index]
               ? matchingInvoiceItems[index].Quantity
               : null;
@@ -398,14 +384,9 @@ const HistoryDetails = () => {
               quantity: poItem.quantity,
               unit_price: poItem.unit_price,
               Quantity: matchingQuantity,
-              Igst: matchingInvoiceItem ? matchingInvoiceItem.Igst : null,
-              Cgst: matchingInvoiceItem ? matchingInvoiceItem.Cgst : null,
-              Sgst: matchingInvoiceItem ? matchingInvoiceItem.Sgst : null,
-              
             };
           },
         );
-
 
         // Log or process the combined data as needed
         console.log(normalizedPoLineItems);
@@ -420,6 +401,7 @@ const HistoryDetails = () => {
         setInvoiceDate(fetchedItems.invoice_info.InvoiceDate);
         setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
         setSupplier(fetchedItems.po_header.supplier_name);
+        setEntrytime(fetchedItems.invoice_info.created_at);
         fetchedItems.po_lineitems.forEach((item) => {
           setClosedCode(item.closed_code);
         });
@@ -479,78 +461,20 @@ const HistoryDetails = () => {
     }
   }, [poNumber]);
 
-  // const sortedData = [...data].sort((a, b) => {
-  //   const aValue = a[sortState.sortColumn];
-  //   const bValue = b[sortState.sortColumn];
-
-  //   if (typeof aValue === "string" && typeof bValue === "string") {
-  //     return sortState.sortDirection === "ascending"
-  //       ? aValue.localeCompare(bValue)
-  //       : bValue.localeCompare(aValue);
-  //   }
-
-  //   return sortState.sortDirection === "ascending"
-  //     ? aValue - bValue
-  //     : bValue - aValue;
-  // });
-
-
-   
-   const handleSort = (column) => {
-    if (sortedColumn === column) {
-      
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      
-      setSortedColumn(column);
-      setSortDirection("asc");
-    }
-  };
-
-  
-  const headerSortProps = (column) => ({
-    onClick: () => handleSort(column),
-    style: {
-      fontWeight: "bold",
-      cursor: "pointer",
-      maxWidth: column === "Description" ? "150px" : "200px", 
-    },
-  });
-
-  const [sortedColumn, setSortedColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState('asc');
-
   const sortedData = [...data].sort((a, b) => {
-    if (!sortedColumn) return 0;
+    const aValue = a[sortState.sortColumn];
+    const bValue = b[sortState.sortColumn];
 
-    const aValue = a[sortedColumn] || "";  
-    const bValue = b[sortedColumn] || "";
-
-   
-    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
-
-    
-    if (isANumeric && isBNumeric) {
-      const aNumeric = parseFloat(aValue);
-      const bNumeric = parseFloat(bValue);
-      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+    if (typeof aValue === "string" && typeof bValue === "string") {
+      return sortState.sortDirection === "ascending"
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
     }
 
-    
-    if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase(); 
-      const bString = String(bValue).toLowerCase();
-      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
-    }
-
-    
-    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
-    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
-
-    return 0; 
+    return sortState.sortDirection === "ascending"
+      ? aValue - bValue
+      : bValue - aValue;
   });
-
 
   return (
     <div style={{ height: "88vh", overflowY: "auto" }}>
@@ -562,7 +486,7 @@ const HistoryDetails = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>History</BreadcrumbButton>
+              <BreadcrumbButton href={path}>Match Found</BreadcrumbButton>
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
@@ -696,6 +620,16 @@ const HistoryDetails = () => {
                 >
                   <p>Line Matching</p>
                   <h2>FULL</h2>
+                </div>
+                <div
+                  style={{
+                    marginLeft: "3vw",
+                    borderLeft: "5px solid #FF7F7F",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  <p>Time Entry</p>
+                  <h2>{entrytime}</h2>
                 </div>
               </div>
             </div>
@@ -1037,68 +971,80 @@ const HistoryDetails = () => {
                   >
                     <TableRow
                       style={
-                        themestate ? { color: "white", borderBottomColor: "#383838" } : {}
+                        themestate
+                          ? { color: "white", borderBottomColor: "#383838" }
+                          : {}
                       }
                     >
-                      <TableHeaderCell {...headerSortProps("id")}>
-                      PO_line_id
-                        {sortedColumn === "id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("PO_line_id")}
+                      >
+                        PO Line ID
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("item_name")}>
-                      Name
-                        {sortedColumn === "item_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "200px",
+                        }}
+                        {...headerSortProps("name")}
+                      >
+                        Name
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("item_description")}>
-                      Description
-                        {sortedColumn === "item_description" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "300px",
+                        }}
+                        {...headerSortProps("description")}
+                      >
+                        Description
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("item_name")}>
-                      Invc Item Name
-                        {sortedColumn === "item_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "250px",
+                        }}
+                        {...headerSortProps("invoice_item_name")}
+                      >
+                        Invc Item Name
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("unit_price")}>
-                      Unit Price
-                        {sortedColumn === "unit_price" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("unit_price")}
+                      >
+                        Unit Price
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("quantity")}>
-                      Quantity
-                        {sortedColumn === "quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("quantity")}
+                      >
+                        Quantity
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Quantity")}>
-                      Invoice Quantity
-                        {sortedColumn === "Quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Igst")}>
-                        Igst
-                        {sortedColumn === "Igst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Cgst")}>
-                        Cgst
-                        {sortedColumn === "Cgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
-                        Sgst
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Invoice Quantity
                       </TableHeaderCell>
                     </TableRow>
                   </TableHeader>
@@ -1181,36 +1127,6 @@ const HistoryDetails = () => {
                           }}
                         >
                           {item.Quantity}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Igst}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Cgst}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Sgst}
                         </TableCell>
                       </TableRow>
                     ))}

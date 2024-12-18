@@ -11,6 +11,7 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import frLogo from "../media/frlogo.png";
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import React, { useState, useEffect } from "react";
 import Login from "../pages/Login";
 import { useSelector, useDispatch } from "react-redux";
@@ -252,28 +253,223 @@ const CustomLayout = ({ children }) => {
   const [isCardOpen, setIsCardOpen] = useState(false);
   const [items, setItems] = useState([]);
   const notificationRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);  // State to handle loading state
+  const [isCleared, setIsCleared] = useState(false); 
 
-  useEffect(() => {
-    const toggleCard = (event) => {
-      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-        setIsCardOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", toggleCard);
-    return () => document.removeEventListener("mousedown", toggleCard);
-  }, []);
+  // useEffect(() => {
+  //   const toggleCard = (event) => {
+  //     if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+  //       setIsCardOpen(false);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", toggleCard);
+  //   return () => document.removeEventListener("mousedown", toggleCard);
+  // }, []);
 
 
 
   const [data, setData] = useState([]);
+
+
+  // const fetchData = async (showMessage = false) => {
+  //   if (showMessage) {
+  //     message.success("Refreshing...");
+  //   }
+  //   try {
+  //     // const response = await axios.get(
+  //     //   "https://invoicezapi.focusrtech.com:57/user/grn-history",
+  //     // );
+  //     const token = localStorage.getItem("access_token");
+  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     const fetchedItems = response.data;
+  //     console.log("fetchedItems", fetchedItems);
+  //     // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+
+  //     const mappedItems = fetchedItems.map((item, index) => {
+  //       // Map over po_headers to get all po_numbers
+
+  //       return {
+  //         Id: item.InvoiceId,
+  //         grn_num: item.gate_entry_no,
+  //         location: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].ship_to : null,
+  //         supplier_name: item.VendorName,
+  //       };
+  //     });
+
+  //     setItems(mappedItems);
+  //     console.log("FETCHED", mappedItems)
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+
+  // const GetData = async (showMessage = false) => {
+  //   if (showMessage) {
+  //     message.success("Refreshing...");
+  //   }
+  //   try {
+  //     // const response = await axios.get(
+  //     //   "https://invoicezapi.focusrtech.com:57/user/grn-history",
+  //     // );
+  //     const token = localStorage.getItem("access_token");
+  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/unread-documents", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         // Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     const fetchedItems = response.data;
+  //     console.log("fetchedItems...", fetchedItems);
+  //     // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+
+  //     const mappedItems = fetchedItems.map((item, index) => {
+  //       let Status = "";
+
+  //       if (item.invoiceInfo.po_headers.length === 0) {
+  //         Status = "No Match Found";
+
+  //       } else if (item.invoiceInfo.po_headers.length === 1) {
+  //         Status = "Match Found";
+
+  //       } else if (item.invoiceInfo.po_headers.length > 1) {
+  //         Status = "Multiple Match Found";
+
+  //       }
+
+  //       return {
+  //         Id: item.invoiceInfo.InvoiceId,
+  //         supplier_name: item.invoiceInfo.VendorName,
+  //         Status: Status,
+
+
+  //       };
+  //     });
+
+  //     setData(mappedItems);
+  //     console.log("FETCHED", mappedItems)
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchData();
+  //   GetData();
+  // }, []);
+
+  // const fetchData = async (showMessage = false) => {
+  //   if (showMessage) {
+  //     message.success("Refreshing...");
+  //   }
+  //   try {
+  //     const token = localStorage.getItem("access_token");
+  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+
+  //     const fetchedItems = response.data;
+
+  //     const mappedItems = fetchedItems.map((item, index) => {
+  //       return {
+  //         Id: item.InvoiceId,
+  //         grn_num: item.gate_entry_no,
+  //         location: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].ship_to : null,
+  //         supplier_name: item.VendorName,
+  //       };
+  //     });
+
+  //     setData(mappedItems);  // Update the table data
+  //     console.log("FETCHED", mappedItems);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // // Function to fetch the unread documents for the notifications
+  // const GetData = async (showMessage = false) => {
+  //   if (showMessage) {
+  //     message.success("Refreshing...");
+  //   }
+  //   try {
+  //     const token = localStorage.getItem("access_token");
+  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/unread-documents", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     const fetchedItems = response.data;
+
+  //     const mappedItems = fetchedItems.map((item, index) => {
+  //       let Status = "";
+
+  //       if (item.invoiceInfo.po_headers.length === 0) {
+  //         Status = "No Match Found";
+  //       } else if (item.invoiceInfo.po_headers.length === 1) {
+  //         Status = "Match Found";
+  //       } else if (item.invoiceInfo.po_headers.length > 1) {
+  //         Status = "Multiple Match Found";
+  //       }
+
+  //       return {
+  //         Id: item.invoiceInfo.InvoiceId,
+  //         supplier_name: item.invoiceInfo.VendorName,
+  //         Status: Status,
+  //       };
+  //     });
+
+  //     setData(mappedItems);  // Update the notifications data
+  //     console.log("FETCHED", mappedItems);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // // Handle the clear button functionality
+  // const handleClearButtonClick = (e) => {
+  //   e.stopPropagation();  // Prevent the click event from bubbling up and closing the card
+  //   setData([]);  // Clear the data
+  //   localStorage.setItem('dataCleared', 'true');  // Store the cleared state in localStorage
+  // };
+
+  // // Check if the data is cleared from localStorage on page load
+  // useEffect(() => {
+  //   const isDataCleared = localStorage.getItem('dataCleared');
+  //   if (isDataCleared === 'true') {
+  //     // If the data was cleared, prevent fetching the data
+  //     setData([]);  // Ensure data is still cleared even on page refresh
+  //   } else {
+  //     fetchData();  // Fetch data if it's not cleared
+  //   }
+  // }, []);
+
+
+
+  // const toggleCard = () => {
+  //   setIsCardOpen((prevState) => !prevState);
+  //   fetchData();
+  //   GetData();
+  // }
+
+
   const fetchData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
     }
     try {
-      // const response = await axios.get(
-      //   "https://invoicezapi.focusrtech.com:57/user/grn-history",
-      // );
       const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
         method: "GET",
@@ -282,89 +478,90 @@ const CustomLayout = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+
       const fetchedItems = response.data;
-      console.log("fetchedItems", fetchedItems);
-      // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
 
-      const mappedItems = fetchedItems.map((item, index) => {
-        // Map over po_headers to get all po_numbers
-
+      const mappedItems = fetchedItems.map((item) => {
         return {
           Id: item.InvoiceId,
           grn_num: item.gate_entry_no,
           location: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].ship_to : null,
           supplier_name: item.VendorName,
-
         };
       });
 
-      setItems(mappedItems);
-      console.log("FETCHED", mappedItems)
+      setData(mappedItems);  // Update the table data
+      console.log("FETCHED", mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-
+  // Function to fetch the unread documents for the notifications
   const GetData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
     }
     try {
-      // const response = await axios.get(
-      //   "https://invoicezapi.focusrtech.com:57/user/grn-history",
-      // );
       const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/unread-documents", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
         },
       });
-      const fetchedItems = response.data;
-      console.log("fetchedItems...", fetchedItems);
-      // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
 
-      const mappedItems = fetchedItems.map((item, index) => {
+      const fetchedItems = response.data;
+
+      const mappedItems = fetchedItems.map((item) => {
         let Status = "";
 
         if (item.invoiceInfo.po_headers.length === 0) {
           Status = "No Match Found";
-
         } else if (item.invoiceInfo.po_headers.length === 1) {
           Status = "Match Found";
-
         } else if (item.invoiceInfo.po_headers.length > 1) {
           Status = "Multiple Match Found";
-
         }
 
         return {
           Id: item.invoiceInfo.InvoiceId,
           supplier_name: item.invoiceInfo.VendorName,
           Status: Status,
-
-
         };
       });
 
-      setData(mappedItems);
-      console.log("FETCHED", mappedItems)
+      setData(mappedItems);  // Update the notifications data
+      console.log("FETCHED", mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  useEffect(() => {
-    fetchData();
-    GetData();
-  }, []);
+  const handleClearButtonClick = (e) => {
+    e.stopPropagation();
+    setIsLoading(true);
+    setData([]);
+    setIsCleared(true); 
+    setIsLoading(false); 
+  };
+
+  // useEffect(() => {
+  //   const isDataCleared = localStorage.getItem('dataCleared');
+  //   if (isDataCleared === 'true') {
+  //     setData([]); 
+  //   } else {
+  //     fetchData();
+  //   }
+  // }, []);
 
 
   const toggleCard = () => {
     setIsCardOpen((prevState) => !prevState);
-  }
+    fetchData();
+    GetData();
+  };
+
 
   const navigateToPage = () => {
     // Add your navigation logic here
@@ -510,6 +707,10 @@ const CustomLayout = ({ children }) => {
     setNewCandidate(true);
   };
 
+
+
+
+
   return (
     <div>
       {/* Navbar */}
@@ -539,12 +740,12 @@ const CustomLayout = ({ children }) => {
           </div>
 
           {/* Notification Icon and Popover Card */}
-          <div style={{ position: "relative", display: "inline-block" }}>
+          <div style={{ position: "relative" }}>
             <div
               ref={notificationRef}
               className="notification-container"
               onClick={toggleCard}
-              style={{ cursor: "pointer", display: "inline-block" }}
+              style={{ cursor: "pointer" }}
             >
               <AlertBadgeRegular
                 style={{
@@ -574,10 +775,10 @@ const CustomLayout = ({ children }) => {
               >
                 <div
                   className="card"
-                  onClick={(e) => e.stopPropagation()}
+                  // onClick={(e) => e.stopPropagation()}
                   style={{
                     background: "#fff",
-                    width: "800px", // Adjusted width for two tables
+                    width: "1200px", // Adjusted width for two tables
                     borderRadius: "10px",
                     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
                     padding: "20px",
@@ -683,7 +884,7 @@ const CustomLayout = ({ children }) => {
                               color: "#555",
                             }}
                           >
-                            Navigation
+                            View
                           </th>
                         </tr>
                       </thead>
@@ -710,9 +911,11 @@ const CustomLayout = ({ children }) => {
                             </td>
                             <td
                               style={{
-                                padding: "5px",
+                                padding: "2px 2px",
                                 borderBottom: "1px solid #ddd",
                                 color: "#fff",
+                                fontSize: "12px",
+                                textAlign: "left",
                                 backgroundColor:
                                   row.Status === "Match Found" ? "#107c10" :
                                     row.Status === "Multiple Match Found" ? "#107c10" :
@@ -730,28 +933,21 @@ const CustomLayout = ({ children }) => {
                                 color: "#333",
                               }}
                             >
-                              <Button
-                                style={{
-                                  marginRight: "10px",
-                                  padding: "5px 10px",
-                                  backgroundColor: "#007bff",
-                                  color: "#fff",
-                                  border: "none",
-                                  borderRadius: "3px",
-                                  cursor: "pointer",
-                                }}
+                              <FaArrowUpRightFromSquare
+                                style={{ cursor: "pointer", marginLeft: "1rem" }}
                                 onClick={() => {
-                                  if (row.Status === "Match found") {
-                                    navigate('/approve');
-                                  } else if (row.Status === "Multiple Match found") {
-                                    navigate('/ai');
-                                  } else if (row.Status === "No Match Found") {
-                                    navigate('/issuefix');
+                                  const status = row.Status?.trim().toLowerCase(); // Normalize the status
+                                  if (status === "match found") {
+                                    navigate("/approve");
+                                  } else if (status === "multiple match found") {
+                                    navigate("/ai");
+                                  } else if (status === "no match found") {
+                                    navigate("/issuefix");
+                                  } else {
+                                    console.error("Unknown status:", row.Status);
                                   }
                                 }}
-                              >
-                                Status
-                              </Button>
+                              />
                             </td>
                           </tr>
                         ))}
@@ -768,18 +964,20 @@ const CustomLayout = ({ children }) => {
                         <button
                           style={{
                             padding: "10px 20px",
-                            backgroundColor: "#007bff",
-                            color: "#fff",
+                            // backgroundColor: "#007bff",
+                            // color: "#fff",
                             border: "none",
-                            borderRadius: "5px",
+                            // borderRadius: "5px",
                             cursor: "pointer",
                             fontSize: "1em",
+                            marginLeft: "-60px"
                           }}
-                          
-                          onClick={(e) => {
-                            e.stopPropagation();  
-                            setData([]);
-                          }}
+
+                          // onClick={(e) => {
+                          //   e.stopPropagation();
+                          //   setData([]);
+                          // }}
+                          onClick={handleClearButtonClick}
                         >
                           Clear
                         </button>
@@ -834,7 +1032,7 @@ const CustomLayout = ({ children }) => {
                               color: "#555",
                             }}
                           >
-                            Navigation
+                            View
                           </th>
                         </tr>
                       </thead>
@@ -905,15 +1103,15 @@ const CustomLayout = ({ children }) => {
                         <button
                           style={{
                             padding: "10px 20px",
-                            backgroundColor: "#007bff",
-                            color: "#fff",
+                            // backgroundColor: "#007bff",
+                            // color: "#fff",
                             border: "none",
-                            borderRadius: "5px",
+                            // borderRadius: "5px",
                             cursor: "pointer",
                             fontSize: "1em",
                           }}
                           onClick={(e) => {
-                            e.stopPropagation(); 
+                            e.stopPropagation();
                             setData([]); // Closes the notification container
                           }}
                         >

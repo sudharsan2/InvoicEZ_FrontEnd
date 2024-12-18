@@ -523,14 +523,7 @@ const CustomLayoutLoop = ({ children }) => {
                             borderBottom: "1px solid #ddd",
                             color: "#333",
                           }}>
-                            {item.amount}
-                          </td>
-                          <td style={{
-                            padding: "5px",
-                            borderBottom: "1px solid #ddd",
-                            color: "#333",
-                          }}>
-                            {item.date}
+                            {item.supplier_name}
                           </td>
                           <td style={{
                             padding: "5px",
@@ -544,7 +537,14 @@ const CustomLayoutLoop = ({ children }) => {
                             borderBottom: "1px solid #ddd",
                             color: "#333",
                           }}>
-                            {item.supplier_name}
+                            {item.amount}
+                          </td>
+                          <td style={{
+                            padding: "5px",
+                            borderBottom: "1px solid #ddd",
+                            color: "#333",
+                          }}>
+                            {item.date}
                           </td>
                         </tr>
                       ))}
@@ -560,10 +560,10 @@ const CustomLayoutLoop = ({ children }) => {
                         <button
                           style={{
                             padding: "10px 20px",
-                            backgroundColor: "#007bff",
-                            color: "#fff",
+                            // backgroundColor: "#007bff",
+                            // color: "#fff",
                             border: "none",
-                            borderRadius: "5px",
+                            // borderRadius: "5px",
                             cursor: "pointer",
                             fontSize: "1em",
                           }}
@@ -573,7 +573,7 @@ const CustomLayoutLoop = ({ children }) => {
                           }}
                         >
                           Clear
-                        </button>
+                        </button> 
                       </div>
                   </table>
                 </div>

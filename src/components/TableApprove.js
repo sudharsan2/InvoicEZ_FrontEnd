@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  ArrowClockwise28Regular,
-  Delete28Regular,
+  ArrowClockwise24Regular,
+  Delete24Regular,
   TasksApp28Regular,
 } from "@fluentui/react-icons";
 import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
@@ -264,8 +264,8 @@ const TableApprove = () => {
     }
   };
 
+  
   // Approve API
-
   const handleApproveSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
     if (selectedItemsArray.length === 0) {
@@ -365,7 +365,7 @@ const TableApprove = () => {
           }}
           onClick={handleDeleteSelectedRows} // Call delete function
         >
-          <Delete28Regular style={{ color: "#1281d7" }} />
+          <Delete24Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
         </button>
 
@@ -401,7 +401,7 @@ const TableApprove = () => {
           onClick={handleRefreshClick}
           
         >
-          <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
+          <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
 

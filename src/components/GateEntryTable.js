@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  ArrowClockwise28Regular,
+  ArrowClockwise24Regular,
   Delete28Regular,
   TasksApp28Regular,
 } from "@fluentui/react-icons";
@@ -410,7 +410,7 @@ const GateEntryTable = ({setTableLength}) => {
           }}
           onClick={fetchData}
         >
-          <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
+          <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
 

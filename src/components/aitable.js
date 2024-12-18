@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  ArrowClockwise28Regular,
-  Delete28Regular,
+  ArrowClockwise24Regular,
+  Delete24Regular,
   TasksApp28Regular,
 } from "@fluentui/react-icons";
 import { useLocation } from "react-router-dom";
@@ -300,7 +300,7 @@ const AITable = ({ setTableLength }) => {
           }}
           onClick={handleDeleteSelectedRows}
         >
-          <Delete28Regular style={{ color: "#1281d7" }} />
+          <Delete24Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
         </button>
 
@@ -318,7 +318,7 @@ const AITable = ({ setTableLength }) => {
           // onClick={fetchData}
           onClick={handleRefreshClick}
         >
-          <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
+          <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
 
