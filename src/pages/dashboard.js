@@ -9,7 +9,7 @@ import LineChartPage from "../components/Linechart";
 // import SankeyChart from "../components/SankeyChart";
 import ApexChart from "../components/ApexChart";
 import { LineChart } from "recharts";
-import SankeyChartComponent from "../components/SankeyChart";
+import SankeyChart from "../components/SankeyChart";
 import {Divider} from "@fluentui/react-components"
 const TagCounters = () => {
   const counters = [
@@ -53,7 +53,7 @@ const TagCounters = () => {
   <Divider/>
   <div style={{display:"flex"}}><h2>Invoice Processed</h2></div>
 
-  <SankeyChartComponent/>
+  <SankeyChart/>
 </div>
 
 

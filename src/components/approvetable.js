@@ -21,7 +21,7 @@
 // import { Button, notification } from "antd"; // Import Ant Design components
 // import { useDispatch, useSelector } from "react-redux";
 // import { refreshActions } from "../Store/Store";
-
+ 
 // // Define columns for the DataGrid
 // const columns = [
 //   createTableColumn({
@@ -83,23 +83,23 @@
 //     ),
 //   }),
 // ];
-
+ 
 // const ApproveTable = () => {
 //   const [searchQuery, setSearchQuery] = useState("");
 //   const [items, setItems] = useState([]); // State to hold API data
 //   const [selectedRows, setSelectedRows] = useState(new Set());
 //   const [po_id, set_Po_id] = useState("");
 //   const navigate = useNavigate();
-
+ 
 //   const dispatch = useDispatch();
 //   const isInvoiceUploadRefreshed = useSelector(
 //     (state) => state.refresh.InvoiceUploadRefresh,
 //   );
-
+ 
 //   const [RefreshUpload, SetRefreshUpload] = useState(null);
-
+ 
 //   const [DeleteRefresh, SetDeleteRefresh] = useState(false);
-
+ 
 //   // Fetch data from the API when the component mounts
 //   const fetchData = async () => {
 //     try {
@@ -126,28 +126,28 @@
 //         total_amount: item.po_headers[0].total_amount,
 //         status: item.po_headers[0].status,
 //       }));
-
+ 
 //       setItems(mappedItems);
 //     } catch (error) {
 //       console.error("Error fetching data:", error);
 //     }
 //   };
-
+ 
 //   useEffect(() => {
 //     SetRefreshUpload(isInvoiceUploadRefreshed);
 //   }, []);
-
+ 
 //   useEffect(() => {
 //     fetchData();
 //   }, [isInvoiceUploadRefreshed]);
-
+ 
 //   const handleSearchChange = (value) => {
 //     setSearchQuery(value);
 //   };
 //   // console.log("--------->",filteredItems)
 //   const filteredItems = items.filter((item) => {
 //     const searchLower = searchQuery?.trim().toLowerCase() || "";
-
+ 
 //     return (
 //       item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
 //       item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
@@ -163,7 +163,7 @@
 //       item.status?.toLowerCase().includes(searchLower)
 //     );
 //   });
-
+ 
 //   const handleRowClick = (e, item) => {
 //     if (e.target.type !== "checkbox") {
 //       navigate(`/approvepage`, {
@@ -172,12 +172,12 @@
 //       console.log("ItemId", item.Id);
 //     }
 //   };
-
+ 
 //   const handleSelectionChange = (event, data) => {
 //     console.log("handleSelectionChange", data.selectedItems);
 //     setSelectedRows(data.selectedItems);
 //   };
-
+ 
 //   //  delete API
 //   const handleDeleteSelectedRows = async () => {
 //     const selectedItemsArray = Array.from(selectedRows);
@@ -188,34 +188,34 @@
 //       });
 //       return;
 //     }
-
+ 
 //     try {
 //       const supplierNames = selectedItemsArray
 //         .map((item) => item.supplier_name)
 //         .join(", ");
-
+ 
 //       const deletePromises = selectedItemsArray.map((item) =>
 //         axios.delete(
 //           `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
 //         ),
 //       );
-
+ 
 //       await Promise.all(deletePromises);
-
+ 
 //       const newItems = items.filter(
 //         (item) =>
 //           !selectedItemsArray.some(
 //             (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
 //           ), // Ensure to compare InvoiceId
 //       );
-
+ 
 //       setItems(newItems);
-
+ 
 //       notification.success({
 //         message: "Successfully deleted",
 //         description: `You have successfully deleted: ${supplierNames}`,
 //       });
-
+ 
 //       dispatch(refreshActions.toggleInvoiceUploadRefresh());
 //     } catch (error) {
 //       const supplierNames = selectedItemsArray
@@ -227,9 +227,9 @@
 //       });
 //     }
 //   };
-
+ 
 //   // Approve API
-
+ 
 //   const handleApproveSelectedRows = async () => {
 //     const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
 //     if (selectedItemsArray.length === 0) {
@@ -239,22 +239,22 @@
 //       });
 //       return;
 //     }
-
+ 
 //     try {
 //       const supplierNames = selectedItemsArray
 //         .map((item) => item.supplier_name)
 //         .join(", ");
-
+ 
 //       // Make API call to delete selected POs
 //       await Promise.all(
 //         selectedItemsArray.map((item) =>
 //           axios.post(`https://invoicezapi.focusrtech.com:57/user/oracle-payload/${po_id}`),
 //         ),
 //       );
-
+ 
 //       // Remove deleted items from the state
 //       setItems(items.filter((item) => !selectedItemsArray.includes(item)));
-
+ 
 //       // Show success notification
 //       notification.success({
 //         message: "Successfully Approved",
@@ -271,7 +271,7 @@
 //       });
 //     }
 //   };
-
+ 
 //   return (
 //     <>
 //       <div
@@ -300,7 +300,7 @@
 //           <Delete28Regular style={{ color: "#1281d7" }} />
 //           <span>Delete</span>
 //         </button>
-
+ 
 //         <button
 //           style={{
 //             display: "flex",
@@ -317,7 +317,7 @@
 //           <TasksApp28Regular style={{ color: "#1281d7" }} />
 //           <span>Approve</span>
 //         </button>
-
+ 
 //         <button
 //           style={{
 //             display: "flex",
@@ -334,7 +334,7 @@
 //           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
 //           <span>Refresh</span>
 //         </button>
-
+ 
 //         <Search
 //           placeholder="Search PO or Supplier"
 //           onSearchChange={handleSearchChange}
@@ -390,9 +390,9 @@
 //     </>
 //   );
 // };
-
+ 
 // export default ApproveTable;
-
+ 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -415,11 +415,10 @@ import Search from "./Search"; // Assuming your search component is imported her
 import { Button, notification } from "antd"; // Import Ant Design components
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-import {message} from "antd";
+import { message } from "antd";
 import { ShareIos24Filled } from "@fluentui/react-icons";
 import { Modal } from "antd";
 import WalkInCandidate from "./WalkinCandidate";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({
@@ -437,14 +436,14 @@ const columns = [
   //   renderHeaderCell: () => "Status",
   //   renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
   // }),
-
+ 
   createTableColumn({
     columnId: "Status",
     renderHeaderCell: () => "Status",
     renderCell: (item) => {
       const getStatusStyle = (status) => {
         switch (status) {
-          case "Match Found":
+          case "Gate Entry":
             return {
               backgroundColor: "#107c10",
               color: "#fff",
@@ -473,7 +472,7 @@ const columns = [
           //   return { backgroundColor: "gray", color: "white", borderRadius: "10px", padding: "4px 8px", textAlign: "center" };
         }
       };
-
+ 
       return (
         <TableCellLayout>
           <span style={getStatusStyle(item.Status)}>{item.Status}</span>
@@ -481,7 +480,7 @@ const columns = [
       );
     },
   }),
-
+ 
   createTableColumn({
     columnId: "amount",
     renderHeaderCell: () => "Amount",
@@ -503,7 +502,7 @@ const columns = [
   //   renderCell: (item) => <TableCellLayout>{item.bill_to}</TableCellLayout>,
   // }),
 ];
-
+ 
 const SummaryTable = ({
   setFixCount,
   setMatchCount,
@@ -516,17 +515,16 @@ const SummaryTable = ({
   const [po_id, set_Po_id] = useState("");
   const [isWalkinUpload, setIsWalkinUpload] = useState(false);
   const [newCandidate, setNewCandidate] = useState(false);
-  const [filtered, setFilteredItems] = useState([]);
-
+ 
   const navigate = useNavigate();
-
+ 
   const dispatch = useDispatch();
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
-
+ 
   const [RefreshUpload, SetRefreshUpload] = useState(null);
-
+ 
   const [DeleteRefresh, SetDeleteRefresh] = useState(false);
   // let tableLength=fetchedItems.length;
   // Fetch data from the API when the component mounts
@@ -548,30 +546,30 @@ const SummaryTable = ({
       const tablelength = fetchedItems.length;
       console.log("Table length", tablelength);
       let Status = "";
-
+ 
       let MatchCount = 0;
       let multiple_MatchCount = 0;
       let fixCount = 0;
-
+ 
       const mappedItems = fetchedItems.map((item) => {
         let Status = "";
-
+ 
         if (item.po_headers.length === 0) {
           Status = "No Match Found";
           fixCount += 1;
         } else if (item.po_headers.length === 1) {
-          Status = "Match Found";
+          Status = "Gate Entry";
           MatchCount += 1;
         } else if (item.po_headers.length > 1) {
           Status = "Multiple Match Found";
           multiple_MatchCount += 1;
         }
-
+ 
         // setTableLength(tablelength);
         // setFixCount(fixCount);
         // setMatchCount(MatchCount);
         // setMultiple_MatchCount(multiple_MatchCount);
-
+ 
         return {
           id: item.id,
           supplier: item.VendorName,
@@ -588,27 +586,23 @@ const SummaryTable = ({
       setMatchCount(MatchCount);
       setMultiple_MatchCount(multiple_MatchCount);
       setTableLength(tablelength);
-
+ 
       setItems(mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
+ 
   console.log("Fiiiii", items);
-
+ 
   useEffect(() => {
     SetRefreshUpload(isInvoiceUploadRefreshed);
   }, []);
-
-  useEffect(() => {
-    setFilteredItems(items); 
-  }, [items])
-
+ 
   useEffect(() => {
     fetchData();
   }, [isInvoiceUploadRefreshed]);
-
+ 
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
   };
@@ -618,7 +612,7 @@ const SummaryTable = ({
   // console.log("--------->",filteredItems)
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
-
+ 
     if (
       searchLower === "match" ||
       searchLower === "match found" ||
@@ -626,7 +620,7 @@ const SummaryTable = ({
     ) {
       return item.Status?.toString().toLowerCase() === "match found";
     }
-
+ 
     return (
       item.id?.toString().toLowerCase().includes(searchLower) ||
       item.supplier?.toString().toLowerCase().includes(searchLower) ||
@@ -636,7 +630,7 @@ const SummaryTable = ({
     );
   });
   console.log("Filtered ", filteredItems);
-
+ 
   // const handleRowClick = (e, item) => {
   //   if (e.target.type !== "checkbox") {
   //     navigate(`/storedetails`, {
@@ -645,14 +639,14 @@ const SummaryTable = ({
   //     console.log("ItemId", item.Id);
   //   }
   // };
-
+ 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
       const status = item.Status;
       console.log("Status", status);
-
-      if (status === "Match Found") {
-        navigate("/approve", {
+ 
+      if (status === "Gate Entry") {
+        navigate("/gateentry", {
           state: { poNumber: item.po_number, Id: item.Id },
         });
       } else if (status === "No Match Found") {
@@ -664,12 +658,12 @@ const SummaryTable = ({
       }
     }
   };
-
+ 
   const handleSelectionChange = (event, data) => {
     console.log("handleSelectionChange", data.selectedItems);
     setSelectedRows(data.selectedItems);
   };
-
+ 
   //  delete API
   const handleDeleteSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows);
@@ -680,12 +674,12 @@ const SummaryTable = ({
       });
       return;
     }
-
+ 
     try {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
         .join(", ");
-
+ 
       // const deletePromises = selectedItemsArray.map((item) =>
       //   axios.delete(
       //     `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].id}`,
@@ -702,24 +696,24 @@ const SummaryTable = ({
           }
         )
       );
-
+ 
       await Promise.all(deletePromises);
-
+ 
       const newItems = items.filter(
         (item) =>
           !selectedItemsArray.some(
             (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
           ), // Ensure to compare InvoiceId
       );
-
+ 
       setItems(newItems);
       setSelectedRows(new Set());
-
+ 
       notification.success({
         message: "Successfully deleted",
         description: `You have successfully deleted: ${supplierNames}`,
       });
-
+ 
       dispatch(refreshActions.toggleInvoiceUploadRefresh());
     } catch (error) {
       const supplierNames = selectedItemsArray
@@ -731,9 +725,9 @@ const SummaryTable = ({
       });
     }
   };
-
+ 
   // Approve API
-
+ 
   const handleApproveSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
     if (selectedItemsArray.length === 0) {
@@ -743,14 +737,14 @@ const SummaryTable = ({
       });
       return;
     }
-
+ 
     try {
       const supplierNames = selectedItemsArray
         .map((item) => item.supplier_name)
         .join(", ");
-
-        const token = localStorage.getItem("access_token");
-             await Promise.all(
+ 
+      const token = localStorage.getItem("access_token");
+      await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
             `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${filteredItems[item].id}`,
@@ -763,11 +757,11 @@ const SummaryTable = ({
           )
         )
       );
-  
-
+ 
+ 
       // Remove deleted items from the state
       setItems(items.filter((item) => !selectedItemsArray.includes(item)));
-
+ 
       // Show success notification
       notification.success({
         message: "Successfully Approved",
@@ -784,7 +778,7 @@ const SummaryTable = ({
       });
     }
   };
-
+ 
   const handleIsWalkinUpload = () => {
     console.log("yes it works");
     setIsWalkinUpload(true);
@@ -797,36 +791,7 @@ const SummaryTable = ({
     console.log("btn clicked");
     setNewCandidate(true);
   };
-
-
-  const [sortState, setSortState] = useState({
-    columnId: "",
-    sortDirection: "ascending",
-  });
-  
-  const handleSort = (columnId) => {
-    let newSortDirection = "ascending";
-
-    if (sortState.columnId === columnId) {
-      newSortDirection =
-        sortState.sortDirection === "ascending" ? "descending" : "ascending";
-    }
-
-    setSortState({ columnId, sortDirection: newSortDirection });
-    
-
-    const sortedItems = [...filteredItems].sort((a, b) => {
-      const aValue = a[columnId];
-      const bValue = b[columnId];
-
-      if (aValue < bValue) return newSortDirection === "ascending" ? -1 : 1;
-      if (aValue > bValue) return newSortDirection === "ascending" ? 1 : -1;
-      return 0;
-    });
-    console.log("SORTED",sortedItems);
-    
-    setFilteredItems(sortedItems); 
-  };
+ 
   return (
     <>
       <div
@@ -855,7 +820,7 @@ const SummaryTable = ({
           <Delete28Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
         </button>
-
+ 
         <button
           style={{
             display: "flex",
@@ -872,7 +837,7 @@ const SummaryTable = ({
           <TasksApp28Regular style={{ color: "#1281d7" }} />
           <span>Approve</span>
         </button>
-
+ 
         <button
           style={{
             display: "flex",
@@ -890,7 +855,7 @@ const SummaryTable = ({
           <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
-
+ 
         <button
           style={{
             display: "flex",
@@ -910,7 +875,7 @@ const SummaryTable = ({
           {/* <TasksApp28Regular style={{ color: "#1281d7" }} /> */}
           <span>Upload-Invoice</span>
         </button>
-
+ 
         <Search
           placeholder="Search PO or Supplier"
           onSearchChange={handleSearchChange}
@@ -924,58 +889,47 @@ const SummaryTable = ({
         }}
       >
         <DataGrid
-      items={filtered}
-      key={items.length}
-      columns={columns}
-      sortable
-      selectionMode="multiselect"
-      onSelectionChange={handleSelectionChange}
-      getRowId={(_, index) => index}
-      focusMode="composite"
-      style={{ minWidth: "600px" }}
-    >
-      <DataGridHeader>
-        <DataGridRow>
-          {({ renderHeaderCell, columnId }) => (
-            <DataGridHeaderCell
-              onClick={() => handleSort(columnId)}
-              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-            >
-              {renderHeaderCell()}
-              {sortState.columnId === columnId &&
-                (sortState.sortDirection === "ascending" ? (
-                  <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
-                ) : (
-                  <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
-                ))}
-            </DataGridHeaderCell>
-          )}
-        </DataGridRow>
-      </DataGridHeader>
-      <DataGridBody>
-        {({ item, rowId }) => (
-          <DataGridRow
-            key={rowId}
-            onClick={(e) => handleRowClick(e, item)}
-            selected={selectedRows.has(rowId)}
-          >
-            {({ renderCell }) => (
-              <DataGridCell
-                style={{
-                  wordWrap: "break-word",
-                  whiteSpace: "normal",
-                  overflow: "hidden",
-                }}
+          key={items.length}
+          items={filteredItems}
+          columns={columns}
+          sortable
+          selectionMode="multiselect"
+          onSelectionChange={handleSelectionChange}
+          getRowId={(_, index) => index}
+          focusMode="composite"
+          style={{ minWidth: "600px" }}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+              )}
+            </DataGridRow>
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow
+                key={rowId}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(rowId)}
               >
-                {renderCell(item)}
-              </DataGridCell>
+                {({ renderCell }) => (
+                  <DataGridCell
+                    style={{
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {renderCell(item)}
+                  </DataGridCell>
+                )}
+              </DataGridRow>
             )}
-          </DataGridRow>
-        )}
-      </DataGridBody>
-    </DataGrid>
+          </DataGridBody>
+        </DataGrid>
       </div>
-
+ 
       <Modal
         open={newCandidate}
         onCancel={handleNewCandidate}
@@ -987,5 +941,7 @@ const SummaryTable = ({
     </>
   );
 };
-
+ 
 export default SummaryTable;
+ 
+ 

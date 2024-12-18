@@ -4,6 +4,10 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import {notification} from "antd";
 import {
+  Delete28Regular,
+  ChatAdd28Regular,
+} from "@fluentui/react-icons";
+import {
   makeStyles,
   Button,
   Link,
@@ -1020,9 +1024,13 @@ try {
               <h2 >Lines</h2>
               
                    </div>
-                   <div style={{display:"flex",justifyContent:"flex-end",marginTop:"1.5em",marginBottom:"2em",gap:"20px"}}>
-                   <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleAddRow}>Add</Button>
-                   <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button>
+                   <div style={{display:"flex",justifyContent:"flex-end",marginTop:"1.5em",marginBottom:"2em",gap:"10px",marginRight:"1em"}}>
+                   {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleAddRow}>Add</Button> */}
+                   <ChatAdd28Regular style={{ color: "#1281d7" }} onClick={handleAddRow}/>
+                             <span style={{marginTop:"5px"}}>Add</span>
+                   <Delete28Regular style={{ color: "#1281d7" }} onClick={handleDeleteSelectedRows}/>
+                             <span style={{marginTop:"5px"}}>Delete</span>
+                   {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button> */}
                    </div>
 
               </div>
