@@ -93,7 +93,6 @@ import axios from "axios";
 import "./WalkinCandidate.css";
 import { useDispatch } from "react-redux";
 import { refreshActions } from "../Store/Store";
-import {CheckmarkCircleRegular} from "@fluentui/react-components"
 
 const WalkInCandidate = ({ isWalkinUpload }) => {
   const dispatch = useDispatch();
@@ -103,7 +102,7 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
     notification.open({
       message: type,
       description: description,
-      // icon: <CheckmarkCircleRegular />,
+      icon: <span style={styles.icon}>✔</span>,
       style: {
         border: "1px solid #00a65a",
         backgroundColor: "#fff",
@@ -178,7 +177,7 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
   const styles = {
     icon: {
       fontSize: "20px",
-      color: "#28a745",
+      color: "black",
       fontWeight: "bold",
     },
   };
