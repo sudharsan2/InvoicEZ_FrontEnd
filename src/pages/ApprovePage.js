@@ -37,19 +37,20 @@ const UserApprove = () => {
         </div>
       </div>
       <div>
-        <div style={{ maxHeight: "10vh",marginLeft:"3em"}}>
+        <div style={{ maxHeight: "10vh",}}>
           <div
             style={{
               display: "flex",
               justifyContent: "flexStart",
               padding: "1px",
+              marginLeft:"3em"
+              
             }}
           >
-            <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Match Found</h3>
+            <h3 style={{ fontSize: "1.5em" }}>Match Found</h3>
           </div>
 
-          <div>
-            {/* <TagCounters /> */}
+          <div style={{marginLeft:"3em"}}>
             <TagCounters type="approve" />
           </div>
         </div>

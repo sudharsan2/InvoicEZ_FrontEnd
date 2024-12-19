@@ -116,9 +116,9 @@ const TagCounters = ({ type }) => {
   const containerStyle = {
     width: "100%",
     display: "flex",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     padding: "8px",
-    marginLeft: "-12em",
+    // marginLeft: "-10em",
   };
 
   const itemStyle = {

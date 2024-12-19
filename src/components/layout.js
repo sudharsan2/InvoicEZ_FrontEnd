@@ -512,7 +512,7 @@ const CustomLayout = ({ children }) => {
       });
 
       const fetchedItems = response.data;
-
+      console.log("API",fetchedItems);
       const mappedItems = fetchedItems.map((item) => {
         let Status = "";
 
@@ -531,8 +531,8 @@ const CustomLayout = ({ children }) => {
         };
       });
 
-      setData(mappedItems);  // Update the notifications data
-      console.log("FETCHED", mappedItems);
+      setItems(mappedItems);  // Update the notifications data
+      console.log("FETCHED NEW ENTRY", mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -918,7 +918,7 @@ const CustomLayout = ({ children }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {data.map((row, index) => (
+                        {items.map((row, index) => (
                           <tr key={index}>
                             <td
                               style={{
@@ -1066,7 +1066,7 @@ const CustomLayout = ({ children }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {items.map((row, index) => (
+                        {data.map((row, index) => (
                           <tr key={index}>
                             <td
                               style={{
@@ -1102,20 +1102,12 @@ const CustomLayout = ({ children }) => {
                                 color: "#333",
                               }}
                             >
-                              <Button
-                                style={{
-                                  marginRight: "10px",
-                                  padding: "5px 10px",
-                                  backgroundColor: "#007bff",
-                                  color: "#fff",
-                                  border: "none",
-                                  borderRadius: "3px",
-                                  cursor: "pointer",
+                              <FaArrowUpRightFromSquare
+                                style={{ cursor: "pointer", marginLeft: "1rem" }}
+                                onClick={() => {
+                                  navigate('/history')
                                 }}
-                                onClick={() => navigate('/history')}
-                              >
-                                History
-                              </Button>
+                              />
 
                             </td>
                           </tr>

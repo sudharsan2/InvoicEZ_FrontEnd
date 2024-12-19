@@ -198,6 +198,8 @@ const AITable = ({ setTableLength }) => {
         description: `You have successfully deleted: ${supplierNames}`,
       });
 
+      console.log("ITEMS LENGTH",items.length);
+
       dispatch(refreshActions.toggleInvoiceUploadRefresh());
     } catch (error) {
       const supplierNames = selectedItemsArray
