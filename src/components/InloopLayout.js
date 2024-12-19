@@ -608,7 +608,7 @@ const CustomLayoutLoop = ({ children }) => {
       </div>
 
       Children Components
-      < div style={{ marginTop: "48px" }}> {children}</div >
+      < div style={{ marginTop: "15px" }}> {children}</div >
     </div >
   );
 };

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import axios from "axios";
 import {
-  ArrowClockwise28Regular,
+  ArrowClockwise24Regular,
   Delete28Regular,
   TasksApp28Regular,
 } from "@fluentui/react-icons";
@@ -73,6 +73,7 @@ const StoreHistoryTable = () => {
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [po_id, set_Po_id] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -350,7 +351,7 @@ const StoreHistoryTable = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
@@ -358,9 +359,11 @@ const StoreHistoryTable = () => {
             marginLeft: "2em",
           }}
           // onClick={fetchData}
+          onMouseEnter={() => setIsHovered(true)} 
+          onMouseLeave={() => setIsHovered(false)} 
           onClick={handleRefreshClick}
         >
-          <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
+          <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
 

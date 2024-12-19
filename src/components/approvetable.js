@@ -396,9 +396,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  ArrowClockwise28Regular,
-  Delete28Regular,
-  TasksApp28Regular,
+  ArrowClockwise24Regular,
+  Delete24Regular,
+  TasksApp24Regular,
 } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
@@ -517,7 +517,10 @@ const SummaryTable = ({
   const [isWalkinUpload, setIsWalkinUpload] = useState(false);
   const [newCandidate, setNewCandidate] = useState(false);
   const [filtered, setFilteredItems] = useState([]);
-
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+  const [isrefresh, setIsRefresh] = useState(false);
+  const [isupload, setIsUpload] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -709,7 +712,7 @@ const SummaryTable = ({
         (item) =>
           !selectedItemsArray.some(
             (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
-          ), // Ensure to compare InvoiceId
+          ), 
       );
 
       setItems(newItems);
@@ -842,17 +845,19 @@ const SummaryTable = ({
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isDelete ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
-            height: "7vh",
+            transition: "background-color 0.2s ease", 
           }}
-          onClick={handleDeleteSelectedRows} // Call delete function
+          onMouseEnter={() => setIsDelete(true)} 
+          onMouseLeave={() => setIsDelete(false)} 
+          onClick={handleDeleteSelectedRows} 
         >
-          <Delete28Regular style={{ color: "#1281d7" }} />
+          <Delete24Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
         </button>
 
@@ -860,16 +865,19 @@ const SummaryTable = ({
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
+            transition: "background-color 0.2s ease", 
           }}
+          onMouseEnter={() => setIsHovered(true)} 
+          onMouseLeave={() => setIsHovered(false)} 
           onClick={handleApproveSelectedRows}
         >
-          <TasksApp28Regular style={{ color: "#1281d7" }} />
+          <TasksApp24Regular style={{ color: "#1281d7" }} />
           <span>Approve</span>
         </button>
 
@@ -877,17 +885,20 @@ const SummaryTable = ({
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isrefresh ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
+            transition: "background-color 0.2s ease", 
           }}
+          onMouseEnter={() => setIsRefresh(true)} 
+          onMouseLeave={() => setIsRefresh(false)} 
           // onClick={fetchData}
           onClick={handleRefreshClick}
         >
-          <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
+          <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
 
@@ -896,7 +907,7 @@ const SummaryTable = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "center", // Ensures alignment in case of larger button dimensions
-            backgroundColor: "transparent",
+            backgroundColor: isupload ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
@@ -904,6 +915,8 @@ const SummaryTable = ({
             marginLeft: "2em",
             whiteSpace: "nowrap", // Prevents wrapping of content
           }}
+          onMouseEnter={() => setIsUpload(true)} 
+          onMouseLeave={() => setIsUpload(false)} 
           onClick={handleNewCandidateBtn}
         >
           <ShareIos24Filled style={{ color: "#1281d7" }} />

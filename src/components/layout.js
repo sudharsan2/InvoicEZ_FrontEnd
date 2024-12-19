@@ -538,12 +538,41 @@ const CustomLayout = ({ children }) => {
     }
   };
 
-  const handleClearButtonClick = (e) => {
+  const clearNotifications = async () => {
+    try {
+      const response = await axios.post('https://invoicezapi.focusrtech.com:57/user/mark-all-documents-as-read/', {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer`, 
+        },
+      });
+ 
+      if (response.ok) {
+        setData([]); 
+        setIsCleared(true); 
+        alert('All notifications cleared successfully!');
+      } else {
+        const errorData = await response.json();
+        console.error('Error clearing notifications:', errorData);
+        alert('Failed to clear notifications. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // alert('An error occurred while clearing notifications.');
+    } finally {
+      setIsLoading(false); // Reset the loading state
+    }
+  };
+
+  const handleClearButtonClick = async(e) => {
     e.stopPropagation();
     setIsLoading(true);
     setData([]);
-    setIsCleared(true); 
-    setIsLoading(false); 
+    setIsCleared(true);
+    setIsLoading(false);
+     clearNotifications(); // Call the clearNotifications API
+ 
   };
 
   // useEffect(() => {

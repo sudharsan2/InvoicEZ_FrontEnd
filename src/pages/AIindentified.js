@@ -4,6 +4,7 @@ import {
   BreadcrumbItem,
   BreadcrumbDivider,
   BreadcrumbButton,
+  Divider
 } from "@fluentui/react-components";
 import {
   CalendarMonthFilled,
@@ -75,7 +76,7 @@ const AIPage = () => {
 
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
-      <div className="Approvebreadcrump">
+      <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
         <Breadcrumb aria-label="Breadcrumb default example">
           <BreadcrumbItem>
             <BreadcrumbButton href={path}>Home</BreadcrumbButton>
@@ -91,12 +92,12 @@ const AIPage = () => {
         </Breadcrumb>
       </div>
       <div
-        style={{ display: "flex", justifyContent: "flexStart", padding: "1px" }}
+        style={{ display: "flex", justifyContent: "flexStart", padding: "1px",marginLeft:"3em" }}
       >
         <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Multiple Match Found</h3>
       </div>
 
-      <div>
+      <div style={{marginLeft:"3em"}}>
         <div style={containerStyle}>
           {counters.map((item, index) => (
             <div style={itemStyle} key={index}>
@@ -113,7 +114,10 @@ const AIPage = () => {
       {/* <div>
 
       </div> max value */}
-      <div>
+       <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+      <Divider style={{ marginTop:"4em"}} />
+    </div>
+      <div style={{marginLeft:"3em",marginTop:"-2em"}}>
         <AITable setTableLength={setTableLength} />
       </div>
     </div>

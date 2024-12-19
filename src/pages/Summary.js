@@ -4,7 +4,9 @@ import {
   BreadcrumbItem,
   BreadcrumbDivider,
   BreadcrumbButton,
+
 } from "@fluentui/react-components";
+import {Divider} from "@fluentui/react-components"
 import {
   CalendarMonthFilled,
   CalendarMonthRegular,
@@ -24,7 +26,7 @@ const containerStyle = {
     
     justifyContent: "space-around",
     padding: "8px",
-    marginLeft:"-6em"
+    marginLeft:"-7em"
   };
   
   const itemStyle = {
@@ -68,7 +70,7 @@ const SummaryPage = () => {
   return (
     <div style={{maxHeight:"91vh",overflowY:"auto"}}>
       <div style={{ height: "5vh" }}>
-        <div className="Approvebreadcrump">
+        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
@@ -82,7 +84,7 @@ const SummaryPage = () => {
         </div>
       </div>
       <div>
-        <div style={{ maxHeight: "10vh" }}>
+        <div style={{ maxHeight: "10vh" ,marginLeft:"3em"}}>
           <div
             style={{
               display: "flex",
@@ -108,8 +110,11 @@ const SummaryPage = () => {
       </div>
           </div>
         </div>
-        <div style={{ width: "100%", height: "5vh" }} />
-        <div>
+        <div style={{ width: "100%", height: "5vh", }} />
+         <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+              <Divider style={{ marginTop:"4em"}} />
+            </div>
+        <div style={{marginLeft:"3em",marginTop:"-2em"}}>
           <SummaryTable setFixCount={setFixCount} setMatchCount={setMatchCount} setTableLength={setTableLength}  setMultiple_MatchCount={setMultiple_MatchCount}/>
         </div>
       </div>

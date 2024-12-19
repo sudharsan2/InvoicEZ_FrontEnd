@@ -73,6 +73,7 @@ const HistoryTable = () => {
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [po_id, set_Po_id] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -350,7 +351,7 @@ const HistoryTable = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
@@ -358,6 +359,8 @@ const HistoryTable = () => {
             marginLeft: "2em",
           }}
           // onClick={fetchData}
+          onMouseEnter={() => setIsHovered(true)} 
+          onMouseLeave={() => setIsHovered(false)} 
           onClick={handleRefreshClick}
         >
           <ArrowClockwise24Regular style={{ color: "#1281d7" }} />

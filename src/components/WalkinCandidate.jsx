@@ -5,27 +5,39 @@ import "./WalkinCandidate.css";
 import { useDispatch } from "react-redux";
 import { refreshActions } from "../Store/Store";
 import { SiTicktick } from "react-icons/si";
+import matchedImage from '../media/matched.png';
+import multiplematch from '../media/multiple.jpeg'
+import nomatch from '../media/nomatch.png';
 const WalkInCandidate = ({ isWalkinUpload }) => {
   const dispatch = useDispatch();
 
 
   const openNotification = (type, description, style) => {
-        notification.open({
-          message: type,
-          description: description,
-          icon: <SiTicktick  style={{ color: "#34a853", fontSize: "20px" }} />,
-          
-          style: {
-            borderRight: `7px solid ${style.borderColor}`,
-            backgroundColor: "#fff",
-            boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
-            borderRadius: "5px",
-            color: style.textColor,
-            width: "300px",
-          },
-          placement: "topRight",
-        });
-      };
+    notification.open({
+      // message: type,
+      description: (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img
+            src={style.imageSrc}
+            alt="notification-icon"
+            style={{ width: "100%", height: "70px", marginRight: "10px" }}
+          />
+          {/* <span>{description}</span> */}
+        </div>
+      ),
+      // style: {
+      //   // borderRight: `7px solid ${style.borderColor}`,
+      //   backgroundColor: "fff",
+      //   boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
+      //   borderRadius: "5px",
+      //   color: style.textColor,
+      //   width: "320px",
+      //   padding:"0px"
+      // },
+      placement: "topRight",
+    });
+  };
+  
 
   const handleUpload = async ({ file, onSuccess, onError }) => {
     const token = localStorage.getItem("access_token");
@@ -50,30 +62,28 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
       const poHeadersLength = response.data.po_headers.length;
 
       if (poHeadersLength === 0) {
-        // message.success(`${file.name} no match found uploaded successfully.`);
         openNotification("Success", "No Match.", {
-                    icon: { color: "#dc3545" },
-                    borderColor: "#dc3545",
-                    backgroundColor: "#f8d7da",
-                    textColor: "#721c24",
-                  });
+          imageSrc: nomatch,
+          borderColor: "#dc3545",
+          backgroundColor: "#f8d7da",
+          textColor: "#721c24",
+        });
       } else if (poHeadersLength === 1) {
-        // message.success(`${file.name} uploaded successfully.`);
         openNotification("Success", "Matched.", {
-                    icon: { color: "#28a745" },
-                    borderColor: "#28a745",
-                    backgroundColor: "#d4edda",
-                    textColor: "#155724",
-                  });
+          imageSrc: matchedImage,
+          borderColor: "#28a745",
+          backgroundColor: "#d4edda",
+          textColor: "#155724",
+        });
       } else if (poHeadersLength > 1) {
-        // message.success(`${file.name} uploaded successfully.`);
         openNotification("Success", "Multiple Match.", {
-                    icon: { color: "#ffc107" },
-                    borderColor: "#ffc107",
-                    backgroundColor: "#fff3cd",
-                    textColor: "#856404",
-                  });
+          imageSrc: multiplematch,
+          borderColor: "#ffc107",
+          backgroundColor: "#fff3cd",
+          textColor: "#856404",
+        });
       }
+      
       // message.success(`${file.name} uploaded successfully.`);
       file.status = "done";
       onSuccess();

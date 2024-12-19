@@ -4,6 +4,7 @@ import {
   BreadcrumbItem,
   BreadcrumbDivider,
   BreadcrumbButton,
+  Divider
 } from "@fluentui/react-components";
 import {
   CalendarMonthFilled,
@@ -69,6 +70,7 @@ const containerStyle = {
 
 const History = () => {
     const[rows,setRows]=useState("");
+    
     useEffect(() => {
         // Fetch data from the API on component mount
         const fetchData = async () => {
@@ -107,7 +109,7 @@ const History = () => {
   return (
     <div style={{overflowY:"auto",height:"90vh"}}>
       <div style={{ height: "5vh"}}>
-        <div className="Approvebreadcrump">
+        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
@@ -121,7 +123,7 @@ const History = () => {
         </div>
       </div>
       <div>
-        <div style={{ maxHeight: "10vh" }}>
+        <div style={{ maxHeight: "10vh",marginLeft:"3em" }}>
           <div
             style={{
               display: "flex",
@@ -153,8 +155,12 @@ const History = () => {
       
           </div>
         </div>
+       
         <div style={{ width: "100%", height: "30vh" ,marginTop:"4em"}} />
-        <div style={{marginTop:"4em"}}>
+        <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em",marginTop:"3em"}}>
+      <Divider style={{ marginTop:"4em"}} />
+    </div>
+        <div style={{marginTop:"-2em",marginLeft:"3em"}}>
           <HistoryTable />
         </div>
       </div>

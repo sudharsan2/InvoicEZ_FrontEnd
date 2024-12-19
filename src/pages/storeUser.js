@@ -4,6 +4,7 @@ import {
   BreadcrumbItem,
   BreadcrumbDivider,
   BreadcrumbButton,
+  Divider
 } from "@fluentui/react-components";
 import {
   CalendarMonthFilled,
@@ -72,7 +73,7 @@ const StoreUser = () => {
   return (
     <div style={{maxHeight:"91vh",overflowY:"auto"}}>
       <div style={{ height: "5vh" }}>
-        <div className="Approvebreadcrump">
+        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
@@ -86,7 +87,7 @@ const StoreUser = () => {
         </div>
       </div>
       <div>
-        <div style={{ maxHeight: "10vh" }}>
+        <div style={{ maxHeight: "10vh",marginLeft:"3em" }}>
           <div
             style={{
               display: "flex",
@@ -115,7 +116,10 @@ const StoreUser = () => {
       </div>
         </div>
         <div style={{ width: "100%", height: "7vh" }} />
-        <div>
+        <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+      <Divider style={{ marginTop:"4em"}} />
+    </div>
+        <div style={{marginTop:"-2em",marginLeft:"3em"}}>
           <StoreTable setTableLength={setTableLength}/>
         </div>
       </div>

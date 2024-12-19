@@ -1,6 +1,7 @@
 // API connection
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {message} from "antd";
 import {
   ArrowClockwise24Regular,
   Delete28Regular,
@@ -86,6 +87,7 @@ const columns = [
 ];
 
 const GateEntryTable = ({setTableLength}) => {
+  const [isHovered, setIsHovered] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -103,7 +105,10 @@ const GateEntryTable = ({setTableLength}) => {
   const [DeleteRefresh, SetDeleteRefresh] = useState(false);
 
   // Fetch data from the API when the component mounts
-  const fetchData = async () => {
+  const fetchData = async (showMessage = false) => {
+    if (showMessage) {
+      message.success("Refreshing...");
+    }
     try {
       // const response = await axios.get(
       //   "https://invoicezapi.focusrtech.com:57/user/storetrue-invoice",
@@ -347,6 +352,9 @@ const GateEntryTable = ({setTableLength}) => {
     setFilteredItems(sortedItems); 
   };
   
+  const handleRefreshClick = () => {
+    fetchData(true); // Pass `true` to show the message when button is clicked
+  };
   
   console.log("12345",filtered);
   
@@ -401,14 +409,18 @@ const GateEntryTable = ({setTableLength}) => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
+            transition: "background-color 0.2s ease", 
           }}
-          onClick={fetchData}
+          onMouseEnter={() => setIsHovered(true)} 
+          onMouseLeave={() => setIsHovered(false)} 
+          // onClick={fetchData}
+          onClick={handleRefreshClick}
         >
           <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>

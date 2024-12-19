@@ -6,8 +6,8 @@ import {
   ArrowClockwise28Regular,
   Delete28Regular,
   TasksApp28Regular,
-  PeopleTeamDelete28Regular,
-  PeopleAdd28Regular,
+  PeopleTeamDelete24Regular,
+  PeopleAdd24Regular,
   Edit24Filled,
   Key24Regular,
   Eye24Filled ,
@@ -133,6 +133,8 @@ const UserTable = ({setGateCount,setStoreCount}) => {
   const handleRoleChange = (_, option) => {
     setFormData({ ...formData, role: option });
   };
+  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered2, setIsHovered2] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -625,7 +627,7 @@ const togglePasswordVisibility = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
@@ -634,9 +636,11 @@ const togglePasswordVisibility = () => {
             height: "7vh",
           }}
         //   onClick={handleDeleteSelectedRow} // Call delete function
+        onMouseEnter={() => setIsHovered(true)} 
+        onMouseLeave={() => setIsHovered(false)} 
         onClick={() => setShowPopup(true)}
         >
-          <PeopleAdd28Regular style={{ color: "#1281d7" }} />
+          <PeopleAdd24Regular style={{ color: "#1281d7" }} />
           <span>Add User</span>
         </button>
 
@@ -805,17 +809,19 @@ const togglePasswordVisibility = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isHovered2 ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
           }}
+          onMouseEnter={() => setIsHovered2(true)} 
+          onMouseLeave={() => setIsHovered2(false)} 
           onClick={handleDeleteSelectedRows }
         
         >
-          <PeopleTeamDelete28Regular style={{ color: "#1281d7" }} />
+          <PeopleTeamDelete24Regular style={{ color: "#1281d7" }} />
           <span>Delete User</span>
         </button>
 

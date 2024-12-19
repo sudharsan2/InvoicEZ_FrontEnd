@@ -86,6 +86,8 @@ const columns = [
 ];
 
 const TableApprove = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isrefresh, setIsRefresh] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -241,7 +243,7 @@ const TableApprove = () => {
         (item) =>
           !selectedItemsArray.some(
             (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
-          ), // Ensure to compare InvoiceId
+          ), 
       );
 
       setItems(newItems);
@@ -355,14 +357,16 @@ const TableApprove = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isrefresh ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
-            height: "7vh",
+            // height: "vh",
           }}
+          onMouseEnter={() => setIsRefresh(true)} 
+          onMouseLeave={() => setIsRefresh(false)} 
           onClick={handleDeleteSelectedRows} // Call delete function
         >
           <Delete24Regular style={{ color: "#1281d7" }} />
@@ -390,7 +394,7 @@ const TableApprove = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
@@ -398,6 +402,8 @@ const TableApprove = () => {
             marginLeft: "2em",
           }}
           // onClick={fetchData}
+          onMouseEnter={() => setIsHovered(true)} 
+          onMouseLeave={() => setIsHovered(false)} 
           onClick={handleRefreshClick}
           
         >

@@ -60,6 +60,8 @@ const columns = [
 ];
 
 const IssuefixTable = ({ height, setTableLength }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered2, setIsHovered2] = useState(false);
   const [items, setItems] = useState([]); // Initialize items state
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -314,13 +316,15 @@ const IssuefixTable = ({ height, setTableLength }) => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
           }}
+          onMouseEnter={() => setIsHovered(true)} 
+          onMouseLeave={() => setIsHovered(false)} 
           onClick={() => handleDelete()}
         >
           <Delete24Regular style={{ color: "#1281d7" }} />
@@ -331,7 +335,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isHovered2 ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             borderRadius: "5px",
@@ -340,6 +344,8 @@ const IssuefixTable = ({ height, setTableLength }) => {
             marginLeft: "2em",
           }}
           // onClick={handleRefresh}
+          onMouseEnter={() => setIsHovered2(true)} 
+          onMouseLeave={() => setIsHovered2(false)} 
           onClick={handleRefreshClick}
           
         >

@@ -1,8 +1,9 @@
 // API connection
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {message} from "antd";
 import {
-  ArrowClockwise28Regular,
+  ArrowClockwise24Regular,
   Delete28Regular,
   TasksApp28Regular,
 } from "@fluentui/react-icons";
@@ -87,6 +88,7 @@ const columns = [
 ];
 
 const StoreTable = ({setTableLength}) => {
+  const [isHovered, setIsHovered] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -103,7 +105,10 @@ const StoreTable = ({setTableLength}) => {
   const [DeleteRefresh, SetDeleteRefresh] = useState(false);
 
   // Fetch data from the API when the component mounts
-  const fetchData = async () => {
+  const fetchData = async (showMessage = false) => {
+    if (showMessage) {
+      message.success("Refreshing...");
+    }
     try {
       const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/storetrue-invoice", {
@@ -265,6 +270,11 @@ const StoreTable = ({setTableLength}) => {
     }
   };
 
+
+  const handleRefreshClick = () => {
+    fetchData(true); // Pass `true` to show the message when button is clicked
+  };
+
   // Approve API
 
   const handleApproveSelectedRows = async () => {
@@ -393,16 +403,20 @@ const StoreTable = ({setTableLength}) => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "transparent",
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
           }}
-          onClick={fetchData}
+          onMouseEnter={() => setIsHovered(true)} 
+          onMouseLeave={() => setIsHovered(false)} 
+          // onClick={fetchData}
+          onClick={handleRefreshClick}
+
         >
-          <ArrowClockwise28Regular style={{ color: "#1281d7" }} />
+          <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
           <span>Refresh</span>
         </button>
 
