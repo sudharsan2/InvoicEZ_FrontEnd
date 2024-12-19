@@ -33,7 +33,7 @@ import { TextField } from "@fluentui/react/lib/TextField";
 import line_data from "./data_approve";
 import "./dashboard.css";
 import { message } from "antd";
-import { ArrowDownload28Regular } from "@fluentui/react-icons";
+import { ArrowDownload28Regular,Add28Regular,Delete28Regular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 // import { refreshActions } from "../Store/Store";
 const path = "/issuefix";
@@ -1026,8 +1026,10 @@ try {
               
                    </div>
                    <div style={{display:"flex",justifyContent:"flex-end",marginTop:"1.5em",marginBottom:"2em",gap:"20px"}}>
-                   <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleAddRow}>Add</Button>
-                   <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button>
+                   {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleAddRow}>Add</Button> */}
+                   <Add28Regular  style={{cursor:"pointer",padding:"2px",height:"35px", color: "#1281d7"}} onClick={handleAddRow}></Add28Regular><span style={{ fontSize: "14px", color: "#000",marginTop:"6px",marginLeft:"-6px" }}>Add</span>
+                   {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button> */}
+                   <Delete28Regular  style={{cursor:"pointer",padding:"2px",height:"35px", color: "#1281d7"}} onClick={handleDeleteSelectedRows}></Delete28Regular><span style={{ fontSize: "14px", color: "#000",marginTop:"6px",marginLeft:"-6px" }}>Delete</span>
                    </div>
 
               </div>
