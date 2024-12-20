@@ -444,7 +444,7 @@ const columns = [
     renderCell: (item) => {
       const getStatusStyle = (status) => {
         switch (status) {
-          case "Gate Entry":
+          case "Match Found":
             return {
               backgroundColor: "#107c10",
               color: "#fff",
@@ -453,6 +453,16 @@ const columns = [
               padding: "4px 8px",
               textAlign: "center",
             };
+            case "Gate Entry":
+              return {
+                backgroundColor: "#107c10",
+                color: "#fff",
+                borderRadius: "8px",
+                textShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                padding: "4px 8px",
+                textAlign: "center",
+              };
+
           case "Multiple Match Found":
             return {
               backgroundColor: "#f2c661",
@@ -509,6 +519,7 @@ const SummaryTable = ({
   setMatchCount,
   setTableLength,
   setMultiple_MatchCount,
+  setGateLength,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
@@ -555,6 +566,7 @@ const SummaryTable = ({
       let MatchCount = 0;
       let multiple_MatchCount = 0;
       let fixCount = 0;
+      let gatelength = 0;
 
       const mappedItems = fetchedItems.map((item) => {
         let Status = "";
@@ -562,13 +574,25 @@ const SummaryTable = ({
         if (item.po_headers.length === 0) {
           Status = "No Match Found";
           fixCount += 1;
-        } else if (item.po_headers.length === 1) {
-          Status = "Gate Entry";
-          MatchCount += 1;
-        } else if (item.po_headers.length > 1) {
+        } 
+        else if (item.po_headers.length === 1) {
+          console.log("wertyuio");
+          if (item.storeuser === true) {
+            console.log("wertyuio123");
+            Status = "Gate Entry";
+            gatelength+=1;
+          } else if (item.storeuser === false) {
+            MatchCount += 1;
+            Status = "Match Found";
+            
+          }
+        }
+
+         else if (item.po_headers.length > 1) {
           Status = "Multiple Match Found";
           multiple_MatchCount += 1;
         }
+        
 
         // setTableLength(tablelength);
         // setFixCount(fixCount);
@@ -581,18 +605,21 @@ const SummaryTable = ({
           amount: item.InvoiceTotal,
           lines: item.items.length,
           buyer: item.CustomerName,
-          Status: Status, // Add Status to the mapped item
+          Status: Status, 
+          // Store:item.storeuser
         };
       });
-      console.log("FIX ", fixCount);
-      console.log("Match", MatchCount);
-      console.log("Multiple", multiple_MatchCount);
+      // console.log("FIX ", fixCount);
+      // console.log("Match", MatchCount);
+      // console.log("Multiple", multiple_MatchCount);
       setFixCount(fixCount);
       setMatchCount(MatchCount);
       setMultiple_MatchCount(multiple_MatchCount);
       setTableLength(tablelength);
-
+      setGateLength(gatelength)
       setItems(mappedItems);
+
+      console.log("MAP IN SUMMARY",mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -625,7 +652,7 @@ const SummaryTable = ({
     if (
       searchLower === "match" ||
       searchLower === "match found" ||
-      searchLower === "matc"
+      searchLower === "no match"
     ) {
       return item.Status?.toString().toLowerCase() === "match found";
     }
@@ -635,7 +662,8 @@ const SummaryTable = ({
       item.supplier?.toString().toLowerCase().includes(searchLower) ||
       item.amount?.toString().toLowerCase().includes(searchLower) ||
       item.Status?.toString().toLowerCase().includes(searchLower) ||
-      item.buyer?.toLowerCase().includes(searchLower)
+      item.buyer?.toLowerCase().includes(searchLower)||
+      item.Store?.toLowerCase().includes(searchLower)
     );
   });
   console.log("Filtered ", filteredItems);
@@ -654,11 +682,17 @@ const SummaryTable = ({
       const status = item.Status;
       console.log("Status", status);
 
-      if (status === "Gate Entry") {
+      if (status === "Match Found") {
+        navigate("/approve", {
+          state: { poNumber: item.po_number, Id: item.Id },
+        });
+      
+      } 
+      else if (status === "Gate Entry") {
         navigate("/gateentry", {
           state: { poNumber: item.po_number, Id: item.Id },
         });
-      } else if (status === "No Match Found") {
+      }else if (status === "No Match Found") {
         navigate("/issuefix", {
           state: { poNumber: item.po_number, Id: item.Id },
         });

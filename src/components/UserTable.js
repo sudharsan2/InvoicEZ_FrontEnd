@@ -124,10 +124,10 @@ const UserTable = ({setGateCount,setStoreCount}) => {
 
   const dropdownId = useId("dropdown-role");
   const options = [
-    "Invoice Manager",
-    "Admin",
-    "Store User",
-    "Supplier",
+    "invoice manager",
+    "admin",
+    "store user",
+    "supplier",
   ];
 
   const handleRoleChange = (_, option) => {

@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { refreshActions } from "../Store/Store";
 import { SiTicktick } from "react-icons/si";
 import matchedImage from '../media/matched.png';
-import multiplematch from '../media/multiple.jpeg'
+import multiplematch from '../media/multiple.png'
 import nomatch from '../media/nomatch.png';
 const WalkInCandidate = ({ isWalkinUpload }) => {
   const dispatch = useDispatch();

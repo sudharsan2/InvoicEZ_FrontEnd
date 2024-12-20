@@ -158,7 +158,7 @@ const History = () => {
        
         <div style={{ width: "100%", height: "30vh" ,marginTop:"4em"}} />
         <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em",marginTop:"3em"}}>
-      <Divider style={{ marginTop:"4em"}} />
+      <Divider style={{ marginTop:"7em"}} />
     </div>
         <div style={{marginTop:"-2em",marginLeft:"3em"}}>
           <HistoryTable />

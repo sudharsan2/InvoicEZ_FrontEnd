@@ -175,7 +175,7 @@ const UserPage = () => {
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
-      <Divider style={{ marginTop:"4em"}} />
+      <Divider style={{ marginTop:"2em"}} />
     </div>
       <div style={{marginLeft:"3em"}}>
         {height > 0 ? <UserTable height={height} setTableLength={setTableLength} setStoreCount={setStoreCount}  setGateCount={setGateCount}/> : <p>Loading...</p>}

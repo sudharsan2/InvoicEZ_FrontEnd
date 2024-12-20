@@ -53,10 +53,10 @@
 
 .questionmark-container {
     display: flex;
-    margin-top: 20px;
-    margin-bottom: 30px;
+    margin-top: 25px;
+    margin-bottom: 50px;
     margin-right: 20px;
-    height: 30px;
+    height: 10px;
     width: 30px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;

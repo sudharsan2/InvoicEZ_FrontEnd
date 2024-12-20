@@ -171,7 +171,7 @@ const IssuefixPage = () => {
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
-      <Divider style={{ marginTop:"4em"}} />
+      <Divider style={{ marginTop:"2em"}} />
     </div>
       <div style={{marginLeft:"3em",marginTop:"-2em"}}>
         {height > 0 ? <IssuefixTable height={height} setTableLength={setTableLength}/> : <p>Loading...</p>}

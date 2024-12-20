@@ -1154,7 +1154,7 @@ const CustomLayout = ({ children }) => {
               rel="noopener noreferrer"
             >
               <QuestionRegular
-                style={{ color: "#fff", height: "38px", width: "38px" }}
+                style={{ color: "#fff", height: "33px", width: "35px" }}
               />
             </a>
           </div>

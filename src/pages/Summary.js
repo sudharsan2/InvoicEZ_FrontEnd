@@ -25,7 +25,8 @@ const containerStyle = {
     display: "flex",
     
     justifyContent: "space-between",
-    padding: "8px",
+    padding: "5px",
+    marginRight:"3em"
     // marginLeft:"-7em"
   };
   
@@ -58,12 +59,14 @@ const SummaryPage = () => {
       const[fixCount,setFixCount]=useState('');
       const[MatchCount,setMatchCount]=useState('');
       const[multiple_MatchCount,setMultiple_MatchCount]=useState('');
+      const[gatelength,setGateLength]= useState('');
       
     const counters = [
         { label: "Total number to Process", value: tableLength, color: "#00bfbf" }, // Cyan
         { label: "Match Found", value: MatchCount, color: "#d62727" }, // Red
         { label: "Multiple Match Found", value: multiple_MatchCount, color: "#1f497d" }, // Dark Blue
         { label: "No Match Found", value: fixCount, color: "#d21994" }, // Magenta
+        // { label: "Gate Entry", value: gatelength, color: "#00bfbf" }
       ];
       
 
@@ -115,7 +118,7 @@ const SummaryPage = () => {
               <Divider style={{ marginTop:"4em"}} />
             </div>
         <div style={{marginLeft:"3em",marginTop:"-2em"}}>
-          <SummaryTable setFixCount={setFixCount} setMatchCount={setMatchCount} setTableLength={setTableLength}  setMultiple_MatchCount={setMultiple_MatchCount}/>
+          <SummaryTable setFixCount={setFixCount} setMatchCount={setMatchCount} setTableLength={setTableLength}  setMultiple_MatchCount={setMultiple_MatchCount} setGateLength={setGateLength}/>
         </div>
       </div>
     </div>

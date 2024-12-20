@@ -69,7 +69,7 @@ const AIPage = () => {
   const location = useLocation();
   const { poNumber } = location.state || {};
   const [tableLength, setTableLength] = useState(0);
-
+  
   const counters = [
     { label: "To do", value: tableLength, color: "#00bfbf" }, // Cyan
   ];
@@ -115,7 +115,7 @@ const AIPage = () => {
 
       </div> max value */}
        <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
-      <Divider style={{ marginTop:"4em"}} />
+      <Divider style={{ marginTop:"2em"}} />
     </div>
       <div style={{marginLeft:"3em",marginTop:"-2em"}}>
         <AITable setTableLength={setTableLength} />
