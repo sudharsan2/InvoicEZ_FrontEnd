@@ -163,10 +163,58 @@ const TableApprove = () => {
     fetchData();
   }, [isInvoiceUploadRefreshed]);
 
+  // const handleSearchChange = (value) => {
+  //   setSearchQuery(value);
+  // };
+  // // console.log("--------->",filteredItems)
+  // const filteredItems = items.filter((item) => {
+  //   const searchLower = searchQuery?.trim().toLowerCase() || "";
+
+  //   return (
+  //     item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
+  //     item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
+  //     item.po_number?.toString().toLowerCase().includes(searchLower) ||
+  //     item.po_type?.toLowerCase().includes(searchLower) ||
+  //     item.po_status?.toLowerCase().includes(searchLower) ||
+  //     item.supplier_name?.toLowerCase().includes(searchLower) ||
+  //     item.location?.toLowerCase().includes(searchLower) ||
+  //     item.ship_to?.toLowerCase().includes(searchLower) ||
+  //     item.bill_to?.toLowerCase().includes(searchLower) ||
+  //     item.buyer_name?.toLowerCase().includes(searchLower) ||
+  //     item.total_amount?.toString().toLowerCase().includes(searchLower) ||
+  //     item.status?.toLowerCase().includes(searchLower)
+  //   );
+  // }).sort((a, b) => a.po_number.localeCompare(b.po_number));
+
+
+
+
   const handleSearchChange = (value) => {
     setSearchQuery(value);
+  
+    const filteredItems = items.filter((item) => {
+        const searchLower = searchQuery?.trim().toLowerCase() || "";
+    
+        return (
+          item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
+          item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
+          item.po_number?.toString().toLowerCase().includes(searchLower) ||
+          item.po_type?.toLowerCase().includes(searchLower) ||
+          item.po_status?.toLowerCase().includes(searchLower) ||
+          item.supplier_name?.toLowerCase().includes(searchLower) ||
+          item.location?.toLowerCase().includes(searchLower) ||
+          item.ship_to?.toLowerCase().includes(searchLower) ||
+          item.bill_to?.toLowerCase().includes(searchLower) ||
+          item.buyer_name?.toLowerCase().includes(searchLower) ||
+          item.total_amount?.toString().toLowerCase().includes(searchLower) ||
+          item.status?.toLowerCase().includes(searchLower)
+        );
+      });
+  
+    setFilteredItems(filteredItems); 
   };
-  // console.log("--------->",filteredItems)
+
+
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
@@ -184,8 +232,8 @@ const TableApprove = () => {
       item.total_amount?.toString().toLowerCase().includes(searchLower) ||
       item.status?.toLowerCase().includes(searchLower)
     );
-  }).sort((a, b) => a.po_number.localeCompare(b.po_number));
-
+  });
+  
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
       navigate(`/approvepage`, {

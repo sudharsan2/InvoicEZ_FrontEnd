@@ -670,9 +670,13 @@ const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>
-            <BreadcrumbButton href={path}>Issue</BreadcrumbButton>
+            <BreadcrumbButton href={path1}>Multiple Match Found</BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
+          <BreadcrumbItem>
+            <BreadcrumbButton href={path}>{invoiceData.invoice_info.InvoiceId}</BreadcrumbButton>
+          </BreadcrumbItem>
+          {/* <BreadcrumbDivider /> */}
           {/* <BreadcrumbItem>
             <BreadcrumbButton href={path}>{ poNumber }</BreadcrumbButton>
           </BreadcrumbItem> */}
@@ -1054,49 +1058,49 @@ const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
           <TableHeaderCell {...headerSortProps("Description")}>
             Description
             {sortedColumn === "Description" && (
-              sortDirection === "asc" ? "▲" : "▼"
+              sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
             )}
           </TableHeaderCell>
           <TableHeaderCell {...headerSortProps("Quantity")}>
             Quantity
             {sortedColumn === "Quantity" && (
-              sortDirection === "asc" ? "▲" : "▼"
+              sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
             )}
           </TableHeaderCell>
           <TableHeaderCell {...headerSortProps("UnitPrice")}>
             Unit Price
             {sortedColumn === "UnitPrice" && (
-              sortDirection === "asc" ? "▲" : "▼"
+              sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
             )}
           </TableHeaderCell>
           <TableHeaderCell {...headerSortProps("Discount")}>
             Discount
             {sortedColumn === "Discount" && (
-              sortDirection === "asc" ? "▲" : "▼"
+              sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
             )}
           </TableHeaderCell>
           <TableHeaderCell {...headerSortProps("ProductCode")}>
             Product Code
             {sortedColumn === "ProductCode" && (
-              sortDirection === "asc" ? "▲" : "▼"
+              sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
             )}
           </TableHeaderCell>
           <TableHeaderCell {...headerSortProps("Igst")}>
             Igst
             {sortedColumn === "Igst" && (
-              sortDirection === "asc" ? "▲" : "▼"
+              sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
             )}
           </TableHeaderCell>
           <TableHeaderCell {...headerSortProps("Cgst")}>
             Cgst
             {sortedColumn === "Cgst" && (
-              sortDirection === "asc" ? "▲" : "▼"
+              sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
             )}
           </TableHeaderCell>
           <TableHeaderCell {...headerSortProps("Sgst")}>
             Sgst
             {sortedColumn === "Sgst" && (
-              sortDirection === "asc" ? "" : "▼"
+              sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
             )}
           </TableHeaderCell>
         </TableRow>

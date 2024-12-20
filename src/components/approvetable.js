@@ -455,7 +455,7 @@ const columns = [
             };
             case "Gate Entry":
               return {
-                backgroundColor: "#0D92F4",
+                backgroundColor: "#074799",
                 color: "#fff",
                 borderRadius: "8px",
                 textShadow: "0 1px 3px rgba(0,0,0,0.2)",
@@ -642,31 +642,72 @@ const SummaryTable = ({
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
   };
+  // const handleSearchChange = (value) => {
+  //   setSearchQuery(value);
+  // };
+  // // console.log("--------->",filteredItems)
+
+  // const filteredItems = items.filter((item) => {
+  //   const searchLower = searchQuery?.trim().toLowerCase() || "";
+
+  //   // if (
+  //   //   searchLower === "multiple match" ||
+  //   //   searchLower === "match found" ||
+  //   //   searchLower === "no match"
+  //   // ) {
+  //   //   return item.Status?.toString().toLowerCase() === "match found";
+  //   // }
+
+  //   return (
+  //     item.id?.toString().toLowerCase().includes(searchLower) ||
+  //     item.supplier?.toString().toLowerCase().includes(searchLower) ||
+  //     item.amount?.toString().toLowerCase().includes(searchLower) ||
+  //     item.Status?.toString().toLowerCase().includes(searchLower) ||
+  //     item.buyer?.toLowerCase().includes(searchLower)||
+  //     item.Store?.toLowerCase().includes(searchLower)
+  //   );
+    
+
+  // });
+
+
+
   const handleSearchChange = (value) => {
     setSearchQuery(value);
+  
+    const filteredItems = items.filter((item) => {
+      const searchLower = value?.trim().toLowerCase() || ""; // Use the input value directly
+  
+      return (
+        item.id?.toString().toLowerCase().includes(searchLower) ||
+        item.supplier?.toString().toLowerCase().includes(searchLower) ||
+        item.amount?.toString().toLowerCase().includes(searchLower) ||
+        item.Status?.toString().toLowerCase().includes(searchLower) ||
+        item.buyer?.toLowerCase().includes(searchLower) ||
+        item.Store?.toLowerCase().includes(searchLower)
+      );
+    });
+  
+    setFilteredItems(filteredItems); 
   };
-  // console.log("--------->",filteredItems)
+  // setFilteredItems(filteredItems)
   const filteredItems = items.filter((item) => {
-    const searchLower = searchQuery?.trim().toLowerCase() || "";
-
-    if (
-      searchLower === "match" ||
-      searchLower === "match found" ||
-      searchLower === "no match"
-    ) {
-      return item.Status?.toString().toLowerCase() === "match found";
-    }
-
+    const searchLower = searchQuery?.trim().toLowerCase() || ""; // Use state value for searchQuery
+  
     return (
       item.id?.toString().toLowerCase().includes(searchLower) ||
       item.supplier?.toString().toLowerCase().includes(searchLower) ||
       item.amount?.toString().toLowerCase().includes(searchLower) ||
       item.Status?.toString().toLowerCase().includes(searchLower) ||
-      item.buyer?.toLowerCase().includes(searchLower)||
+      item.buyer?.toLowerCase().includes(searchLower) ||
       item.Store?.toLowerCase().includes(searchLower)
     );
   });
-  console.log("Filtered ", filteredItems);
+
+
+
+  
+  // console.log("Filtered ", filteredItems);
 
   // const handleRowClick = (e, item) => {
   //   if (e.target.type !== "checkbox") {
@@ -852,7 +893,7 @@ const SummaryTable = ({
     setSortState({ columnId, sortDirection: newSortDirection });
     
 
-    const sortedItems = [...filteredItems].sort((a, b) => {
+    const sortedItems = [...filtered].sort((a, b) => {
       const aValue = a[columnId];
       const bValue = b[columnId];
 

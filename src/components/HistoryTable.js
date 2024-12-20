@@ -137,10 +137,47 @@ const HistoryTable = () => {
     fetchData();
   }, [isInvoiceUploadRefreshed]);
 
+  // const handleSearchChange = (value) => {
+  //   setSearchQuery(value);
+  // };
+  // // console.log("--------->",filteredItems)
+  // const filteredItems = items.filter((item) => {
+  //   const searchLower = searchQuery?.trim().toLowerCase() || "";
+
+  //   return (
+  //     item.grn_num?.toString().toLowerCase().includes(searchLower) ||
+  //     item.location?.toString().toLowerCase().includes(searchLower) ||
+  //     item.po_number?.toString().toLowerCase().includes(searchLower) ||
+  //     item.received_date?.toLowerCase().includes(searchLower) ||
+  //     item.po_status?.toLowerCase().includes(searchLower) ||
+  //     item.supplier_name?.toLowerCase().includes(searchLower) ||
+  //     item.total_amount?.toLowerCase().includes(searchLower) ||
+  //     item.receipt?.toLowerCase().includes(searchLower)
+  //   );
+  // })
+
+
   const handleSearchChange = (value) => {
     setSearchQuery(value);
+  
+    const filteredItems = items.filter((item) => {
+      const searchLower = searchQuery?.trim().toLowerCase() || "";
+  
+      return (
+        item.grn_num?.toString().toLowerCase().includes(searchLower) ||
+        item.location?.toString().toLowerCase().includes(searchLower) ||
+        item.po_number?.toString().toLowerCase().includes(searchLower) ||
+        item.received_date?.toLowerCase().includes(searchLower) ||
+        item.po_status?.toLowerCase().includes(searchLower) ||
+        item.supplier_name?.toLowerCase().includes(searchLower) ||
+        item.total_amount?.toLowerCase().includes(searchLower) ||
+        item.receipt?.toLowerCase().includes(searchLower)
+      );
+    })
+  
+    setFilteredItems(filteredItems); 
   };
-  // console.log("--------->",filteredItems)
+
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
 
@@ -155,6 +192,9 @@ const HistoryTable = () => {
       item.receipt?.toLowerCase().includes(searchLower)
     );
   })
+
+
+
 
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked

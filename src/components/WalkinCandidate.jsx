@@ -12,28 +12,55 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
   const dispatch = useDispatch();
 
 
+  // const openNotification = (type, description, style) => {
+  //   notification.open({
+  //     // message: type,
+  //     description: (
+  //       <div style={{ display: "flex", alignItems: "center" }}>
+  //         <img
+  //           src={style.imageSrc}
+  //           alt="notification-icon"
+  //           style={{ width: "100%", height: "70px", marginRight: "10px" }}
+  //         />
+  //         {/* <span>{description}</span> */}
+  //       </div>
+  //     ),
+  //     // style: {
+  //     //   // borderRight: `7px solid ${style.borderColor}`,
+  //     //   backgroundColor: "fff",
+  //     //   boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
+  //     //   borderRadius: "5px",
+  //     //   color: style.textColor,
+  //     //   width: "320px",
+  //     //   padding:"0px"
+  //     // },
+  //     placement: "topRight",
+  //   });
+  // };
+  
+
   const openNotification = (type, description, style) => {
     notification.open({
-      // message: type,
       description: (
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "0" }}>
           <img
             src={style.imageSrc}
             alt="notification-icon"
-            style={{ width: "100%", height: "70px", marginRight: "10px" }}
+            style={{
+              width: "100%", // Ensures the image spans the entire notification card
+              height: "auto", // Maintains aspect ratio
+            }}
           />
-          {/* <span>{description}</span> */}
         </div>
       ),
-      // style: {
-      //   // borderRight: `7px solid ${style.borderColor}`,
-      //   backgroundColor: "fff",
-      //   boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
-      //   borderRadius: "5px",
-      //   color: style.textColor,
-      //   width: "320px",
-      //   padding:"0px"
-      // },
+      style: {
+        backgroundColor: "#fff", // Notification background color
+        boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)", // Optional shadow
+        borderRadius: "5px", // Rounded corners
+        padding: "0", // Remove any internal padding
+        overflow: "hidden", // Ensures no content spills out
+        width: "320px", // Adjust the width of the notification card
+      },
       placement: "topRight",
     });
   };

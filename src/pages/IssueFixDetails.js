@@ -2,7 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import React from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import {notification} from "antd";
+import { notification } from "antd";
+import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+import { Add24Regular,Delete24Regular } from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
@@ -27,17 +29,17 @@ import {
   useTableFeatures,
   useTableSort,
 } from "@fluentui/react-components";
-import { refreshActions} from "../Store/Store";
+import { refreshActions } from "../Store/Store";
 import { useDispatch, useSelector } from "react-redux";
 import { TextField } from "@fluentui/react/lib/TextField";
 import line_data from "./data_approve";
 import "./dashboard.css";
 import { message } from "antd";
-import { ArrowDownload28Regular,Add28Regular,Delete28Regular } from "@fluentui/react-icons";
+import { ArrowDownload28Regular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 // import { refreshActions } from "../Store/Store";
 const path = "/issuefix";
-const path1 = "http://localhost:3000/";
+const path1 = "/dashboard";
 
 const useStyles = makeStyles({
   root: {
@@ -152,7 +154,7 @@ const IssuefixDetails = () => {
     shippingAddressRecipient: "",
     dueDate: "",
     purchaseOrder: "",
-    entrytime: "",
+    entrytime: ""
   });
 
   const location = useLocation();
@@ -169,23 +171,23 @@ const IssuefixDetails = () => {
         // );
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
-    const response = await axios.get(
-      `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Add the authorization header
-        },
-      }
-    );
+        const response = await axios.get(
+          `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the authorization header
+            },
+          }
+        );
         const data = response.data.invoice_info;
-        console.log("New ",data);
+        console.log("New ", data);
         // Assuming 'items' is the correct property from your API response
         // const items = data || [];
-        console.log("ITEMS",data.id);
+        console.log("ITEMS", data.id);
         setRows(
-          data.map((item,index) => ({
+          data.map((item, index) => ({
             id: item.id,
-            inv_id:item.id,
+            inv_id: item.id,
             Description: item.items.Description || "",
             Quantity: item.items.Quantity || "",
             Unit: item.items.Unit || "",
@@ -218,37 +220,37 @@ const IssuefixDetails = () => {
   const [poNumber, setPoNumber] = useState("");
 
   const handleSubmit = async () => {
-    
+
     const apiUrl = "https://invoicezapi.focusrtech.com:57/user/po-number";
 
-try {
- 
-  const token = localStorage.getItem("access_token");
+    try {
 
-  const response = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`, 
-    },
-    body: JSON.stringify({
-      po_number: poNumber,
-      invoice_id: invoiceNo,
-    }), 
-  });
+      const token = localStorage.getItem("access_token");
 
-  if (!response.ok) {
-    throw new Error("Failed to submit PO");
-  }
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          po_number: poNumber,
+          invoice_id: invoiceNo,
+        }),
+      });
 
-  if (response.status === 201) {
-    message.success("PO successfully Updated");
-    navigate(`/approve`);
-  }
+      if (!response.ok) {
+        throw new Error("Failed to submit PO");
+      }
 
-  const data = await response.json();
-  console.log("API response:", data);
-} catch (error) {
+      if (response.status === 201) {
+        message.success("PO successfully Updated");
+        navigate(`/approve`);
+      }
+
+      const data = await response.json();
+      console.log("API response:", data);
+    } catch (error) {
       message.error(error);
       console.error("Error submitting PO:", error);
     }
@@ -258,97 +260,96 @@ try {
   const [completedata, setCompletedata] = useState({});
   const [oldrow, setOldrow] = useState([]);
 
- 
-    // Fetch data from the API when the component mounts
-    const fetchData = async () => {
-      try {
-        // const response = await axios.get(
-        //   `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
-        // );
-        const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
-    const response = await axios.get(
-      `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-        },
-      }
-    );
-        const data = response.data.invoice_info;
-        setFormData({
-          vendorName: data.VendorName,
-          customerName: data.CustomerName,
-          invoiceDate: data.InvoiceDate,
-          invoiceTotal: data.InvoiceTotal,
-          vendorAddressRecipient: data.VendorAddressRecipient,
-          customerAddressRecipient: data.CustomerAddressRecipient,
-          invoiceId: data.InvoiceId,
-          customerId: data.CustomerId,
-          billingAddressRecipient: data.BillingAddressRecipient,
-          shippingAddressRecipient: data.ShippingAddressRecipient,
-          dueDate: data.DueDate,
-          purchaseOrder: data.PurchaseOrder,
-          entrytime: data.created_at,
+  // Fetch data from the API when the component mounts
+  const fetchData = async () => {
+    try {
+      // const response = await axios.get(
+      //   `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+      // );
+      const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
-        });
-        setCompletedata(data);
-        // Update the full data in state
-        setFulldata(response.data.invoice_info);
+      const response = await axios.get(
+        `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = response.data.invoice_info;
+      setFormData({
+        vendorName: data.VendorName,
+        customerName: data.CustomerName,
+        invoiceDate: data.InvoiceDate,
+        invoiceTotal: data.InvoiceTotal,
+        vendorAddressRecipient: data.VendorAddressRecipient,
+        customerAddressRecipient: data.CustomerAddressRecipient,
+        invoiceId: data.InvoiceId,
+        customerId: data.CustomerId,
+        billingAddressRecipient: data.BillingAddressRecipient,
+        shippingAddressRecipient: data.ShippingAddressRecipient,
+        dueDate: data.DueDate,
+        purchaseOrder: data.PurchaseOrder,
+        entrytime:data.created_at,
+      });
+      setCompletedata(data);
+      // Update the full data in state
+      setFulldata(response.data.invoice_info);
 
-        setOldrow(
-          data.items.map((item) => ({
-            id: item.id,
-            Description: item.Description,
-            Quantity: item.Quantity,
-            Unit: item.Unit,
-            UnitPrice: item.UnitPrice,
-            Amount: item.Amount,
-            SubTotal: item.SubTotal,
-            PreviousUnpaidBalance: item.PreviousUnpaidBalance,
-            Date: item.Date,
-            TotalTax: item.TotalTax,
-            Tax: item.Tax,
-            AmountDue: item.AmountDue,
-            ServiceStartDate: item.ServiceStartDate,
-            ServiceEndDate: item.ServiceEndDate,
-            ServiceAddressRecipient: item.ServiceAddressRecipient,
-            RemittanceAddressRecipient: item.RemittanceAddressRecipient,
-            ServiceAddress: item.ServiceAddress,
-            RemittanceAddress: item.RemittanceAddress,
-          })),
-        );
+      setOldrow(
+        data.items.map((item) => ({
+          id: item.id,
+          Description: item.Description,
+          Quantity: item.Quantity,
+          Unit: item.Unit,
+          UnitPrice: item.UnitPrice,
+          Amount: item.Amount,
+          SubTotal: item.SubTotal,
+          PreviousUnpaidBalance: item.PreviousUnpaidBalance,
+          Date: item.Date,
+          TotalTax: item.TotalTax,
+          Tax: item.Tax,
+          AmountDue: item.AmountDue,
+          ServiceStartDate: item.ServiceStartDate,
+          ServiceEndDate: item.ServiceEndDate,
+          ServiceAddressRecipient: item.ServiceAddressRecipient,
+          RemittanceAddressRecipient: item.RemittanceAddressRecipient,
+          ServiceAddress: item.ServiceAddress,
+          RemittanceAddress: item.RemittanceAddress,
+        })),
+      );
 
-        setRows(
-          data.items.map((item,index) => ({
-            // id: index+1,
-            // inv_id:data.id,
-            id:item.id,
-            Description: item.Description,
-            Quantity: item.Quantity,
-            Unit: item.Unit,
-            UnitPrice: item.UnitPrice,
-            Amount: item.Amount,
-            SubTotal: item.SubTotal,
-            PreviousUnpaidBalance: item.PreviousUnpaidBalance,
-            Igst:item.Igst,
-            Cgst:item.Cgst,
-            Sgst:item.Sgst
-            
+      setRows(
+        data.items.map((item, index) => ({
+          // id: index+1,
+          // inv_id:data.id,
+          id: item.id,
+          Description: item.Description,
+          Quantity: item.Quantity,
+          Unit: item.Unit,
+          UnitPrice: item.UnitPrice,
+          Amount: item.Amount,
+          SubTotal: item.SubTotal,
+          PreviousUnpaidBalance: item.PreviousUnpaidBalance,
+          Igst: item.Igst,
+          Cgst: item.Cgst,
+          Sgst: item.Sgst
 
-          })),
-        );
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    useEffect(() => {
-      
-      fetchData();
-    }, []);
-   
 
-  
+        })),
+      );
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+
+    fetchData();
+  }, []);
+
+
+
   const handleformSubmit = async () => {
     // Update the full data state based on formData and rows
     const updatedFulldata = {
@@ -366,7 +367,6 @@ try {
       DueDate: formData.dueDate,
       PurchaseOrder: formData.purchaseOrder,
       created_at: formData.entrytime,
-      
       items: rows.map((item, index) => {
         const oldItem = oldrow[index]; // Match the index of rows with oldrow
 
@@ -399,12 +399,12 @@ try {
       }),
       // Add any other properties like po_headers, if needed
     };
-    console.log("ITEMS",updatedFulldata);
+    console.log("ITEMS", updatedFulldata);
     try {
-  
+
       const token = localStorage.getItem("access_token");
 
-  
+
       const response = await fetch(
         `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
         {
@@ -416,14 +416,14 @@ try {
           body: JSON.stringify({
             invoice_info: updatedFulldata,
             po_headers: [],
-          }), 
+          }),
         },
       );
 
       if (response.ok) {
-         console.log("Form data updated successfully");
-         message.success("Updated Successfully!!!");
-         dispatch(refreshActions.toggleInvoiceUploadRefresh());
+        console.log("Form data updated successfully");
+        message.success("Updated Successfully!!!");
+        dispatch(refreshActions.toggleInvoiceUploadRefresh());
 
       } else {
         console.error("Error updating form data");
@@ -476,7 +476,7 @@ try {
     console.log("InvoiceUploadRefresh has changed:", InvoiceUploadRefresh);
     fetchData();
   }, [isInvoiceUploadRefreshed]);
-  
+
 
   // const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -493,11 +493,11 @@ try {
   //   );
   //   console.log("Selected Rows",selectedRows);
   // };
-  console.log("ROWS",rows)
+  console.log("ROWS", rows)
 
 
   // const handleDeleteSelectedRows = async () => {
-    
+
   //   if (selectedRows.length === 0) {
   //     notification.warning({
   //       message: "No PO Selected",
@@ -507,7 +507,7 @@ try {
   //   }
 
   //   try {
-      
+
 
   //     const deletePromises = selectedRows.map((inv_id) =>
   //       axios.delete(
@@ -517,25 +517,25 @@ try {
 
   //     await Promise.all(deletePromises);
 
-      
-     
+
+
 
   //     notification.success({
   //       message: "Successfully deleted",
-        
+
   //     });
 
   //     // dispatch(refreshActions.toggleInvoiceUploadRefresh());
   //   } catch (error) {
-     
+
   //     notification.error({
   //       message: "Deletion Failed",
-        
+
   //     });
   //   }
   // };
 
- 
+
   const handleDeleteSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
     if (selectedItemsArray.length === 0) {
@@ -545,62 +545,61 @@ try {
       });
       return;
     }
-  
+
     try {
       const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
-  const deletePromises = selectedItemsArray.map((inv_id) =>
-    axios.delete(
-      `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Add the authorization header
-        },
-      }
-    )
-  );
-  
-      await Promise.all(deletePromises); 
-  
-      const updatedRows = rows.filter(
-        (item) => !selectedItemsArray.includes(item.inv_id), 
-      );
-  
-      setRows(updatedRows); 
-      setSelectedRows(new Set()); 
-  
-      notification.success({
-        message: "Successfully deleted",
-        description: `Deleted items: ${selectedItemsArray.join(", ")}`,
-      });
-  
-      dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Trigger refresh action if necessary
-    } catch (error) {
-      notification.error({
-        message: "Deletion Failed",
-        description: `Deletion failed. ${
-          error.response?.data?.message || "An error occurred."
-        }`,
-      });
-    }
-  };
-  
-
-
-  
-  const handleViewInvoice = async () => {
-    try {
-      const token = localStorage.getItem("access_token"); // Retrieve the token securely
-
-        const response = await fetch(
-          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceNo}`,
+      const deletePromises = selectedItemsArray.map((inv_id) =>
+        axios.delete(
+          `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
           {
-            method: "GET", // Specify the HTTP method explicitly
             headers: {
               Authorization: `Bearer ${token}`, // Add the authorization header
             },
           }
-        );
+        )
+      );
+
+      await Promise.all(deletePromises);
+
+      const updatedRows = rows.filter(
+        (item) => !selectedItemsArray.includes(item.inv_id),
+      );
+
+      setRows(updatedRows);
+      setSelectedRows(new Set());
+
+      notification.success({
+        message: "Successfully deleted",
+        description: `Deleted items: ${selectedItemsArray.join(", ")}`,
+      });
+
+      dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Trigger refresh action if necessary
+    } catch (error) {
+      notification.error({
+        message: "Deletion Failed",
+        description: `Deletion failed. ${error.response?.data?.message || "An error occurred."
+          }`,
+      });
+    }
+  };
+
+
+
+
+  const handleViewInvoice = async () => {
+    try {
+      const token = localStorage.getItem("access_token"); // Retrieve the token securely
+
+      const response = await fetch(
+        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceNo}`,
+        {
+          method: "GET", // Specify the HTTP method explicitly
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the authorization header
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -614,7 +613,7 @@ try {
     }
   };
 
-  const handlePOChange = (event) => {};
+  const handlePOChange = (event) => { };
 
   // Adding new row
 
@@ -656,37 +655,37 @@ try {
       Amount: "",
       Subtotal: "",
       PreviousUnpaidBalance: "",
-      Igst:"",
-      Cgst:"",
-      Sgst:"",
+      Igst: "",
+      Cgst: "",
+      Sgst: "",
     };
-    setRows((prevRows) => [...prevRows, newRow]); 
+    setRows((prevRows) => [...prevRows, newRow]);
   };
 
-  console.log("Update Row",rows)
+  console.log("Update Row", rows)
 
 
 
   // checkbox
 
 
-  
+
 
   // const toggleRowSelection = (rowid) => {
   //   console.log("Invoice ID:", rowid);
-  
+
   //   setSelectedRows((prevSelectedRows) =>
   //     prevSelectedRows.includes(rowid)
   //       ? prevSelectedRows.filter((id) => id !== rowid) // Deselect row
   //       : [...prevSelectedRows, rowid] // Select row
   //   );
-  
+
   //   console.log("Selected Rows:", selectedRows);
   // };
-  
+
   const toggleRowSelection = (rowid) => {
     console.log("Invoice ID:", rowid);
-  
+
     setSelectedRows((prevSelectedRows) => {
       const newSet = new Set(prevSelectedRows);
       if (newSet.has(rowid)) {
@@ -696,7 +695,7 @@ try {
       }
       return newSet;
     });
-  
+
     console.log("Selected Rows:", Array.from(selectedRows));
   };
   // const toggleSelectAll = () => {
@@ -720,11 +719,67 @@ try {
       console.log("Selected Rows:", Array.from(allSelectedRows)); // Log selected rows
     }
   };
-  
-  
-  
+
+  // sorting
+  const handleSort = (column) => {
+    if (sortedColumn === column) {
+
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+
+      setSortedColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+
+  const headerSortProps = (column) => ({
+    onClick: () => handleSort(column),
+    style: {
+      fontWeight: "bold",
+      cursor: "pointer",
+      maxWidth: column === "Description" ? "150px" : "200px",
+    },
+  });
+
+  const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState('asc');
+
+  const sortedData = [...rows].sort((a, b) => {
+    if (!sortedColumn) return 0;
+
+    const aValue = a[sortedColumn] || "";
+    const bValue = b[sortedColumn] || "";
+
+
+    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
+    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
+
+
+    if (isANumeric && isBNumeric) {
+      const aNumeric = parseFloat(aValue);
+      const bNumeric = parseFloat(bValue);
+      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+    }
+
+
+    if (!isANumeric && !isBNumeric) {
+      const aString = String(aValue).toLowerCase();
+      const bString = String(bValue).toLowerCase();
+      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+    }
+
+
+    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
+    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
+
+    return 0;
+  });
+
+
+
   const areAllSelected = selectedRows.length === rows.length;
-    return (
+  return (
     <div>
       <div>
         <div ref={divRef}>
@@ -734,10 +789,10 @@ try {
                 <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
               </BreadcrumbItem>
               <BreadcrumbDivider />
-              <BreadcrumbItem>
+              {/* <BreadcrumbItem>
                 <BreadcrumbButton href={path}>Issues</BreadcrumbButton>
-              </BreadcrumbItem>
-              <BreadcrumbDivider />
+              </BreadcrumbItem> */}
+              {/* <BreadcrumbDivider /> */}
               <BreadcrumbItem>
                 <BreadcrumbButton href={path}>
                   {formData.vendorName}
@@ -829,27 +884,21 @@ try {
                 <div
                   style={{
                     display: "flex",
-                    justifyContent: "space-around",
-                    width: "25%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "120px"
                   }}
                 >
-                  <div
+                  <ArrowDownload28Regular
                     style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      marginTop: "120px"
+                      color: "#1281d7",
+                      marginTop: "10px",
                     }}
-                  >
-                    <ArrowDownload28Regular
-                      style={{ color: "#1281d7",
-                        marginTop: "10px",
-                      }}
-                      onClick={handleViewInvoice}
-                    />{" "}
-                    <span onClick={handleViewInvoice}> View Invoice</span>
-                  </div>
-                  <div style={{ marginTop: "120px" }}>
+                    onClick={handleViewInvoice}
+                  />{" "}
+                  <span onClick={handleViewInvoice}> View Invoice</span>
+                </div>
+                <div style={{ marginTop: "120px" }}>
                   <Button
                     className="buttoncolor"
                     style={{ backgroundColor: "#3570c3", color: "white" }}
@@ -857,7 +906,6 @@ try {
                   >
                     Update form
                   </Button>
-                  </div>
                 </div>
               </div>
 
@@ -1019,80 +1067,121 @@ try {
                   </div>
                 </div>
               </div>
-              
-              <div style={{display:"flex",justifyContent:"space-between"}}>
-              <div style={{display:"flex",marginTop:"1.5em",marginBottom:"2em"}}>
-              <h2 >Lines</h2>
-              
-                   </div>
-                   <div style={{display:"flex",justifyContent:"flex-end",marginTop:"1.5em",marginBottom:"2em",gap:"20px"}}>
+
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", marginTop: "1.5em", marginBottom: "2em" }}>
+                  <h2 >Lines</h2>
+
+                </div>
+                <div style={{display:"flex",justifyContent:"flex-end",marginTop:"1.5em",marginBottom:"2em",gap:"20px"}}>
                    {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleAddRow}>Add</Button> */}
-                   <Add28Regular  style={{cursor:"pointer",padding:"2px",height:"35px", color: "#1281d7"}} onClick={handleAddRow}></Add28Regular><span style={{ fontSize: "14px", color: "#000",marginTop:"6px",marginLeft:"-6px" }}>Add</span>
+                   <Add24Regular  style={{cursor:"pointer",padding:"2px",height:"35px", color: "#1281d7"}} onClick={handleAddRow}></Add24Regular><span style={{ fontSize: "14px", color: "#000",marginTop:"6px",marginLeft:"-6px" }}>Add</span>
                    {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button> */}
-                   <Delete28Regular  style={{cursor:"pointer",padding:"2px",height:"35px", color: "#1281d7"}} onClick={handleDeleteSelectedRows}></Delete28Regular><span style={{ fontSize: "14px", color: "#000",marginTop:"6px",marginLeft:"-6px" }}>Delete</span>
+                   <Delete24Regular  style={{cursor:"pointer",padding:"2px",height:"35px", color: "#1281d7"}} onClick={handleDeleteSelectedRows}></Delete24Regular><span style={{ fontSize: "14px", color: "#000",marginTop:"6px",marginLeft:"-6px" }}>Delete</span>
                    </div>
 
               </div>
-              
-              
+
+
               <div
                 style={{
                   marginTop: "-20px",
                 }}
               >
                 <Table>
-  <TableHeader>
-    <TableRow>
-      <TableHeaderCell>
-        <Checkbox
-          checked={areAllSelected}
-          onChange={toggleSelectAll}
-          title="Select All"
-        />
-      </TableHeaderCell>
-      <TableHeaderCell>No</TableHeaderCell>
-      <TableHeaderCell>Description</TableHeaderCell>
-      <TableHeaderCell>Quantity</TableHeaderCell>
-      <TableHeaderCell>Unit</TableHeaderCell>
-      <TableHeaderCell>Unit Price</TableHeaderCell>
-      <TableHeaderCell>Amount</TableHeaderCell>
-      <TableHeaderCell>Subtotal</TableHeaderCell>
-      <TableHeaderCell>Previous Unpaid Balance</TableHeaderCell>
-      <TableHeaderCell>Igst</TableHeaderCell>
-      <TableHeaderCell>Cgst</TableHeaderCell>
-      <TableHeaderCell>Sgst</TableHeaderCell>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    {rows.map((row, index) => (
-      <TableRow key={row.id}>
-        <TableCell>
-          <Checkbox
-            checked={selectedRows.has(row.id)}
-            onChange={() => toggleRowSelection(row.id)}
-          />
-        </TableCell>
-        <TableCell>{index + 1}</TableCell> {/* Dynamic numbering */}
-        {Object.keys(row)
-          .filter((key) => key !== "id")
-          .map((key) => (
-            <TableCell key={key}>
-              <Input
-                value={row[key] || ""} // Fallback to empty string for null values
-                onChange={(e) => handleInputChange(index, key, e.target.value)}
-                style={{ width: "100%" }}
-              />
-            </TableCell>
-          ))}
-      </TableRow>
-    ))}
-  </TableBody>
-</Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHeaderCell>
+                        <Checkbox
+                          checked={areAllSelected}
+                          onChange={toggleSelectAll}
+                          title="Select All"
+                        />
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("id")}>No
+                        {sortedColumn === "id" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Description")}>Description
+                        {sortedColumn === "Description" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Quantity")}>Quantity
+                        {sortedColumn === "Quantity" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Unit")}>Unit
+                        {sortedColumn === "Unit" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("UnitPrice")}>Unit Price
+                        {sortedColumn === "UnitPrice" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Amount")}>Amount
+                        {sortedColumn === "Amount" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("SubTotal")}>Subtotal
+                        {sortedColumn === "SubTotal" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("PreviousUnpaidBalance")}>Previous Unpaid Balance
+                        {sortedColumn === "PreviousUnpaidBalance" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Igst")}>Igst
+                        {sortedColumn === "Igst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Cgst")}>Cgst
+                        {sortedColumn === "Cgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Sgst")}>Sgst
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sortedData.map((row, index) => (
+                      <TableRow key={row.id}>
+                        <TableCell>
+                          <Checkbox
+                            checked={selectedRows.has(row.id)}
+                            onChange={() => toggleRowSelection(row.id)}
+                          />
+                        </TableCell>
+                        <TableCell>{index + 1}</TableCell> {/* Dynamic numbering */}
+                        {Object.keys(row)
+                          .filter((key) => key !== "id")
+                          .map((key) => (
+                            <TableCell key={key}>
+                              <input
+                                value={row[key] || ""} // Fallback to empty string for null values
+                                onChange={(e) => handleInputChange(index, key, e.target.value)}
+                                style={{ width: "100%", border: "none", marginLeft: "-15px" }}
+                              />
+                            </TableCell>
+                          ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
 
 
-
- 
- 
                 {/* <Button onClick={addLine} style={{ marginTop: "10px" }}>+ Add Line</Button> */}
               </div>
             </div>

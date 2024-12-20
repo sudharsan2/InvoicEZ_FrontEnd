@@ -118,7 +118,7 @@ const History = () => {
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>History</BreadcrumbButton>
             </BreadcrumbItem>
-            <BreadcrumbDivider />
+            {/* <BreadcrumbDivider /> */}
           </Breadcrumb>
         </div>
       </div>

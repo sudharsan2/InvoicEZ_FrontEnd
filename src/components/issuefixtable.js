@@ -153,9 +153,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
   // };
 
   
-  const handleSearchChange = (value) => {
-    setSearchQuery(value);
-  };
+ 
 
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
@@ -207,8 +205,64 @@ const IssuefixTable = ({ height, setTableLength }) => {
       console.warn("No rows selected for deletion");
     }
   };
+  // const handleSearchChange = (value) => {
+  //   setSearchQuery(value);
+  // };
+  // const filteredItems = items.filter((item) => {
+  //   return (
+  //     item.invid
+  //       ?.toString()
+  //       .toLowerCase()
+  //       .includes(searchQuery.toLowerCase()) ||
+  //     item.invoiceNo
+  //       ?.toString()
+  //       .toLowerCase()
+  //       .includes(searchQuery.toLowerCase()) ||
+  //     item.supplier?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     item.numberOfLines
+  //       ?.toString()
+  //       .toLowerCase()
+  //       .includes(searchQuery.toLowerCase()) || // Convert numberOfLines to string
+  //     item.invoiceDate?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     item.totalAmount?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     item.statusVerified?.toLowerCase().includes(searchQuery.toLowerCase())
+  //   );
+  // });
+
+
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
   
+    const filteredItems = items.filter((item) => {
+      // const searchQuery = value?.trim().toLowerCase() || "";
+      return (
+        item.invid
+          ?.toString()
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        item.invoiceNo
+          ?.toString()
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        item.supplier?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.numberOfLines
+          ?.toString()
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) || // Convert numberOfLines to string
+        item.invoiceDate?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.totalAmount?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.statusVerified?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    });
+  
+    setFilteredItems(filteredItems); 
+  };
+
+
+
   const filteredItems = items.filter((item) => {
+    // const searchQuery = value?.trim().toLowerCase() || "";
     return (
       item.invid
         ?.toString()
@@ -228,6 +282,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
       item.statusVerified?.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
+
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {

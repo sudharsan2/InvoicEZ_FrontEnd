@@ -16,7 +16,7 @@ import StoreTable from "../components/StoreTable";
 import Search from "../components/Search";
 
 // const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
-const path = "/approve";
+const path = "/storeuser";
 const path1 = "/storedashboard";
 
 const containerStyle = {
@@ -82,7 +82,7 @@ const StoreUser = () => {
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>Generate Gate Entry</BreadcrumbButton>
             </BreadcrumbItem>
-            <BreadcrumbDivider />
+            {/* <BreadcrumbDivider /> */}
           </Breadcrumb>
         </div>
       </div>

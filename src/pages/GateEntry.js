@@ -81,7 +81,7 @@ const GateEntry = () => {
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>Gate Entry</BreadcrumbButton>
             </BreadcrumbItem>
-            <BreadcrumbDivider />
+            {/* <BreadcrumbDivider /> */}
           </Breadcrumb>
         </div>
       </div>

@@ -123,27 +123,66 @@ const AITable = ({ setTableLength }) => {
     fetchData();
   }, [isInvoiceUploadRefreshed]);
 
-  const handleSearchChange = (value) => {
-    setSearchQuery(value);
-  };
+  
 
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
   };
+
+  // const handleSearchChange = (value) => {
+  //   setSearchQuery(value);
+  // };
+  // const filteredItems = items.filter((item) => {
+  //   const searchLower = searchQuery?.trim().toLowerCase() || "";
+
+  //   return (
+  //     item.Id?.toString().toLowerCase().includes(searchLower) ||
+  //     item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
+  //     item.supplier_name?.toLowerCase().includes(searchLower) ||
+  //     item.city?.toLowerCase().includes(searchLower) ||
+  //     item.InvoiceDate?.toLowerCase().includes(searchLower) ||
+  //     item.InvoiceTotal?.toLowerCase().includes(searchLower) 
+  //     // item.ship_to?.toLowerCase().includes(searchLower)
+  //   );
+  // });
+
+
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+  
+    const filteredItems = items.filter((item) => {
+        const searchLower = searchQuery?.trim().toLowerCase() || "";
+    
+        return (
+          item.Id?.toString().toLowerCase().includes(searchLower) ||
+          item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
+          item.supplier_name?.toLowerCase().includes(searchLower) ||
+          item.city?.toLowerCase().includes(searchLower) ||
+          item.InvoiceDate?.toLowerCase().includes(searchLower) ||
+          item.InvoiceTotal?.toLowerCase().includes(searchLower) 
+          // item.ship_to?.toLowerCase().includes(searchLower)
+        );
+      });
+  
+    setFilteredItems(filteredItems); 
+  };
+
+
   const filteredItems = items.filter((item) => {
-    const searchLower = searchQuery?.trim().toLowerCase() || "";
-
-    return (
-      item.Id?.toString().toLowerCase().includes(searchLower) ||
-      item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
-      item.supplier_name?.toLowerCase().includes(searchLower) ||
-      item.city?.toLowerCase().includes(searchLower) ||
-      item.InvoiceDate?.toLowerCase().includes(searchLower) ||
-      item.InvoiceTotal?.toLowerCase().includes(searchLower) 
-      // item.ship_to?.toLowerCase().includes(searchLower)
-    );
-  });
-
+      const searchLower = searchQuery?.trim().toLowerCase() || "";
+  
+      return (
+        item.Id?.toString().toLowerCase().includes(searchLower) ||
+        item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
+        item.supplier_name?.toLowerCase().includes(searchLower) ||
+        item.city?.toLowerCase().includes(searchLower) ||
+        item.InvoiceDate?.toLowerCase().includes(searchLower) ||
+        item.InvoiceTotal?.toLowerCase().includes(searchLower) 
+        // item.ship_to?.toLowerCase().includes(searchLower)
+      );
+    });
+    
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
       navigate(`/aidetail`, { state: { invoiceNumber: item.Id } });

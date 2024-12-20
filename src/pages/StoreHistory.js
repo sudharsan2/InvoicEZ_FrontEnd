@@ -16,7 +16,7 @@ import StoreHistoryTable from "../components/StoreHistoryTable";
 import Search from "../components/Search";
 import Example from "./ExampleLineChart";
 // const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
-const path = "/history";
+const path = "/storehistory";
 const path1 = "/storedashboard";
 
 
@@ -118,7 +118,7 @@ const StoreHistory = () => {
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>History</BreadcrumbButton>
             </BreadcrumbItem>
-            <BreadcrumbDivider />
+            {/* <BreadcrumbDivider /> */}
           </Breadcrumb>
         </div>
       </div>
