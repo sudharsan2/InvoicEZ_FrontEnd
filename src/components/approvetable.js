@@ -455,7 +455,7 @@ const columns = [
             };
             case "Gate Entry":
               return {
-                backgroundColor: "#107c10",
+                backgroundColor: "#0D92F4",
                 color: "#fff",
                 borderRadius: "8px",
                 textShadow: "0 1px 3px rgba(0,0,0,0.2)",

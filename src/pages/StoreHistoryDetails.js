@@ -114,6 +114,7 @@ const useStyles = makeStyles({
 const StoreHistoryDetails = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const navigate = useNavigate();
+  const [entrytime, setEntrytime] = useState();
 
   const [PONumberOPtions, setPONumberOPtions] = useState([]);
 
@@ -191,7 +192,8 @@ const StoreHistoryDetails = () => {
     }
   };
 
-  const handlePostApi = async () => {
+  const handlePostApi = async () => 
+  {
     console.log("Button clicked!");
 
     if (!selectedOption || !selectedOption.value) {
@@ -225,7 +227,8 @@ const StoreHistoryDetails = () => {
       } else {
         message.error(`Operation Unsuccessfully Please try again`);
       }
-    } catch (error) {
+    } 
+    catch (error) {
       message.error(error);
     }
   };
@@ -420,6 +423,7 @@ const StoreHistoryDetails = () => {
         setInvoiceDate(fetchedItems.invoice_info.InvoiceDate);
         setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
         setSupplier(fetchedItems.po_header.supplier_name);
+        setEntrytime(fetchedItems.invoice_info.created_at);
         fetchedItems.po_lineitems.forEach((item) => {
           setClosedCode(item.closed_code);
         });
@@ -697,6 +701,16 @@ const StoreHistoryDetails = () => {
                 >
                   <p>Line Matching</p>
                   <h2>FULL</h2>
+                </div>
+                <div
+                  style={{
+                    marginLeft: "3vw",
+                    borderLeft: "5px solid #FF7F7F",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  <p>Entry Time</p>
+                  <h2>{entrytime}</h2>
                 </div>
               </div>
             </div>

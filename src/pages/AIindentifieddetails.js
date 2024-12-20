@@ -3,6 +3,7 @@
 import { message } from "antd";
 import { OverlayTrigger } from "react-bootstrap";
 import { TableContainer, TableHead, TableSortLabel, Paper } from '@mui/material';
+import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
@@ -1287,31 +1288,31 @@ const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
       <TableHeaderCell {...headerSortProps2("Line Number")}>
         Line Number
         {sortedColumn2 === "Line Number" && (
-          sortDirection === "asc" ? "▲" : "▼"
+          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
         )}
       </TableHeaderCell>
       <TableHeaderCell {...headerSortProps2("Item Name")}>
         Item Name
         {sortedColumn2 === "Item Name" && (
-          sortDirection === "asc" ? "▲" : "▼"
+          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
         )}
       </TableHeaderCell>
       <TableHeaderCell {...headerSortProps2("Quantity")}>
         Quantity
         {sortedColumn2 === "Quantity" && (
-          sortDirection === "asc" ? "▲" : "▼"
+          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
         )}
       </TableHeaderCell>
       <TableHeaderCell {...headerSortProps2("Unit Price")}>
         Unit Price
         {sortedColumn2 === "Unit Price" && (
-          sortDirection === "asc" ? "▲" : "▼"
+          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
         )}
       </TableHeaderCell>
       <TableHeaderCell {...headerSortProps2("Amount Billed")}>
         Amount Billed
         {sortedColumn2 === "Amount Billed" && (
-          sortDirection === "asc" ? "▲" : "▼"
+          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
         )}
       </TableHeaderCell>
       <TableHeaderCell style={{ fontWeight: "bold" }}>
