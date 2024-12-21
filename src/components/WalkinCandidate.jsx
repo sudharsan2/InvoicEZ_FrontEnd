@@ -47,19 +47,19 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
             src={style.imageSrc}
             alt="notification-icon"
             style={{
-              width: "100%", // Ensures the image spans the entire notification card
-              height: "auto", // Maintains aspect ratio
+              width: "100%", 
+              height: "auto", 
             }}
           />
         </div>
       ),
       style: {
-        backgroundColor: "#fff", // Notification background color
-        boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)", // Optional shadow
-        borderRadius: "5px", // Rounded corners
-        padding: "0", // Remove any internal padding
-        overflow: "hidden", // Ensures no content spills out
-        width: "320px", // Adjust the width of the notification card
+        backgroundColor: "#fff", 
+        boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)", 
+        borderRadius: "5px", 
+        padding: "0", 
+        overflow: "hidden", 
+        width: "320px", 
       },
       placement: "topRight",
     });

@@ -126,7 +126,7 @@ const UserTable = ({setGateCount,setStoreCount}) => {
   const options = [
     "invoice manager",
     "admin",
-    "store user",
+    "storeuser",
     "supplier",
   ];
 

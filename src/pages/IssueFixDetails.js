@@ -4,7 +4,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { notification } from "antd";
 import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
-import { Add24Regular,Delete24Regular } from "@fluentui/react-icons";
+import { Add24Regular, Delete24Regular } from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
@@ -199,6 +199,9 @@ const IssuefixDetails = () => {
             // Date: item.Date || "",
             // Tax: item.Tax || "",
             PreviousUnpaidBalance: item.items.PreviousUnpaidBalance || "",
+            Igst: item.items.Igst || "",
+            Cgst: item.items.Cgst || "",
+            Sgst: item.items.Sgst || "",
             // AmountDue: item.AmountDue || "",
             // Add any other fields here as needed
           })),
@@ -291,7 +294,7 @@ const IssuefixDetails = () => {
         shippingAddressRecipient: data.ShippingAddressRecipient,
         dueDate: data.DueDate,
         purchaseOrder: data.PurchaseOrder,
-        entrytime:data.created_at,
+        entrytime: data.created_at,
       });
       setCompletedata(data);
       // Update the full data in state
@@ -307,6 +310,9 @@ const IssuefixDetails = () => {
           Amount: item.Amount,
           SubTotal: item.SubTotal,
           PreviousUnpaidBalance: item.PreviousUnpaidBalance,
+          Igst: item.Igst,
+          Cgst: item.Cgst,
+          Sgst: item.Sgst,
           Date: item.Date,
           TotalTax: item.TotalTax,
           Tax: item.Tax,
@@ -379,6 +385,9 @@ const IssuefixDetails = () => {
           Amount: item.Amount,
           SubTotal: item.SubTotal,
           PreviousUnpaidBalance: item.PreviousUnpaidBalance,
+          Igst: item.Igst,
+          Cgst: item.Cgst,
+          Sgst: item.Cgst,
           // Assign values from oldrow for fields not updated in rows
           Date: oldItem ? oldItem.Date : null,
           TotalTax: oldItem ? oldItem.TotalTax : null,
@@ -627,6 +636,9 @@ const IssuefixDetails = () => {
       amount: "",
       subtotal: "",
       previousUnpaidBalance: "",
+      Igst: "",
+      Cgst: "",
+      Sgst: "",
     },
   ]);
 
@@ -789,10 +801,10 @@ const IssuefixDetails = () => {
                 <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
               </BreadcrumbItem>
               <BreadcrumbDivider />
-              {/* <BreadcrumbItem>
+              <BreadcrumbItem>
                 <BreadcrumbButton href={path}>Issues</BreadcrumbButton>
-              </BreadcrumbItem> */}
-              {/* <BreadcrumbDivider /> */}
+              </BreadcrumbItem>
+              <BreadcrumbDivider />
               <BreadcrumbItem>
                 <BreadcrumbButton href={path}>
                   {formData.vendorName}
@@ -852,7 +864,7 @@ const IssuefixDetails = () => {
                   </div>
                   <div
                     style={{
-                      marginLeft: "3vw",
+                      marginLeft: "1vw",
                       borderLeft: "5px solid #9a3ca9",
                       paddingLeft: "10px",
                     }}
@@ -862,7 +874,7 @@ const IssuefixDetails = () => {
                   </div>
                   <div
                     style={{
-                      marginLeft: "3vw",
+                      marginLeft: "2vw",
                       borderLeft: "5px solid black",
                       paddingLeft: "10px",
                     }}
@@ -872,7 +884,7 @@ const IssuefixDetails = () => {
                   </div>
                   <div
                     style={{
-                      marginLeft: "3vw",
+                      marginLeft: "2vw",
                       borderLeft: "5px solid #FF7F7F",
                       paddingLeft: "10px",
                     }}
@@ -881,24 +893,22 @@ const IssuefixDetails = () => {
                     <h2>{formData.entrytime}</h2>
                   </div>
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: "120px"
-                  }}
-                >
+
+                <div style={{ marginTop: "120px", display: "flex" }}>
+
                   <ArrowDownload28Regular
                     style={{
                       color: "#1281d7",
                       marginTop: "10px",
+                      // marginRight: "00px"
                     }}
                     onClick={handleViewInvoice}
                   />{" "}
-                  <span onClick={handleViewInvoice}> View Invoice</span>
-                </div>
-                <div style={{ marginTop: "120px" }}>
+                  <span style={{
+                    marginTop: "10px",
+                    marginRight: "20px"
+
+                  }} onClick={handleViewInvoice}> View Invoice</span>
                   <Button
                     className="buttoncolor"
                     style={{ backgroundColor: "#3570c3", color: "white" }}
@@ -1073,12 +1083,12 @@ const IssuefixDetails = () => {
                   <h2 >Lines</h2>
 
                 </div>
-                <div style={{display:"flex",justifyContent:"flex-end",marginTop:"1.5em",marginBottom:"2em",gap:"20px"}}>
-                   {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleAddRow}>Add</Button> */}
-                   <Add24Regular  style={{cursor:"pointer",padding:"2px",height:"35px", color: "#1281d7"}} onClick={handleAddRow}></Add24Regular><span style={{ fontSize: "14px", color: "#000",marginTop:"6px",marginLeft:"-6px" }}>Add</span>
-                   {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button> */}
-                   <Delete24Regular  style={{cursor:"pointer",padding:"2px",height:"35px", color: "#1281d7"}} onClick={handleDeleteSelectedRows}></Delete24Regular><span style={{ fontSize: "14px", color: "#000",marginTop:"6px",marginLeft:"-6px" }}>Delete</span>
-                   </div>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1.5em", marginBottom: "2em", gap: "20px" }}>
+                  {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleAddRow}>Add</Button> */}
+                  <Add24Regular style={{ cursor: "pointer", padding: "2px", height: "35px", color: "#1281d7" }} onClick={handleAddRow}></Add24Regular><span style={{ fontSize: "14px", color: "#000", marginTop: "6px", marginLeft: "-6px" }}>Add</span>
+                  {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button> */}
+                  <Delete24Regular style={{ cursor: "pointer", padding: "2px", height: "35px", color: "#1281d7" }} onClick={handleDeleteSelectedRows}></Delete24Regular><span style={{ fontSize: "14px", color: "#000", marginTop: "6px", marginLeft: "-6px" }}>Delete</span>
+                </div>
 
               </div>
 

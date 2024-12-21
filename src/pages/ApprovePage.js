@@ -32,7 +32,7 @@ const UserApprove = () => {
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>Match Found</BreadcrumbButton>
             </BreadcrumbItem>
-            <BreadcrumbDivider />
+            {/* <BreadcrumbDivider /> */}
           </Breadcrumb>
         </div>
       </div>

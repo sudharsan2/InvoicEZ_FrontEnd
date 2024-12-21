@@ -362,7 +362,7 @@ const AIDetailPage = () => {
           }
         );
         const fetchedItem = response.data;
-        console.log("R", fetchedItem);
+        console.log("RRRR", fetchedItem);
         setInvoiceId(fetchedItem.invoice_info.id);
         setInvoiceData(fetchedItem);
 
@@ -452,13 +452,7 @@ const AIDetailPage = () => {
     { label: "Vendor Tax ID", value: invoiceData.VendorTaxId || "" },
   ];
 
-  // const renderPopover = (props) => (
-  //   <Popover {...props}>
-  //     <Popover.Body>
-  //       Hi
-  //     </Popover.Body>
-  //   </Popover>
-  // );
+  
 
   const lineItems = invoiceData.invoice_info.items.map((item) => ({
     Description: item.Description || "Null",
@@ -509,7 +503,7 @@ const AIDetailPage = () => {
   const handlePostApi = async () => {
     console.log("Button clicked!");
 
-    // Check if PO number and invoice ID are provided
+   
     if (!selectedOption || !selectedOption.value) {
       message.warning("PO number not selected or entered.");
       return;
@@ -558,37 +552,37 @@ const AIDetailPage = () => {
 
   const handleChange = (option) => {
     setSelectedOption(option);
-    // console.log("Selected PO Number:", option ? option.value : null);
+    
   };
 
-  // Function to handle sorting
+  
   const handleSort = (column) => {
     if (sortedColumn === column) {
-      // Toggle sorting direction if the same column is clicked
+      
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
-      // Set sorting direction to ascending if a new column is clicked
+      
       setSortedColumn(column);
       setSortDirection("asc");
     }
   };
   const handleSort2 = (column) => {
     if (sortedColumn2=== column) {
-      // Toggle sorting direction if the same column is clicked
+     
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
-      // Set sorting direction to ascending if a new column is clicked
+      
       setSortedColumn2(column);
       setSortDirection("asc");
     }
   };
-  // Sorting function for header props
+  
   const headerSortProps = (column) => ({
     onClick: () => handleSort(column),
     style: {
       fontWeight: "bold",
       cursor: "pointer",
-      maxWidth: column === "Description" ? "150px" : "200px", // Adjust width as needed
+      maxWidth: column === "Description" ? "150px" : "200px", 
     },
   });
   const headerSortProps2 = (column) => ({
@@ -596,29 +590,19 @@ const AIDetailPage = () => {
     style: {
       fontWeight: "bold",
       cursor: "pointer",
-      maxWidth: column === "Description" ? "150px" : "200px", // Adjust width as needed
+      maxWidth: column === "Description" ? "150px" : "200px", 
     },
   });
 
-  // Sort lineItems based on the current sorting column and direction
-  // const sortedLineItems = [...invoiceData.invoice_info.items].sort((a, b) => {
-  //   if (!sortedColumn) return 0;
-
-  //   const aValue = a[sortedColumn] || "";
-  //   const bValue = b[sortedColumn] || "";
-
-  //   if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
-  //   if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
-  //   return 0;
-  // });
+  
   const sortedLineItems = [...invoiceData.invoice_info.items].sort((a, b) => {
     if (!sortedColumn) return 0;
 
-    // Get the values for comparison
-    const aValue = a[sortedColumn] || ""; // Use empty string for undefined or null
+    
+    const aValue = a[sortedColumn] || ""; 
     const bValue = b[sortedColumn] || "";
 
-    // Convert to numbers if they are numeric values (e.g., Quantity, UnitPrice, etc.)
+    
     const aNumericValue = isNaN(aValue) ? aValue : parseFloat(aValue);
     const bNumericValue = isNaN(bValue) ? bValue : parseFloat(bValue);
 
@@ -628,8 +612,8 @@ const AIDetailPage = () => {
   });
 
 
- // Mapping object: Display names to data keys
-const columnKeyMap = {
+ 
+ const columnKeyMap = {
   "Line Number": "line_num",
   "Item Name": "item_name",
   "Quantity": "quantity",
@@ -637,25 +621,32 @@ const columnKeyMap = {
   "Amount Billed": "amount_billed",
 };
 
-// Sorting function
+
+
+console.log("SORTED",dataitem.po_items);
+
 const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
-  if (!sortedColumn) return 0; // No sorting if no column is selected
+  if (!sortedColumn2) return 0; 
 
-  // Map the sorted column name to the actual data key
-  const dataKey = columnKeyMap[sortedColumn];
-  if (!dataKey) return 0; // Skip sorting if no mapping exists for the column
+ 
+  const dataKey = columnKeyMap[sortedColumn2];
+  if (!dataKey) return 0; 
 
-  // Get the values for comparison, default to empty string for null/undefined
+  
   const aValue = a[dataKey] || "";
   const bValue = b[dataKey] || "";
 
-  // Convert numeric values for proper comparison
-  const aNumericValue = isNaN(aValue) ? aValue : parseFloat(aValue);
-  const bNumericValue = isNaN(bValue) ? bValue : parseFloat(bValue);
+  
+  const aIsNumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
+  const bIsNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
 
-  // Sort logic: Compare based on the current direction
-  if (aNumericValue < bNumericValue) return sortDirection === "asc" ? -1 : 1;
-  if (aNumericValue > bNumericValue) return sortDirection === "asc" ? 1 : -1;
+ 
+  const aComparable = aIsNumeric ? parseFloat(aValue) : aValue.toString();
+  const bComparable = bIsNumeric ? parseFloat(bValue) : bValue.toString();
+
+  
+  if (aComparable < bComparable) return sortDirection === "asc" ? -1 : 1;
+  if (aComparable > bComparable) return sortDirection === "asc" ? 1 : -1;
   return 0; // Equal values
 });
 
@@ -940,105 +931,6 @@ const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
               }}
             >
               <div style={{ flex: 2 }}>
-               {/*  <Table>
-                  <TableHeader
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      backgroundColor: themestate ? "#383838" : "white",
-                      zIndex: 1,
-                      color: themestate ? "white" : "black",
-                    }}
-                  >
-                    <TableRow
-                      style={
-                        themestate
-                          ? { color: "white", borderBottomColor: "#383838" }
-                          : {}
-                      }
-                    >
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Description")}
-                      >
-                        Description
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "200px",
-                        }}
-                        {...headerSortProps("Quantity")}
-                      >
-                        Quantity
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "300px",
-                        }}
-                        {...headerSortProps("Unit Price")}
-                      >
-                        Unit Price
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "250px",
-                        }}
-                        {...headerSortProps("Discount")}
-                      >
-                        Discount
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Product Code")}
-                      >
-                        Product Code
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Igst")}
-                      >
-                        Igst
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Cgst")}
-                      >
-                        Cgst
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Sgst")}
-                      >
-                        Sgst
-                      </TableHeaderCell>
-                    </TableRow>
-                  </TableHeader> */}
 
 <Table>
       <TableHeader
@@ -1120,100 +1012,7 @@ const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
           </TableRow>
         ))}
       </TableBody>
-    
-
-                  <TableBody style={themestate ? { color: "white" } : {}}>
-                    {lineItems.map((item) => (
-                      <TableRow
-                        key={item.id}
-                        style={themestate ? { color: "white" } : {}}
-                        className={
-                          themestate ? "hovereffect dark" : "hovereffect"
-                        }
-                      >
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Description}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Quantity}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.UnitPrice}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Discount}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.ProductCode}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Igst}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Cgst}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            maxWidth: "300px",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.Sgst}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
+  
                 </Table>
               </div>
             </div>
@@ -1273,7 +1072,7 @@ const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
                 >
                   <div style={{ flex: 1 }}>
                     <Table>
-                    <TableHeader
+   <TableHeader
     style={{
       position: "sticky",
       top: 0,
@@ -1384,18 +1183,92 @@ const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
         {item.amount_billed || "Null"}
       </TableCell>
       <TableCell
-        style={{
-          maxWidth: "300px",
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-        }}
-      >
-        <FaArrowUpRightFromSquare
-          style={{ cursor: "pointer" }}
-          onClick={(event) => handleClick(event, item)}
-        />
-      </TableCell>
+                                style={{
+                                  maxWidth: "300px",
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                <FaArrowUpRightFromSquare
+                                  style={{ cursor: "pointer" }}
+                                  onClick={(event) => handleClick(event, item)}
+                                />
+
+                                {/* Popover component */}
+                                <Popover
+                                  id={id}
+                                  open={open}
+                                  anchorEl={anchorEl}
+                                  onClose={handleClose}
+                                  anchorOrigin={{
+                                    vertical: "bottom",
+                                    horizontal: "center",
+                                  }}
+                                  transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "center",
+                                  }}
+                                >
+                                   <div
+                                      style={{
+                                        padding: "30px",
+                                        maxWidth: "300px",
+                                        marginLeft: "-1em",
+                                        fontFamily: "Segoe UI",
+                                        backgroundColor: "#fff", 
+                                        borderRadius: "8px", 
+                                        // boxShadow: "0px 4px 8px rgba(225, 225, 226, 0.8)",
+ 
+                                      }}
+                                    >
+                                    {selectedItem ? (
+                                      <ul key={selectedItem.id}>
+                                        <h3>Item Details</h3>
+                                        <ul>
+                                          <li>
+                                            <b>Line Number:</b>{" "}
+                                            {selectedItem.line_num}
+                                          </li>
+                                          <li>
+                                            <b>Order Type:</b>{" "}
+                                            {
+                                              selectedItem.order_type_lookup_code
+                                            }
+                                          </li>
+                                          <li>
+                                            <b>Purchase Basis:</b>{" "}
+                                            {selectedItem.purchase_basis}
+                                          </li>
+                                          <li>
+                                            <b>Category:</b>{" "}
+                                            {selectedItem.category_name}
+                                          </li>
+                                          <li>
+                                            <b>Status:</b>{" "}
+                                            {selectedItem.closed_code}
+                                          </li>
+                                          <li>
+                                            <b>Description:</b>{" "}
+                                            {selectedItem.item_description}
+                                          </li>
+                                          <li>
+                                            <b>Need By Date:</b>{" "}
+                                            {selectedItem.need_by_date || "N/A"}
+                                          </li>
+                                          <li>
+                                            <b>Promised Date:</b>{" "}
+                                            {selectedItem.promised_date ||
+                                              "N/A"}
+                                          </li>
+                                        </ul>
+                                      </ul>
+                                    ) : (
+                                      <p>No item selected.</p>
+                                    )}
+                                  </div>
+                                </Popover>
+                              </TableCell>
     </TableRow>
   ))}
 </TableBody>

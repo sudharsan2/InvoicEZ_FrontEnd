@@ -82,7 +82,7 @@ const SummaryPage = () => {
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>Summary</BreadcrumbButton>
             </BreadcrumbItem>
-            <BreadcrumbDivider />
+            {/* <BreadcrumbDivider /> */}
           </Breadcrumb>
         </div>
       </div>

@@ -36,7 +36,7 @@ import CreatableSelect from "react-select/creatable";
 import { message } from "antd";
 import { notification } from "antd";
 
-const path = "/storeuser";
+const path = "/storedetails";
 const path2 = "/approvepage";
 const path1 = "/storedashboard";
 
@@ -543,7 +543,7 @@ const StoreUserPage = () => {
     style: {
       fontWeight: "bold",
       cursor: "pointer",
-      maxWidth: column === "Description" ? "150px" : "200px", 
+      maxWidth: column === "PO Number in Supplier Invoice" ? "200px" : "250px", 
     },
   });
 
@@ -1101,7 +1101,7 @@ const StoreUserPage = () => {
                         }}
                         {...headerSortProps("po_number")}
                       >
-                        PO Number in Supplier Invoice
+                        PO Number 
                         {sortedColumn === "po_number" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
