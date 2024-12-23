@@ -262,7 +262,8 @@ const IssuefixDetails = () => {
   const [fulldata, setFulldata] = useState({}); // Add state for full data
   const [completedata, setCompletedata] = useState({});
   const [oldrow, setOldrow] = useState([]);
-
+  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered2, setIsHovered2] = useState(false);
 
   // Fetch data from the API when the component mounts
   const fetchData = async () => {
@@ -1084,10 +1085,75 @@ const IssuefixDetails = () => {
 
                 </div>
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1.5em", marginBottom: "2em", gap: "20px" }}>
-                  {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleAddRow}>Add</Button> */}
-                  <Add24Regular style={{ cursor: "pointer", padding: "2px", height: "35px", color: "#1281d7" }} onClick={handleAddRow}></Add24Regular><span style={{ fontSize: "14px", color: "#000", marginTop: "6px", marginLeft: "-6px" }}>Add</span>
+                <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "4px", 
+    backgroundColor: isHovered2 ? "#e1e1e2" : "transparent",
+    padding: "6px 12px", 
+    borderRadius: "4px", 
+    cursor: "pointer",
+  }}
+  onMouseEnter={() => setIsHovered2(true)}
+  onMouseLeave={() => setIsHovered2(false)}
+  onClick={handleAddRow}
+>
+  <Add24Regular
+    style={{
+      color: "#1281d7", 
+      fontSize: "20px",
+      marginRight:"5px"
+    }}
+  />
+  <span
+    style={{
+      fontSize: "14px",
+      color: "#000",
+      
+    }}
+  >
+    Add
+  </span>
+</div>
+
+
+
+<div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "4px", 
+    backgroundColor: isHovered ? "#e1e1e2" : "transparent",
+    padding: "6px 12px", 
+    borderRadius: "4px", 
+    cursor: "pointer",
+  }}
+  onMouseEnter={() => setIsHovered(true)}
+  onMouseLeave={() => setIsHovered(false)}
+  onClick={handleDeleteSelectedRows}
+>
+  <Delete24Regular
+    style={{
+      color: "#1281d7", 
+      fontSize: "20px",
+      marginRight:"5px"
+    }}
+  />
+  <span
+    style={{
+      fontSize: "14px",
+      color: "#000",
+      
+    }}
+  >
+    Delete
+  </span>
+</div>
+
+                  
                   {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button> */}
-                  <Delete24Regular style={{ cursor: "pointer", padding: "2px", height: "35px", color: "#1281d7" }} onClick={handleDeleteSelectedRows}></Delete24Regular><span style={{ fontSize: "14px", color: "#000", marginTop: "6px", marginLeft: "-6px" }}>Delete</span>
+                  {/* <Delete24Regular style={{ cursor: "pointer", padding: "2px", height: "35px", color: "#1281d7" }} onClick={handleDeleteSelectedRows}></Delete24Regular><span style={{ fontSize: "14px", color: "#000", marginTop: "6px", marginLeft: "-6px",cursor:"pointer" }}>Delete</span> */}
                 </div>
 
               </div>
