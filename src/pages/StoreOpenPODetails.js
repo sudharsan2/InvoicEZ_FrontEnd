@@ -21,8 +21,7 @@ import {
   createTableColumn,
   useTableFeatures,
   useTableSort,
-  Input,
-  Divider
+  Divider,
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
 import { useLocation } from "react-router-dom";
@@ -34,7 +33,8 @@ import CreatableSelect from "react-select/creatable";
 import { message } from "antd";
 import { notification } from "antd";
 import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
-const path = "/storeuser";
+
+const path = "/approve";
 const path2 = "/approvepage";
 const path1 = "/dashboard";
 
@@ -52,7 +52,7 @@ const useStyles = makeStyles({
   },
 
   content1: {
-    overflowY: "auto",
+    overflowX: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
     maxHeight: "35vh",
@@ -102,6 +102,7 @@ const useStyles = makeStyles({
   },
   heading: {
     fontWeight: "bold",
+    maxWidth: "500px",
   },
   content: {
     fontSize: "13px",
@@ -109,7 +110,7 @@ const useStyles = makeStyles({
   },
 });
 
-const GateEntryDetails = () => {
+const StoreOpenPODetails = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const navigate = useNavigate();
 
@@ -147,47 +148,67 @@ const GateEntryDetails = () => {
   const [invoicedate, setInvoiceDate] = useState();
   const [invoicetot, setInvoicetot] = useState();
   const [closedcode, setClosedCode] = useState();
+  const [entrytime, setentrytime] =useState();
   const [po_id, set_Po_id] = useState("");
 
   const [inv_id, setInv_id] = useState();
 
-  // console.log("vendor", setVendor);
+  console.log("Invoice Id", inv_id);
 
   const approvePo = async () => {
-    const url = `https://invoicezapi.focusrtech.com:57/user/GRNGeneration/${po_id}`;
-
+    const url = `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${inv_id}`;
+  
     try {
-      const response = await axios.post(url, {});
-
+     
+      const token = localStorage.getItem("access_token");
+  
+      const response = await axios.post(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+  
       if (response.status === 200) {
-        message.success("GRN successfully Updated");
-        navigate(`/storeuser`);
+        message.success("Gate Entry successfully Updated");
+        navigate(`/approve`);
       }
       console.log("Success:", response.data); // Handle the response data
     } catch (error) {
       notification.error({
-        message: "Approved Failed",
-        // description: `You have successfully Approved: ${po_id}`,
+        message: "Gate Entry Failed",
+        description: error.response?.data?.message || "An error occurred.",
       });
       console.error("Error:", error);
     }
   };
-
+  
   const deleteInvoice = async () => {
     const url = `https://invoicezapi.focusrtech.com:57/user/delete-pos/${inv_id}`;
-
+  
     try {
-      const response = await axios.delete(url);
+      
+      const token = localStorage.getItem("access_token");
+  
+      const response = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+  
       if (response.status === 204) {
         message.success("Revoked successfully");
         navigate(`/approve`);
       }
     } catch (error) {
-      message.error(`Operation Unsuccessfull Please try again`);
-
+      message.error(`Operation Unsuccessful. Please try again`);
       console.error("Error:", error);
     }
   };
+  
 
   const handlePostApi = async () => {
     console.log("Button clicked!");
@@ -207,15 +228,24 @@ const GateEntryDetails = () => {
       invoice_id: inv_id,
     };
 
-    console.log("payload", payload);
+    console.log("payload ", payload);
 
     try {
       setLoad(true);
+      
+      
+      const token = localStorage.getItem("access_token");
+    
       const response = await axios.post(
         "https://invoicezapi.focusrtech.com:57/user/po-number",
         payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
       );
-
+    
       if (response.status === 201) {
         message.success("PO successfully Updated");
         setLoad(false);
@@ -248,26 +278,16 @@ const GateEntryDetails = () => {
     sortDirection: "ascending",
     sortColumn: "empid",
   });
-  const [entrytime, setEntrytime] = useState();
   const [load, setLoad] = useState(false);
-  const [input,setInput] = useState("");
-  // const [data, setData] = useState("");
-  const [data, setData] = useState([]);
+
+  const [data, setData] = useState("");
   // console.log("data", data);
 
   const handleTabSelect2 = (event, data) => {
     // console.log({"currentmonth":currentMonthEmployees})
     setSelectedTab(data.value);
   };
-  
 
-  const handleInputChange = (e, fieldName) => {
-    const value = e.target.value;
-    setInput(value);
-    console.log(`Changed`,input);
-   
-  };
-  
   const columns = [
     createTableColumn({
       columnId: "id",
@@ -323,14 +343,35 @@ const GateEntryDetails = () => {
   //   sortDirection: getSortDirection(columnId),
   // });
 
+
+  const handleSort = (column) => {
+    if (sortedColumn === column) {
+     
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      // Set sorting direction to ascending if a new column is clicked
+      setSortedColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+  const headerSortProps = (column) => ({
+    onClick: () => handleSort(column),
+    style: {
+      fontWeight: "bold",
+      cursor: "pointer",
+      maxWidth: column === "Description" ? "150px" : "200px", // Adjust width as needed
+    },
+  });
+
   const handleViewInvoice = async () => {
     try {
-        const token = localStorage.getItem("access_token"); // Retrieve the token securely
+      const token = localStorage.getItem("access_token"); 
 
         const response = await fetch(
           `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
           {
-            method: "GET",
+            method: "GET", 
             headers: {
               Authorization: `Bearer ${token}`, 
             },
@@ -348,31 +389,32 @@ const GateEntryDetails = () => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("access_token"); // Retrieve the token securely
+        const token = localStorage.getItem("access_token"); 
 
     const response = await axios.get(
       `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`, // Add the authorization header
+          Authorization: `Bearer ${token}`, 
         },
       }
     );
         const fetchedItems = response.data;
-        console.log("FETCHED ITEMS",fetchedItems);
+
         setInv_id(fetchedItems.invoice_info.id);
         set_Po_id(fetchedItems.po_header.id);
-        
-        console.log("Learn", fetchedItems.po_lineitems);
+
+        console.log("InvoiceId", fetchedItems.invoice_info.id);
+
 
         const invoice_items = fetchedItems.invoice_info.items.map((item, index) => {
-          console.log("IGST", item.Igst);
-          console.log("CGST", item.Cgst);
-          console.log("SGST", item.Sgst);
+          // console.log("IGST", item.Igst);
+          // console.log("CGST", item.Cgst);
+          // console.log("SGST", item.Sgst);
         
           return {
             Igst: item.Igst,
@@ -382,40 +424,36 @@ const GateEntryDetails = () => {
           };
         });
         
-        const normalizedPoLineItems = fetchedItems.po_lineitems.map((poItem, index) => {
-          console.log("PO", poItem);
-        
-          const matchingInvoiceItem = invoice_items[index]; // Find the corresponding invoice item
-          const PO_Num = fetchedItems.po_header.po_number;
-          const matchingQuantity = matchingInvoiceItem
-            ? matchingInvoiceItem.Quantity
-            : null;
-        
-          return {
-            id: poItem.id,
-            item_name: poItem.item_name,
-            item_description: poItem.item_description,
-            quantity: poItem.quantity,
-            unit_price: poItem.unit_price,
-            Quantity: matchingQuantity,
-            po_number: PO_Num,
-            line_value: poItem.line_num,
-            note: input, // Assuming `input` is a variable you defined earlier
-            Igst: matchingInvoiceItem ? matchingInvoiceItem.Igst : null,
-            Cgst: matchingInvoiceItem ? matchingInvoiceItem.Cgst : null,
-            Sgst: matchingInvoiceItem ? matchingInvoiceItem.Sgst : null,
-          };
-        });
-        
+
+        const normalizedPoLineItems = fetchedItems.po_lineitems.map(
+          (poItem, index) => {
+            console.log("PO", poItem);
+
+            const matchingInvoiceItems = fetchedItems.invoice_info.items;
+            
+            const matchingInvoiceItem = invoice_items[index];
+            const matchingQuantity = matchingInvoiceItems[index]
+              ? matchingInvoiceItems[index].Quantity
+              : null;
+            return {
+              id: poItem.id,
+              item_name: poItem.item_name,
+              item_description: poItem.item_description,
+              quantity: poItem.quantity,
+              unit_price: poItem.unit_price,
+              Quantity: matchingQuantity,
+              Igst: matchingInvoiceItem ? matchingInvoiceItem.Igst : null,
+              Cgst: matchingInvoiceItem ? matchingInvoiceItem.Cgst : null,
+              Sgst: matchingInvoiceItem ? matchingInvoiceItem.Sgst : null,
+              
+            };
+          },
+        );
+
         // Log or process the combined data as needed
-        console.log("Invoice Items:", invoice_items);
-        console.log("Normalized PO Line Items:", normalizedPoLineItems);
-        
+        console.log("NORMAL",normalizedPoLineItems);
 
         setData(normalizedPoLineItems);
-          
-        // setData(normalizedPoLineItems);
-        
         setTotal(fetchedItems.po_header.total_amount);
         setPoDate(fetchedItems.po_lineitems[0]?.promised_date || "N/A"); // Assuming the first date is used
         setPoStatus(fetchedItems.po_header.po_status);
@@ -425,11 +463,10 @@ const GateEntryDetails = () => {
         setInvoiceDate(fetchedItems.invoice_info.InvoiceDate);
         setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
         setSupplier(fetchedItems.po_header.supplier_name);
-        setEntrytime(fetchedItems.invoice_info.created_at);
+        setentrytime(fetchedItems.invoice_info.created_at);
         fetchedItems.po_lineitems.forEach((item) => {
           setClosedCode(item.closed_code);
         });
-       
         // vendor address
         const vendorAddressObj = fetchedItems.invoice_info.VendorAddress;
         console.log("obj1", vendorAddressObj);
@@ -450,7 +487,7 @@ const GateEntryDetails = () => {
           setVendor("NULL");
           console.error("VendorAddress is missing");
         }
-        console.log("data",data);
+
         const vendorCustomerObj = fetchedItems.invoice_info.ShippingAddress;
         console.log("obj", vendorAddressObj);
 
@@ -501,34 +538,8 @@ const GateEntryDetails = () => {
   //     : bValue - aValue;
   // });
 
-
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
-
-
-   
-   const handleSort = (column) => {
-    if (sortedColumn === column) {
-     
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      
-      setSortedColumn(column);
-      setSortDirection("asc");
-    }
-  };
-
-  
-  const headerSortProps = (column) => ({
-    onClick: () => handleSort(column),
-    style: {
-      fontWeight: "bold",
-      cursor: "pointer",
-      maxWidth: column === "Description" ? "150px" : "200px", 
-    },
-  });
-
-  
 
   const sortedData = [...data].sort((a, b) => {
     if (!sortedColumn) return 0;
@@ -536,11 +547,11 @@ const GateEntryDetails = () => {
     const aValue = a[sortedColumn] || "";  
     const bValue = b[sortedColumn] || "";
 
-    // Determine if the values are numeric
+    
     const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
     const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
 
-    // Numeric comparison
+   
     if (isANumeric && isBNumeric) {
       const aNumeric = parseFloat(aValue);
       const bNumeric = parseFloat(bValue);
@@ -561,6 +572,7 @@ const GateEntryDetails = () => {
     return 0; // If values are still equal
   });
 
+  
 
   return (
     <div style={{ height: "88vh", overflowY: "auto" }}>
@@ -572,18 +584,18 @@ const GateEntryDetails = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}> Gate Entry</BreadcrumbButton>
+              <BreadcrumbButton href={path}>Open PO</BreadcrumbButton>
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path2}>PO:{purchaseOrder.poNumber}</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>PO:{poNumber}</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
         <div style={{ maxHeight: "20vh" }}>
           <div className={styles.root}>
             <div className={styles.header}>
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   justifyContent: "end",
@@ -592,17 +604,17 @@ const GateEntryDetails = () => {
                   marginTop: "0px",
                 }}
               >
-                {/* <div style={{ right: "5%", display: "flex", gap: "10px" }}>
-                  <Button onClick={() => deleteInvoice()}>Generate GRN</Button>
+                <div style={{ right: "5%", display: "flex", gap: "10px" }}>
+                  <Button onClick={() => deleteInvoice()}>Revoke</Button>
                   <Button
                     className=" buttoncolor"
                     style={{ backgroundColor: "#3570c3", color: "white" }}
                     onClick={() => approvePo()}
                   >
-                    Generate GRN
+                    Create Gate Entry
                   </Button>
-                </div> */}
-              </div>
+                </div>
+              </div> */}
 
               {/* <div
                 style={{
@@ -694,7 +706,7 @@ const GateEntryDetails = () => {
                     paddingLeft: "10px",
                   }}
                 >
-                  <p>Invoice Matching</p>
+                  <p>Type of Invoice</p>
                   <h2>PO</h2>
                 </div>
                 <div
@@ -704,8 +716,8 @@ const GateEntryDetails = () => {
                     paddingLeft: "10px",
                   }}
                 >
-                  <p>Line Matching</p>
-                  <h2>FULL</h2>
+                  <p>Buyer</p>
+                  {/* <h2>FULL</h2> */}
                 </div>
                 <div
                   style={{
@@ -714,7 +726,7 @@ const GateEntryDetails = () => {
                     paddingLeft: "10px",
                   }}
                 >
-                  <p>Entry Time</p>
+                  <p>Created Date</p>
                   <h2>{entrytime}</h2>
                 </div>
               </div>
@@ -781,8 +793,14 @@ const GateEntryDetails = () => {
           {selectedtab === "tab1" && (
             <div style={{ marginTop: "20px" }}>
               <div className={styles.content1}>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 3fr)", gap: "15px"}}>
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(6, 3fr)",
+                    gap: "15px",
+                  }}
+                >
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -801,13 +819,12 @@ const GateEntryDetails = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
                         color: themestate ? "white" : "",
-                        whiteSpace: "noWrap"
                       }}
                     >
                       Vendor Address:
@@ -820,7 +837,7 @@ const GateEntryDetails = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -839,15 +856,12 @@ const GateEntryDetails = () => {
                     </div>
                   </div>
 
-                  <div
-                    style={{display:"flex",flexDirection:"row"}}
-                  >
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
                         color: themestate ? "white" : "",
-                        whiteSpace: "noWrap"
                       }}
                     >
                       Customer Address:
@@ -861,7 +875,7 @@ const GateEntryDetails = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -879,7 +893,7 @@ const GateEntryDetails = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -898,7 +912,7 @@ const GateEntryDetails = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -915,7 +929,7 @@ const GateEntryDetails = () => {
                       {purchaseOrder.poCurrency}
                     </div>
                   </div>
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -934,7 +948,7 @@ const GateEntryDetails = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -952,7 +966,7 @@ const GateEntryDetails = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -971,7 +985,7 @@ const GateEntryDetails = () => {
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -981,6 +995,7 @@ const GateEntryDetails = () => {
                     >
                       Line Matching:
                     </div>
+                   
                     <div
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
@@ -992,7 +1007,7 @@ const GateEntryDetails = () => {
                   <div
                     className={`${styles.section} ${styles.invoiceCurrency}`}
                   >
-                    {/* <div
+                    {/* <divs
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
@@ -1029,8 +1044,8 @@ const GateEntryDetails = () => {
                     </div>
                   </div> */}
                 </div>
-                <Divider style={{marginTop:"3em",width:"100%"}}/>
               </div>
+              <Divider style={{ marginTop: "3em" }} />
             </div>
           )}
 
@@ -1045,8 +1060,8 @@ const GateEntryDetails = () => {
               }}
             >
               <div style={{ flex: 1 }}>
-                <Table style={{tableLayout:"auto"}}>
-                  <TableHeader
+                <Table>
+                  {/* <TableHeader
                     style={{
                       position: "sticky",
                       top: 0,
@@ -1062,17 +1077,15 @@ const GateEntryDetails = () => {
                           : {}
                       }
                     >
-                      <TableHeaderCell 
-                       style={{
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                        maxWidth: "200px",
-                      }}
-                      {...headerSortProps("id")}>
-                      Line Number
-                        {sortedColumn === "id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("PO_line_id")}
+                      >
+                        PO Line ID
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1080,12 +1093,9 @@ const GateEntryDetails = () => {
                           cursor: "pointer",
                           maxWidth: "200px",
                         }}
-                        {...headerSortProps("po_number")}
+                        {...headerSortProps("name")}
                       >
-                        PO Number in Supplier Invoice
-                        {sortedColumn === "po_number" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
+                        Name
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1093,12 +1103,9 @@ const GateEntryDetails = () => {
                           cursor: "pointer",
                           maxWidth: "300px",
                         }}
-                        {...headerSortProps("item_description")}
+                        {...headerSortProps("description")}
                       >
                         Description
-                        {sortedColumn === "item_description" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1106,12 +1113,9 @@ const GateEntryDetails = () => {
                           cursor: "pointer",
                           maxWidth: "250px",
                         }}
-                        {...headerSortProps("item_name")}
+                        {...headerSortProps("invoice_item_name")}
                       >
-                         Item 
-                         {sortedColumn === "item_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
+                        Invc Item Name
                       </TableHeaderCell>
                       <TableHeaderCell
                         style={{
@@ -1122,20 +1126,7 @@ const GateEntryDetails = () => {
                         {...headerSortProps("unit_price")}
                       >
                         Unit Price
-                        {sortedColumn === "unit_price" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
                       </TableHeaderCell>
-                      {/* <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("quantity")}
-                      >
-                        UOM
-                      </TableHeaderCell> */}
                       <TableHeaderCell
                         style={{
                           fontWeight: "bold",
@@ -1145,87 +1136,129 @@ const GateEntryDetails = () => {
                         {...headerSortProps("quantity")}
                       >
                         Quantity
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Invoice Quantity
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Igst
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Cgst
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Sgst
+                      </TableHeaderCell>
+                    </TableRow>
+                  </TableHeader> */}
+
+
+
+                  <TableHeader
+                    style={{
+                      position: "sticky",
+                      top: 0,
+                      backgroundColor: themestate ? "#383838" : "white",
+                      zIndex: 1,
+                      color: themestate ? "white" : "black",
+                    }}
+                  >
+                    <TableRow
+                      style={
+                        themestate ? { color: "white", borderBottomColor: "#383838" } : {}
+                      }
+                    >
+                      <TableHeaderCell {...headerSortProps("id")}>
+                      PO_line_id
+                        {sortedColumn === "id" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("item_name")}>
+                      Name
+                        {sortedColumn === "item_name" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("item_description")}>
+                      Description
+                        {sortedColumn === "item_description" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("item_name")}>
+                      Invc Item Name
+                        {sortedColumn === "item_name" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("unit_price")}>
+                      Unit Price
+                        {sortedColumn === "unit_price" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("quantity")}>
+                      Quantity
                         {sortedColumn === "quantity" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      {/* <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Unit Price
-                      </TableHeaderCell> */}
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("line_value")}
-                      >
-                        Line Value
-                        {sortedColumn === "line_value" && (
+                      <TableHeaderCell {...headerSortProps("Quantity")}>
+                      Invoice Quantity
+                        {sortedColumn === "Quantity" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Igst")}
-                      >
-                        IGST
+                      <TableHeaderCell {...headerSortProps("Igst")}>
+                        Igst
                         {sortedColumn === "Igst" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Cgst")}
-                      >
-                        CGST
+                      <TableHeaderCell {...headerSortProps("Cgst")}>
+                        Cgst
                         {sortedColumn === "Cgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                          sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Sgst")}
-                      >
-                        SGST
+                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                        Sgst
                         {sortedColumn === "Sgst" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      {/* <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Note
-                        {sortedColumn === "id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell> */}
                     </TableRow>
                   </TableHeader>
+
 
                   <TableBody style={themestate ? { color: "white" } : {}}>
                     {sortedData.map((item) => (
@@ -1254,7 +1287,7 @@ const GateEntryDetails = () => {
                             textOverflow: "ellipsis",
                           }}
                         >
-                          {item.po_number}
+                          {item.item_name}
                         </TableCell>
                         <TableCell
                           style={{
@@ -1296,8 +1329,6 @@ const GateEntryDetails = () => {
                         >
                           {item.quantity}
                         </TableCell>
-                        
-                        
                         <TableCell
                           style={{
                             maxWidth: "300px",
@@ -1306,7 +1337,7 @@ const GateEntryDetails = () => {
                             textOverflow: "ellipsis",
                           }}
                         >
-                          {item.line_value}
+                          {item.Quantity}
                         </TableCell>
                         <TableCell
                           style={{
@@ -1317,7 +1348,8 @@ const GateEntryDetails = () => {
                           }}
                         >
                           {item.Igst}
-                        </TableCell><TableCell
+                        </TableCell>
+                        <TableCell
                           style={{
                             maxWidth: "300px",
                             whiteSpace: "nowrap",
@@ -1326,7 +1358,8 @@ const GateEntryDetails = () => {
                           }}
                         >
                           {item.Cgst}
-                        </TableCell><TableCell
+                        </TableCell>
+                        <TableCell
                           style={{
                             maxWidth: "300px",
                             whiteSpace: "nowrap",
@@ -1336,28 +1369,6 @@ const GateEntryDetails = () => {
                         >
                           {item.Sgst}
                         </TableCell>
-
-                        {/* {item.id &&(
-                          <TableCell
-                          style={{
-                            fontWeight: "bold",
-                            cursor: "pointer",
-                            maxWidth: "150px",
-                          }}
-                        >
-                        
-                                  <Input
-                                    onChange={(e) => handleInputChange(e, "invoice_quantity")} 
-                                    type="text"
-                                    size="small"
-                                    style={{ width: "100%" }}
-                                  />
-                        </TableCell>
-                        )
-
-                        } */}
-                        
-
                       </TableRow>
                     ))}
                   </TableBody>
@@ -1371,4 +1382,4 @@ const GateEntryDetails = () => {
   );
 };
 
-export default GateEntryDetails;
+export default StoreOpenPODetails;

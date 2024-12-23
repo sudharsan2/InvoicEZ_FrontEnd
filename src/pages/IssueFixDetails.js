@@ -804,8 +804,8 @@ const IssuefixDetails = () => {
               <BreadcrumbDivider />
               {/* <BreadcrumbItem>
                 <BreadcrumbButton href={path}>Issues</BreadcrumbButton>
-              </BreadcrumbItem> */}
-              {/* <BreadcrumbDivider /> */}
+              </BreadcrumbItem>
+              <BreadcrumbDivider /> */}
               <BreadcrumbItem>
                 <BreadcrumbButton href={path}>
                   {formData.vendorName}
@@ -1167,7 +1167,7 @@ const IssuefixDetails = () => {
                   marginTop: "-20px",
                 }}
               >
-                <Table style={{ tableLayout: "auto" }}>
+                <Table style={{tableLayout:"auto"}}>
                   <TableHeader>
                     <TableRow>
                       <TableHeaderCell>
