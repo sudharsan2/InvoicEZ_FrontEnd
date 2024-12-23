@@ -554,6 +554,34 @@ const NavDrawerDefault = (props) => {
               ></NavItem>
             </Tooltip>
             <Tooltip
+              content={"Open PO"}
+              positioning="after"
+              withArrow={true}
+              appearance={themestate ? "inverted" : "normal"}
+            >
+              <NavItem
+                target="_blank"
+                icon={
+                  <History
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/openpo");
+                  setValue("7");
+                }}
+                value="7"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+              ></NavItem>
+            </Tooltip>
+
+            <Tooltip
               content={"History"}
               positioning="after"
               withArrow={true}
@@ -825,6 +853,41 @@ const NavDrawerDefault = (props) => {
                   }
                 >
                   No Match Found
+                </div>
+              </NavItem>
+            </div>
+
+            {/* openpo */}
+            <div style={{ width: "100%" }}>
+              <NavItem
+                target="_blank"
+                icon={
+                  <History
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/openpo");
+                  setValue("8");
+                }}
+                value="8"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+                style={{ marginTop: "10px", fontSize: "17px" }}
+              >
+                <div
+                  style={
+                    themestate
+                      ? { marginTop: "2px", color: darktheme.fontcolordark }
+                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                  }
+                >
+                  Open PO
                 </div>
               </NavItem>
             </div>

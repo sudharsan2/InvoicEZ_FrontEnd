@@ -61,7 +61,9 @@ import {
   WrenchSettings24Filled,
   WrenchSettings24Regular,
   History24Regular,
-  History24Filled
+  History24Filled,
+  DatabaseSearch24Filled ,
+  DatabaseSearch24Regular
 } from "@fluentui/react-icons";
 
 import {
@@ -220,6 +222,7 @@ const Interviews = bundleIcon(People20Filled, People20Regular);
 const HealthPlans = bundleIcon(HeartPulse20Filled, HeartPulse20Regular);
 const TrainingPrograms = bundleIcon(BoxMultiple20Filled, BoxMultiple20Regular);
 const CareerDevelopment = bundleIcon(PeopleStar20Filled, PeopleStar20Regular);
+const OpenPo = bundleIcon(DatabaseSearch24Filled ,DatabaseSearch24Regular )
 const Analytics = bundleIcon(DataArea20Filled, DataArea20Regular);
 const Reports = bundleIcon(
   DocumentBulletListMultiple20Filled,
@@ -424,6 +427,34 @@ const NavDrawerDefaultStore = (props) => {
             </Tooltip>
 
             <Tooltip
+              content={"Open PO"}
+              positioning="after"
+              withArrow={true}
+              appearance={themestate ? "inverted" : "normal"}
+            >
+              <NavItem
+                target="_blank"
+                icon={
+                  <OpenPo
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/storeopenpo");
+                  setValue("4");
+                }}
+                value="4"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+              ></NavItem>
+            </Tooltip>
+
+            <Tooltip
               content={"History"}
               positioning="after"
               withArrow={true}
@@ -560,6 +591,40 @@ const NavDrawerDefaultStore = (props) => {
                   }
                 >
                   Generate Gate Entry
+                </div>
+              </NavItem>
+            </div>
+
+            <div style={{ width: "100%" }}>
+              <NavItem
+                target="_blank"
+                icon={
+                  <OpenPo
+                    style={
+                      themestate
+                        ? { color: darktheme.fontcolordark }
+                        : { color: lighttheme.fontcolorlight }
+                    }
+                  />
+                }
+                onClick={() => {
+                  navigate("/storeopenpo");
+                  setValue("4");
+                }}
+                value="4"
+                className={
+                  themestate ? styles.navItemdark : styles.navItemlight
+                }
+                style={{ marginTop: "10px", fontSize: "17px" }}
+              >
+                <div
+                  style={
+                    themestate
+                      ? { marginTop: "2px", color: darktheme.fontcolordark }
+                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                  }
+                >
+                  Open PO
                 </div>
               </NavItem>
             </div>

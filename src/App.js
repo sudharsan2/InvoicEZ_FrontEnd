@@ -60,7 +60,11 @@ import GateEntryDetails from "./pages/GateEntryDetails";
 import SankeyChart from "./components/SankeyChart";
 import {  Navigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
+import OpenPo from "./pages/OpenPo";
+import StoreOpenPO from "./pages/StoreOpenPo";
 import React, {useState,useEffect} from "react";
+import StoreOpenPODetails from "./pages/StoreOpenPODetails";
+import OpenPODetails from "./pages/OpenPoDetails";
 
 // const getUserRoleFromToken = () => {
 //   const token = localStorage.getItem("access_token");
@@ -178,6 +182,37 @@ function App() {
             <CustomLayout>
                <NavDrawerDefault>
                 <UserApprove />
+                </NavDrawerDefault>
+            </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
+          }
+        />
+
+
+<Route
+          path="/openpo"
+          element={
+            userRole === 'invoice manager' ? (
+            <CustomLayout>
+               <NavDrawerDefault>
+                <OpenPo/>
+                </NavDrawerDefault>
+            </CustomLayout>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
+          }
+        />
+
+<Route
+          path="/openpodet"
+          element={
+            userRole === 'invoice manager' ? (
+            <CustomLayout>
+               <NavDrawerDefault>
+                <OpenPODetails/>
                 </NavDrawerDefault>
             </CustomLayout>
             ) : (
@@ -556,6 +591,35 @@ function App() {
             <CustomLayoutLoop>
                <NavDrawerDefaultStore>
                 <StoreUser />
+                </NavDrawerDefaultStore>
+            </CustomLayoutLoop>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
+          }
+        />
+
+<Route
+          path="/storeopenpo"
+          element={
+            userRole === 'storeuser' ? (
+            <CustomLayoutLoop>
+               <NavDrawerDefaultStore>
+                <StoreOpenPO />
+                </NavDrawerDefaultStore>
+            </CustomLayoutLoop>
+            ) : (
+              <Navigate to="/unauthorized" />  
+            )
+          }
+        />
+        <Route
+          path="/storeopenpodet"
+          element={
+            userRole === 'storeuser' ? (
+            <CustomLayoutLoop>
+               <NavDrawerDefaultStore>
+                <StoreOpenPODetails />
                 </NavDrawerDefaultStore>
             </CustomLayoutLoop>
             ) : (
