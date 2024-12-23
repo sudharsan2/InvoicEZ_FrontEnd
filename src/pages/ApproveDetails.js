@@ -21,6 +21,7 @@ import {
   createTableColumn,
   useTableFeatures,
   useTableSort,
+  Divider,
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
 import { useLocation } from "react-router-dom";
@@ -31,10 +32,11 @@ import { ArrowDownload28Regular } from "@fluentui/react-icons";
 import CreatableSelect from "react-select/creatable";
 import { message } from "antd";
 import { notification } from "antd";
+import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 
 const path = "/approve";
 const path2 = "/approvepage";
-const path1 = "http://localhost:3000/";
+const path1 = "/dashboard";
 
 const useStyles = makeStyles({
   root: {
@@ -50,7 +52,7 @@ const useStyles = makeStyles({
   },
 
   content1: {
-    overflowY: "auto",
+    overflowX: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
     maxHeight: "35vh",
@@ -100,6 +102,7 @@ const useStyles = makeStyles({
   },
   heading: {
     fontWeight: "bold",
+    maxWidth: "500px",
   },
   content: {
     fontSize: "13px",
@@ -145,47 +148,67 @@ const ApprovePage = () => {
   const [invoicedate, setInvoiceDate] = useState();
   const [invoicetot, setInvoicetot] = useState();
   const [closedcode, setClosedCode] = useState();
+  const [entrytime, setentrytime] =useState();
   const [po_id, set_Po_id] = useState("");
 
   const [inv_id, setInv_id] = useState();
 
-  // console.log("vendor", setVendor);
+  console.log("Invoice Id", inv_id);
 
   const approvePo = async () => {
-    const url = `http://172.235.21.99:57/user/oracle-payload/${po_id}`;
-
+    const url = `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${inv_id}`;
+  
     try {
-      const response = await axios.post(url, {});
-
+     
+      const token = localStorage.getItem("access_token");
+  
+      const response = await axios.post(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+  
       if (response.status === 200) {
-        message.success("PO successfully Updated");
+        message.success("Gate Entry successfully Updated");
         navigate(`/approve`);
       }
       console.log("Success:", response.data); // Handle the response data
     } catch (error) {
       notification.error({
-        message: "Approved Failed",
-        // description: `You have successfully Approved: ${po_id}`,
+        message: "Gate Entry Failed",
+        description: error.response?.data?.message || "An error occurred.",
       });
       console.error("Error:", error);
     }
   };
-
+  
   const deleteInvoice = async () => {
-    const url = `http://172.235.21.99:57/user/delete-pos/${inv_id}`;
-
+    const url = `https://invoicezapi.focusrtech.com:57/user/delete-pos/${inv_id}`;
+  
     try {
-      const response = await axios.delete(url);
+      
+      const token = localStorage.getItem("access_token");
+  
+      const response = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+  
       if (response.status === 204) {
         message.success("Revoked successfully");
-        navigate(`/issuefix`);
+        navigate(`/approve`);
       }
     } catch (error) {
-      message.error(`Operation Unsuccessfull Please try again`);
-
+      message.error(`Operation Unsuccessful. Please try again`);
       console.error("Error:", error);
     }
   };
+  
 
   const handlePostApi = async () => {
     console.log("Button clicked!");
@@ -205,15 +228,24 @@ const ApprovePage = () => {
       invoice_id: inv_id,
     };
 
-    console.log("payload", payload);
+    console.log("payload ", payload);
 
     try {
       setLoad(true);
+      
+      
+      const token = localStorage.getItem("access_token");
+    
       const response = await axios.post(
-        "http://172.235.21.99:57/user/po-number",
+        "https://invoicezapi.focusrtech.com:57/user/po-number",
         payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
       );
-
+    
       if (response.status === 201) {
         message.success("PO successfully Updated");
         setLoad(false);
@@ -306,16 +338,45 @@ const ApprovePage = () => {
     ],
   );
 
-  const headerSortProps = (columnId) => ({
-    onClick: (e) => toggleColumnSort(e, columnId),
-    sortDirection: getSortDirection(columnId),
+  // const headerSortProps = (columnId) => ({
+  //   onClick: (e) => toggleColumnSort(e, columnId),
+  //   sortDirection: getSortDirection(columnId),
+  // });
+
+
+  const handleSort = (column) => {
+    if (sortedColumn === column) {
+     
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      // Set sorting direction to ascending if a new column is clicked
+      setSortedColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+  const headerSortProps = (column) => ({
+    onClick: () => handleSort(column),
+    style: {
+      fontWeight: "bold",
+      cursor: "pointer",
+      maxWidth: column === "Description" ? "150px" : "200px", // Adjust width as needed
+    },
   });
 
   const handleViewInvoice = async () => {
     try {
-      const response = await fetch(
-        `http://172.235.21.99:57/user/invoices-file/${inv_id}`,
-      );
+      const token = localStorage.getItem("access_token"); 
+
+        const response = await fetch(
+          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+          {
+            method: "GET", 
+            headers: {
+              Authorization: `Bearer ${token}`, 
+            },
+          }
+        );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -332,9 +393,16 @@ const ApprovePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://172.235.21.99:57/user/po-details/${Id}/`,
-        );
+        const token = localStorage.getItem("access_token"); 
+
+    const response = await axios.get(
+      `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      }
+    );
         const fetchedItems = response.data;
 
         setInv_id(fetchedItems.invoice_info.id);
@@ -342,12 +410,28 @@ const ApprovePage = () => {
 
         console.log("InvoiceId", fetchedItems.invoice_info.id);
 
+
+        const invoice_items = fetchedItems.invoice_info.items.map((item, index) => {
+          // console.log("IGST", item.Igst);
+          // console.log("CGST", item.Cgst);
+          // console.log("SGST", item.Sgst);
+        
+          return {
+            Igst: item.Igst,
+            Cgst: item.Cgst,
+            Sgst: item.Sgst,
+            index: index, // Include the index to match with po_lineitems
+          };
+        });
+        
+
         const normalizedPoLineItems = fetchedItems.po_lineitems.map(
           (poItem, index) => {
             console.log("PO", poItem);
 
             const matchingInvoiceItems = fetchedItems.invoice_info.items;
-
+            
+            const matchingInvoiceItem = invoice_items[index];
             const matchingQuantity = matchingInvoiceItems[index]
               ? matchingInvoiceItems[index].Quantity
               : null;
@@ -358,12 +442,16 @@ const ApprovePage = () => {
               quantity: poItem.quantity,
               unit_price: poItem.unit_price,
               Quantity: matchingQuantity,
+              Igst: matchingInvoiceItem ? matchingInvoiceItem.Igst : null,
+              Cgst: matchingInvoiceItem ? matchingInvoiceItem.Cgst : null,
+              Sgst: matchingInvoiceItem ? matchingInvoiceItem.Sgst : null,
+              
             };
           },
         );
 
         // Log or process the combined data as needed
-        console.log(normalizedPoLineItems);
+        console.log("NORMAL",normalizedPoLineItems);
 
         setData(normalizedPoLineItems);
         setTotal(fetchedItems.po_header.total_amount);
@@ -375,6 +463,7 @@ const ApprovePage = () => {
         setInvoiceDate(fetchedItems.invoice_info.InvoiceDate);
         setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
         setSupplier(fetchedItems.po_header.supplier_name);
+        setentrytime(fetchedItems.invoice_info.created_at);
         fetchedItems.po_lineitems.forEach((item) => {
           setClosedCode(item.closed_code);
         });
@@ -434,20 +523,56 @@ const ApprovePage = () => {
     }
   }, [poNumber]);
 
-  const sortedData = [...data].sort((a, b) => {
-    const aValue = a[sortState.sortColumn];
-    const bValue = b[sortState.sortColumn];
+  // const sortedData = [...data].sort((a, b) => {
+  //   const aValue = a[sortState.sortColumn];
+  //   const bValue = b[sortState.sortColumn];
 
-    if (typeof aValue === "string" && typeof bValue === "string") {
-      return sortState.sortDirection === "ascending"
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
+  //   if (typeof aValue === "string" && typeof bValue === "string") {
+  //     return sortState.sortDirection === "ascending"
+  //       ? aValue.localeCompare(bValue)
+  //       : bValue.localeCompare(aValue);
+  //   }
+
+  //   return sortState.sortDirection === "ascending"
+  //     ? aValue - bValue
+  //     : bValue - aValue;
+  // });
+
+  const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState('asc');
+
+  const sortedData = [...data].sort((a, b) => {
+    if (!sortedColumn) return 0;
+
+    const aValue = a[sortedColumn] || "";  
+    const bValue = b[sortedColumn] || "";
+
+    
+    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
+    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
+
+   
+    if (isANumeric && isBNumeric) {
+      const aNumeric = parseFloat(aValue);
+      const bNumeric = parseFloat(bValue);
+      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
     }
 
-    return sortState.sortDirection === "ascending"
-      ? aValue - bValue
-      : bValue - aValue;
+    // String comparison using localeCompare for case-insensitive sorting
+    if (!isANumeric && !isBNumeric) {
+      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
+      const bString = String(bValue).toLowerCase();
+      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+    }
+
+    // Mixed types: If one is numeric and the other is not, treat the numeric value as smaller
+    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
+    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
+
+    return 0; // If values are still equal
   });
+
+  
 
   return (
     <div style={{ height: "88vh", overflowY: "auto" }}>
@@ -459,11 +584,11 @@ const ApprovePage = () => {
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path}>Approve</BreadcrumbButton>
+              <BreadcrumbButton href={path}>Match Found</BreadcrumbButton>
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path2}>PO:13466</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>PO:{poNumber}</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -486,7 +611,7 @@ const ApprovePage = () => {
                     style={{ backgroundColor: "#3570c3", color: "white" }}
                     onClick={() => approvePo()}
                   >
-                    Approve
+                    Create Gate Entry
                   </Button>
                 </div>
               </div>
@@ -594,6 +719,16 @@ const ApprovePage = () => {
                   <p>Line Matching</p>
                   <h2>FULL</h2>
                 </div>
+                <div
+                  style={{
+                    marginLeft: "3vw",
+                    borderLeft: "5px solid #FF7F7F",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  <p>Entry Time</p>
+                  <h2>{entrytime}</h2>
+                </div>
               </div>
             </div>
 
@@ -658,8 +793,14 @@ const ApprovePage = () => {
           {selectedtab === "tab1" && (
             <div style={{ marginTop: "20px" }}>
               <div className={styles.content1}>
-                <div className={`${styles.container} ${styles.gridTemplate1}`}>
-                  <div className={`${styles.section} ${styles.poNumber}`}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(6, 3fr)",
+                    gap: "15px",
+                  }}
+                >
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -678,7 +819,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.vendorAddress}`}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -696,7 +837,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.poDate}`}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -715,9 +856,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div
-                    className={`${styles.section} ${styles.customerAddress}`}
-                  >
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -736,7 +875,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.poTotalAmount}`}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -754,7 +893,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.invoiceId}`}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -773,7 +912,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.poCurrency}`}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -790,7 +929,7 @@ const ApprovePage = () => {
                       {purchaseOrder.poCurrency}
                     </div>
                   </div>
-                  <div className={`${styles.section} ${styles.invoiceDate}`}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -809,7 +948,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.poStatus}`}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -827,7 +966,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.invoiceTotal}`}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -846,7 +985,7 @@ const ApprovePage = () => {
                     </div>
                   </div>
 
-                  <div className={`${styles.section} ${styles.lineMatching}`}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -856,6 +995,7 @@ const ApprovePage = () => {
                     >
                       Line Matching:
                     </div>
+                   
                     <div
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
@@ -867,7 +1007,7 @@ const ApprovePage = () => {
                   <div
                     className={`${styles.section} ${styles.invoiceCurrency}`}
                   >
-                    {/* <div
+                    {/* <divs
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
@@ -905,6 +1045,7 @@ const ApprovePage = () => {
                   </div> */}
                 </div>
               </div>
+              <Divider style={{ marginTop: "3em" }} />
             </div>
           )}
 
@@ -920,7 +1061,7 @@ const ApprovePage = () => {
             >
               <div style={{ flex: 1 }}>
                 <Table>
-                  <TableHeader
+                  {/* <TableHeader
                     style={{
                       position: "sticky",
                       top: 0,
@@ -1006,8 +1147,118 @@ const ApprovePage = () => {
                       >
                         Invoice Quantity
                       </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Igst
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Cgst
+                      </TableHeaderCell>
+                      <TableHeaderCell
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          maxWidth: "150px",
+                        }}
+                        {...headerSortProps("invoice_quantity")}
+                      >
+                        Sgst
+                      </TableHeaderCell>
+                    </TableRow>
+                  </TableHeader> */}
+
+
+
+                  <TableHeader
+                    style={{
+                      position: "sticky",
+                      top: 0,
+                      backgroundColor: themestate ? "#383838" : "white",
+                      zIndex: 1,
+                      color: themestate ? "white" : "black",
+                    }}
+                  >
+                    <TableRow
+                      style={
+                        themestate ? { color: "white", borderBottomColor: "#383838" } : {}
+                      }
+                    >
+                      <TableHeaderCell {...headerSortProps("id")}>
+                      PO_line_id
+                        {sortedColumn === "id" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("item_name")}>
+                      Name
+                        {sortedColumn === "item_name" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("item_description")}>
+                      Description
+                        {sortedColumn === "item_description" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("item_name")}>
+                      Invc Item Name
+                        {sortedColumn === "item_name" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("unit_price")}>
+                      Unit Price
+                        {sortedColumn === "unit_price" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("quantity")}>
+                      Quantity
+                        {sortedColumn === "quantity" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Quantity")}>
+                      Invoice Quantity
+                        {sortedColumn === "Quantity" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Igst")}>
+                        Igst
+                        {sortedColumn === "Igst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Cgst")}>
+                        Cgst
+                        {sortedColumn === "Cgst" && (
+                          sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                        Sgst
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
                     </TableRow>
                   </TableHeader>
+
 
                   <TableBody style={themestate ? { color: "white" } : {}}>
                     {sortedData.map((item) => (
@@ -1087,6 +1338,36 @@ const ApprovePage = () => {
                           }}
                         >
                           {item.Quantity}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Igst}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Cgst}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            maxWidth: "300px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.Sgst}
                         </TableCell>
                       </TableRow>
                     ))}

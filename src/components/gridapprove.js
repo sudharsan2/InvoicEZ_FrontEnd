@@ -46,7 +46,7 @@
 //   const fetchData = async () => {
 //     try {
 //       const response = await fetch(
-//         "http://172.235.21.99:57/user/statusForApprove",
+//         "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
 //       ); // Replace with your API URL
 //       if (!response.ok) {
 //         throw new Error("Network response was not ok");
@@ -108,7 +108,7 @@
 // export default TagCounters;
 
 import React, { useEffect, useState } from "react";
-
+import axios from "axios";
 const TagCounters = ({ type }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -116,9 +116,9 @@ const TagCounters = ({ type }) => {
   const containerStyle = {
     width: "100%",
     display: "flex",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     padding: "8px",
-    marginLeft: "-8em",
+    // marginLeft: "-10em",
   };
 
   const itemStyle = {
@@ -148,9 +148,24 @@ const TagCounters = ({ type }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        "http://172.235.21.99:57/user/statusForApprove",
-      );
+      // const response = await fetch(
+      //   "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
+      // );
+
+      const authToken = localStorage.getItem("access_token"); 
+
+  const response = await fetch(
+    "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
+    {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+      
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -184,7 +199,7 @@ const TagCounters = ({ type }) => {
         setData(
           allData.filter(
             (item) =>
-              item.label === "To Do" ||
+              item.label === "Total number to Process" ||
               item.label === "Crossed PO Date" ||
               item.label === "PO Number Matching" ||
               item.label === "Supplier Matching" ||

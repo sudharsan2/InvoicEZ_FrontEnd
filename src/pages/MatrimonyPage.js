@@ -37,7 +37,7 @@ import { notification } from "antd";
 import { DatePicker } from "@fluentui/react";
 import { Field } from "@fluentui/react-components";
 const path = "/admin";
-const path1 = "http://localhost:3000/";
+const path1 = "/dashboard";
 const path3 = "/matrimony";
 
 const containerStyle = {
@@ -252,18 +252,29 @@ const Matrimony = () => {
 
   const fetchLLMDetails = async () => {
     try {
-      const response = await fetch("http://172.235.21.99:57/user/llm-detail");
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/llm-detail", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("access_token")}`, 
+        },
+      });
+    
+      if (!response.ok) {
+        throw new Error("Failed to fetch LLM details");
+      }
+    
       const data = await response.json(); // Parse the JSON response
-
+    
       if (data && data.llm_apikey && data.llm_model) {
         setApiKey(data.llm_apikey);
         setModel(data.llm_model);
         setToken(data.token_spent);
       }
-
+    
       console.log("LLM API Key:", data.llm_apikey);
       console.log("LLM Model:", data.llm_model);
-    } catch (error) {
+    }  catch (error) {
       console.error("Error fetching LLM details:", error);
     } finally {
       setLoading(false); // Set loading to false after fetch
@@ -272,9 +283,17 @@ const Matrimony = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        "http://172.235.21.99:57/user/statusForApprove",
-      );
+      // const response = await fetch(
+      //   "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
+      // );
+
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/statusForApprove", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("access_token")}`, 
+        },
+      });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -290,7 +309,14 @@ const Matrimony = () => {
 
   const fetchAzureDetails = async () => {
     try {
-      const response = await fetch("http://172.235.21.99:57/user/azure-detail");
+      // const response = await fetch("https://invoicezapi.focusrtech.com:57/user/azure-detail");
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/azure-detail", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("access_token")}`, 
+        },
+      });
       const data = await response.json();
       if (data) {
         setStorage(data.storage_account_name);
@@ -329,7 +355,7 @@ const Matrimony = () => {
 
       console.log("Payload:", JSON.stringify(body)); // Log payload for verification
 
-      const response = await fetch("http://172.235.21.99:57/user/llm-detail", {
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/llm-detail", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -382,7 +408,7 @@ const Matrimony = () => {
       console.log("Payload:", JSON.stringify(body));
 
       const response = await fetch(
-        "http://172.235.21.99:57/user/azure-detail",
+        "https://invoicezapi.focusrtech.com:57/user/azure-detail",
         {
           method: "PUT",
           headers: {
@@ -457,10 +483,10 @@ const Matrimony = () => {
         >
           <div className="Approvebreadcrump">
             <Breadcrumb aria-label="Breadcrumb default example">
-              <BreadcrumbItem>
+              {/* <BreadcrumbItem>
                 <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
               </BreadcrumbItem>
-              <BreadcrumbDivider />
+              <BreadcrumbDivider /> */}
               <BreadcrumbItem>
                 <BreadcrumbButton href={path3}>Control Center</BreadcrumbButton>
               </BreadcrumbItem>

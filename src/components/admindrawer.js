@@ -256,7 +256,7 @@ const NavDrawerDefaultAdmin = (props) => {
         style={
           collapse
             ? {
-                width: `59px`,
+                width: `56px`,
                 transition: "width 0.5s",
                 borderRightStyle: "none",
               }
@@ -482,11 +482,11 @@ const NavDrawerDefaultAdmin = (props) => {
                       value="4"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        // navigate("/issuefix");
+                        navigate("/user");
                         setValue("4");
                       }}
                     >
-                      Bilt
+                      User Management
                     </NavSubItem>
                   </NavSubItemGroup>
                 </NavCategory>
@@ -564,7 +564,7 @@ const NavDrawerDefaultAdmin = (props) => {
                       value="3"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        // navigate("/ai");
+                        navigate("/matrimony");
                         setValue("3");
                       }}
                     >
@@ -574,11 +574,11 @@ const NavDrawerDefaultAdmin = (props) => {
                       value="4"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        navigate("/matrimony");
+                        navigate("/user");
                         setValue("4");
                       }}
                     >
-                      Bilt
+                      User Management
                     </NavSubItem>
                   </NavSubItemGroup>
                 </NavCategory>

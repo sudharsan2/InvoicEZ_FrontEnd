@@ -13,27 +13,14 @@ const ApexChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://172.235.21.99:57/user/statusForApprove",
-        );
+        const response = await axios.get('http://10.10.15.15:5719/user/statusForApprove');
         const apiData = response.data;
 
         const chartData = [
-          {
-            y: apiData.PONumberMatchingCount,
-            label: "PO Number Matching Count",
-            color: "#6495ed",
-          },
-          {
-            y: apiData.SupplierMatchingCount,
-            label: "Supplier Matching Count",
-            color: "#45b6fe",
-          },
-          {
-            y: apiData.LineItemsMatchingCount,
-            label: "Line Items Matching Count",
-            color: "#8fd3fe",
-          },
+          
+          { y: apiData.PONumberMatchingCount, label: "PO Number Matching Count", color: "#6495ed" },
+          { y: apiData.SupplierMatchingCount, label: "Supplier Matching Count", color: "#45b6fe" },
+          { y: apiData.LineItemsMatchingCount, label: "Line Items Matching Count", color: "#8fd3fe" }
         ];
 
         setData(chartData);
@@ -105,14 +92,13 @@ const ApexChart = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-      <div
-        style={{
-          backgroundColor: "white",
-          borderRadius: "10px",
-          padding: "40px",
-          width: "80%",
-          maxWidth: "1200px",
-          height: "auto",
+      <div style={{ 
+          backgroundColor: "white", 
+          borderRadius: "10px", 
+          padding: "40px", 
+          width: "80%",  
+          maxWidth: "1200px", 
+          height: "auto", 
           maxHeight: "100vh",
           overflow: "hidden",
         }}

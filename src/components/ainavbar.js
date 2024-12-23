@@ -98,9 +98,16 @@ const AiNav = ({ onPoNumberClick }) => {
   const fetchInvoiceDetails = async () => {
     // const invoiceNumber = "110"; // Replace with dynamic invoice number if available
     try {
-      const response = await axios.get(
-        `http://172.235.21.99:57/user/invoices-details/${invoiceNumber}/`,
-      );
+      const token = localStorage.getItem("access_token");
+
+  const response = await axios.get(
+    `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    }
+  );
       const fetchedItem = response.data;
       console.log("Fetched Invoice Details:", fetchedItem);
 

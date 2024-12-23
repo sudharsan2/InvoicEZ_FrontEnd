@@ -1,4 +1,4 @@
-import { Layout, Button } from "antd";
+import { Layout } from "antd";
 import {
   SearchOutlined,
   BellOutlined,
@@ -11,6 +11,7 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import frLogo from "../media/frlogo.png";
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import React, { useState, useEffect } from "react";
 import Login from "../pages/Login";
 import { useSelector, useDispatch } from "react-redux";
@@ -44,11 +45,10 @@ import { ShareIos24Filled } from "@fluentui/react-icons";
 import axios from "axios";
 import InvoiceUpload from "./UploadInvoice";
 import { useRef } from "react";
-
 import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
 import { Modal, Upload, notification, message } from "antd";
 import WalkInCandidate from "./WalkinCandidate.jsx";
-
+import { Button } from "@fluentui/react-components";
 const { Header, Content, Footer, Sider } = Layout;
 const { Dragger } = Upload;
 const useStyles = makeStyles({
@@ -77,7 +77,7 @@ const ExampleContent = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
-
+  const [id, setId] = useState("");
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     console.log(storedUsername);
@@ -94,9 +94,12 @@ const ExampleContent = () => {
         console.log(decodedToken);
         const emailFromToken = decodedToken.email;
         const empIdFromToken = decodedToken.empId;
+        const userid = decodedToken.user_id;
 
         setEmail(emailFromToken);
         setEmpId(empIdFromToken);
+        setId(userid);
+        console.log("IDD", userid);
       } catch (error) {
         console.error("Invalid token:", error);
       }
@@ -139,16 +142,16 @@ const ExampleContent = () => {
           style={
             themestate
               ? {
-                  width: "25%",
-                  textAlign: "right",
-                  color: darktheme.fontcolordark,
-                  WebkitTapHighlightColor: "transparent",
-                }
+                width: "25%",
+                textAlign: "right",
+                color: darktheme.fontcolordark,
+                WebkitTapHighlightColor: "transparent",
+              }
               : {
-                  width: "25%",
-                  textAlign: "right",
-                  WebkitTapHighlightColor: "transparent",
-                }
+                width: "25%",
+                textAlign: "right",
+                WebkitTapHighlightColor: "transparent",
+              }
           }
         >
           Sign out
@@ -178,11 +181,11 @@ const ExampleContent = () => {
             style={
               themestate
                 ? {
-                    fontSize: "20px",
-                    width: "100%",
-                    marginBottom: "10px",
-                    color: darktheme.fontcolordark,
-                  }
+                  fontSize: "20px",
+                  width: "100%",
+                  marginBottom: "10px",
+                  color: darktheme.fontcolordark,
+                }
                 : { fontSize: "1.5 em", width: "100%", marginBottom: "10px" }
             }
           >
@@ -194,17 +197,17 @@ const ExampleContent = () => {
             style={
               themestate
                 ? {
-                    fontSize: "14px",
-                    width: "100%",
-                    marginBottom: "10px",
-                    color: darktheme.fontcolordark,
-                  }
+                  fontSize: "14px",
+                  width: "100%",
+                  marginBottom: "10px",
+                  color: darktheme.fontcolordark,
+                }
                 : {
-                    fontSize: "14px",
-                    width: "100%",
-                    marginBottom: "10px",
-                    color: "#424242",
-                  }
+                  fontSize: "14px",
+                  width: "100%",
+                  marginBottom: "10px",
+                  color: "#424242",
+                }
             }
           >
             {email} {/* Dynamically generate email based on username */}
@@ -216,10 +219,10 @@ const ExampleContent = () => {
             style={
               themestate
                 ? {
-                    fontSize: "14px",
-                    width: "100%",
-                    color: darktheme.fontcolordark,
-                  }
+                  fontSize: "14px",
+                  width: "100%",
+                  color: darktheme.fontcolordark,
+                }
                 : { fontSize: "14px", width: "100%" }
             }
           >
@@ -237,7 +240,6 @@ const ExampleContent = () => {
 const CustomLayout = ({ children }) => {
   const [isDarkMode, setDarkMode] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
   const [logoutPopoverVisible, setLogoutPopoverVisible] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState("Dashboard");
   const navigate = useNavigate();
@@ -248,6 +250,352 @@ const CustomLayout = ({ children }) => {
   const [username, setUsername] = useState("");
   const [isWalkinUpload, setIsWalkinUpload] = useState(false);
   const [newCandidate, setNewCandidate] = useState(false);
+  const [isCardOpen, setIsCardOpen] = useState(false);
+  const [items, setItems] = useState([]);
+  const notificationRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);  // State to handle loading state
+  const [isCleared, setIsCleared] = useState(false); 
+
+  // useEffect(() => {
+  //   const toggleCard = (event) => {
+  //     if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+  //       setIsCardOpen(false);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", toggleCard);
+  //   return () => document.removeEventListener("mousedown", toggleCard);
+  // }, []);
+
+
+
+  const [data, setData] = useState([]);
+
+
+  // const fetchData = async (showMessage = false) => {
+  //   if (showMessage) {
+  //     message.success("Refreshing...");
+  //   }
+  //   try {
+  //     // const response = await axios.get(
+  //     //   "https://invoicezapi.focusrtech.com:57/user/grn-history",
+  //     // );
+  //     const token = localStorage.getItem("access_token");
+  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     const fetchedItems = response.data;
+  //     console.log("fetchedItems", fetchedItems);
+  //     // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+
+  //     const mappedItems = fetchedItems.map((item, index) => {
+  //       // Map over po_headers to get all po_numbers
+
+  //       return {
+  //         Id: item.InvoiceId,
+  //         grn_num: item.gate_entry_no,
+  //         location: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].ship_to : null,
+  //         supplier_name: item.VendorName,
+  //       };
+  //     });
+
+  //     setItems(mappedItems);
+  //     console.log("FETCHED", mappedItems)
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+
+  // const GetData = async (showMessage = false) => {
+  //   if (showMessage) {
+  //     message.success("Refreshing...");
+  //   }
+  //   try {
+  //     // const response = await axios.get(
+  //     //   "https://invoicezapi.focusrtech.com:57/user/grn-history",
+  //     // );
+  //     const token = localStorage.getItem("access_token");
+  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/unread-documents", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         // Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     const fetchedItems = response.data;
+  //     console.log("fetchedItems...", fetchedItems);
+  //     // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+
+  //     const mappedItems = fetchedItems.map((item, index) => {
+  //       let Status = "";
+
+  //       if (item.invoiceInfo.po_headers.length === 0) {
+  //         Status = "No Match Found";
+
+  //       } else if (item.invoiceInfo.po_headers.length === 1) {
+  //         Status = "Match Found";
+
+  //       } else if (item.invoiceInfo.po_headers.length > 1) {
+  //         Status = "Multiple Match Found";
+
+  //       }
+
+  //       return {
+  //         Id: item.invoiceInfo.InvoiceId,
+  //         supplier_name: item.invoiceInfo.VendorName,
+  //         Status: Status,
+
+
+  //       };
+  //     });
+
+  //     setData(mappedItems);
+  //     console.log("FETCHED", mappedItems)
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchData();
+  //   GetData();
+  // }, []);
+
+  // const fetchData = async (showMessage = false) => {
+  //   if (showMessage) {
+  //     message.success("Refreshing...");
+  //   }
+  //   try {
+  //     const token = localStorage.getItem("access_token");
+  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+
+  //     const fetchedItems = response.data;
+
+  //     const mappedItems = fetchedItems.map((item, index) => {
+  //       return {
+  //         Id: item.InvoiceId,
+  //         grn_num: item.gate_entry_no,
+  //         location: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].ship_to : null,
+  //         supplier_name: item.VendorName,
+  //       };
+  //     });
+
+  //     setData(mappedItems);  // Update the table data
+  //     console.log("FETCHED", mappedItems);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // // Function to fetch the unread documents for the notifications
+  // const GetData = async (showMessage = false) => {
+  //   if (showMessage) {
+  //     message.success("Refreshing...");
+  //   }
+  //   try {
+  //     const token = localStorage.getItem("access_token");
+  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/unread-documents", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     const fetchedItems = response.data;
+
+  //     const mappedItems = fetchedItems.map((item, index) => {
+  //       let Status = "";
+
+  //       if (item.invoiceInfo.po_headers.length === 0) {
+  //         Status = "No Match Found";
+  //       } else if (item.invoiceInfo.po_headers.length === 1) {
+  //         Status = "Match Found";
+  //       } else if (item.invoiceInfo.po_headers.length > 1) {
+  //         Status = "Multiple Match Found";
+  //       }
+
+  //       return {
+  //         Id: item.invoiceInfo.InvoiceId,
+  //         supplier_name: item.invoiceInfo.VendorName,
+  //         Status: Status,
+  //       };
+  //     });
+
+  //     setData(mappedItems);  // Update the notifications data
+  //     console.log("FETCHED", mappedItems);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // // Handle the clear button functionality
+  // const handleClearButtonClick = (e) => {
+  //   e.stopPropagation();  // Prevent the click event from bubbling up and closing the card
+  //   setData([]);  // Clear the data
+  //   localStorage.setItem('dataCleared', 'true');  // Store the cleared state in localStorage
+  // };
+
+  // // Check if the data is cleared from localStorage on page load
+  // useEffect(() => {
+  //   const isDataCleared = localStorage.getItem('dataCleared');
+  //   if (isDataCleared === 'true') {
+  //     // If the data was cleared, prevent fetching the data
+  //     setData([]);  // Ensure data is still cleared even on page refresh
+  //   } else {
+  //     fetchData();  // Fetch data if it's not cleared
+  //   }
+  // }, []);
+
+
+
+  // const toggleCard = () => {
+  //   setIsCardOpen((prevState) => !prevState);
+  //   fetchData();
+  //   GetData();
+  // }
+
+
+  const fetchData = async (showMessage = false) => {
+    if (showMessage) {
+      message.success("Refreshing...");
+    }
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const fetchedItems = response.data;
+
+      const mappedItems = fetchedItems.map((item) => {
+        return {
+          Id: item.InvoiceId,
+          grn_num: item.gate_entry_no,
+          location: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].ship_to : null,
+          supplier_name: item.VendorName,
+        };
+      });
+
+      setData(mappedItems);  // Update the table data
+      console.log("FETCHED", mappedItems);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // Function to fetch the unread documents for the notifications
+  const GetData = async (showMessage = false) => {
+    if (showMessage) {
+      message.success("Refreshing...");
+    }
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/unread-documents", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const fetchedItems = response.data;
+      console.log("API",fetchedItems);
+      const mappedItems = fetchedItems.map((item) => {
+        let Status = "";
+
+        if (item.invoiceInfo.po_headers.length === 0) {
+          Status = "No Match Found";
+        } else if (item.invoiceInfo.po_headers.length === 1) {
+          Status = "Match Found";
+        } else if (item.invoiceInfo.po_headers.length > 1) {
+          Status = "Multiple Match Found";
+        }
+
+        return {
+          Id: item.invoiceInfo.InvoiceId,
+          supplier_name: item.invoiceInfo.VendorName,
+          Status: Status,
+        };
+      });
+
+      setItems(mappedItems);  // Update the notifications data
+      console.log("FETCHED NEW ENTRY", mappedItems);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const clearNotifications = async () => {
+    try {
+      const response = await axios.post('https://invoicezapi.focusrtech.com:57/user/mark-all-documents-as-read/', {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer`, 
+        },
+      });
+ 
+      if (response.ok) {
+        setData([]); 
+        setIsCleared(true); 
+        alert('All notifications cleared successfully!');
+      } else {
+        const errorData = await response.json();
+        console.error('Error clearing notifications:', errorData);
+        alert('Failed to clear notifications. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // alert('An error occurred while clearing notifications.');
+    } finally {
+      setIsLoading(false); // Reset the loading state
+    }
+  };
+
+  const handleClearButtonClick = async(e) => {
+    e.stopPropagation();
+    setIsLoading(true);
+    setData([]);
+    setIsCleared(true);
+    setIsLoading(false);
+     clearNotifications(); // Call the clearNotifications API
+ 
+  };
+
+  // useEffect(() => {
+  //   const isDataCleared = localStorage.getItem('dataCleared');
+  //   if (isDataCleared === 'true') {
+  //     setData([]); 
+  //   } else {
+  //     fetchData();
+  //   }
+  // }, []);
+
+
+  const toggleCard = () => {
+    setIsCardOpen((prevState) => !prevState);
+    fetchData();
+    GetData();
+  };
+
+
+  const navigateToPage = () => {
+    // Add your navigation logic here
+    window.location.href = "/your-target-page"; // Replace with your route
+  };
 
   // const fileInputRef = useRef(null);
 
@@ -294,7 +642,7 @@ const CustomLayout = ({ children }) => {
 
       try {
         const response = await axios.post(
-          "http://172.235.21.99:57/user/invoice-upload",
+          "https://invoicezapi.focusrtech.com:57/user/invoice-upload",
           formData,
           {
             headers: {
@@ -388,91 +736,46 @@ const CustomLayout = ({ children }) => {
     setNewCandidate(true);
   };
 
+
+
+
+
   return (
-    <div style={{}}>
-      <div>
-        <div className={themestate ? "navbardark" : "navbarlight"}>
-          <div className="left-part">
-            <div className="focusr-logo">
-              <img src={frLogo} alt="FRLogo" className="focusr-logo-img"></img>
-            </div>
-            <span className="focusR-text">InvoicEZ</span>
+    <div>
+      {/* Navbar */}
+      <div className={themestate ? "navbardark" : "navbarlight"}>
+        {/* Left Part */}
+        <div className="left-part">
+          <div className="focusr-logo">
+            <img src={frLogo} alt="FRLogo" className="focusr-logo-img" />
           </div>
-          {/* <Field
-            style={
-              themestate
-                ? {
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "rgb(41,41,41)",
-                    borderRadius: "5px",
-                  }
-                : {
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "#fff",
-                    borderRadius: "5px",
-                  }
-            }
+          <span className="focusR-text">InvoicEZ</span>
+        </div>
+
+        {/* Right Part */}
+        <div className="right-part">
+          {/* Share Button */}
+          <div
+            style={{
+              color: "#fff",
+              cursor: "pointer",
+              height: "100%",
+              width: "100%",
+              position: "relative",
+            }}
+            onClick={handleNewCandidateBtn}
           >
-            <SearchBox
-              placeholder="Search..."
-              style={getSearchBoxStyle()}
-              className={
-                themestate &&
-                "searchboxicon searchboxinputtext searchboxinputplaceholder"
-              }
-              size="medium"
-              appearance="filled-darker"
-            />
-          </Field> */}
-          <div className="right-part">
-            {/* <div
-              className="theme-container"
-              onClick={handleTheme}
-              style={{ WebkitTapHighlightColor: "transparent" }}
+            <ShareIos24Filled />
+          </div>
+
+          {/* Notification Icon and Popover Card */}
+          <div style={{ position: "relative" }}>
+            <div
+              ref={notificationRef}
+              className="notification-container"
+              onClick={toggleCard}
+              style={{ cursor: "pointer" }}
             >
-              <DarkModeSwitch
-                checked={isDarkMode}
-                onChange={toggleDarkMode}
-                sunColor="rgb(239, 213, 112)"
-                moonColor="rgb(246, 241, 150)"
-                size={26}
-              />
-            </div> */}
-            {/* <input type="file" onChange={handleFileChange} /> */}
-            <div>
-              {/* The button that triggers file selection */}
-              {/* <div
-                style={{ color: "#fff", cursor: "pointer", height: "100%",
-                  width: "100%", }}
-                onClick={handleButtonClick}
-            >
-                <ShareIos24Filled />
-                <InvoiceUpload fileInputRef={fileInputRef} />
-            </div> */}
-              <div
-                style={{
-                  color: "#fff",
-                  cursor: "pointer",
-                  height: "100%",
-                  width: "100%",
-                  position: "relative", // To position the hidden input
-                }}
-                onClick={handleButtonClick}
-              >
-                <ShareIos24Filled onClick={handleNewCandidateBtn} />
-                {/* <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{ display: "none" }} // Hide the file input
-                  onChange={showModal} // Add the onChange prop to handle file input changes
-                /> */}
-              </div>
-            </div>
-            <div className="notification-container">
               <AlertBadgeRegular
                 style={{
                   color: "#fff",
@@ -482,70 +785,421 @@ const CustomLayout = ({ children }) => {
                 }}
               />
             </div>
-            <div className="questionmark-container">
-              <a
-                href="https://focusrtech.com/"
-                target="_blank"
-                rel="noopener noreferrer"
+
+            {isCardOpen && (
+              <div
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  zIndex: 1000,
+                }}
+                onClick={toggleCard}
               >
-                <QuestionRegular
-                  style={{ color: "#fff", height: "100%", width: "100%" }}
-                />
-              </a>
-            </div>
-            <Popover appearance={themestate ? "inverted" : ""}>
-              <PopoverTrigger disableButtonEnhancement>
                 <div
+                  className="card"
+                  // onClick={(e) => e.stopPropagation()}
                   style={{
-                    marginRight: "15px",
-                    height: "48px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
+                    background: "#fff",
+                    width: "1200px", // Adjusted width for two tables
+                    borderRadius: "10px",
+                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+                    padding: "20px",
                   }}
                 >
-                  <Avatar color="colorful" name={username} size={36} />
+                  {/* Header Section */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center", // Ensures vertical alignment
+                      borderBottom: "1px solid #ddd",
+                      paddingBottom: "10px",
+                      marginBottom: "20px",
+                      gap: "20px",
+                    }}
+                  >
+                    {/* Left Header */}
+                    <h3
+                      style={{
+                        fontSize: "1.3em",
+                        marginLeft: "5px",
+                        marginBottom: "10px",
+                        textAlign: "left",
+                        // borderBottom: "1px solid #ddd",
+                        paddingBottom: "5px",
+                      }}
+                    >
+                      New Upload
+                    </h3>
+
+                    {/* Right Header */}
+
+                    <h3
+                      style={{
+                        fontSize: "1.3em",
+                        textAlign: "center",
+                        marginBottom: "10px",
+                        // borderBottom: "1px solid #ddd",
+                        paddingBottom: "5px",
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        width: "49%"
+                      }}
+                    >
+                      GRN Created
+                    </h3>
+                  </div>
+
+                  {/* Tables Section */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between", // Space between tables
+                      alignItems: "flex-start", // Ensures tables align to the top
+                      gap: "20px", // Adds consistent spacing between tables
+                    }}
+                  >
+                    {/* Left Table */}
+                    <table
+                      style={{
+                        width: "100%", // Adjust table width for proper alignment
+                        borderCollapse: "collapse",
+                      }}
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            style={{
+                              textAlign: "left",
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#555",
+                            }}
+                          >
+                            Invoice No
+                          </th>
+                          <th
+                            style={{
+                              textAlign: "left",
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#555",
+                            }}
+                          >
+                            Supplier Name
+                          </th>
+                          <th
+                            style={{
+                              textAlign: "left",
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#555",
+                            }}
+                          >
+                            Status
+                          </th>
+                          <th
+                            style={{
+                              textAlign: "left",
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#555",
+                            }}
+                          >
+                            View
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {items.map((row, index) => (
+                          <tr key={index}>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              {row.Id}
+                            </td>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              {row.supplier_name}
+                            </td>
+                            <td
+                              style={{
+                                padding: "2px 2px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#fff",
+                                fontSize: "12px",
+                                textAlign: "left",
+                                backgroundColor:
+                                  row.Status === "Match Found" ? "#107c10" :
+                                    row.Status === "Multiple Match Found" ? "#107c10" :
+                                      row.Status === "No Match Found" ? "#c50f1f" :
+                                        "transparent",
+                              }}
+                            >
+                              {row.Status}
+                            </td>
+
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              <FaArrowUpRightFromSquare
+                                style={{ cursor: "pointer", marginLeft: "1rem" }}
+                                onClick={() => {
+                                  const status = row.Status?.trim().toLowerCase(); // Normalize the status
+                                  if (status === "match found") {
+                                    navigate("/approve");
+                                  } else if (status === "multiple match found") {
+                                    navigate("/ai");
+                                  } else if (status === "no match found") {
+                                    navigate("/issuefix");
+                                  } else {
+                                    console.error("Unknown status:", row.Status);
+                                  }
+                                }}
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      {/* Bottom Button Section */}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center", // Centers the button horizontally
+                          marginTop: "20px", // Adds spacing between table and button
+                          marginBottom: "20px", // Ensures some spacing at the bottom
+                        }}
+                      >
+                        <button
+                          style={{
+                            padding: "10px 20px",
+                            // backgroundColor: "#007bff",
+                            // color: "#fff",
+                            border: "none",
+                            // borderRadius: "5px",
+                            cursor: "pointer",
+                            fontSize: "1em",
+                            marginLeft: "-60px"
+                          }}
+
+                          // onClick={(e) => {
+                          //   e.stopPropagation();
+                          //   setData([]);
+                          // }}
+                          onClick={handleClearButtonClick}
+                        >
+                          Clear
+                        </button>
+                      </div>
+
+                    </table>
+
+                    {/* Right Table */}
+                    <table
+                      style={{
+                        width: "100%", // Adjust table width for proper alignment
+                        borderCollapse: "collapse",
+                      }}
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            style={{
+                              textAlign: "left",
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#555",
+                            }}
+                          >
+                            Invoice No
+                          </th>
+                          <th
+                            style={{
+                              textAlign: "left",
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#555",
+                            }}
+                          >
+                            Supplier Name
+                          </th>
+                          <th
+                            style={{
+                              textAlign: "left",
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#555",
+                            }}
+                          >
+                            GRN Number
+                          </th>
+                          <th
+                            style={{
+                              textAlign: "left",
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#555",
+                            }}
+                          >
+                            View
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.map((row, index) => (
+                          <tr key={index}>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              {row.Id}
+                            </td>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              {row.supplier_name}
+                            </td>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              {row.grn_num}
+                            </td>
+                            <td
+                              style={{
+                                padding: "5px",
+                                borderBottom: "1px solid #ddd",
+                                color: "#333",
+                              }}
+                            >
+                              <FaArrowUpRightFromSquare
+                                style={{ cursor: "pointer", marginLeft: "1rem" }}
+                                onClick={() => {
+                                  navigate('/history')
+                                }}
+                              />
+
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "left", // Centers the button horizontally
+                          marginTop: "20px", // Adds spacing between table and button
+                          marginBottom: "20px", // Ensures some spacing at the bottom
+                        }}
+                      >
+                        <button
+                          style={{
+                            padding: "10px 20px",
+                            // backgroundColor: "#007bff",
+                            // color: "#fff",
+                            border: "none",
+                            // borderRadius: "5px",
+                            cursor: "pointer",
+                            fontSize: "1em",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setData([]); // Closes the notification container
+                          }}
+                        >
+                          Clear
+                        </button>
+                      </div>
+                    </table>
+                  </div>
                 </div>
-              </PopoverTrigger>
-              <PopoverSurface tabIndex={-5}>
-                <ExampleContent />
-              </PopoverSurface>
-            </Popover>
+              </div>
+            )}
+
           </div>
+          {/* Question Mark Icon */}
+          <div className="questionmark-container">
+            <a
+              href="https://focusrtech.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <QuestionRegular
+                style={{ color: "#fff", height: "33px", width: "35px" }}
+              />
+            </a>
+          </div>
+
+          <Popover appearance={themestate ? "inverted" : ""}>
+            <PopoverTrigger disableButtonEnhancement>
+              <div
+                style={{
+                  marginRight: "15px",
+                  height: "48px",
+                  width: "48px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  WebkitTapHighlightColor: "transparent",
+                }}
+              >
+                <Avatar color="colorful" name={username} size={36} />
+              </div>
+            </PopoverTrigger>
+            <PopoverSurface tabIndex={-5}>
+              <ExampleContent />
+            </PopoverSurface>
+          </Popover>
+
         </div>
       </div>
+
+      {/* Children Components */}
       <div style={{ marginTop: "48px" }}>{children}</div>
-      {/* <Modal
-        title="Upload File"
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Dragger {...uploadProps}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p className="ant-upload-hint">
-            Support for a single file upload. Strictly prohibited from uploading
-            company data or other banned files.
-          </p>
-        </Dragger>
-      </Modal> */}
+
+      {/* Modal */}
       <Modal
         open={newCandidate}
         onCancel={handleNewCandidate}
         width={540}
-        footer={[]}
+        footer={null}
       >
-        <WalkInCandidate isWalkinUpload={handleIsWalkinUpload} />
+        <WalkInCandidate />
       </Modal>
     </div>
   );
 };
 
+
 export default CustomLayout;
+

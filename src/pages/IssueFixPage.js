@@ -4,6 +4,7 @@ import {
   BreadcrumbItem,
   BreadcrumbDivider,
   BreadcrumbButton,
+  Divider
 } from "@fluentui/react-components";
 import {
   CalendarMonthFilled,
@@ -19,7 +20,7 @@ import { FilterRegular, DismissCircleRegular } from "@fluentui/react-icons"; // 
 
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/approve";
-const path1 = "http://localhost:3000/";
+const path1 = "/dashboard";
 const path2 = "/issuefix";
 
 const containerStyle = {
@@ -28,7 +29,7 @@ const containerStyle = {
   
   // justifyContent: "space-around",
   padding: "8px",
-  marginLeft:"0em"
+  marginLeft:"3em"
 };
 
 const itemStyle = {
@@ -98,20 +99,20 @@ const IssuefixPage = () => {
     // { label: "Refix", value: 4, color: "#d21994" }, // Magenta
   ];
   return (
-    <div>
+    <div style={{maxHeight:"88vh",overflowY:"auto"}}>
       <div ref={divRef1}>
-        <div className="Approvebreadcrump">
+        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
             </BreadcrumbItem>
             <BreadcrumbDivider />
-            <BreadcrumbItem>
+            {/* <BreadcrumbItem>
               <BreadcrumbButton href={path}>Issue</BreadcrumbButton>
             </BreadcrumbItem>
-            <BreadcrumbDivider />
+            <BreadcrumbDivider /> */}
             <BreadcrumbItem>
-              <BreadcrumbButton href={path2}>Fix</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>No Match Found</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -120,9 +121,10 @@ const IssuefixPage = () => {
             display: "flex",
             justifyContent: "flexStart",
             padding: "1px",
+            marginLeft:"3em"
           }}
         >
-          <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Fix</h3>
+          <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>No Match Found</h3>
         </div>
         <div>
           <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -168,7 +170,10 @@ const IssuefixPage = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+      <Divider style={{ marginTop:"2em"}} />
+    </div>
+      <div style={{marginLeft:"3em",marginTop:"-2em"}}>
         {height > 0 ? <IssuefixTable height={height} setTableLength={setTableLength}/> : <p>Loading...</p>}
       </div>
     </div>

@@ -89,7 +89,7 @@
 //     e.preventDefault();
 
 //     try {
-//       const response = await axios.post('http://172.235.21.99:57/user/forgot-password', {
+//       const response = await axios.post('https://invoicezapi.focusrtech.com:57/user/forgot-password', {
 //         email,
 //       });
 
@@ -201,7 +201,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(
-        "http://172.235.21.99:57/user/forgot-password",
+        "https://invoicezapi.focusrtech.com:57/user/forgot-password",
         {
           email,
         },
