@@ -706,7 +706,7 @@ const StoreOpenPODetails = () => {
                     paddingLeft: "10px",
                   }}
                 >
-                  <p>Type of Invoice</p>
+                  <p>Type</p>
                   <h2>PO</h2>
                 </div>
                 <div
@@ -864,7 +864,7 @@ const StoreOpenPODetails = () => {
                         color: themestate ? "white" : "",
                       }}
                     >
-                      Customer Address:
+                      PO Type:
                     </div>
                     <div
                       className={styles.content}
@@ -901,7 +901,7 @@ const StoreOpenPODetails = () => {
                         color: themestate ? "white" : "",
                       }}
                     >
-                      Invoice ID:
+                      Location:
                     </div>
                     <div
                       className={styles.content}
@@ -929,25 +929,7 @@ const StoreOpenPODetails = () => {
                       {purchaseOrder.poCurrency}
                     </div>
                   </div>
-                  <div style={{ display: "flex", flexDirection: "row" }}>
-                    <div
-                      className={styles.heading}
-                      style={{
-                        fontWeight: "bold",
-                        color: themestate ? "white" : "",
-                      }}
-                    >
-                      Invoice Date:
-                    </div>
-                    <div
-                      className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                    >
-                      {/* {purchaseOrder.invoiceDate} */}
-                      {invoicedate}
-                    </div>
-                  </div>
-
+                  
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
@@ -966,26 +948,9 @@ const StoreOpenPODetails = () => {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "row" }}>
-                    <div
-                      className={styles.heading}
-                      style={{
-                        fontWeight: "bold",
-                        color: themestate ? "white" : "",
-                      }}
-                    >
-                      Invoice Total:
-                    </div>
-                    <div
-                      className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                    >
-                      {/* {purchaseOrder.invoiceTotal} */}
-                      {invoicetot}
-                    </div>
-                  </div>
+                  
 
-                  <div style={{ display: "flex", flexDirection: "row" }}>
+                  {/* <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
@@ -1002,7 +967,7 @@ const StoreOpenPODetails = () => {
                     >
                       {closedcode || "NULL"}
                     </div>
-                  </div>
+                  </div> */}
 
                   <div
                     className={`${styles.section} ${styles.invoiceCurrency}`}
@@ -1179,79 +1144,139 @@ const StoreOpenPODetails = () => {
                       </TableHeaderCell>
                     </TableRow>
                   </TableHeader> */}
-
-
-
-                  <TableHeader
+{/* <TableHeader
                     style={{
                       position: "sticky",
                       top: 0,
                       backgroundColor: themestate ? "#383838" : "white",
                       zIndex: 1,
                       color: themestate ? "white" : "black",
+                      maxWidth:"1000px",
+                      overflow:"hidden",
+                      whiteSpace:"nowrap",
+                      textOverflow:"ellipsis"
                     }}
-                  >
+                  ></TableHeader> */}
+
+
+<TableHeader
+  style={{
+    position: "sticky",
+    top: 0,
+    backgroundColor: themestate ? "#383838" : "white",
+    zIndex: 1,
+    color: themestate ? "white" : "black",
+    maxWidth: "1000px",
+    display: "table-cell", 
+    boxSizing: "border-box", 
+    padding: "10px", 
+    textAlign: "center", 
+    overflow: "hidden", 
+    whiteSpace: "nowrap", 
+    textOverflow: "ellipsis", 
+    overflowX: "auto", // Enable horizontal scrolling
+    width: "100%",
+    // borderBottom: "1px solid #ddd", // Optional: Add a border for clarity
+  }}
+>
+
                     <TableRow
                       style={
                         themestate ? { color: "white", borderBottomColor: "#383838" } : {}
                       }
                     >
                       <TableHeaderCell {...headerSortProps("id")}>
-                      PO_line_id
+                      Item Name
                         {sortedColumn === "id" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("item_name")}>
-                      Name
+                      Line Number
                         {sortedColumn === "item_name" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("item_description")}>
-                      Description
+                      Quantity
                         {sortedColumn === "item_description" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("item_name")}>
-                      Invc Item Name
+                      Unit Price
                         {sortedColumn === "item_name" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("unit_price")}>
-                      Unit Price
+                      Amount Billed
                         {sortedColumn === "unit_price" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("quantity")}>
-                      Quantity
+                      Order Type
                         {sortedColumn === "quantity" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("Quantity")}>
-                      Invoice Quantity
+                      Purchase Basis
                         {sortedColumn === "Quantity" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("Igst")}>
-                        Igst
+                        Category Name
                         {sortedColumn === "Igst" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("Cgst")}>
-                        Cgst
+                        Closed Code
                         {sortedColumn === "Cgst" && (
                           sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("Sgst")}>
-                        Sgst
+                        Item Description
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                        Need By Date
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                        Promised Date
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                       PO Line_Id
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                        PO Distribution Id
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                        Line Location Id
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                        Inventory Item Id
                         {sortedColumn === "Sgst" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}

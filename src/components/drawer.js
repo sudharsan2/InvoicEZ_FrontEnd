@@ -77,7 +77,9 @@ import {
   DocumentBulletListMultiple24Filled,
   DocumentBulletListMultiple24Regular,
   History24Regular,
-  History24Filled
+  History24Filled,
+  DatabaseSearch24Filled,
+  DatabaseSearch24Regular
 } from "@fluentui/react-icons";
 
 import {
@@ -91,6 +93,7 @@ import {
   tokens,
   useId,
   Tooltip,
+
 } from "@fluentui/react-components";
 import { CiSettings } from "react-icons/ci";
 import { useEffect } from "react";
@@ -207,6 +210,7 @@ const Person = bundleIcon(PersonFilled, PersonRegular);
 const Dashboard = bundleIcon(Board24Filled, Board24Regular);
 const History = bundleIcon(History24Filled,History24Regular);
 const Announcements = bundleIcon(MegaphoneLoud20Filled, MegaphoneLoud20Regular);
+const OpenPO = bundleIcon(DatabaseSearch24Filled,DatabaseSearch24Regular)
 const EmployeeSpotlight = bundleIcon(
   PersonLightbulb20Filled,
   PersonLightbulb20Regular,
@@ -562,7 +566,7 @@ const NavDrawerDefault = (props) => {
               <NavItem
                 target="_blank"
                 icon={
-                  <History
+                  <OpenPO
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark }
@@ -862,7 +866,7 @@ const NavDrawerDefault = (props) => {
               <NavItem
                 target="_blank"
                 icon={
-                  <History
+                  <OpenPO
                     style={
                       themestate
                         ? { color: darktheme.fontcolordark }
