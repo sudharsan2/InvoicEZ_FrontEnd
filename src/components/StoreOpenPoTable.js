@@ -55,7 +55,7 @@ const columns = [
   
 ];
 
-const OpenPoTable = () => {
+const StoreOpenPoTable = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isrefresh, setIsRefresh] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -206,7 +206,7 @@ const OpenPoTable = () => {
   
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/openpodet`, {
+      navigate(`/storeopenpodet`, {
         state: { poNumber: item.po_number, Id: item.Id },
       });
       console.log("ItemId", item.Id);
@@ -498,4 +498,4 @@ const OpenPoTable = () => {
   );
 };
 
-export default OpenPoTable;
+export default StoreOpenPoTable;

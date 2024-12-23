@@ -12,11 +12,12 @@ import {
   CalendarMonthFilled,
   CalendarMonthRegular,
   bundleIcon,
+  DismissRegular
 } from "@fluentui/react-icons";
 import TagCounters from "../components/gridapprove";
 
 import Search from "../components/Search";
-import OpenPoTable from "../components/OpenPoTable";
+import StoreOpenPoTable from "../components/StoreOpenPoTable";
 import { makeStyles, useId, Input, Label } from "@fluentui/react-components";
 // const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/openpo";
@@ -37,6 +38,7 @@ const StoreOpenPO = () => {
     const styles = useStyles();
     const [selectedOption, setSelectedOption] = useState(null);
     const [PONumberOPtions, setPONumberOPtions] = useState([]);
+    const [Hovered2,setIsHovered2]=useState(false);
     const handleCreate = (inputValue) => {
         const newOption = { value: inputValue, label: inputValue };
     
@@ -208,7 +210,39 @@ const StoreOpenPO = () => {
           </div>
           <div style={{display:"flex",justifyContent:"flex-end",width:"50%",gap:"20px",marginLeft:"40em",marginBottom:"20px"}}>
                 <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px",width:"10%"}} >Find</Button>
-                <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px",width:"10%"}} >Clear</Button>
+                {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px",width:"10%"}} >Clear</Button> */}
+                 <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px", 
+                        backgroundColor: Hovered2 ? "#e1e1e2" : "transparent",
+                        padding: "6px 12px", 
+                        borderRadius: "4px", 
+                        cursor: "pointer",
+                        marginRight:"20px"
+                      }}
+                      onMouseEnter={() => setIsHovered2(true)}
+                      onMouseLeave={() => setIsHovered2(false)}
+                    //   onClick={handleDeleteSelectedRows}
+                    >
+                      <DismissRegular
+                        style={{
+                          color: "#1281d7", 
+                          fontSize: "20px",
+                          marginRight:"5px"
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontSize: "14px",
+                          color: "#000",
+                          
+                        }}
+                      >
+                        Clear
+                      </span>
+                    </div>
                 </div>
  
 
@@ -219,7 +253,7 @@ const StoreOpenPO = () => {
       <Divider style={{ marginTop:"21em"}} />
     </div>
         <div style={{marginLeft:"3em",marginTop:"-2em"}}>
-          <OpenPoTable />
+          <StoreOpenPoTable />
         </div>
       </div>
     </div>
