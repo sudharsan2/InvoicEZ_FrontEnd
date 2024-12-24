@@ -80,6 +80,7 @@ import {
   shorthands,
   Link,
   InfoLabel,
+  DatabaseSearchRegular,
 } from "@fluentui/react-components";
 
 import { AlertBadgeRegular } from "@fluentui/react-icons";
