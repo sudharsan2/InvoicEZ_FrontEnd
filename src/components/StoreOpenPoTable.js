@@ -44,12 +44,50 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "Buyer",
+    columnId: "supplier_name",
     renderHeaderCell: () => "Supplier Name",
     renderCell: (item) => (
       <TableCellLayout>{item.supplier_name}</TableCellLayout>
     ),
   }),
+  createTableColumn({
+    columnId: "Buyer",
+    renderHeaderCell: () => "Buyer Name",
+    renderCell: (item) => (
+      <TableCellLayout>{item.Buyer}</TableCellLayout>
+    ),
+  }),
+
+  createTableColumn({
+    columnId: "totamount",
+    renderHeaderCell: () => "Total Amount",
+    renderCell: (item) => (
+      <TableCellLayout>{item.totamount}</TableCellLayout>
+    ),
+  }),
+  createTableColumn({
+    columnId: "poheader",
+    renderHeaderCell: () => "PO Header ID",
+    renderCell: (item) => (
+      <TableCellLayout>{item.poheader}</TableCellLayout>
+    ),
+  }),
+  createTableColumn({
+    columnId: "vendor",
+    renderHeaderCell: () => "Vendor Site ID",
+    renderCell: (item) => (
+      <TableCellLayout>{item.vendor}</TableCellLayout>
+    ),
+  }),
+  createTableColumn({
+    columnId: "vendor_num",
+    renderHeaderCell: () => "Vendor Number",
+    renderCell: (item) => (
+      <TableCellLayout>{item.vendor_num}</TableCellLayout>
+    ),
+  }),
+
+
   createTableColumn({
     columnId: "location",
     renderHeaderCell: () => "Location",
@@ -205,7 +243,11 @@ const StoreOpenPoTable = () => {
         location: item.location,
         total_amount:item.total_amount,
         Buyer:item.buyer_name,
-        need_by:item.need_by_date
+        need_by:item.need_by_date,
+        vendor:item.vendor_site_id,
+        poheader:item.po_header_id,
+        totamount:item.total_amount,
+        vendor_num:item.vendor_number,
       
       }));
 
@@ -219,7 +261,7 @@ const StoreOpenPoTable = () => {
       setPOStatusOptions(getUniqueOptions(fetchedItems, "po_status") || []);
       setSelectedPOTypeOptions(getUniqueOptions(fetchedItems, "po_type") || []);
       setSelectedSupplierNameOptions(getUniqueOptions(fetchedItems, "supplier_name") || []);
-      setSelectedShipToOptions(getUniqueOptions(fetchedItems, "ship_to") || []);
+      setSelectedShipToOptions(getUniqueOptions(fetchedItems, "location") || []);
       setSelectedBillToOptions(getUniqueOptions(fetchedItems, "bill_to") || []);
       setSelectedBuyerNameOptions(getUniqueOptions(fetchedItems, "buyer_name") || []);
       setItems(mappedItems || []);
@@ -283,8 +325,13 @@ const StoreOpenPoTable = () => {
           item.po_status?.toLowerCase().includes(searchLower) ||
           item.supplier_name?.toLowerCase().includes(searchLower) ||
           item.location?.toLowerCase().includes(searchLower) ||
-          item.total_amount?.toLowerCase().includes(searchLower) 
-          
+          item.total_amount?.toLowerCase().includes(searchLower) ||
+          item.Buyer?.toLowerCase().includes(searchLower) ||
+          item.need_by?.toLowerCase().includes(searchLower) ||
+          item.vendor?.toLowerCase().includes(searchLower) ||
+          item.poheader?.toLowerCase().includes(searchLower) ||
+          item.totamount?.toLowerCase().includes(searchLower) ||
+          item.vendor_num?.toLowerCase().includes(searchLower) 
         
         );
       });
@@ -304,7 +351,14 @@ const StoreOpenPoTable = () => {
       item.po_status?.toLowerCase().includes(searchLower) ||
       item.supplier_name?.toLowerCase().includes(searchLower) ||
       item.location?.toLowerCase().includes(searchLower) ||
-      item.total_amount?.toLowerCase().includes(searchLower) 
+      item.total_amount?.toLowerCase().includes(searchLower) ||
+      item.Buyer?.toLowerCase().includes(searchLower) ||
+      item.need_by?.toLowerCase().includes(searchLower) ||
+      item.vendor?.toLowerCase().includes(searchLower) ||
+      item.poheader?.toLowerCase().includes(searchLower) ||
+      item.totamount?.toLowerCase().includes(searchLower) ||
+      item.vendor_num?.toLowerCase().includes(searchLower) 
+
    
     );
   });
@@ -491,25 +545,37 @@ const StoreOpenPoTable = () => {
 
   const filterData = () => {
     const filteredData = items.filter((item) => {
-      return (
-        (!poNumber || item.po_number.toLowerCase().includes(poNumber.toLowerCase())) ||
-        (!selectedPOStatus || item.po_status === selectedPOStatus.value) &&
-        (!selectedPOType || item.po_type === selectedPOType.value) &&
-        (!selectedSupplierName || item.supplier_name === selectedSupplierName.value) &&
-        (!selectedShipTo || item.ship_to === selectedShipTo.value) &&
-        (!selectedBillTo || item.bill_to === selectedBillTo.value) &&
-        (!selectedBuyerName || item.buyer_name === selectedBuyerName.value) &&
-        (!selectedTotalAmount || item.total_amount === parseFloat(selectedTotalAmount)) &&
-        (!selectedPOHeaderID || item.po_header_id === selectedPOHeaderID) ||
-        (!selectedVendorID || item.vendor_id === selectedVendorID) ||
-        (!selectedVendorSiteID || item.vendor_site_id === selectedVendorSiteID) ||
-        (!selectedVendorNumber || item.vendor_number === selectedVendorNumber)
-      );
+      
+      const matchesPONumber = poNumber ? item.po_number.toLowerCase().includes(poNumber.toLowerCase()) : true;
+      const matchesPOStatus = selectedPOStatus ? item.po_status === selectedPOStatus.value : true;
+      const matchesPOType = selectedPOType ? item.po_type === selectedPOType.value : true;
+      const matchesSupplierName = selectedSupplierName ? item.supplier_name === selectedSupplierName.value : true;
+      const matchesShipTo = selectedShipTo ? item.location === selectedShipTo.value : true;
+      const matchesBuyerName = selectedBuyerName ? item.Buyer === selectedBuyerName.value : true;
+      const matchesTotalAmount = selectedTotalAmount ? item.total_amount === parseFloat(selectedTotalAmount) : true;
+      const matchesPOHeaderID = selectedPOHeaderID ? item.poheader === selectedPOHeaderID : true;
+      const matchesVendorID = selectedVendorID ? item.vendor === selectedVendorID : true;
+      const matchesVendorSiteID = selectedVendorSiteID ? item.vendor === selectedVendorSiteID : true;
+      const matchesVendorNumber = selectedVendorNumber ? item.vendor_num === selectedVendorNumber : true;
+     
+      
+      return matchesPONumber && 
+             matchesPOStatus && 
+             matchesPOType && 
+             matchesSupplierName && 
+             matchesShipTo && 
+             matchesBuyerName && 
+             matchesTotalAmount && 
+             matchesPOHeaderID && 
+             matchesVendorID && 
+             matchesVendorSiteID &&
+             matchesVendorNumber;
+
     });
+  
     setFilteredItems(filteredData);
     console.log("Filtered Data:", filteredData);
   };
-  
   
   
   return (
@@ -520,6 +586,7 @@ const StoreOpenPoTable = () => {
           alignItems: "center",
           gap: "20px",
           fontWeight: "bold",
+          width:"100%"
           
         }}
       >
@@ -531,7 +598,7 @@ const StoreOpenPoTable = () => {
     backgroundColor: "#F8FAFC",
     paddingBottom: "5px",
     paddingTop: "10px",
-    width: "100vw", 
+    width: "100%", 
     boxSizing: "border-box", 
     marginTop:"-8em",
     marginLeft:"5em",
@@ -548,7 +615,7 @@ const StoreOpenPoTable = () => {
       gap: "2em",
       padding: "1em",
       marginLeft: "4em",
-      marginRight: "1em",
+      marginRight: "4em",
       marginTop:"3em"
       
     }}
@@ -600,6 +667,10 @@ const StoreOpenPoTable = () => {
           onChange={handleSupplierNameChange}
           name="supplier_name"
           options={selectedSupplierOptions}
+          styles={{
+            container: (provided) => ({ ...provided, width: 200 }),
+            marginTop: "20px",
+          }}
           onCreateOption={handleSupplierNameChange}
           placeholder=" Supplier Name"
           isClearable
@@ -615,23 +686,31 @@ const StoreOpenPoTable = () => {
           onChange={handleShipToChange}
           name="ship_to"
           options={selectedShipToOptions}
+          styles={{
+            container: (provided) => ({ ...provided, width: 200 }),
+            marginTop: "20px",
+          }}
           onCreateOption={handleShipToChange}
-          placeholder="Ship To"
+          placeholder="Location"
           isClearable
         />
       
       
-        <CreatableSelect
+        {/* <CreatableSelect
           className="basic-single"
           classNamePrefix="select"
           value={selectedBillTo}
           onChange={handleBillToChange}
           name="bill_to"
           options={selectedBillToOptions}
+          styles={{
+            container: (provided) => ({ ...provided, width: 200 }),
+            marginTop: "20px",
+          }}
           onCreateOption={handleBillToChange}
           placeholder="Bill To"
           isClearable
-        />
+        /> */}
       
       <CreatableSelect
           className="basic-single"
@@ -640,6 +719,10 @@ const StoreOpenPoTable = () => {
           onChange={handleBuyerNameChange}
           name="buyer_name"
           options={selectedBuyerNameOptions}
+          styles={{
+            container: (provided) => ({ ...provided, width: 200 }),
+            marginTop: "20px",
+          }}
           onCreateOption={handleBuyerNameChange}
           placeholder="Buyer Name"
           isClearable
@@ -673,7 +756,7 @@ const StoreOpenPoTable = () => {
           boxSizing: "border-box", 
         }}
       />
-    <Input
+    {/* <Input
         placeholder="Vendor Name"
         value={selectedVendorID} 
         onChange={handleVendorIdChange} 
@@ -681,7 +764,7 @@ const StoreOpenPoTable = () => {
           width: "200px", 
           boxSizing: "border-box", 
         }}
-      />
+      /> */}
     <Input
         placeholder="Vendor Site ID"
         value={selectedVendorSiteID} 
@@ -760,9 +843,9 @@ const StoreOpenPoTable = () => {
         
 <div
   style={{
-    marginTop: "30em", // Add spacing below the above div
-  
-    marginRight:"2.5em"
+    marginTop: "30em", 
+    width:"30%",
+    marginRight:"4em"
   }}
 >
         <Search

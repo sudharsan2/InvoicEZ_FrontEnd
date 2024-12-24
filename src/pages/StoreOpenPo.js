@@ -20,8 +20,8 @@ import Search from "../components/Search";
 import StoreOpenPoTable from "../components/StoreOpenPoTable";
 import { makeStyles, useId, Input, Label } from "@fluentui/react-components";
 // const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
-const path = "/openpo";
-const path1 = "/dashboard";
+const path = "/storeopenpo";
+const path1 = "/storedashboard";
 
 
 const useStyles = makeStyles({
@@ -48,7 +48,7 @@ const StoreOpenPO = () => {
   return (
     <div style={{maxHeight:"91vh",overflowY:"auto"}}>
       <div style={{ height: "5vh" }}>
-        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
+        <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
@@ -68,7 +68,7 @@ const StoreOpenPO = () => {
               display: "flex",
               justifyContent: "flexStart",
               padding: "1px",
-              marginLeft:"3em"
+              
               
             }}
           >
@@ -77,9 +77,9 @@ const StoreOpenPO = () => {
          
                 </div>
         <div style={{ width: "100%", height: "5vh" }} />
-        <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
-      {/* <Divider style={{ marginTop:"22em"}} /> */}
-    </div>
+        {/* <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+      <Divider style={{ marginTop:"22em"}} />
+    </div> */}
         <div style={{marginTop:"-2em"}}>
         <StoreOpenPoTable />
         </div>

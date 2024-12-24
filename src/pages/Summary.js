@@ -73,7 +73,7 @@ const SummaryPage = () => {
   return (
     <div style={{maxHeight:"91vh",overflowY:"auto"}}>
       <div style={{ height: "5vh" }}>
-        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
+        <div className="Approvebreadcrump" >
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
@@ -87,7 +87,7 @@ const SummaryPage = () => {
         </div>
       </div>
       <div>
-        <div style={{ maxHeight: "10vh" ,marginLeft:"3em"}}>
+        <div style={{ maxHeight: "10vh"}}>
           <div
             style={{
               display: "flex",
@@ -114,10 +114,10 @@ const SummaryPage = () => {
           </div>
         </div>
         <div style={{ width: "100%", height: "5vh", }} />
-         <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+         <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",}}>
               <Divider style={{ marginTop:"4em"}} />
             </div>
-        <div style={{marginLeft:"3em",marginTop:"-2em"}}>
+        <div style={{marginTop:"-2em"}}>
           <SummaryTable setFixCount={setFixCount} setMatchCount={setMatchCount} setTableLength={setTableLength}  setMultiple_MatchCount={setMultiple_MatchCount} setGateLength={setGateLength}/>
         </div>
       </div>
