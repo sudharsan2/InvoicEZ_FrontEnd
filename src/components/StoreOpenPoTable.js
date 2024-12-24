@@ -209,42 +209,19 @@ const StoreOpenPoTable = () => {
       
       }));
 
-      const postatus = (fetchedItems || []).map((header) => ({
-        value: header.po_status,
-        label: header.po_status,
-      }));
+      const getUniqueOptions = (array, key) => {
+        return Array.from(new Set(array.map((item) => item[key]))).map((value) => ({
+            value,
+            label: value,
+        }));
+    };
 
-      const potype = (fetchedItems || []).map((header) => ({
-        value: header.po_type,
-        label: header.po_type,
-      }));
-
-      const supplier = (fetchedItems || []).map((header) => ({
-        value: header.supplier_name,
-        label: header.supplier_name,
-      }));
-
-      const ship_to = (fetchedItems || []).map((header) => ({
-        value: header.ship_to,
-        label: header.ship_to,
-      }));
-
-      const bill_to = (fetchedItems || []).map((header) => ({
-        value: header.bill_to,
-        label: header.bill_to,
-      }));
-
-      const buyer = (fetchedItems || []).map((header) => ({
-        value: header.buyer_name,
-        label: header.buyer_name,
-      }));
-
-      setPOStatusOptions(postatus || []);
-      setSelectedPOTypeOptions(potype || []);
-      setSelectedSupplierNameOptions(supplier || []);
-      setSelectedShipToOptions(ship_to || []);
-      setSelectedBillToOptions(bill_to || []);
-      setSelectedBuyerNameOptions(buyer || []);
+      setPOStatusOptions(getUniqueOptions(fetchedItems, "po_status") || []);
+      setSelectedPOTypeOptions(getUniqueOptions(fetchedItems, "po_type") || []);
+      setSelectedSupplierNameOptions(getUniqueOptions(fetchedItems, "supplier_name") || []);
+      setSelectedShipToOptions(getUniqueOptions(fetchedItems, "ship_to") || []);
+      setSelectedBillToOptions(getUniqueOptions(fetchedItems, "bill_to") || []);
+      setSelectedBuyerNameOptions(getUniqueOptions(fetchedItems, "buyer_name") || []);
       setItems(mappedItems || []);
       
       

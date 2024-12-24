@@ -782,7 +782,7 @@ const OpenPODetails = () => {
             >
               Supplier
             </Tab> */}
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   justifyContent: "flex-end",
@@ -798,7 +798,7 @@ const OpenPODetails = () => {
                   onClick={handleViewInvoice}
                 />{" "}
                 <span onClick={handleViewInvoice}> View Invoice</span>
-              </div>
+              </div>   */}
             </TabList>
           </div>
           {selectedtab === "tab1" && (

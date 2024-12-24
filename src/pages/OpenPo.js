@@ -48,7 +48,7 @@ const OpenPO = () => {
   return (
     <div style={{maxHeight:"91vh",overflowY:"auto"}}>
       <div style={{ height: "5vh" }}>
-        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
+        <div className="Approvebreadcrump" >
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
@@ -68,7 +68,7 @@ const OpenPO = () => {
               display: "flex",
               justifyContent: "flexStart",
               padding: "1px",
-              marginLeft:"3em"
+              // marginLeft:"3em"
               
             }}
           >

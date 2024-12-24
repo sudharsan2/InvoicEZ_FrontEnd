@@ -400,6 +400,9 @@ const StoreOpenPODetails = () => {
    },[])
   
   console.log("DATA--->",data);
+   
+  
+
   
   useEffect(() => {
     const fetchData = async () => {
@@ -737,7 +740,7 @@ const StoreOpenPODetails = () => {
                     paddingLeft: "10px",
                   }}
                 >
-                  <p>Created Date</p>
+                  <p>Need By Date</p>
                   <h2>{data?.need_by_date}</h2>
                 </div>
               </div>
@@ -782,7 +785,7 @@ const StoreOpenPODetails = () => {
             >
               Supplier
             </Tab> */}
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   justifyContent: "flex-end",
@@ -798,7 +801,7 @@ const StoreOpenPODetails = () => {
                   onClick={handleViewInvoice}
                 />{" "}
                 <span onClick={handleViewInvoice}> View Invoice</span>
-              </div>
+              </div> */}
             </TabList>
           </div>
           {selectedtab === "tab1" && (
