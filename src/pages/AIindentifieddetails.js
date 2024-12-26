@@ -336,7 +336,7 @@ const AIDetailPage = () => {
   
     try {
       
-      if (Array.isArray(poheader)) {
+      if ( poheader && Array.isArray(poheader)) {
         const selectedPoDetails = poheader.find(
           (po) => po.po_number === poNumber
         );
@@ -654,30 +654,28 @@ const AIDetailPage = () => {
 
 // console.log("SORTED",dataitem.po_items);
 
-const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
-  if (!sortedColumn2) return 0; 
+const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
+  ? [...dataitem.po_items].sort((a, b) => {
+      if (!sortedColumn2) return 0;
 
- 
-  const dataKey = columnKeyMap[sortedColumn2];
-  if (!dataKey) return 0; 
+      const dataKey = columnKeyMap[sortedColumn2];
+      if (!dataKey) return 0;
 
-  
-  const aValue = a[dataKey] || "";
-  const bValue = b[dataKey] || "";
+      const aValue = a[dataKey] || "";
+      const bValue = b[dataKey] || "";
 
-  
-  const aIsNumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-  const bIsNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
+      const aIsNumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
+      const bIsNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
 
- 
-  const aComparable = aIsNumeric ? parseFloat(aValue) : aValue.toString();
-  const bComparable = bIsNumeric ? parseFloat(bValue) : bValue.toString();
+      const aComparable = aIsNumeric ? parseFloat(aValue) : aValue.toString();
+      const bComparable = bIsNumeric ? parseFloat(bValue) : bValue.toString();
 
-  
-  if (aComparable < bComparable) return sortDirection === "asc" ? -1 : 1;
-  if (aComparable > bComparable) return sortDirection === "asc" ? 1 : -1;
-  return 0; // Equal values
-});
+      if (aComparable < bComparable) return sortDirection === "asc" ? -1 : 1;
+      if (aComparable > bComparable) return sortDirection === "asc" ? 1 : -1;
+      return 0; 
+  })
+  : []; 
+
 
 
 
