@@ -167,23 +167,36 @@ const StoreUserPage = () => {
       }
 
     });
-    // const response = await axios.post(url, {});
 
+    console.log("RESPONSE",response.data);
+    // const response = await axios.post(url, {});
+    if (response.data.message === "Data Inserted.") {
+      setShowButton(false);
+      
+    } else {
+      setShowButton(true);
+    }
       
 
       if (response.status === 200) {
         message.success("GRN successfully Updated");
+
+        console.log("API Response Message:", response.data.message);
+        // setApiMessage(response.data.message);
+        // console.log("Success:", messages);
         navigate(`/storeuser`);
       }
-      console.log("Success:", response.data); 
+       
     } catch (error) {
       notification.error({
-        message: "Approved Failed",
+        messages: "Approved Failed",
         // description: `You have successfully Approved: ${po_id}`,
       });
       console.error("Error:", error);
     }
   };
+  
+  
 
   const deleteInvoice = async () => {
     const url = `https://invoicezapi.focusrtech.com:57/user/delete-pos/${inv_id}`;
@@ -266,7 +279,8 @@ const StoreUserPage = () => {
   const [data, setData] = useState([]);
   const [entrytime, setEntrytime] = useState();
   // console.log("data", data);
-
+  // const [apiMessage, setApiMessage] = useState("");
+  const [showButton, setShowButton] = useState(true);
   const handleTabSelect2 = (event, data) => {
     // console.log({"currentmonth":currentMonthEmployees})
     setSelectedTab(data.value);
@@ -613,13 +627,17 @@ const StoreUserPage = () => {
               >
                 <div style={{ right: "5%", display: "flex", gap: "10px" }}>
                   {/* <Button onClick={() => deleteInvoice()}>Generate GRN</Button> */}
-                  <Button
-                    className=" buttoncolor"
-                    style={{ backgroundColor: "#3570c3", color: "white" }}
-                    onClick={() => approvePo()}
-                  >
-                    Generate GRN
-                  </Button>
+                  {showButton ? (
+        <Button
+          className="buttoncolor"
+          style={{ backgroundColor: "#3570c3", color: "white" }}
+          onClick={() => approvePo()}
+        >
+          Generate GRN
+        </Button>
+      ) : (
+        <p></p>
+      )}
                 </div>
               </div>
 

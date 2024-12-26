@@ -43,6 +43,11 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
   }),
   createTableColumn({
+      columnId: "Gate",
+      renderHeaderCell: () => "Gate Entry Number",
+      renderCell: (item) => <TableCellLayout>{item.Gate}</TableCellLayout>,
+    }),
+  createTableColumn({
     columnId: "supplier_name",
     renderHeaderCell: () => "Supplier Name",
     renderCell: (item) => (
@@ -155,6 +160,7 @@ const StoreTable = ({setTableLength}) => {
           status: po_header.status,
           customer:item.CustomerName,
           invoice:item.InvoiceFile,
+          Gate:item.gate_entry_no,
           Igst_val:val.Igst
           
           
@@ -224,7 +230,8 @@ const StoreTable = ({setTableLength}) => {
         item.bill_to?.toLowerCase().includes(searchLower) ||
         item.buyer_name?.toLowerCase().includes(searchLower) ||
         item.total_amount?.toString().toLowerCase().includes(searchLower) ||
-        item.status?.toLowerCase().includes(searchLower)
+        item.status?.toLowerCase().includes(searchLower)||
+        item.Gate?.toLowerCase().includes(searchLower)
       );
     });
   
@@ -248,7 +255,8 @@ const StoreTable = ({setTableLength}) => {
       item.bill_to?.toLowerCase().includes(searchLower) ||
       item.buyer_name?.toLowerCase().includes(searchLower) ||
       item.total_amount?.toString().toLowerCase().includes(searchLower) ||
-      item.status?.toLowerCase().includes(searchLower)
+      item.status?.toLowerCase().includes(searchLower)||
+      item.Gate?.toLowerCase().includes(searchLower)
     );
   });
 

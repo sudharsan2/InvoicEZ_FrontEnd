@@ -55,8 +55,8 @@ const CompareDrawer = ({data,onClose}) => {
   const handleSubmit= async ()=>{
     console.log("Compare API ")
     try{
-      axios.defaults.baseURL = 'http://172.235.21.99:57';
-      const response = await axios.put(`/user/update-supplier/${data.id}/`, { supplier_id: selectedSupplier });
+      // axios.defaults.baseURL = 'http://172.235.21.99:57';
+      const response = await axios.put(`http://172.235.21.99:57/user/update-supplier/${data.id}/`, { supplier_id: selectedSupplier });
       if (response.status === 200) {
         
         handleClose();

@@ -275,7 +275,7 @@ const togglePasswordVisibility = () => {
         return {
             Id: item.id,
             username: item.username,
-            role: item.role,
+            // role: item.role,
             email: item.email,
             empId: item.empId,
             role:role,

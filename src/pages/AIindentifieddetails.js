@@ -307,28 +307,57 @@ const AIDetailPage = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   //  PopOver
 
-  const handlePoNumberClick = async (poNumber) => {
-    console.log("test function called");
-    setSelectedInvoiceNumber(poNumber);
-    try {
-      // const response = await axios.get(`https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`);
-      // const fetchedData = response.data;
+  // const handlePoNumberClick = async (poNumber) => {
+  //   console.log("test function called");
+  //   setSelectedInvoiceNumber(poNumber);
+  //   try {
+  //     // const response = await axios.get(`https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`);
+  //     // const fetchedData = response.data;
 
-      const selectedPoDetails = poheader.find(
-        (po) => po.po_number === poNumber,
-      );
-      console.log("SELECTED PO", selectedPoDetails);
-      // console.log("selectedPO",selectedPoDetails);
-      setDataItem(selectedPoDetails || {});
-      setItems(selectedPoDetails?.po_items || []);
-      // console.log("Fetched Invoice Details:", fetchedData);
-      console.log("Selected PO Details:", selectedPoDetails);
-      console.log("Po", items);
+  //     const selectedPoDetails = poheader.find(
+  //       (po) => po.po_number === poNumber,
+  //     );
+  //     console.log("SELECTED PO", selectedPoDetails);
+  //     // console.log("selectedPO",selectedPoDetails);
+  //     setDataItem(selectedPoDetails || {});
+  //     setItems(selectedPoDetails?.po_items || []);
+  //     // console.log("Fetched Invoice Details:", fetchedData);
+  //     console.log("Selected PO Details:", selectedPoDetails);
+  //     console.log("Po", items);
+  //   } catch (error) {
+  //     console.error("Error fetching invoice details:", error);
+  //   }
+  // };
+
+
+  const handlePoNumberClick = async (poNumber) => {
+    console.log("Test function called");
+    setSelectedInvoiceNumber(poNumber);
+  
+    try {
+      
+      if (Array.isArray(poheader)) {
+        const selectedPoDetails = poheader.find(
+          (po) => po.po_number === poNumber
+        );
+        console.log("SELECTED PO", selectedPoDetails);
+  
+        
+        setDataItem(selectedPoDetails || {});
+        setItems(selectedPoDetails?.po_items || []);
+  
+        console.log("Selected PO Details:", selectedPoDetails);
+        console.log("Po Items:", items);
+      } else {
+        console.warn("poheader is not a valid array");
+        setDataItem({});
+        setItems([]);
+      }
     } catch (error) {
-      console.error("Error fetching invoice details:", error);
+      console.error("Error handling PO number click:", error);
     }
   };
-
+  
   // pop over
   const handleClick = (event, item) => {
     setAnchorEl(event.currentTarget);
@@ -623,7 +652,7 @@ const AIDetailPage = () => {
 
 
 
-console.log("SORTED",dataitem.po_items);
+// console.log("SORTED",dataitem.po_items);
 
 const sortedPoItems = [...dataitem.po_items].sort((a, b) => {
   if (!sortedColumn2) return 0; 
