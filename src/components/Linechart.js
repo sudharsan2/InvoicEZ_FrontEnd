@@ -44,9 +44,7 @@ const LineChartPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await axios.get(
-        //   "https://invoicezapi.focusrtech.com:57/user/dashboard-supplier-totalamount",
-        // );
+        
 
         const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/dashboard-supplier-totalamount", {

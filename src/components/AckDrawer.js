@@ -1,12 +1,8 @@
 import React, { useState,useEffect } from "react";
 import {
-  DrawerBody,
-  DrawerHeader,
-  DrawerHeaderTitle,
+  
   Drawer,
   makeStyles,
-  tokens,
-  useId,
   useRestoreFocusSource,
   useRestoreFocusTarget,
 } from "@fluentui/react-components";
@@ -35,10 +31,9 @@ const useStyles = makeStyles({
 
 const AckDrawer = ({data,setIsOpen,isOpen,onClose}) => {
   const styles = useStyles();
-  // const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("overlay");
 
-  const restoreFocusTargetAttributes = useRestoreFocusTarget();
+ 
   const restoreFocusSourceAttributes = useRestoreFocusSource();
   useEffect(()=>{
   console.log("Data",data);

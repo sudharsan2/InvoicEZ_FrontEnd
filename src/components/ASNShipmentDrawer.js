@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {
-  DrawerBody,
-  DrawerHeader,
-  DrawerHeaderTitle,
+ 
   Drawer,
   makeStyles,
   useRestoreFocusSource,
@@ -34,7 +32,7 @@ const ASNShipmentDrawer = ({ isOpen, setIsOpen }) => {
   const styles = useStyles();
   const [type, setType] = useState("overlay");
 
-  const restoreFocusTargetAttributes = useRestoreFocusTarget();
+ 
   const restoreFocusSourceAttributes = useRestoreFocusSource();
 
   return (

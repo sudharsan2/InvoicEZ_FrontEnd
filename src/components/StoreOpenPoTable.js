@@ -621,33 +621,36 @@ const StoreOpenPoTable = () => {
         
 
 
-<div
-  style={{
-    backgroundColor: "#F8FAFC",
-    paddingBottom: "5px",
-    paddingTop: "10px",
-    width: "100%", 
-    boxSizing: "border-box", 
-    marginTop:"-8em",
-    marginLeft:"5em",
-    height:"50vh"
+        <div
+ 
+ style={{
+   backgroundColor: "#F8FAFC",
+   // paddingBottom: "3px",
+   paddingTop: "10px",
+   width: "100%", 
+   marginTop: "-8em", 
+   height: "50vh", 
+   marginLeft:"12em",
+   paddingLeft:"1em",
+   paddingRight:"1em"
+  
+ }}
 
-    
+ 
 
-  }}
+
 >
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(4, 1fr)",
-      gap: "2em",
-      padding: "1em",
-      marginLeft: "4em",
-      marginRight: "4em",
-      marginTop:"3em"
-      
-    }}
-  >
+<div
+ style={{
+   display: "grid",
+   gridTemplateColumns: "repeat(4, 1fr)", 
+   gap: "2em",
+   padding: "1em",
+   marginTop: "4em", 
+   width: "100%", 
+   
+ }}
+>
     <Input
         placeholder="PO Number"
         value={poNumber} 
@@ -872,10 +875,15 @@ const StoreOpenPoTable = () => {
 <div
   style={{
     marginTop: "30em", 
-    width: "300px", // Use a fixed width instead of percentage
-    marginRight: "4em",
-    maxWidth: "100%", // Ensure it does not overflow on smaller screens
-    minWidth: "200px"  // Optional: Set a minimum width if needed
+    width: "300px", 
+    maxWidth: "100%", 
+    minWidth: "200px",  
+    display: "flex", 
+    justifyContent: "center", 
+    marginLeft: "auto", 
+    marginRight: "auto", 
+    
+   
   }}
 >
   <Search

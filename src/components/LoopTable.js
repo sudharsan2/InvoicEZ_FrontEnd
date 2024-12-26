@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  FolderRegular,
-  EditRegular,
-  OpenRegular,
-  DocumentRegular,
-  VideoRegular,
   ArrowClockwise28Regular,
 } from "@fluentui/react-icons";
 import {
-  Avatar,
+ 
   DataGridBody,
   DataGridRow,
   DataGrid,
@@ -23,7 +18,7 @@ import {
   makeStyles,
   TabList,
   Tab,
-  Divider,
+  
   Button,
   Popover,
   PopoverSurface,
@@ -33,11 +28,11 @@ import Search from "./Search";
 import TodoDrawer from "./TodoDrawer";
 import RFQDrawer from "./RFQDrawer";
 import CompareDrawer from "./CompareDrawer";
-import DatePickerComponent from "./DatePicker";
+
 import DropdownComponent from "../components/DropDown";
 import axios from "axios";
-import {message} from "antd";
-import { useDispatch, useSelector } from "react-redux";
+
+import {  useSelector } from "react-redux";
 
 const useStyles = makeStyles({
   statusBullet: {
@@ -131,12 +126,15 @@ const columns = [
 
 const StatusCell = ({ statusLabel }) => {
   const styles = useStyles();
-  const statusStyle =
-    statusLabel === "Todo"
-      ? styles.statusTodo
-      : statusLabel === "RFQ"
-      ? styles.statusRFQ
-      : styles.statusCompare;
+
+  let statusStyle;
+  if (statusLabel === "Todo") {
+    statusStyle = styles.statusTodo;
+  } else if (statusLabel === "RFQ") {
+    statusStyle = styles.statusRFQ;
+  } else {
+    statusStyle = styles.statusCompare;
+  }
 
   return (
     <TableCellLayout>
@@ -145,6 +143,7 @@ const StatusCell = ({ statusLabel }) => {
     </TableCellLayout>
   );
 };
+
 // Main component
 const LoopTable = ({ data ,setStatusCounts }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -154,9 +153,9 @@ const LoopTable = ({ data ,setStatusCounts }) => {
   const [items, setItems] = useState([]);
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
-  const [mulipleRowData,setMultipleRowData]=useState([]);
-  const [selectedRowsSet, setSelectedRowsSet] = useState(new Set());
-  const navigate = useNavigate();
+  // const [mulipleRowData,setMultipleRowData]=useState([]);
+  // const [selectedRowsSet, setSelectedRowsSet] = useState(new Set());
+  
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.messageNotify,
   );
@@ -182,7 +181,7 @@ const LoopTable = ({ data ,setStatusCounts }) => {
       );
       const data = response.data.details;
       console.log("Status", data[0]?.status);
-      // console.log("Data",data);
+      
       //
       const data2 = data.filter((item) => {
         return (
@@ -191,23 +190,23 @@ const LoopTable = ({ data ,setStatusCounts }) => {
       });
 
       console.log("Status", data2);
-      // const data2 = data.filter((item) => item.status != "YetAcknowledged");
+      
 
-      // Map through the data to structure it as needed
+     
       const mappedItems = data2.flatMap((item) => {
-        // Use lineData to check for lines or line_items
+        
         const lineData = item.lines || item.line_items;
         if (lineData && lineData.length) {
-          // Map over each line and create a new item for each line entry
+          
           return lineData.map((line) => ({
-            ...item, // Copy all properties from the original item
-            lines: [line], // Replace 'lines' with a single line item array
+            ...item, 
+            lines: [line], 
           }));
         } else {
-          // Handle case where there are no lines or line_items
+         
           return {
             ...item,
-            lines: [], // Default to an empty array if no lines/line_items are found
+            lines: [], 
           };
         }
       });
@@ -252,18 +251,7 @@ const LoopTable = ({ data ,setStatusCounts }) => {
     setSearchQuery(value);
   };
 
-  // Filter items based on search
-  const filteredItems = items.filter((item) => {
-    const searchLower = searchQuery.trim().toLowerCase();
-    return (
-      item.lines[0].requestor.toLowerCase().includes(searchLower) ||
-      item.document_number.toLowerCase().includes(searchLower) ||
-      item.description.toLowerCase().includes(searchLower) ||
-      item.status.toLowerCase().includes(searchLower) ||
-      item.lines[0].need_by_date.toLowerCase().includes(searchLower) ||
-      item.lines[0].supplier_ids.toString().toLowerCase().includes(searchLower)
-    );
-  });
+  
  
   const handleRowClick = (e,item) => {
     if (e.target.type === "checkbox") {
@@ -276,7 +264,7 @@ const LoopTable = ({ data ,setStatusCounts }) => {
       setSelectedRowData(item);
     }, 0);
 
-    // setSelectedRowData(item);
+    
    
     console.log("status",item.status)
      console.log("items",item)
@@ -284,7 +272,7 @@ const LoopTable = ({ data ,setStatusCounts }) => {
 
   const handleSelectionChange = (event, data) => {
     console.log("handleSelectionChange", data.selectedItems);
-    setSelectedRowsSet(data.selectedItems);
+   
     let a = [];
     let truth = false;
     let count = 0;
@@ -306,7 +294,7 @@ const LoopTable = ({ data ,setStatusCounts }) => {
    
       console.log("Length",a.length===0);
     setSelectedStatus(truth);
-    setMultipleRowData(a);
+    // setMultipleRowData(a);
   };
 
   return (
@@ -399,10 +387,7 @@ const LoopTable = ({ data ,setStatusCounts }) => {
 </DataGridBody>
 </DataGrid>
 </div>
-      {/* {selectedRowData && selectedRowData.status === "Todo" && <TodoDrawer data={selectedRowData} />}
-      {selectedRowData && selectedRowData.status === "RFQ" && <RFQDrawer data={selectedRowData}/>}
-      {selectedRowData && selectedRowData.status === "Compare" && <CompareDrawer data={selectedRowData}/>} */}
-
+     
 <div>
   {/* Render the corresponding drawer based on the status */}
   {selectedRowData && selectedRowData.status === "Todo" && (

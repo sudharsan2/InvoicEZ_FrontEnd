@@ -2,7 +2,7 @@
 
 
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   NavCategory,
@@ -12,7 +12,6 @@ import {
   NavDrawerFooter,
   NavDrawerHeader,
   NavDrawerHeaderNav,
-  NavDrawerProps,
   NavItem,
   NavSubItem,
   NavSubItemGroup,
@@ -30,7 +29,6 @@ import {
   HeartPulse20Regular,
   MegaphoneLoud20Filled,
   MegaphoneLoud20Regular,
-  NavigationFilled,
   NotePin20Filled,
   NotePin20Regular,
   People20Filled,
@@ -67,22 +65,16 @@ import {Apps28Regular} from "@fluentui/react-icons"
 import { PiTrolleyBold } from "react-icons/pi";
 import {
   Button,
-  Caption1Strong,
-  Label,
-  Radio,
-  RadioGroup,
   makeStyles,
   shorthands,
   tokens,
   useId,
   Tooltip,
 } from "@fluentui/react-components";
-import { CiSettings } from "react-icons/ci";
+
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { PiTrolleyFill } from "react-icons/pi";
-import { FaTruck } from "react-icons/fa";
-// import { toggleDrawerPosition } from "../Store/refreshSlice";
 import {toggleSecondaryDrawerPosition } from "../Store/refreshSlice";
 const useStyles = makeStyles({
   root: {
@@ -220,15 +212,14 @@ const NavDrawerDefaultLoop = (props) => {
 
   const styles = useStyles();
 
-  const labelId = useId("type-label");
+  
 
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
-  // const [value,setValue] = useState("");
-  // const [val,setVal] = useState("");
+  
   const drawer = useSelector((state)=>state.refresh.secondaryDrawerPosition);
   console.log("23456",drawer);
   const secondaryDrawerValue = localStorage.getItem("userSecondaryDrawerPosition") || "1";
@@ -255,7 +246,7 @@ const NavDrawerDefaultLoop = (props) => {
         const emailFromToken = decodedToken.email;
         const empIdFromToken = decodedToken.empId;
 
-        setEmail(emailFromToken);
+        // setEmail(emailFromToken);
         setEmpId(empIdFromToken);
       } catch (error) {
         console.error("Invalid token:", error);
@@ -774,22 +765,6 @@ const NavDrawerDefaultLoop = (props) => {
         className={styles.content}
         style={themestate ? { background: darktheme.contentpagedark } : {}}
       >
-        {/* <Button appearance="primary" onClick={() => setIsOpen(!isOpen)}>
-          {type === "inline" ? "Toggle" : "Open"}
-        </Button>
-
-        <div className={styles.field}>
-          <Label id={labelId}>Type</Label>
-          <RadioGroup
-            value={type}
-            onChange={(_, data) => setType(data.value)}
-            aria-labelledby={labelId}
-          >
-            <Radio value="overlay" label="Overlay (Default)" />
-            <Radio value="inline" label="Inline" />
-          </RadioGroup>
-        </div> */}
-        {/* {Children} */}
 
         {props.children}
       </div>
