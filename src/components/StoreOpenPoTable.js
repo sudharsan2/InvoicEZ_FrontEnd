@@ -872,16 +872,18 @@ const StoreOpenPoTable = () => {
 <div
   style={{
     marginTop: "30em", 
-    width:"30%",
-    marginRight:"4em"
+    width: "300px", // Use a fixed width instead of percentage
+    marginRight: "4em",
+    maxWidth: "100%", // Ensure it does not overflow on smaller screens
+    minWidth: "200px"  // Optional: Set a minimum width if needed
   }}
 >
-        <Search
-          placeholder="Search PO"
-          onSearchChange={handleSearchChange}
-          
-        />
-        </div>
+  <Search
+    placeholder="Search PO"
+    onSearchChange={handleSearchChange}
+  />
+</div>
+
        
       </div>
       <div

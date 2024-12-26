@@ -810,7 +810,7 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
               }}
             >
               <p>Potential PO</p>
-              <h2>{poheader.length}</h2>
+              <h2>{poheader ? poheader.length : 0}</h2>
             </div>
             <div
               style={{
@@ -1074,16 +1074,16 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
                   {invoiceData && (
                     <>
                       <div><b>PO Number:</b> {selectedInvoiceNumber}</div>
-                      <div><b>PO Type:</b> {dataitem.po_type}</div>
+                      <div><b>PO Type:</b> {dataitem ? dataitem.po_type : 'N/A'}</div>
                       <div><b>Supplier Name:</b> {invoiceData.invoice_info.VendorName}</div>
-                      <div><b>Site:</b> {dataitem.location}</div>
-                      <div><b>Status: </b>{dataitem.po_status}</div>
+                      <div><b>Site:</b> {dataitem ? dataitem.location : 'N/A'}</div>
+                      <div><b>Status: </b>{dataitem ? dataitem.po_status : 'N/A'}</div>
 
-                      <div><b>Total Amount:</b> {dataitem.total_amount}</div>
-                      <div><b>Buyer Name:</b> {dataitem.buyer_name}</div>
-                      <div><b>Invoice Detail:</b> {dataitem.invoice_detail}</div>
-                      <div><b>Shipping Address:</b> {dataitem.ship_to}</div>
-                      <div><b>Billing Address:</b> {dataitem.ship_to}</div>
+                      <div><b>Total Amount:</b> {dataitem ? dataitem.total_amount : 'N/A'}</div>
+                      <div><b>Buyer Name:</b> {dataitem ? dataitem.buyer_name : 'N/A'}</div>
+                      <div><b>Invoice Detail:</b> {dataitem ? dataitem.invoice_detail : 'N/A'}</div>
+                      <div><b>Shipping Address:</b> {dataitem ? dataitem.ship_to : 'N/A'}</div>
+                      <div><b>Billing Address:</b> {dataitem ? dataitem.ship_to : 'N/A'}</div>
                     </>
                   )}
                 </div>
