@@ -34,7 +34,7 @@ import { message } from "antd";
 import { notification } from "antd";
 import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 
-const path = "/storeopenpodet";
+const path = "/storeopenpo";
 const path2 = "/storeopenpodet";
 const path1 = "/storedashboard";
 
@@ -134,7 +134,7 @@ const StoreOpenPODetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
-  const { poNumber, Id ,po_type ,locations,totals,Status,po_items,Supplier,Buyer} = location.state || {};
+  const { poNumber, Id, po_type, locations, totals, Status, po_items, Supplier, Buyer } = location.state || {};
   // console.log("need", need_by);
   const [poDate, setPoDate] = useState();
   const [postatus, setPoStatus] = useState();
@@ -148,7 +148,7 @@ const StoreOpenPODetails = () => {
   const [invoicedate, setInvoiceDate] = useState();
   const [invoicetot, setInvoicetot] = useState();
   const [closedcode, setClosedCode] = useState();
-  const [entrytime, setentrytime] =useState();
+  const [entrytime, setentrytime] = useState();
   const [po_id, set_Po_id] = useState("");
 
   const [inv_id, setInv_id] = useState();
@@ -158,25 +158,25 @@ const StoreOpenPODetails = () => {
 
 
 
-  
+
 
   const approvePo = async () => {
     const url = `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${inv_id}`;
-  
+
     try {
-     
+
       const token = localStorage.getItem("access_token");
-  
+
       const response = await axios.post(
         url,
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-  
+
       if (response.status === 200) {
         message.success("Gate Entry successfully Updated");
         navigate(`/approve`);
@@ -190,20 +190,20 @@ const StoreOpenPODetails = () => {
       console.error("Error:", error);
     }
   };
-  
+
   const deleteInvoice = async () => {
     const url = `https://invoicezapi.focusrtech.com:57/user/delete-pos/${inv_id}`;
-  
+
     try {
-      
+
       const token = localStorage.getItem("access_token");
-  
+
       const response = await axios.delete(url, {
         headers: {
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (response.status === 204) {
         message.success("Revoked successfully");
         navigate(`/approve`);
@@ -213,7 +213,7 @@ const StoreOpenPODetails = () => {
       console.error("Error:", error);
     }
   };
-  
+
 
   const handlePostApi = async () => {
     console.log("Button clicked!");
@@ -237,20 +237,20 @@ const StoreOpenPODetails = () => {
 
     try {
       setLoad(true);
-      
-      
+
+
       const token = localStorage.getItem("access_token");
-    
+
       const response = await axios.post(
         "https://invoicezapi.focusrtech.com:57/user/po-number",
         payload,
         {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-    
+
       if (response.status === 201) {
         message.success("PO successfully Updated");
         setLoad(false);
@@ -351,7 +351,7 @@ const StoreOpenPODetails = () => {
 
   const handleSort = (column) => {
     if (sortedColumn === column) {
-     
+
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       // Set sorting direction to ascending if a new column is clicked
@@ -371,17 +371,17 @@ const StoreOpenPODetails = () => {
 
   const handleViewInvoice = async () => {
     try {
-      const token = localStorage.getItem("access_token"); 
+      const token = localStorage.getItem("access_token");
 
-        const response = await fetch(
-          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
-          {
-            method: "GET", 
-            headers: {
-              Authorization: `Bearer ${token}`, 
-            },
-          }
-        );
+      const response = await fetch(
+        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -404,20 +404,20 @@ const StoreOpenPODetails = () => {
   const needByDate = data?.[0]?.need_by_date;
    console.log("needByDate",needByDate);
 
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("access_token"); 
+        const token = localStorage.getItem("access_token");
 
-    const response = await axios.get(
-      `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-        },
-      }
-    );
+        const response = await axios.get(
+          `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const fetchedItems = response.data;
 
         setInv_id(fetchedItems.invoice_info.id);
@@ -430,7 +430,7 @@ const StoreOpenPODetails = () => {
           // console.log("IGST", item.Igst);
           // console.log("CGST", item.Cgst);
           // console.log("SGST", item.Sgst);
-        
+
           return {
             Igst: item.Igst,
             Cgst: item.Cgst,
@@ -438,14 +438,14 @@ const StoreOpenPODetails = () => {
             index: index, // Include the index to match with po_lineitems
           };
         });
-        
+
 
         const normalizedPoLineItems = fetchedItems.po_lineitems.map(
           (poItem, index) => {
             console.log("PO", poItem);
 
             const matchingInvoiceItems = fetchedItems.invoice_info.items;
-            
+
             const matchingInvoiceItem = invoice_items[index];
             const matchingQuantity = matchingInvoiceItems[index]
               ? matchingInvoiceItems[index].Quantity
@@ -460,13 +460,13 @@ const StoreOpenPODetails = () => {
               Igst: matchingInvoiceItem ? matchingInvoiceItem.Igst : null,
               Cgst: matchingInvoiceItem ? matchingInvoiceItem.Cgst : null,
               Sgst: matchingInvoiceItem ? matchingInvoiceItem.Sgst : null,
-              
+
             };
           },
         );
 
         // Log or process the combined data as needed
-        console.log("NORMAL",normalizedPoLineItems);
+        console.log("NORMAL", normalizedPoLineItems);
 
         // setData(normalizedPoLineItems);
         setTotal(fetchedItems.po_header.total_amount);
@@ -559,7 +559,7 @@ const StoreOpenPODetails = () => {
   const sortedData = Array.isArray(data) ? [...data].sort((a, b) => {
     if (!sortedColumn) return 0;
 
-    const aValue = a[sortedColumn] || "";  
+    const aValue = a[sortedColumn] || "";
     const bValue = b[sortedColumn] || "";
 
     const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
@@ -586,10 +586,10 @@ const StoreOpenPODetails = () => {
   }) : [];
 
 
-  
+
 
   return (
-    <div style={{ height: "88vh", overflowY: "auto" }}>
+    <div style={{ height: "88vh", overflowY: "auto", overflowX: "auto" }}>
       <div>
         <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
@@ -943,7 +943,7 @@ const StoreOpenPODetails = () => {
                       {purchaseOrder.poCurrency}
                     </div>
                   </div>
-                  
+
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
@@ -962,7 +962,7 @@ const StoreOpenPODetails = () => {
                     </div>
                   </div>
 
-                  
+
 
                   {/* <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
@@ -1158,7 +1158,7 @@ const StoreOpenPODetails = () => {
                       </TableHeaderCell>
                     </TableRow>
                   </TableHeader> */}
-{/* <TableHeader
+                  {/* <TableHeader
                     style={{
                       position: "sticky",
                       top: 0,
@@ -1173,16 +1173,16 @@ const StoreOpenPODetails = () => {
                   ></TableHeader> */}
 
 
-<TableHeader
- style={{
-  position: "sticky",
+                  <TableHeader
+                    style={{
+                      position: "sticky",
                       top: 0,
                       backgroundColor: themestate ? "#383838" : "white",
                       zIndex: 1,
                       color: themestate ? "white" : "black",
-                     
-}}
->
+
+                    }}
+                  >
 
                     <TableRow
                       style={
@@ -1197,7 +1197,7 @@ const StoreOpenPODetails = () => {
                       }}>
                       Item Name
                         {sortedColumn === "item_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("line_num")}
@@ -1208,7 +1208,7 @@ const StoreOpenPODetails = () => {
                       }}>
                       Line Number
                         {sortedColumn === "line_num" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("quantity")}style={{
@@ -1218,7 +1218,7 @@ const StoreOpenPODetails = () => {
                       }}>
                       Quantity
                         {sortedColumn === "quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("unit_price")}
@@ -1368,7 +1368,7 @@ const StoreOpenPODetails = () => {
                   </TableHeader>
 
 
-                  <TableBody style={themestate ? { color: "white" } : {}}>
+                  <TableBody style={themestate ? { color: "white" } : {  }}>
                     {sortedData.map((item) => (
                       <TableRow
                         key={item.id}
@@ -1379,13 +1379,13 @@ const StoreOpenPODetails = () => {
                       >
                         <TableCell
                           style={{
-                            maxWidth: "150px", 
+                            maxWidth: "150px",
                             // minWidth: "100px", 
-                            whiteSpace: "wrap", 
-                            overflow: "hidden", 
-                            textOverflow: "ellipsis", 
+                            whiteSpace: "wrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
                             padding: "8px 16px",
-                            boxSizing: "border-box", 
+                            boxSizing: "border-box",
                           }}
                         >
                           {item.item_name}

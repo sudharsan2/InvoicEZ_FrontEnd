@@ -520,27 +520,55 @@ const StoreOpenPoTable = () => {
   
   const handleSort = (columnId) => {
     let newSortDirection = "ascending";
-
+  
+    // Toggle sort direction if the same column is clicked
     if (sortState.columnId === columnId) {
       newSortDirection =
         sortState.sortDirection === "ascending" ? "descending" : "ascending";
     }
-
+  
     setSortState({ columnId, sortDirection: newSortDirection });
-    
-
+  
+    // Sort with handling for both numeric and string values
     const sortedItems = [...filteredItems].sort((a, b) => {
       const aValue = a[columnId];
       const bValue = b[columnId];
-
-      if (aValue < bValue) return newSortDirection === "ascending" ? -1 : 1;
-      if (aValue > bValue) return newSortDirection === "ascending" ? 1 : -1;
-      return 0;
+  
+      // Handle numeric values
+      const aNumeric = !isNaN(parseFloat(aValue)) ? parseFloat(aValue) : null;
+      const bNumeric = !isNaN(parseFloat(bValue)) ? parseFloat(bValue) : null;
+  
+      if (aNumeric !== null && bNumeric !== null) {
+        // Both values are numeric
+        return newSortDirection === "ascending"
+          ? aNumeric - bNumeric
+          : bNumeric - aNumeric;
+      }
+  
+      if (aNumeric !== null && bNumeric === null) {
+        // aValue is numeric, bValue is not
+        return newSortDirection === "ascending" ? -1 : 1;
+      }
+  
+      if (aNumeric === null && bNumeric !== null) {
+        // bValue is numeric, aValue is not
+        return newSortDirection === "ascending" ? 1 : -1;
+      }
+  
+      // Fallback to string comparison for non-numeric values
+      const aString = String(aValue || "").toLowerCase();
+      const bString = String(bValue || "").toLowerCase();
+  
+      return newSortDirection === "ascending"
+        ? aString.localeCompare(bString)
+        : bString.localeCompare(aString);
     });
-    console.log("SORTED",sortedItems);
-    
-    setFilteredItems(sortedItems); 
+  
+    console.log("SORTED", sortedItems);
+  
+    setFilteredItems(sortedItems);
   };
+  
 
 
   const filterData = () => {

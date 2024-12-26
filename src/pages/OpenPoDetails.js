@@ -34,7 +34,7 @@ import { message } from "antd";
 import { notification } from "antd";
 import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 
-const path = "/openpodet";
+const path = "/openpo";
 const path2 = "/openpodet";
 const path1 = "/dashboard";
 
