@@ -235,35 +235,7 @@ const SummaryTable = ({
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
   };
-  // const handleSearchChange = (value) => {
-  //   setSearchQuery(value);
-  // };
-  // // console.log("--------->",filteredItems)
-
-  // const filteredItems = items.filter((item) => {
-  //   const searchLower = searchQuery?.trim().toLowerCase() || "";
-
-  //   // if (
-  //   //   searchLower === "multiple match" ||
-  //   //   searchLower === "match found" ||
-  //   //   searchLower === "no match"
-  //   // ) {
-  //   //   return item.Status?.toString().toLowerCase() === "match found";
-  //   // }
-
-  //   return (
-  //     item.id?.toString().toLowerCase().includes(searchLower) ||
-  //     item.supplier?.toString().toLowerCase().includes(searchLower) ||
-  //     item.amount?.toString().toLowerCase().includes(searchLower) ||
-  //     item.Status?.toString().toLowerCase().includes(searchLower) ||
-  //     item.buyer?.toLowerCase().includes(searchLower)||
-  //     item.Store?.toLowerCase().includes(searchLower)
-  //   );
-    
-
-  // });
-
-
+  
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
@@ -300,16 +272,7 @@ const SummaryTable = ({
 
 
   
-  // console.log("Filtered ", filteredItems);
-
-  // const handleRowClick = (e, item) => {
-  //   if (e.target.type !== "checkbox") {
-  //     navigate(`/storedetails`, {
-  //       state: { poNumber: item.po_number, Id: item.Id },
-  //     });
-  //     console.log("ItemId", item.Id);
-  //   }
-  // };
+ 
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
@@ -357,11 +320,7 @@ const SummaryTable = ({
         .map((item) => item.supplier_name)
         .join(", ");
 
-      // const deletePromises = selectedItemsArray.map((item) =>
-      //   axios.delete(
-      //     `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].id}`,
-      //   ),
-      // );
+      
       const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(

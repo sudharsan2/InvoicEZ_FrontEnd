@@ -1,13 +1,10 @@
-// import { useState } from "react";
-// import React from "react";
+
 import { message } from "antd";
-import { OverlayTrigger } from "react-bootstrap";
-import { TableContainer, TableHead, TableSortLabel, Paper } from '@mui/material';
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+import { ArrowSortUpFilled, ArrowSortDownRegular ,ArrowDownload28Regular} from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
-  Link,
+ 
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
@@ -17,27 +14,25 @@ import {
   Table,
   TableCell,
   TableHeader,
-  TableSelectionCell,
+  
   TableRow,
   TableBody,
   TableHeaderCell,
   createTableColumn,
   useTableFeatures,
   useTableSort,
+  tokens,
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 
 import AiNav from "../components/ainavbar";
-import { SettingOutlined } from "@ant-design/icons";
-import { ArrowDownload28Regular } from "@fluentui/react-icons";
-import { useLocation } from "react-router-dom";
-import { tokens, Divider } from "@fluentui/react-components";
+
 import CreatableSelect from "react-select/creatable";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
-import { PopoverSurface, PopoverTrigger } from "@fluentui/react-components";
+
 import axios from "axios";
 import { Popover } from "@mui/material";
 import { toggleDrawerPosition } from "../Store/refreshSlice";
@@ -82,8 +77,8 @@ const useStyles = makeStyles({
     padding: "20px",
   },
   content1: {
-    display: "flex", // Arrange items in a row
-    flexWrap: "wrap", // Allow items to wrap to the next line if necessary
+    display: "flex", 
+    flexWrap: "wrap", 
     overflowY: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
@@ -151,13 +146,9 @@ const AIDetailPage = () => {
   const [sortDirection, setSortDirection] = useState('asc');
   
 
-  const [colourOptions, setColourOptions] = useState([
-    { value: "1009", label: "1009" },
-    { value: "1010", label: "1010" },
-    { value: "1011", label: "1011" },
-    { value: "1012", label: "1012" },
-    { value: "1013", label: "1013" },
-  ]);
+  
+
+
 
   const [PONumberOPtions, setPONumberOPtions] = useState([
     { value: "1009", label: "1009" },
@@ -168,11 +159,7 @@ const AIDetailPage = () => {
   ]);
 
   const [selectedOption, setSelectedOption] = useState(null);
-  // const handleCreate = (inputValue) => {
-  //   const newOption = { value: inputValue, label: inputValue };
-  //   setColourOptions((prevOptions) => [...prevOptions, newOption]);
-  //   setSelectedOption(newOption);
-  // };
+ 
 
   const styles = useStyles();
   const themestate = false;
@@ -407,7 +394,7 @@ const AIDetailPage = () => {
 
         setDataItem(fetchedItem.po_headers[0]);
 
-        setColourOptions();
+      
       } catch (error) {
         console.error("Error fetching invoice data", error);
       }
@@ -439,7 +426,7 @@ const AIDetailPage = () => {
   ];
 
   const inv_id = invoiceData.invoice_info.id;
-  // const inv_id = invoiceData.InvoiceId;
+ 
 
   const formatAddress = (address) => {
     if (!address) return "N/A";
@@ -652,7 +639,7 @@ const AIDetailPage = () => {
 
 
 
-// console.log("SORTED",dataitem.po_items);
+
 
 const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
   ? [...dataitem.po_items].sort((a, b) => {

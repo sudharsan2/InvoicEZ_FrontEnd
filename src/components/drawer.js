@@ -80,7 +80,7 @@ import {
   makeStyles,
   shorthands,
   tokens,
-  useId,
+  
   Tooltip,
 
 } from "@fluentui/react-components";
@@ -276,7 +276,7 @@ const NavDrawerDefault = (props) => {
     if (storedUsername) {
       setUsername(storedUsername);
     }
-    // localStorage.setItem("userDrawerPosition", "1");
+    
   }, []);
 
   useEffect(() => {
@@ -286,7 +286,7 @@ const NavDrawerDefault = (props) => {
       try {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
-        const emailFromToken = decodedToken.email;
+        
         const empIdFromToken = decodedToken.empId;
 
        
@@ -305,7 +305,7 @@ const NavDrawerDefault = (props) => {
         // defaultSelectedCategoryValue="3"
 
         open={isOpen}
-        type={type}
+        type="inline"
         onOpenChange={(_, { open }) => setIsOpen(open)}
         size="small"
         className={useStyles.navdrawer}
@@ -917,63 +917,7 @@ const NavDrawerDefault = (props) => {
               </NavItem>
             </div>
             
-            {/* <div style={{ width: "100%" }}>
-              <div
-                style={
-                  themestate
-                    ? { marginTop: "2px", color: darktheme.fontcolordark }
-                    : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                }
-              >
-                <NavCategory value="6">
-                  <NavCategoryItem
-                    target="_blank"
-                    icon={
-                      <PersonStarRegular
-                        style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
-                        }
-                      />
-                    }
-                    // onClick={someClickHandler}
-                    value="3"
-                    className={
-                      themestate ? styles.navItemdark : styles.navItemlight
-                    }
-                    style={{ marginTop: "10px", fontSize: "17px" }}
-                    onClick={() => {
-                      setValue("3");
-                    }}
-                  >
-                    Issue
-                  </NavCategoryItem>
-                  <NavSubItemGroup>
-                    <NavSubItem
-                      value="4"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/ai");
-                        setValue("4");
-                      }}
-                    >
-                      AI Identified
-                    </NavSubItem>
-                    <NavSubItem
-                      value="5"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/issuefix");
-                        setValue("5");
-                      }}
-                    >
-                      Fix
-                    </NavSubItem>
-                  </NavSubItemGroup>
-                </NavCategory>
-              </div>
-            </div> */}
+            
 
             
           </NavDrawerBody>
@@ -1039,23 +983,7 @@ const NavDrawerDefault = (props) => {
         className={styles.content}
         style={themestate ? { background: darktheme.contentpagedark } : {}}
       >
-        {/* <Button appearance="primary" onClick={() => setIsOpen(!isOpen)}>
-          {type === "inline" ? "Toggle" : "Open"}
-        </Button>
-
-        <div className={styles.field}>
-          <Label id={labelId}>Type</Label>
-          <RadioGroup
-            value={type}
-            onChange={(_, data) => setType(data.value)}
-            aria-labelledby={labelId}
-          >
-            <Radio value="overlay" label="Overlay (Default)" />
-            <Radio value="inline" label="Inline" />
-          </RadioGroup>
-        </div> */}
-        {/* {Children} */}
-
+        
         {props.children}
       </div>
     </div>

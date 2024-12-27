@@ -76,6 +76,8 @@ const ExampleContent = () => {
       setUsername(storedUsername);
     }
   }, []);
+
+  
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     console.log(typeof token);
@@ -264,198 +266,9 @@ const CustomLayout = ({ children }) => {
   const [data, setData] = useState([]);
 
 
-  // const fetchData = async (showMessage = false) => {
-  //   if (showMessage) {
-  //     message.success("Refreshing...");
-  //   }
-  //   try {
-  //     // const response = await axios.get(
-  //     //   "https://invoicezapi.focusrtech.com:57/user/grn-history",
-  //     // );
-  //     const token = localStorage.getItem("access_token");
-  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     const fetchedItems = response.data;
-  //     console.log("fetchedItems", fetchedItems);
-  //     // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+  
 
-  //     const mappedItems = fetchedItems.map((item, index) => {
-  //       // Map over po_headers to get all po_numbers
-
-  //       return {
-  //         Id: item.InvoiceId,
-  //         grn_num: item.gate_entry_no,
-  //         location: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].ship_to : null,
-  //         supplier_name: item.VendorName,
-  //       };
-  //     });
-
-  //     setItems(mappedItems);
-  //     console.log("FETCHED", mappedItems)
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-
-  // const GetData = async (showMessage = false) => {
-  //   if (showMessage) {
-  //     message.success("Refreshing...");
-  //   }
-  //   try {
-  //     // const response = await axios.get(
-  //     //   "https://invoicezapi.focusrtech.com:57/user/grn-history",
-  //     // );
-  //     const token = localStorage.getItem("access_token");
-  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/unread-documents", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         // Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     const fetchedItems = response.data;
-  //     console.log("fetchedItems...", fetchedItems);
-  //     // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-
-  //     const mappedItems = fetchedItems.map((item, index) => {
-  //       let Status = "";
-
-  //       if (item.invoiceInfo.po_headers.length === 0) {
-  //         Status = "No Match Found";
-
-  //       } else if (item.invoiceInfo.po_headers.length === 1) {
-  //         Status = "Match Found";
-
-  //       } else if (item.invoiceInfo.po_headers.length > 1) {
-  //         Status = "Multiple Match Found";
-
-  //       }
-
-  //       return {
-  //         Id: item.invoiceInfo.InvoiceId,
-  //         supplier_name: item.invoiceInfo.VendorName,
-  //         Status: Status,
-
-
-  //       };
-  //     });
-
-  //     setData(mappedItems);
-  //     console.log("FETCHED", mappedItems)
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  //   GetData();
-  // }, []);
-
-  // const fetchData = async (showMessage = false) => {
-  //   if (showMessage) {
-  //     message.success("Refreshing...");
-  //   }
-  //   try {
-  //     const token = localStorage.getItem("access_token");
-  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     const fetchedItems = response.data;
-
-  //     const mappedItems = fetchedItems.map((item, index) => {
-  //       return {
-  //         Id: item.InvoiceId,
-  //         grn_num: item.gate_entry_no,
-  //         location: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].ship_to : null,
-  //         supplier_name: item.VendorName,
-  //       };
-  //     });
-
-  //     setData(mappedItems);  // Update the table data
-  //     console.log("FETCHED", mappedItems);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // // Function to fetch the unread documents for the notifications
-  // const GetData = async (showMessage = false) => {
-  //   if (showMessage) {
-  //     message.success("Refreshing...");
-  //   }
-  //   try {
-  //     const token = localStorage.getItem("access_token");
-  //     const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/unread-documents", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-
-  //     const fetchedItems = response.data;
-
-  //     const mappedItems = fetchedItems.map((item, index) => {
-  //       let Status = "";
-
-  //       if (item.invoiceInfo.po_headers.length === 0) {
-  //         Status = "No Match Found";
-  //       } else if (item.invoiceInfo.po_headers.length === 1) {
-  //         Status = "Match Found";
-  //       } else if (item.invoiceInfo.po_headers.length > 1) {
-  //         Status = "Multiple Match Found";
-  //       }
-
-  //       return {
-  //         Id: item.invoiceInfo.InvoiceId,
-  //         supplier_name: item.invoiceInfo.VendorName,
-  //         Status: Status,
-  //       };
-  //     });
-
-  //     setData(mappedItems);  // Update the notifications data
-  //     console.log("FETCHED", mappedItems);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // // Handle the clear button functionality
-  // const handleClearButtonClick = (e) => {
-  //   e.stopPropagation();  // Prevent the click event from bubbling up and closing the card
-  //   setData([]);  // Clear the data
-  //   localStorage.setItem('dataCleared', 'true');  // Store the cleared state in localStorage
-  // };
-
-  // // Check if the data is cleared from localStorage on page load
-  // useEffect(() => {
-  //   const isDataCleared = localStorage.getItem('dataCleared');
-  //   if (isDataCleared === 'true') {
-  //     // If the data was cleared, prevent fetching the data
-  //     setData([]);  // Ensure data is still cleared even on page refresh
-  //   } else {
-  //     fetchData();  // Fetch data if it's not cleared
-  //   }
-  // }, []);
-
-
-
-  // const toggleCard = () => {
-  //   setIsCardOpen((prevState) => !prevState);
-  //   fetchData();
-  //   GetData();
-  // }
+  
 
 
   const fetchData = async (showMessage = false) => {
@@ -568,14 +381,7 @@ const CustomLayout = ({ children }) => {
  
   };
 
-  // useEffect(() => {
-  //   const isDataCleared = localStorage.getItem('dataCleared');
-  //   if (isDataCleared === 'true') {
-  //     setData([]); 
-  //   } else {
-  //     fetchData();
-  //   }
-  // }, []);
+  
 
 
   const toggleCard = () => {
@@ -664,11 +470,7 @@ const CustomLayout = ({ children }) => {
 
   
 
-  // const handleIsWalkinUpload = () => {
-  //   console.log("yes it works");
-  //   setIsWalkinUpload(true);
-  //   setNewCandidate(false);
-  // };
+  
   const handleNewCandidate = () => {
     setNewCandidate(false);
   };
@@ -882,22 +684,28 @@ const CustomLayout = ({ children }) => {
                             >
                               {row.supplier_name}
                             </td>
+                            
                             <td
-                              style={{
-                                padding: "2px 2px",
-                                borderBottom: "1px solid #ddd",
-                                color: "#fff",
-                                fontSize: "12px",
-                                textAlign: "left",
-                                backgroundColor:
-                                  row.Status === "Match Found" ? "#107c10" :
-                                    row.Status === "Multiple Match Found" ? "#107c10" :
-                                      row.Status === "No Match Found" ? "#c50f1f" :
-                                        "transparent",
-                              }}
-                            >
-                              {row.Status}
-                            </td>
+                                            style={{
+                                              padding: "2px 2px",
+                                              borderBottom: "1px solid #ddd",
+                                              color: "#fff",
+                                              fontSize: "12px",
+                                              textAlign: "left",
+                                              backgroundColor: (() => {
+                                                if (row.Status === "Match Found" || row.Status === "Multiple Match Found") {
+                                                  return "#107c10";
+                                                } else if (row.Status === "No Match Found") {
+                                                  return "#c50f1f";
+                                                } else {
+                                                  return "transparent";
+                                                }
+                                              })(),  
+                                            }}
+                                          >
+                                            {row.Status}
+                                          </td>
+
 
                             <td
                               style={{

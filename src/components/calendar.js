@@ -14,10 +14,7 @@ const CalendarComponent = () => {
   useEffect(() => {
     const fetchPurchaseOrders = async () => {
       try {
-        // const response = await fetch(
-        //   "https://invoicezapi.focusrtech.com:57/user/no-invoice-list",
-        // );
-
+       
         const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/no-invoice-list", {
         method: "GET",

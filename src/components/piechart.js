@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
 // Define colors for pie chart slices
