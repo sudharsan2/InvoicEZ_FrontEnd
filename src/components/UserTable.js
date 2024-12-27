@@ -231,9 +231,7 @@ const togglePasswordVisibility = () => {
   // Fetch data from the API when the component mounts
   const fetchData = async () => {
     try {
-      // const response = await axios.get(
-      //   "https://invoicezapi.focusrtech.com:57/user/user-list",
-      // );
+      
       const token = localStorage.getItem("access_token"); 
 
       const response = await axios.get(
@@ -273,7 +271,7 @@ const togglePasswordVisibility = () => {
         return {
             Id: item.id,
             username: item.username,
-            // role: item.role,
+            
             email: item.email,
             empId: item.empId,
             role:role,
@@ -316,14 +314,7 @@ const togglePasswordVisibility = () => {
     );
   });
 
-  // const handleRowClick = (e, item) => {
-  //   if (e.target.type !== "checkbox") {
-  //     navigate(``, {
-  //       state: { poNumber: item.po_number, Id: item.Id },
-  //     });
-  //     console.log("ItemId", item.Id);
-  //   }
-  // };
+ 
 
   const handleSelectionChange = (event, data) => {
     console.log("handleSelectionChange", data.selectedItems);
@@ -339,10 +330,7 @@ const togglePasswordVisibility = () => {
   const handleSave = async () => {
     try {
       
-      // const updatedData = {
-      //   ...selectedRow, 
-        
-      // };
+    
 
       const roleMapping = {
         "Invoice Manager": 1,
@@ -738,22 +726,7 @@ const togglePasswordVisibility = () => {
 )}
 
 
-        {/* <button
-          style={{
-            display: "flex",
-            alignItems: "center",
-            backgroundColor: "transparent",
-            border: "1px solid #fff",
-            padding: "6px 12px",
-            cursor: "pointer",
-            gap: "8px",
-            marginLeft: "2em",
-          }}
-          onClick={handleApproveSelectedRows}
-        >
-          <TasksApp28Regular style={{ color: "#1281d7" }} />
-          <span>Approve</span>
-        </button> */}
+        
 
         <button
           style={{

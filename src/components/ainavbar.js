@@ -77,7 +77,7 @@ const AiNav = ({ onPoNumberClick }) => {
   const { invoiceNumber } = location2.state || {};
   console.log("AI", invoiceNumber);
   const fetchInvoiceDetails = async () => {
-    // const invoiceNumber = "110"; // Replace with dynamic invoice number if available
+   
     try {
       const token = localStorage.getItem("access_token");
 
@@ -118,7 +118,7 @@ const AiNav = ({ onPoNumberClick }) => {
       </Tooltip>
     );
   };
-  //  console.log("Number",number);
+  
   return (
     <div className={styles.root}>
       <NavDrawer
