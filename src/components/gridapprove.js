@@ -108,11 +108,11 @@
 // export default TagCounters;
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+
 const TagCounters = ({ type }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-
+   console.log(loading)
   const containerStyle = {
     width: "100%",
     display: "flex",

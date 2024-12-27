@@ -8,8 +8,9 @@ import {
   DataGridCell,
   TableCellLayout,
   createTableColumn,
+  makeStyles
 } from "@fluentui/react-components";
-import { makeStyles, TabList, Tab } from "@fluentui/react-components";
+
 
 const useStyles = makeStyles({
     statusBullet: {

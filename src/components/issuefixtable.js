@@ -1,9 +1,9 @@
 import * as React from "react";
 import {
   ArrowClockwise24Regular,
-  Delete24Regular,
+  Delete24Regular,ArrowSortUpFilled, ArrowSortDownRegular
 } from "@fluentui/react-icons";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -67,12 +67,12 @@ const IssuefixTable = ({ height, setTableLength }) => {
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [rowselect,setRowSelect]=useState(true);
   const navigate = useNavigate();
-  const [refreshKey, setRefreshKey] = useState(0);
+ 
   const getNumberOfLines = (invoice) => {
     return invoice.items ? invoice.items.length : 0;
   };
-  const [invid, setInvId] = useState("");
-
+ 
+  console.log(rowselect)
   const dispatch = useDispatch();
 
   const isInvoiceUploadRefreshed = useSelector(
@@ -309,19 +309,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
   };
 
 
-  const handleUnSelectionChange = (event, data) => {
-    const newSelectedRows = new Set(selectedRows); // Create a copy of the selected rows
-    data.selectedItems.forEach((item) => {
-      // if (item) {
-      //   // Ensure invid is defined
-      newSelectedRows.add(item); // Store item.invid instead of item.invoiceNo
-      // } else {
-      //   console.warn("Selected item does not have an invid:", item);
-      console.log(item);
-    });
-    setSelectedRows(newSelectedRows); // Update state
-    // console.log("Selected IDs:", Array.from(newSelectedRows)); // Log selected IDs for debugging
-  };
+  
 
   const [filtered, setFilteredItems] = useState([]);
   useEffect(() => {

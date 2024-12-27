@@ -411,15 +411,15 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import Search from "./Search"; // Assuming your search component is imported here
-import { Button, notification } from "antd"; // Import Ant Design components
+import Search from "./Search"; 
+import {  notification,message } from "antd"; 
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-import {message} from "antd";
-import { ShareIos24Filled } from "@fluentui/react-icons";
+
+
 import { Modal } from "antd";
 import WalkInCandidate from "./WalkinCandidate";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+import { ArrowSortUpFilled, ArrowSortDownRegular,ShareIos24Filled } from "@fluentui/react-icons";
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({
@@ -432,11 +432,7 @@ const columns = [
     renderHeaderCell: () => "Supplier name ",
     renderCell: (item) => <TableCellLayout>{item.supplier}</TableCellLayout>,
   }),
-  // createTableColumn({
-  //   columnId: "po_status",
-  //   renderHeaderCell: () => "Status",
-  //   renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
-  // }),
+  
 
   createTableColumn({
     columnId: "Status",
@@ -522,9 +518,9 @@ const SummaryTable = ({
   setGateLength,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [items, setItems] = useState([]); // State to hold API data
+  const [items, setItems] = useState([]); 
   const [selectedRows, setSelectedRows] = useState(new Set());
-  const [po_id, set_Po_id] = useState("");
+  
   const [isWalkinUpload, setIsWalkinUpload] = useState(false);
   const [newCandidate, setNewCandidate] = useState(false);
   const [filtered, setFilteredItems] = useState([]);
@@ -540,8 +536,9 @@ const SummaryTable = ({
   );
 
   const [RefreshUpload, SetRefreshUpload] = useState(null);
+  console.log(RefreshUpload);
+ 
 
-  const [DeleteRefresh, SetDeleteRefresh] = useState(false);
   // let tableLength=fetchedItems.length;
   // Fetch data from the API when the component mounts
   const fetchData = async (showMessage = false) => {
@@ -561,8 +558,7 @@ const SummaryTable = ({
       console.log("fetchedItems Summary", fetchedItems);
       const tablelength = fetchedItems.length;
       console.log("Table length", tablelength);
-      let Status = "";
-
+     
       let MatchCount = 0;
       let multiple_MatchCount = 0;
       let fixCount = 0;

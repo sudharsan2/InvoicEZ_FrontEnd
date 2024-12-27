@@ -4,9 +4,9 @@ import axios from "axios";
 import {
   ArrowClockwise24Regular,
   Delete24Regular,
-  TasksApp28Regular,
+  ArrowSortUpFilled, ArrowSortDownRegular
 } from "@fluentui/react-icons";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -19,11 +19,11 @@ import {
   createTableColumn,
 } from "@fluentui/react-components";
 import Search from "./Search"; // Assuming your search component is imported here
-import { Button, notification } from "antd"; // Import Ant Design components
+import {message,  notification } from "antd"; // Import Ant Design components
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-import {message} from "antd";
-// Define columns for the DataGrid
+
+
 const columns = [
   createTableColumn({
     columnId: "po_number",
@@ -95,7 +95,7 @@ const TableApprove = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
+  
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
@@ -106,7 +106,8 @@ const TableApprove = () => {
 
 
  
-  
+  console.log(RefreshUpload)
+  console.log(DeleteRefresh)
  
 
   // Fetch data from the API when the component mounts
@@ -163,28 +164,7 @@ const TableApprove = () => {
     fetchData();
   }, [isInvoiceUploadRefreshed]);
 
-  // const handleSearchChange = (value) => {
-  //   setSearchQuery(value);
-  // };
-  // // console.log("--------->",filteredItems)
-  // const filteredItems = items.filter((item) => {
-  //   const searchLower = searchQuery?.trim().toLowerCase() || "";
-
-  //   return (
-  //     item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
-  //     item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
-  //     item.po_number?.toString().toLowerCase().includes(searchLower) ||
-  //     item.po_type?.toLowerCase().includes(searchLower) ||
-  //     item.po_status?.toLowerCase().includes(searchLower) ||
-  //     item.supplier_name?.toLowerCase().includes(searchLower) ||
-  //     item.location?.toLowerCase().includes(searchLower) ||
-  //     item.ship_to?.toLowerCase().includes(searchLower) ||
-  //     item.bill_to?.toLowerCase().includes(searchLower) ||
-  //     item.buyer_name?.toLowerCase().includes(searchLower) ||
-  //     item.total_amount?.toString().toLowerCase().includes(searchLower) ||
-  //     item.status?.toLowerCase().includes(searchLower)
-  //   );
-  // }).sort((a, b) => a.po_number.localeCompare(b.po_number));
+ 
 
 
 
@@ -268,11 +248,7 @@ const TableApprove = () => {
         .map((item) => item.supplier_name)
         .join(", ");
 
-      // const deletePromises = selectedItemsArray.map((item) =>
-      //   axios.delete(
-      //     `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
-      //   ),
-      // );
+      
       const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
@@ -315,48 +291,7 @@ const TableApprove = () => {
   };
 
   
-  // Approve API
-  const handleApproveSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
-    if (selectedItemsArray.length === 0) {
-      notification.warning({
-        message: "No PO Selected",
-        description: "Please select at least one PO to Approve.",
-      });
-      return;
-    }
-
-    try {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-
-      // Make API call to delete selected POs
-      await Promise.all(
-        selectedItemsArray.map((item) =>
-          axios.post(`https://invoicezapi.focusrtech.com:57/user/oracle-payload/${po_id}`),
-        ),
-      );
-
-      // Remove deleted items from the state
-      setItems(items.filter((item) => !selectedItemsArray.includes(item)));
-
-      // Show success notification
-      notification.success({
-        message: "Successfully Approved",
-        description: `You have successfully approved: ${supplierNames}`,
-      });
-      dispatch(refreshActions.toggleInvoiceUploadRefresh());
-    } catch (error) {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-      notification.error({
-        message: "Approval Failed",
-        description: `Approval Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
-      });
-    }
-  };
+  
   const [filtered, setFilteredItems] = useState([]);
   useEffect(() => {
     setFilteredItems(items); 
@@ -415,29 +350,13 @@ const TableApprove = () => {
           }}
           onMouseEnter={() => setIsRefresh(true)} 
           onMouseLeave={() => setIsRefresh(false)} 
-          onClick={handleDeleteSelectedRows} // Call delete function
+          onClick={handleDeleteSelectedRows} 
         >
           <Delete24Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
         </button>
 
-        {/* <button
-          style={{
-            display: "flex",
-            alignItems: "center",
-            backgroundColor: "transparent",
-            border: "1px solid #fff",
-            padding: "6px 12px",
-            cursor: "pointer",
-            gap: "8px",
-            marginLeft: "2em",
-          }}
-          onClick={handleApproveSelectedRows}
-        >
-          <TasksApp28Regular style={{ color: "#1281d7" }} />
-          <span>Approve</span>
-        </button> */}
-
+        
         <button
           style={{
             display: "flex",

@@ -12,13 +12,12 @@ import {
   DataGridCell,
   TableCellLayout,
   createTableColumn,
-  makeStyles, useId, Input, Label 
+  makeStyles, Input, 
 } from "@fluentui/react-components";
 
 import Search from "./Search"; 
-import { Button, notification ,message} from "antd"; 
+import { Button,message} from "antd"; 
 import { useDispatch, useSelector } from "react-redux";
-import { refreshActions } from "../Store/Store";
 import CreatableSelect from "react-select/creatable";
 // Define columns for the DataGrid
 const columns = [
@@ -168,15 +167,13 @@ const OpenPoTable = () => {
   
   console.log("SELECTED",selectedShipTo)
 
-  const dispatch = useDispatch();
-  const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
+  
+ 
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
 
-  const [RefreshUpload, SetRefreshUpload] = useState(null);
-
-  const [DeleteRefresh, SetDeleteRefresh] = useState(false);
+  
 
 
  
@@ -262,9 +259,7 @@ const OpenPoTable = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    SetRefreshUpload(isInvoiceUploadRefreshed);
-  }, []);
+  
 
   useEffect(() => {
     console.log("Refreshed!!!");
@@ -385,9 +380,7 @@ const OpenPoTable = () => {
     setSelectedRows(data.selectedItems);
   };
 
-  const handleRefreshClick = () => {
-    fetchData(true); // Pass `true` to show the message when button is clicked
-  };
+  
 
   
 
@@ -406,7 +399,7 @@ const OpenPoTable = () => {
   const handleSort = (columnId) => {
     let newSortDirection = "ascending";
   
-    // Toggle sort direction if the same column is clicked
+    
     if (sortState.columnId === columnId) {
       newSortDirection =
         sortState.sortDirection === "ascending" ? "descending" : "ascending";
@@ -414,33 +407,33 @@ const OpenPoTable = () => {
   
     setSortState({ columnId, sortDirection: newSortDirection });
   
-    // Sort with handling for both numeric and string values
+    
     const sortedItems = [...filteredItems].sort((a, b) => {
       const aValue = a[columnId];
       const bValue = b[columnId];
   
-      // Handle numeric values
+      
       const aNumeric = !isNaN(parseFloat(aValue)) ? parseFloat(aValue) : null;
       const bNumeric = !isNaN(parseFloat(bValue)) ? parseFloat(bValue) : null;
   
       if (aNumeric !== null && bNumeric !== null) {
-        // Both values are numeric
+       
         return newSortDirection === "ascending"
           ? aNumeric - bNumeric
           : bNumeric - aNumeric;
       }
   
       if (aNumeric !== null && bNumeric === null) {
-        // aValue is numeric, bValue is not
+        
         return newSortDirection === "ascending" ? -1 : 1;
       }
   
       if (aNumeric === null && bNumeric !== null) {
-        // bValue is numeric, aValue is not
+        
         return newSortDirection === "ascending" ? 1 : -1;
       }
   
-      // Fallback to string comparison for non-numeric values
+      
       const aString = String(aValue || "").toLowerCase();
       const bString = String(bValue || "").toLowerCase();
   

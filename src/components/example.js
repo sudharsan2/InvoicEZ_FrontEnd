@@ -1,5 +1,5 @@
 import React from "react";
-import { DrawerProps } from "@fluentui/react-components";
+
 import {
   Hamburger,
   NavCategory,
@@ -7,7 +7,7 @@ import {
   NavDrawer,
   NavDrawerBody,
   NavDrawerHeader,
-  NavDrawerProps,
+ 
   NavItem,
   NavSectionHeader,
   NavSubItem,

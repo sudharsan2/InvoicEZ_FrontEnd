@@ -2,12 +2,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  ArrowClockwise24Regular,
-  Delete24Regular,
-  TasksApp28Regular,
-  DismissRegular,
+  DismissRegular, ArrowSortUpFilled, ArrowSortDownRegular
 } from "@fluentui/react-icons";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -17,11 +13,11 @@ import {
   DataGridHeaderCell,
   DataGridCell,
   TableCellLayout,
-  createTableColumn,
+  createTableColumn,makeStyles, Input,
 } from "@fluentui/react-components";
-import { makeStyles, useId, Input, Label } from "@fluentui/react-components";
-import Search from "./Search"; // Assuming your search component is imported here
-import { Button, notification } from "antd"; // Import Ant Design components
+
+import Search from "./Search"; 
+import { Button, notification } from "antd"; 
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
 import {message} from "antd";
@@ -106,18 +102,18 @@ const useStyles = makeStyles({
   },
 });
 const StoreOpenPoTable = () => {
-  const [isHovered, setIsHovered] = useState(false);
+  
   const [Hovered2,setIsHovered2] = useState(false);
-  const [isrefresh, setIsRefresh] = useState(false);
+ 
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [po_id, set_Po_id] = useState("");
   
   const [selectedOption,setSelectedOption] = useState(null);
-  // const [selectedPOStatus, setSelectedPOStatus] = useState(null);
-  const navigate = useNavigate();
   
+  const navigate = useNavigate();
+  console.log(selectedOption);
 
   const styles = useStyles();
   const [poNumber, setPoNumber] = useState("");
@@ -125,31 +121,26 @@ const StoreOpenPoTable = () => {
   const [SelectedPOTypeOptions,setSelectedPOTypeOptions] = useState([]);
   const [selectedSupplierOptions, setSelectedSupplierNameOptions] = useState([]);
   const [selectedShipToOptions, setSelectedShipToOptions] = useState([]);
-  const [selectedBillToOptions, setSelectedBillToOptions] = useState([]);
+  
   const [selectedBuyerNameOptions, setSelectedBuyerNameOptions] = useState([]);
   const [selectedPOStatus, setSelectedPOStatus] = useState(null);
   const [selectedPOType, setSelectedPOType] = useState(null);
   const [selectedSupplierName, setSelectedSupplierName] = useState(null);
   const [selectedShipTo, setSelectedShipTo] = useState(null);
-  const [selectedBillTo, setSelectedBillTo] = useState(null);
+  
   const [selectedBuyerName, setSelectedBuyerName] = useState(null);
   const [selectedTotalAmount, setSelectedTotalAmount] = useState("");
   const [selectedPOHeaderID, setSelectedPOHeaderID] = useState("");
   const [selectedVendorID, setSelectedVendorID] = useState("");
   const [selectedVendorSiteID, setSelectedVendorSiteID] = useState("");
   const [selectedVendorNumber, setSelectedVendorNumber] = useState("");
-  const [PONumberOPtions,setPONumberOPtions]=useState("");
-    const handleCreate = (inputValue) => {
-        const newOption = { value: inputValue, label: inputValue };
+  
     
-        setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
-        setSelectedOption(newOption); 
-      };
       // INPUT FIELD
-      const handlePoNumberChange = (e) => setPoNumber(e.target.value);
+  const handlePoNumberChange = (e) => setPoNumber(e.target.value);
   const handleTotalChange = (e) => setSelectedTotalAmount(e.target.value);
   const handlePoHeaderChange = (e) => setSelectedPOHeaderID(e.target.value);
-  const handleVendorIdChange = (e) => setSelectedVendorID(e.target.value);
+ 
   const handleVendorSiteChange = (e) => setSelectedVendorSiteID(e.target.value);
   const handleVendorNumber = (e) => setSelectedVendorNumber(e.target.value);
 
@@ -158,7 +149,7 @@ const StoreOpenPoTable = () => {
     setSelectedPOType(null);
     setSelectedSupplierName(null);
     setSelectedShipTo(null);
-    setSelectedBillTo(null);
+   
     setSelectedBuyerName(null);
     setSelectedVendorNumber("");
     setSelectedVendorSiteID("");
@@ -174,7 +165,7 @@ const StoreOpenPoTable = () => {
   const handlePOTypeChange = (option) => setSelectedPOType(option);
   const handleSupplierNameChange = (option) => setSelectedSupplierName(option);
   const handleShipToChange = (option) => setSelectedShipTo(option);
-  const handleBillToChange = (option) => setSelectedBillTo(option);
+  
   const handleBuyerNameChange = (option) => setSelectedBuyerName(option);
 
  
@@ -183,14 +174,7 @@ const StoreOpenPoTable = () => {
   console.log("SELECTED",selectedShipTo)
 
   const dispatch = useDispatch();
-  const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
-  const isInvoiceUploadRefreshed = useSelector(
-    (state) => state.refresh.InvoiceUploadRefresh,
-  );
-
-  const [RefreshUpload, SetRefreshUpload] = useState(null);
-
-  const [DeleteRefresh, SetDeleteRefresh] = useState(false);
+  
 
 
  
@@ -262,7 +246,6 @@ const StoreOpenPoTable = () => {
       setSelectedPOTypeOptions(getUniqueOptions(fetchedItems, "po_type") || []);
       setSelectedSupplierNameOptions(getUniqueOptions(fetchedItems, "supplier_name") || []);
       setSelectedShipToOptions(getUniqueOptions(fetchedItems, "location") || []);
-      setSelectedBillToOptions(getUniqueOptions(fetchedItems, "bill_to") || []);
       setSelectedBuyerNameOptions(getUniqueOptions(fetchedItems, "buyer_name") || []);
       setItems(mappedItems || []);
       
@@ -276,14 +259,7 @@ const StoreOpenPoTable = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    SetRefreshUpload(isInvoiceUploadRefreshed);
-  }, []);
-
-  useEffect(() => {
-    console.log("Refreshed!!!");
-    fetchData();
-  }, [isInvoiceUploadRefreshed]);
+  
 
   // const handleSearchChange = (value) => {
   //   setSearchQuery(value);
@@ -787,15 +763,7 @@ const StoreOpenPoTable = () => {
           boxSizing: "border-box", 
         }}
       />
-    {/* <Input
-        placeholder="Vendor Name"
-        value={selectedVendorID} 
-        onChange={handleVendorIdChange} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      /> */}
+    
     <Input
         placeholder="Vendor Site ID"
         value={selectedVendorSiteID} 

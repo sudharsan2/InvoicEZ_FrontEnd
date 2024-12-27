@@ -5,7 +5,7 @@ import {
   makeStyles,
  
   useRestoreFocusSource,
-  useRestoreFocusTarget,
+ 
 } from "@fluentui/react-components";
 
 import ComparePage from "../pages/ComparePage";

@@ -111,66 +111,93 @@ const SankeyChart = () => {
 
   const fetchData = async () => {
     try {
-      const authToken = localStorage.getItem("access_token"); // Replace with your token retrieval method
+      const authToken = localStorage.getItem("access_token");
   
-      // Fetch invoices data
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/invoices", {
-        headers: {
-          "Authorization": `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const invoiceData = await fetchInvoices(authToken);
+      const statusData = await fetchStatus(authToken);
   
-      const fetchedItems = response.data;
-  
-      let fixCount = 0;
-      let MatchCount = 0;
-      let multiple_MatchCount = 0;
-  
-      fetchedItems.forEach((item) => {
-        if (item.po_headers.length === 0) {
-          fixCount += 1; // No Match Found
-        } else if (item.po_headers.length === 1) {
-          MatchCount += 1; // Match Found
-        } else if (item.po_headers.length > 1) {
-          multiple_MatchCount += 1; // Multiple Match Found
-        }
-      });
-  
-      // Fetch status data
-      const statusResponse = await axios.get("https://invoicezapi.focusrtech.com:57/user/statusForApprove", {
-        headers: {
-          "Authorization": `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-      const statusData = statusResponse.data || {};
-  
-      setChartData((prevState) => ({
-        ...prevState,
-        nodes: prevState.nodes.map((node, index) => {
-          if (index === 0) return { ...node, value: fixCount + MatchCount + multiple_MatchCount };
-          if (index === 1) return { ...node, value: MatchCount };
-          if (index === 2) return { ...node, value: multiple_MatchCount };
-          if (index === 3) return { ...node, value: fixCount };
-          if (index === 4) return { ...node, value: statusData.LineItemsMatchingCount || 0.1 };
-          if (index === 5) return { ...node, value: statusData.SupplierMatchingCount || 0.1 };
-          if (index === 6) return { ...node, value: statusData.PONumberMatchingCount || 0.1 };
-          return node;
-        }),
-        links: prevState.links.map((link) => {
-          if (link.target === 1) return { ...link, value: MatchCount };
-          if (link.target === 2) return { ...link, value: multiple_MatchCount };
-          if (link.target === 3) return { ...link, value: fixCount };
-          if (link.target === 4) return { ...link, value: statusData.LineItemsMatchingCount || 0.1 };
-          if (link.target === 5) return { ...link, value: statusData.SupplierMatchingCount || 0.1 };
-          if (link.target === 6) return { ...link, value: statusData.PONumberMatchingCount || 0.1 };
-          return link;
-        }),
-      }));
+      updateChartData(invoiceData, statusData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  };
+  
+  const fetchInvoices = async (authToken) => {
+    const response = await axios.get(
+      "https://invoicezapi.focusrtech.com:57/user/invoices",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  };
+  
+  const fetchStatus = async (authToken) => {
+    const response = await axios.get(
+      "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data || {};
+  };
+  
+  const calculateInvoiceCounts = (invoices) => {
+    let fixCount = 0;
+    let matchCount = 0;
+    let multipleMatchCount = 0;
+  
+    invoices.forEach((item) => {
+      if (item.po_headers.length === 0) fixCount++;
+      else if (item.po_headers.length === 1) matchCount++;
+      else if (item.po_headers.length > 1) multipleMatchCount++;
+    });
+  
+    return { fixCount, matchCount, multipleMatchCount };
+  };
+  
+  const updateChartData = (invoiceData, statusData) => {
+    const { fixCount, matchCount, multipleMatchCount } =
+      calculateInvoiceCounts(invoiceData);
+  
+    setChartData((prevState) => ({
+      ...prevState,
+      nodes: prevState.nodes.map((node, index) => {
+        if (index === 0)
+          return {
+            ...node,
+            value: fixCount + matchCount + multipleMatchCount,
+          };
+        if (index === 1) return { ...node, value: matchCount };
+        if (index === 2) return { ...node, value: multipleMatchCount };
+        if (index === 3) return { ...node, value: fixCount };
+        if (index === 4)
+          return { ...node, value: statusData.LineItemsMatchingCount || 0.1 };
+        if (index === 5)
+          return { ...node, value: statusData.SupplierMatchingCount || 0.1 };
+        if (index === 6)
+          return { ...node, value: statusData.PONumberMatchingCount || 0.1 };
+        return node;
+      }),
+      links: prevState.links.map((link) => {
+        if (link.target === 1) return { ...link, value: matchCount };
+        if (link.target === 2) return { ...link, value: multipleMatchCount };
+        if (link.target === 3) return { ...link, value: fixCount };
+        if (link.target === 4)
+          return { ...link, value: statusData.LineItemsMatchingCount || 0.1 };
+        if (link.target === 5)
+          return { ...link, value: statusData.SupplierMatchingCount || 0.1 };
+        if (link.target === 6)
+          return { ...link, value: statusData.PONumberMatchingCount || 0.1 };
+        return link;
+      }),
+    }));
   };
   
 

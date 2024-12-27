@@ -1,25 +1,16 @@
-import { Layout } from "antd";
-import {
-  SearchOutlined,
-  BellOutlined,
-  LogoutOutlined,
-} from "@ant-design/icons";
+
+
 import "./layout.css";
-import {
-  UserOutlined,
-  BarChartOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
+
 import frLogo from "../media/frlogo.png";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
-import React, { useState, useEffect } from "react";
-import Login from "../pages/Login";
+import React, { useState, useEffect,useRef } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Drawer1 from "./drawer";
+
 import {
-  SearchBox,
-  Field,
+  
   Avatar,
   PopoverTrigger,
   PopoverSurface,
@@ -28,27 +19,25 @@ import {
   Text,
   shorthands,
   Link,
-  InfoLabel,
+  
 } from "@fluentui/react-components";
 import {
   AlertBadgeRegular,
   QuestionRegular,
-  WeatherSunnyRegular,
-  WeatherMoonRegular,
+  ShareIos24Filled
 } from "@fluentui/react-icons";
 import { themeActions, refreshActions } from "../Store/Store";
-import { calc } from "antd/es/theme/internal";
-import { DarkModeSwitch } from "react-toggle-dark-mode";
-// import { useNavigate } from "react-router-dom";
+
 import { jwtDecode } from "jwt-decode";
-import { ShareIos24Filled } from "@fluentui/react-icons";
+
 import axios from "axios";
-import InvoiceUpload from "./UploadInvoice";
-import { useRef } from "react";
-import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
-import { Modal, Upload, notification, message } from "antd";
+
+
+
+import { Modal, Upload, notification, message, Layout } from "antd";
 import WalkInCandidate from "./WalkinCandidate.jsx";
-import { Button } from "@fluentui/react-components";
+import { DarkMode } from "@mui/icons-material";
+
 const { Header, Content, Footer, Sider } = Layout;
 const { Dragger } = Upload;
 const useStyles = makeStyles({
@@ -70,7 +59,7 @@ const useStyles = makeStyles({
 
 const ExampleContent = () => {
   const styles = useStyles();
-  const lighttheme = useSelector((state) => state.theme.light);
+  
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
   const navigate = useNavigate();
@@ -78,6 +67,8 @@ const ExampleContent = () => {
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
   const [id, setId] = useState("");
+
+  console.log(id);
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     console.log(storedUsername);
@@ -239,23 +230,25 @@ const ExampleContent = () => {
 
 const CustomLayout = ({ children }) => {
   const [isDarkMode, setDarkMode] = useState(false);
+  
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [logoutPopoverVisible, setLogoutPopoverVisible] = useState(false);
-  const [selectedMenuItem, setSelectedMenuItem] = useState("Dashboard");
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const lighttheme = useSelector((state) => state.theme.light);
   const darktheme = useSelector((state) => state.theme.dark);
+  console.log(lighttheme,darktheme)
   const themestate = useSelector((state) => state.theme.theme);
   const [username, setUsername] = useState("");
   const [isWalkinUpload, setIsWalkinUpload] = useState(false);
+  // console.log(isWalkinUpload)
   const [newCandidate, setNewCandidate] = useState(false);
   const [isCardOpen, setIsCardOpen] = useState(false);
   const [items, setItems] = useState([]);
   const notificationRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);  // State to handle loading state
   const [isCleared, setIsCleared] = useState(false); 
-
+  console.log(isDarkMode)
   // useEffect(() => {
   //   const toggleCard = (event) => {
   //     if (notificationRef.current && !notificationRef.current.contains(event.target)) {
@@ -503,7 +496,7 @@ const CustomLayout = ({ children }) => {
       message.success("Refreshing...");
     }
     try {
-      const token = localStorage.getItem("access_token");
+      // const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/unread-documents", {
         method: "GET",
         headers: {
@@ -592,37 +585,15 @@ const CustomLayout = ({ children }) => {
   };
 
 
-  const navigateToPage = () => {
-    // Add your navigation logic here
-    window.location.href = "/your-target-page"; // Replace with your route
-  };
-
-  // const fileInputRef = useRef(null);
-
-  // const handleButtonClick = () => {
-  //     if (fileInputRef.current) {
-  //         fileInputRef.current.click();
-  //     }
-  // };
+  
 
   const fileInputRef = useRef(null);
 
-  const handleButtonClick = () => {
-    // Trigger the file input click
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
+  
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+  
 
   const handleToggle = () => {
     dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Dispatch the action to toggle the state
@@ -650,7 +621,7 @@ const CustomLayout = ({ children }) => {
             },
           },
         );
-
+        console.log(response)
         notification.success({
           message: "Upload Successful",
           description: `File ${file.name} uploaded successfully!`,
@@ -667,19 +638,9 @@ const CustomLayout = ({ children }) => {
     }
   };
 
-  const uploadProps = {
-    name: "file",
-    multiple: false, // Single file upload
-    onChange: handleFileChange, // This is where we handle the file change
-  };
+  
 
-  const toggleDarkMode = (checked) => {
-    setDarkMode(checked);
-  };
-
-  const handleTheme = () => {
-    dispatch(themeActions.toggletheme());
-  };
+  
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -701,33 +662,13 @@ const CustomLayout = ({ children }) => {
     };
   }, []);
 
-  const getSearchBoxStyle = () => {
-    if (windowWidth < 500) {
-      return {
-        width: "30vw",
-        height: "",
-        backgroundColor: themestate ? "rgb(41,41,41)" : "#fff",
-      };
-    } else if (windowWidth < 863) {
-      return {
-        width: "40vw",
-        height: "",
-        backgroundColor: themestate ? "rgb(41,41,41)" : "#fff",
-      };
-    } else {
-      return {
-        width: "100vw",
-        height: "",
-        backgroundColor: themestate ? "rgb(41,41,41)" : "#fff",
-      };
-    }
-  };
+  
 
-  const handleIsWalkinUpload = () => {
-    console.log("yes it works");
-    setIsWalkinUpload(true);
-    setNewCandidate(false);
-  };
+  // const handleIsWalkinUpload = () => {
+  //   console.log("yes it works");
+  //   setIsWalkinUpload(true);
+  //   setNewCandidate(false);
+  // };
   const handleNewCandidate = () => {
     setNewCandidate(false);
   };
@@ -736,6 +677,9 @@ const CustomLayout = ({ children }) => {
     setNewCandidate(true);
   };
 
+  console.log(isLoading);
+  
+  console.log("Cleared",isCleared)
 
 
 

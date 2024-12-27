@@ -8,11 +8,10 @@ import {
   PopoverSurface,
   Popover,
   Avatar,
-  shorthands,
   Link, makeStyles, Text
  
 } from "@fluentui/react-components";
-
+import { shorthands } from '@griffel/react';
 import { AlertBadgeRegular } from "@fluentui/react-icons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -205,10 +204,10 @@ const ExampleContent = () => {
 
 const CustomLayoutLoop = ({ children }) => {
   
-  const navigate = useNavigate();
+  
   const [username, setUsername] = useState("");
   const [notificationsVisible, setNotificationsVisible] = useState(false);
-  const [newCandidate, setNewCandidate] = useState(false); 
+  
   const themestate = useSelector((state) => state.theme.theme);
   const [data, setData] = useState([]);
   const notificationRef = useRef(null); 

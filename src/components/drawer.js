@@ -1,19 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate,} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDrawerPosition } from "../Store/refreshSlice";
 import {
-  NavCategory,
-  NavCategoryItem,
+ 
   NavDrawer,
   NavDrawerBody,
   NavDrawerFooter,
   NavDrawerHeader,
   NavDrawerHeaderNav,
-  NavDrawerProps,
+ 
   NavItem,
-  NavSubItem,
-  NavSubItemGroup,
+  
 } from "@fluentui/react-nav-preview";
 import {
   Board24Filled,
@@ -28,7 +26,7 @@ import {
   HeartPulse20Regular,
   MegaphoneLoud20Filled,
   MegaphoneLoud20Regular,
-  NavigationFilled,
+  
   NotePin20Filled,
   NotePin20Regular,
   People20Filled,
@@ -58,18 +56,12 @@ import {
   Navigation24Regular,
   DocumentCatchUp24Filled,
   DocumentCatchUp24Regular,
-  WrenchSettings24Filled,
-  WrenchSettings24Regular,
-  TasksApp24Regular,
-  TasksApp24Filled,
+  
   TargetArrow24Filled,
   TargetArrow24Regular,
   TargetDismiss24Filled,
   TargetDismiss24Regular,
-  DocumentTableCheckmark24Filled,
-  DocumentTableCheckmark24Regular,
-  TaskListSquareRtl24Filled,
-  TaskListSquareRtl24Regular,
+  
   VehicleTruckProfile24Filled,
   VehicleTruckProfile24Regular,
   Form28Regular,
@@ -84,10 +76,7 @@ import {
 
 import {
   Button,
-  Caption1Strong,
-  Label,
-  Radio,
-  RadioGroup,
+  
   makeStyles,
   shorthands,
   tokens,
@@ -95,11 +84,10 @@ import {
   Tooltip,
 
 } from "@fluentui/react-components";
-import { CiSettings } from "react-icons/ci";
+
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-// import { Dropdown, Option} from "@fluentui/react-components";
-// import  { DropdownProps } from "@fluentui/react-components";
+
 const useStyles = makeStyles({
   root: {
     // ...shorthands.border("2px", "solid", "#ccc"),
@@ -265,23 +253,20 @@ const NavDrawerDefault = (props) => {
 
   const styles = useStyles();
 
-  const labelId = useId("type-label");
+  
 
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  
   const [empId, setEmpId] = useState("");
-  const dropdownId = useId("dropdown");
+  
 
   const drawerPosition = useSelector((state) => state.refresh.drawerPosition);
-  // const styles = useStyles();
-  // const[value,setValue] = useState("1")
+  
   const value = localStorage.getItem("userDrawerPosition");
   console.log("value", { value });
-  const someClickHandler = () => {
-    navigate("/dashboard");
-  };
+ 
   const setValue = (value) => {
     dispatch(toggleDrawerPosition(value));
   };
@@ -304,7 +289,7 @@ const NavDrawerDefault = (props) => {
         const emailFromToken = decodedToken.email;
         const empIdFromToken = decodedToken.empId;
 
-        setEmail(emailFromToken);
+       
         setEmpId(empIdFromToken);
       } catch (error) {
         console.error("Invalid token:", error);

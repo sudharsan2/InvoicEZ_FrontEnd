@@ -1,60 +1,40 @@
-import React from "react";
-import { DrawerProps } from "@fluentui/react-components";
+import React ,{useEffect, useState}  from "react";
+
 import {
-  AppItem,
+  
   Hamburger,
-  NavCategory,
-  NavCategoryItem,
+ 
   NavDrawer,
   NavDrawerBody,
   NavDrawerHeader,
-  NavDrawerProps,
+ 
   NavItem,
-  NavSectionHeader,
-  NavSubItem,
-  NavSubItemGroup,
+  
 } from "@fluentui/react-nav-preview";
 import {
-  Label,
-  Radio,
-  RadioGroup,
-  Switch,
+  
   Tooltip,
   makeStyles,
   tokens,
-  useId,
+  
 } from "@fluentui/react-components";
 import {
   Board20Filled,
   Board20Regular,
-  BoxMultiple20Filled,
-  BoxMultiple20Regular,
-  DataArea20Filled,
-  DataArea20Regular,
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-  HeartPulse20Filled,
-  HeartPulse20Regular,
+  
   MegaphoneLoud20Filled,
   MegaphoneLoud20Regular,
   NotePin20Filled,
   NotePin20Regular,
-  People20Filled,
-  People20Regular,
-  PeopleStar20Filled,
-  PeopleStar20Regular,
+  
   Person20Filled,
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
+  
   Person20Regular,
-  PersonSearch20Filled,
-  PersonSearch20Regular,
-  PreviewLink20Filled,
-  PreviewLink20Regular,
+  
   bundleIcon,
-  PersonCircle32Regular,
+  
 } from "@fluentui/react-icons";
-import { useEffect, useState } from "react";
+
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 const useStyles = makeStyles({
@@ -90,8 +70,9 @@ const AiNav = ({ onPoNumberClick }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [poNumbers, setPoNumbers] = useState([]); // To store PO numbers from API response
   const location2 = useLocation();
-  const [items, setItems] = useState([]);
+ 
   const [selectedPoNumber, setSelectedPoNumber] = useState("");
+  console.log(selectedPoNumber)
   // Extract the invoiceId from the URL
   const { invoiceNumber } = location2.state || {};
   console.log("AI", invoiceNumber);

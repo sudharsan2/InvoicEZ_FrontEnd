@@ -4,7 +4,7 @@ import axios from "axios";
 import "./WalkinCandidate.css";
 import { useDispatch } from "react-redux";
 import { refreshActions } from "../Store/Store";
-import { SiTicktick } from "react-icons/si";
+
 import matchedImage from '../media/matched.png';
 import multiplematch from '../media/multiple.png'
 import nomatch from '../media/nomatch.png';
@@ -133,10 +133,7 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
 
       file.status = "error";
       onError();
-    } finally {
-      // Trigger any additional local refresh if needed
-      isWalkinUpload();
-    }
+    } 
   };
 
   return (

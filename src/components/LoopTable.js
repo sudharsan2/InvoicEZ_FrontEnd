@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import {
   ArrowClockwise28Regular,
 } from "@fluentui/react-icons";
@@ -13,8 +13,6 @@ import {
   DataGridCell,
   TableCellLayout,
   createTableColumn,
-} from "@fluentui/react-components";
-import {
   makeStyles,
   TabList,
   Tab,
@@ -144,12 +142,12 @@ const StatusCell = ({ statusLabel }) => {
   );
 };
 
-// Main component
+
 const LoopTable = ({ data ,setStatusCounts }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(false);
-  const [selectedRows, setSelectedRows] = useState(new Set());
+  
   const [items, setItems] = useState([]);
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
@@ -251,7 +249,7 @@ const LoopTable = ({ data ,setStatusCounts }) => {
     setSearchQuery(value);
   };
 
-  
+  console.log("SearchQuery",searchQuery);
  
   const handleRowClick = (e,item) => {
     if (e.target.type === "checkbox") {

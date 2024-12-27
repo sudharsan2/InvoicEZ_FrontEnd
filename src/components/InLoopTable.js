@@ -191,7 +191,8 @@ const InLoopTable = () => {
         from_date: "11/09/24",
         to_date: "11/09/24",
       });
-      // const fetchedItems = response.data;
+      const fetchedItems2 = response.data;
+      console.log(fetchedItems2);
       const fetchedItems = data.flatMap((item) =>
         item.lines.map((line) => ({
           ...item, 

@@ -14,13 +14,13 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import Search from "./Search"; // Assuming your search component is imported here
-import {  notification,message } from "antd"; // Import Ant Design components
+import Search from "./Search"; 
+import {message } from "antd"; 
 import { useDispatch, useSelector } from "react-redux";
-import { refreshActions } from "../Store/Store";
+
 import { ArrowSortUpFilled, ArrowSortDownRegular,ArrowClockwise24Regular, } from "@fluentui/react-icons";
 
-// Define columns for the DataGrid
+
 const columns = [
   createTableColumn({
     columnId: "po_number",
@@ -93,10 +93,10 @@ const GateEntryTable = ({setTableLength}) => {
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [filtered, setFilteredItems] = useState([]);
-  const [po_id, set_Po_id] = useState("");
+  
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+ 
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );

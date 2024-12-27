@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import {
-  DrawerBody,
-  DrawerHeader,
-  DrawerHeaderTitle,
+  
   Drawer,
   makeStyles,
-  tokens,
-  useId,
+  
   useRestoreFocusSource,
   useRestoreFocusTarget,
 } from "@fluentui/react-components";
@@ -37,7 +34,7 @@ const RFQDrawer = ({data,onClose}) => {
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("overlay");
 
-  const restoreFocusTargetAttributes = useRestoreFocusTarget();
+  
   const restoreFocusSourceAttributes = useRestoreFocusSource();
 
   const handleClose = () => {
@@ -55,7 +52,7 @@ const RFQDrawer = ({data,onClose}) => {
         open={isOpen}
         onOpenChange={(_, { open }) => {
           setIsOpen(open)
-          if (!open) handleClose(); // Trigger close logic when the drawer closes
+          if (!open) handleClose(); 
         }}
         className={styles.drawer}
       >

@@ -1,7 +1,7 @@
 
 
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -60,21 +60,19 @@ import {
   Navigation24Filled,
   Navigation24Regular,
   Gavel24Regular,
+  Apps28Regular
 } from "@fluentui/react-icons";
-import {Apps28Regular} from "@fluentui/react-icons"
-import { PiTrolleyBold } from "react-icons/pi";
+import { PiTrolleyBold ,PiTrolleyFill} from "react-icons/pi";
 import {
   Button,
   makeStyles,
   shorthands,
   tokens,
-  useId,
   Tooltip,
 } from "@fluentui/react-components";
 
-import { useEffect } from "react";
+
 import { jwtDecode } from "jwt-decode";
-import { PiTrolleyFill } from "react-icons/pi";
 import {toggleSecondaryDrawerPosition } from "../Store/refreshSlice";
 const useStyles = makeStyles({
   root: {
@@ -243,10 +241,9 @@ const NavDrawerDefaultLoop = (props) => {
       try {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
-        const emailFromToken = decodedToken.email;
         const empIdFromToken = decodedToken.empId;
 
-        // setEmail(emailFromToken);
+        
         setEmpId(empIdFromToken);
       } catch (error) {
         console.error("Invalid token:", error);
