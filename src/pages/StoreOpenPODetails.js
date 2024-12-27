@@ -34,9 +34,9 @@ import { message } from "antd";
 import { notification } from "antd";
 import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 
-const path = "/approve";
-const path2 = "/approvepage";
-const path1 = "/dashboard";
+const path = "/storeopenpo";
+const path2 = "/storeopenpodet";
+const path1 = "/storedashboard";
 
 const useStyles = makeStyles({
   root: {
@@ -395,13 +395,14 @@ const StoreOpenPODetails = () => {
     }
   };
 
-  useEffect(() => {
-    setData(po_items);
-  }, [])
-
-  console.log("DATA--->", data);
-
-
+   useEffect(()=>{
+     setData(po_items);
+   },[])
+  
+  console.log("DATA--->",data);
+   
+  const needByDate = data?.[0]?.need_by_date;
+   console.log("needByDate",needByDate);
 
 
   useEffect(() => {
@@ -555,16 +556,14 @@ const StoreOpenPODetails = () => {
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
 
-  const sortedData = [...data].sort((a, b) => {
+  const sortedData = Array.isArray(data) ? [...data].sort((a, b) => {
     if (!sortedColumn) return 0;
 
     const aValue = a[sortedColumn] || "";
     const bValue = b[sortedColumn] || "";
 
-
     const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
     const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
-
 
     if (isANumeric && isBNumeric) {
       const aNumeric = parseFloat(aValue);
@@ -572,19 +571,20 @@ const StoreOpenPODetails = () => {
       return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
     }
 
-    // String comparison using localeCompare for case-insensitive sorting
+    
     if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
+      const aString = String(aValue).toLowerCase(); 
       const bString = String(bValue).toLowerCase();
       return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
     }
 
-    // Mixed types: If one is numeric and the other is not, treat the numeric value as smaller
+    
     if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
     if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
 
-    return 0; // If values are still equal
-  });
+    return 0; 
+  }) : [];
+
 
 
 
@@ -741,7 +741,7 @@ const StoreOpenPODetails = () => {
                   }}
                 >
                   <p>Need By Date</p>
-                  <h2>{data?.need_by_date}</h2>
+                  <h2>{needByDate}</h2>
                 </div>
               </div>
             </div>
@@ -866,7 +866,7 @@ const StoreOpenPODetails = () => {
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
                       {/* {purchaseOrder.poDate} */}
-                      { }
+                      {needByDate}
                     </div>
                   </div>
 
@@ -1189,100 +1189,179 @@ const StoreOpenPODetails = () => {
                         themestate ? { color: "white", borderBottomColor: "#383838" } : {}
                       }
                     >
-                      <TableHeaderCell {...headerSortProps("item_name")}>
-                        Item Name
+                      <TableHeaderCell {...headerSortProps("item_name")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
+                      Item Name
                         {sortedColumn === "item_name" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("line_num")}>
-                        Line Number
+                      <TableHeaderCell {...headerSortProps("line_num")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
+                      Line Number
                         {sortedColumn === "line_num" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("quantity")}>
-                        Quantity
+                      <TableHeaderCell {...headerSortProps("quantity")}style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
+                      Quantity
                         {sortedColumn === "quantity" && (
                           sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("item_name")}>
-                        Unit Price
-                        {sortedColumn === "item_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("unit_price")}>
-                        Amount Billed
+                      <TableHeaderCell {...headerSortProps("unit_price")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
+                      Unit Price
                         {sortedColumn === "unit_price" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("quantity")}>
-                        Order Type
-                        {sortedColumn === "quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                      <TableHeaderCell {...headerSortProps("amount_billed")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
+                      Amount Billed
+                        {sortedColumn === "amount_billed" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Quantity")}>
-                        Purchase Basis
-                        {sortedColumn === "Quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                      <TableHeaderCell {...headerSortProps("order_type_lookup_code")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
+                      Order Type
+                        {sortedColumn === "order_type_lookup_code" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Igst")}>
+                      <TableHeaderCell {...headerSortProps("purchase_basis")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
+                      Purchase Basis
+                        {sortedColumn === "purchase_basis" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("category_name")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
                         Category Name
-                        {sortedColumn === "Igst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        {sortedColumn === "category_name" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Cgst")}>
+                      <TableHeaderCell {...headerSortProps("closed_code")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
                         Closed Code
-                        {sortedColumn === "Cgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        {sortedColumn === "closed_code" && (
+                          sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                      <TableHeaderCell {...headerSortProps("item_description")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
                         Item Description
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        {sortedColumn === "item_description" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                      <TableHeaderCell {...headerSortProps("need_by_date")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
                         Need By Date
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        {sortedColumn === "need_by_date" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                      <TableHeaderCell {...headerSortProps("promised_date")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
                         Promised Date
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        {sortedColumn === "promised_date" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
-                        PO Line_Id
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                      <TableHeaderCell {...headerSortProps("po_line_id")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
+                       PO Line_Id
+                        {sortedColumn === "po_line_id" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                      <TableHeaderCell {...headerSortProps("po_distribution_id")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
                         PO Distribution Id
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        {sortedColumn === "po_distribution_id" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                      <TableHeaderCell {...headerSortProps("line_location_id")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
                         Line Location Id
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        {sortedColumn === "line_location_id" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                      <TableHeaderCell {...headerSortProps("inventory_item_id")}
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}>
                         Inventory Item Id
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        {sortedColumn === "inventory_item_id" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
                         )}
                       </TableHeaderCell>
                     </TableRow>

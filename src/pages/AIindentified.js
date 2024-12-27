@@ -76,7 +76,7 @@ const AIPage = () => {
 
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
-      <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
+      <div className="Approvebreadcrump" >
         <Breadcrumb aria-label="Breadcrumb default example">
           <BreadcrumbItem>
             <BreadcrumbButton href={path}>Home</BreadcrumbButton>
@@ -92,12 +92,12 @@ const AIPage = () => {
         </Breadcrumb>
       </div>
       <div
-        style={{ display: "flex", justifyContent: "flexStart", padding: "1px",marginLeft:"3em" }}
+        style={{ display: "flex", justifyContent: "flexStart", padding: "1px" }}
       >
         <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Multiple Match Found</h3>
       </div>
 
-      <div style={{marginLeft:"3em"}}>
+      <div >
         <div style={containerStyle}>
           {counters.map((item, index) => (
             <div style={itemStyle} key={index}>
@@ -114,10 +114,10 @@ const AIPage = () => {
       {/* <div>
 
       </div> max value */}
-       <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+       <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",}}>
       <Divider style={{ marginTop:"2em"}} />
     </div>
-      <div style={{marginLeft:"3em",marginTop:"-2em"}}>
+      <div style={{marginTop:"-2em"}}>
         <AITable setTableLength={setTableLength} />
       </div>
     </div>

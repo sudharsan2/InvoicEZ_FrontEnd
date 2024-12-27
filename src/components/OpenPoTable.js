@@ -1,4 +1,3 @@
-
 // API connection
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -25,7 +24,7 @@ import Search from "./Search"; // Assuming your search component is imported her
 import { Button, notification } from "antd"; // Import Ant Design components
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-import { message } from "antd";
+import {message} from "antd";
 import CreatableSelect from "react-select/creatable";
 // Define columns for the DataGrid
 const columns = [
@@ -45,49 +44,61 @@ const columns = [
     renderCell: (item) => <TableCellLayout>{item.po_status}</TableCellLayout>,
   }),
   createTableColumn({
-    columnId: "Buyers",
+    columnId: "supplier_name",
     renderHeaderCell: () => "Supplier Name",
     renderCell: (item) => (
       <TableCellLayout>{item.supplier_name}</TableCellLayout>
     ),
   }),
   createTableColumn({
+    columnId: "Buyer",
+    renderHeaderCell: () => "Buyer Name",
+    renderCell: (item) => (
+      <TableCellLayout>{item.Buyer}</TableCellLayout>
+    ),
+  }),
+
+  createTableColumn({
+    columnId: "totamount",
+    renderHeaderCell: () => "Total Amount",
+    renderCell: (item) => (
+      <TableCellLayout>{item.totamount}</TableCellLayout>
+    ),
+  }),
+  createTableColumn({
+    columnId: "poheader",
+    renderHeaderCell: () => "PO Header ID",
+    renderCell: (item) => (
+      <TableCellLayout>{item.poheader}</TableCellLayout>
+    ),
+  }),
+  createTableColumn({
+    columnId: "vendor",
+    renderHeaderCell: () => "Vendor Site ID",
+    renderCell: (item) => (
+      <TableCellLayout>{item.vendor}</TableCellLayout>
+    ),
+  }),
+  createTableColumn({
+    columnId: "vendor_num",
+    renderHeaderCell: () => "Vendor Number",
+    renderCell: (item) => (
+      <TableCellLayout>{item.vendor_num}</TableCellLayout>
+    ),
+  }),
+
+
+  createTableColumn({
     columnId: "location",
     renderHeaderCell: () => "Location",
     renderCell: (item) => <TableCellLayout>{item.location}</TableCellLayout>,
   }),
-  createTableColumn({
-    columnId: "Buyer",
-    renderHeaderCell: () => "Buyer Name",
-    renderCell: (item) => <TableCellLayout>{item.Buyer}</TableCellLayout>
-  }),
-  createTableColumn({
-    columnId: "total_amount",
-    renderHeaderCell: () => "Total Amount",
-    renderCell: (item) => <TableCellLayout>{item.total_amount}</TableCellLayout>
-  }),
-  createTableColumn({
-    columnId: "po_header_id",
-    renderHeaderCell: () => "Po Header Id",
-    renderCell: (item) => <TableCellLayout>{item.po_header_id}</TableCellLayout>
-  }),
-  createTableColumn({
-    columnId: "vendor_site_id",
-    renderHeaderCell: () => "Vendor Site Id",
-    renderCell: (item) => <TableCellLayout>{item.vendor_site_id}</TableCellLayout>
-  }),
-  createTableColumn({
-    columnId: "vendor_number",
-    renderHeaderCell: () => "Vendor Number",
-    renderCell: (item) => <TableCellLayout>{item.vendor_number}</TableCellLayout>
-  }),
-
-
+  
 ];
 
 const useStyles = makeStyles({
   root: {
-
+    
     display: "flex",
     flexDirection: "column",
     gap: "2px",
@@ -96,29 +107,29 @@ const useStyles = makeStyles({
 });
 const OpenPoTable = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const [Hovered2, setIsHovered2] = useState(false);
+  const [Hovered2,setIsHovered2] = useState(false);
   const [isrefresh, setIsRefresh] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [po_id, set_Po_id] = useState("");
-
-  const [selectedOption, setSelectedOption] = useState(null);
+  
+  const [selectedOption,setSelectedOption] = useState(null);
   // const [selectedPOStatus, setSelectedPOStatus] = useState(null);
   const navigate = useNavigate();
-
+  
 
   const styles = useStyles();
   const [poNumber, setPoNumber] = useState("");
   const [POStatusOptions, setPOStatusOptions] = useState([]);
-  const [SelectedPOTypeOptions, setSelectedPOTypeOptions] = useState([]);
+  const [SelectedPOTypeOptions,setSelectedPOTypeOptions] = useState([]);
   const [selectedSupplierOptions, setSelectedSupplierNameOptions] = useState([]);
+  const [selectedShipToOptions, setSelectedShipToOptions] = useState([]);
+  const [selectedBillToOptions, setSelectedBillToOptions] = useState([]);
   const [selectedBuyerNameOptions, setSelectedBuyerNameOptions] = useState([]);
   const [selectedPOStatus, setSelectedPOStatus] = useState(null);
   const [selectedPOType, setSelectedPOType] = useState(null);
   const [selectedSupplierName, setSelectedSupplierName] = useState(null);
-  const [selectLocation, setselectLocation] = useState(null);
-  const [selectLocationOptions, setLocationOptions] = useState(null);
   const [selectedShipTo, setSelectedShipTo] = useState(null);
   const [selectedBillTo, setSelectedBillTo] = useState(null);
   const [selectedBuyerName, setSelectedBuyerName] = useState(null);
@@ -127,15 +138,15 @@ const OpenPoTable = () => {
   const [selectedVendorID, setSelectedVendorID] = useState("");
   const [selectedVendorSiteID, setSelectedVendorSiteID] = useState("");
   const [selectedVendorNumber, setSelectedVendorNumber] = useState("");
-  const [PONumberOPtions, setPONumberOPtions] = useState("");
-  const handleCreate = (inputValue) => {
-    const newOption = { value: inputValue, label: inputValue };
-
-    setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
-    setSelectedOption(newOption);
-  };
-  // INPUT FIELD
-  const handlePoNumberChange = (e) => setPoNumber(e.target.value);
+  const [PONumberOPtions,setPONumberOPtions]=useState("");
+    const handleCreate = (inputValue) => {
+        const newOption = { value: inputValue, label: inputValue };
+    
+        setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
+        setSelectedOption(newOption); 
+      };
+      // INPUT FIELD
+      const handlePoNumberChange = (e) => setPoNumber(e.target.value);
   const handleTotalChange = (e) => setSelectedTotalAmount(e.target.value);
   const handlePoHeaderChange = (e) => setSelectedPOHeaderID(e.target.value);
   const handleVendorIdChange = (e) => setSelectedVendorID(e.target.value);
@@ -146,7 +157,8 @@ const OpenPoTable = () => {
     setSelectedPOStatus(null);
     setSelectedPOType(null);
     setSelectedSupplierName(null);
-    setselectLocation(null);
+    setSelectedShipTo(null);
+    setSelectedBillTo(null);
     setSelectedBuyerName(null);
     setSelectedVendorNumber("");
     setSelectedVendorSiteID("");
@@ -157,18 +169,18 @@ const OpenPoTable = () => {
   };
 
 
-  // DROP DOWN 
+      // DROP DOWN 
   const handlePOStatusChange = (option) => setSelectedPOStatus(option);
   const handlePOTypeChange = (option) => setSelectedPOType(option);
   const handleSupplierNameChange = (option) => setSelectedSupplierName(option);
   const handleShipToChange = (option) => setSelectedShipTo(option);
-  const handleLocation = (option) => setselectLocation(option);
+  const handleBillToChange = (option) => setSelectedBillTo(option);
   const handleBuyerNameChange = (option) => setSelectedBuyerName(option);
 
-
+ 
   // const handleStatusChange = (option) =>setSelectedPOStatus(option);
-
-  console.log("SELECTED", selectedShipTo)
+  
+  console.log("SELECTED",selectedShipTo)
 
   const dispatch = useDispatch();
   const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
@@ -181,13 +193,15 @@ const OpenPoTable = () => {
   const [DeleteRefresh, SetDeleteRefresh] = useState(false);
 
 
-
-
-
-  const [data, setData] = useState([]);
+ 
+  
+ 
+  const[data,setData]=useState([]);
   // Fetch data from the API when the component mounts
   const fetchData = async (showMessage = false) => {
-
+    if (showMessage) {
+      message.success("Refreshing...");
+    }
     try {
       // const response = await axios.get(
       //   "https://invoicezapi.focusrtech.com:57/user/one-invoice-list",
@@ -204,18 +218,18 @@ const OpenPoTable = () => {
       const fetchedItems = response.data || []; // Assuming data is in response.data
       console.log("fetchedItemsOPen", fetchedItems);
       setData(fetchedItems);
-      //   set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+    //   set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
       //  console.log("InvId",InvoiceNumber);
       // Map fetched data to the format expected by DataGrid
 
-
+      
       // const po_lineitems = fetchedItems.flatMap((po) =>
       //   po.po_items.map((item) => ({
       //     item_name: item.item_description,
       //   }))
       // );
-
-
+    
+    
 
       // console.log("PO_LINE",po_lineitems);
       const mappedItems = fetchedItems.map((item) => ({
@@ -227,30 +241,32 @@ const OpenPoTable = () => {
         po_status: item.po_status,
         supplier_name: item.supplier_name,
         location: item.location,
-        total_amount: item.total_amount,
-        Buyer: item.buyer_name,
-        need_by: item.need_by_date,
-        po_header_id: item.po_header_id,
-        vendor_site_id: item.vendor_site_id,
-        vendor_number: item.vendor_number
-
+        total_amount:item.total_amount,
+        Buyer:item.buyer_name,
+        need_by:item.need_by_date,
+        vendor:item.vendor_site_id,
+        poheader:item.po_header_id,
+        totamount:item.total_amount,
+        vendor_num:item.vendor_number,
+      
       }));
 
       const getUniqueOptions = (array, key) => {
         return Array.from(new Set(array.map((item) => item[key]))).map((value) => ({
-          value,
-          label: value,
+            value,
+            label: value,
         }));
-      };
+    };
 
       setPOStatusOptions(getUniqueOptions(fetchedItems, "po_status") || []);
       setSelectedPOTypeOptions(getUniqueOptions(fetchedItems, "po_type") || []);
       setSelectedSupplierNameOptions(getUniqueOptions(fetchedItems, "supplier_name") || []);
-      setLocationOptions(getUniqueOptions(fetchedItems, "location") || []);
+      setSelectedShipToOptions(getUniqueOptions(fetchedItems, "location") || []);
+      setSelectedBillToOptions(getUniqueOptions(fetchedItems, "bill_to") || []);
       setSelectedBuyerNameOptions(getUniqueOptions(fetchedItems, "buyer_name") || []);
       setItems(mappedItems || []);
-
-
+      
+      
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -297,26 +313,30 @@ const OpenPoTable = () => {
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
-
+  
     const filteredItems = items.filter((item) => {
-      const searchLower = searchQuery?.trim().toLowerCase() || "";
-
-      return (
-        item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
-        item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
-        item.po_number?.toString().toLowerCase().includes(searchLower) ||
-        item.po_type?.toLowerCase().includes(searchLower) ||
-        item.po_status?.toLowerCase().includes(searchLower) ||
-        item.supplier_name?.toLowerCase().includes(searchLower) ||
-        item.location?.toLowerCase().includes(searchLower) ||
-        item.total_amount?.toLowerCase().includes(searchLower) ||
-        item.buyer_name?.toLowerCase().includes(searchLower)
-
-
-      );
-    });
-
-    setFilteredItems(filteredItems);
+        const searchLower = searchQuery?.trim().toLowerCase() || "";
+    
+        return (
+          item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
+          item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
+          item.po_number?.toString().toLowerCase().includes(searchLower) ||
+          item.po_type?.toLowerCase().includes(searchLower) ||
+          item.po_status?.toLowerCase().includes(searchLower) ||
+          item.supplier_name?.toLowerCase().includes(searchLower) ||
+          item.location?.toLowerCase().includes(searchLower) ||
+          item.total_amount?.toLowerCase().includes(searchLower) ||
+          item.Buyer?.toLowerCase().includes(searchLower) ||
+          item.need_by?.toLowerCase().includes(searchLower) ||
+          item.vendor?.toLowerCase().includes(searchLower) ||
+          item.poheader?.toLowerCase().includes(searchLower) ||
+          item.totamount?.toLowerCase().includes(searchLower) ||
+          item.vendor_num?.toLowerCase().includes(searchLower) 
+        
+        );
+      });
+  
+    setFilteredItems(filteredItems); 
   };
 
 
@@ -332,20 +352,26 @@ const OpenPoTable = () => {
       item.supplier_name?.toLowerCase().includes(searchLower) ||
       item.location?.toLowerCase().includes(searchLower) ||
       item.total_amount?.toLowerCase().includes(searchLower) ||
-      item.buyer_name?.toLowerCase().includes(searchLower)
+      item.Buyer?.toLowerCase().includes(searchLower) ||
+      item.need_by?.toLowerCase().includes(searchLower) ||
+      item.vendor?.toLowerCase().includes(searchLower) ||
+      item.poheader?.toLowerCase().includes(searchLower) ||
+      item.totamount?.toLowerCase().includes(searchLower) ||
+      item.vendor_num?.toLowerCase().includes(searchLower) 
 
+   
     );
   });
-
-
+  
+  
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-
+      
       const selectedPO = data.find((po) => po.po_number === item.po_number);
-
+  
       const selectedPOItems = selectedPO?.po_items || [];
-
+  
       navigate(`/openpodet`, {
         state: {
           poNumber: item.po_number,
@@ -355,18 +381,18 @@ const OpenPoTable = () => {
           totals: item.total_amount,
           Status: item.po_status,
           item_name: item.item_description,
-          po_items: selectedPOItems,
-          Supplier: item.supplier_name,
-          Buyer: item.buyer_name,
+          po_items: selectedPOItems, 
+          Supplier:item.supplier_name,
+          Buyer:item.Buyer,
           // need_by:item.need_by
         },
-
+        
       });
-
+      
       console.log("Selected PO Items", selectedPOItems);
     }
   };
-
+  
 
   const handleSelectionChange = (event, data) => {
     console.log("handleSelectionChange", data.selectedItems);
@@ -416,7 +442,7 @@ const OpenPoTable = () => {
         (item) =>
           !selectedItemsArray.some(
             (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
-          ),
+          ), 
       );
 
       setItems(newItems);
@@ -439,7 +465,7 @@ const OpenPoTable = () => {
     }
   };
 
-
+  
   // Approve API
   const handleApproveSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
@@ -484,56 +510,18 @@ const OpenPoTable = () => {
   };
   const [filtered, setFilteredItems] = useState([]);
   useEffect(() => {
-    setFilteredItems(items);
+    setFilteredItems(items); 
   }, [items])
 
   const [sortState, setSortState] = useState({
     columnId: "",
     sortDirection: "ascending",
   });
-
-  // const handleSort = (columnId) => {
-  //   let newSortDirection = "ascending";
-
-  //   if (sortState.columnId === columnId) {
-  //     newSortDirection =
-  //       sortState.sortDirection === "ascending" ? "descending" : "ascending";
-  //   }
-
-  //   setSortState({ columnId, sortDirection: newSortDirection });
-
-
-  //   const sortedItems = [...filteredItems].sort((a, b) => {
-  //     const aValue = a[columnId]?? "";
-  //     const bValue = b[columnId]?? "";
-
-  //     if (aValue < bValue) return newSortDirection === "ascending" ? -1 : 1;
-  //     if (aValue > bValue) return newSortDirection === "ascending" ? 1 : -1;
-
-  //     if (typeof aValue === "string" && typeof bValue === "string") {
-  //       // Case-insensitive string comparison
-  //       return newSortDirection === "ascending"
-  //         ? aValue.localeCompare(bValue)
-  //         : bValue.localeCompare(aValue);
-  //     }
   
-  //     if (typeof aValue === "number" && typeof bValue === "number") {
-  //       // Numeric comparison
-  //       return newSortDirection === "ascending" ? aValue - bValue : bValue - aValue;
-  //     }
-  //     return newSortDirection === "ascending"
-  //     ? String(aValue).localeCompare(String(bValue))
-  //     : String(bValue).localeCompare(String(aValue));
-  //   });
-  //   console.log("SORTED", sortedItems);
-
-  //   setFilteredItems(sortedItems);
-  // };
-
-
   const handleSort = (columnId) => {
     let newSortDirection = "ascending";
   
+    // Toggle sort direction if the same column is clicked
     if (sortState.columnId === columnId) {
       newSortDirection =
         sortState.sortDirection === "ascending" ? "descending" : "ascending";
@@ -541,26 +529,47 @@ const OpenPoTable = () => {
   
     setSortState({ columnId, sortDirection: newSortDirection });
   
+    // Sorting logic
     const sortedItems = [...filteredItems].sort((a, b) => {
-      const aValue = a[columnId] ?? ""; // Default to an empty string if undefined or null
-      const bValue = b[columnId] ?? ""; // Default to an empty string if undefined or null
+      const aValue = a[columnId] ?? null; // Treat null explicitly
+      const bValue = b[columnId] ?? null; // Treat null explicitly
   
-      // Case-insensitive string comparison using localeCompare for full string comparison
-      if (typeof aValue === "string" && typeof bValue === "string") {
+      // Handle null values first in ascending, last in descending
+      if (aValue === null && bValue !== null) {
+        return newSortDirection === "ascending" ? -1 : 1;
+      }
+      if (bValue === null && aValue !== null) {
+        return newSortDirection === "ascending" ? 1 : -1;
+      }
+  
+      // Handle numeric values
+      const aNumeric = !isNaN(parseFloat(aValue)) ? parseFloat(aValue) : null;
+      const bNumeric = !isNaN(parseFloat(bValue)) ? parseFloat(bValue) : null;
+  
+      if (aNumeric !== null && bNumeric !== null) {
+        // Both are numeric
         return newSortDirection === "ascending"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
+          ? aNumeric - bNumeric
+          : bNumeric - aNumeric;
       }
   
-      // Numeric comparison for numbers
-      if (typeof aValue === "number" && typeof bValue === "number") {
-        return newSortDirection === "ascending" ? aValue - bValue : bValue - aValue;
+      if (aNumeric !== null && bNumeric === null) {
+        // aValue is numeric, bValue is not
+        return newSortDirection === "ascending" ? -1 : 1;
       }
   
-      // Handle cases where the values might be mixed types (string vs number)
+      if (aNumeric === null && bNumeric !== null) {
+        // bValue is numeric, aValue is not
+        return newSortDirection === "ascending" ? 1 : -1;
+      }
+  
+      // Fallback to string comparison
+      const aString = String(aValue || "").toLowerCase();
+      const bString = String(bValue || "").toLowerCase();
+  
       return newSortDirection === "ascending"
-        ? String(aValue).localeCompare(String(bValue))
-        : String(bValue).localeCompare(String(aValue));
+        ? aString.localeCompare(bString)
+        : bString.localeCompare(aString);
     });
   
     console.log("SORTED", sortedItems);
@@ -568,46 +577,46 @@ const OpenPoTable = () => {
     setFilteredItems(sortedItems);
   };
   
+  
+  
+  
 
 
   const filterData = () => {
-    // const filteredData = items.filter((item) => {
-    //   return (
-    //     (!poNumber || item.po_number.toLowerCase().includes(poNumber.toLowerCase())) ||
-    //     (!selectedPOStatus || item.po_status.toLowerCase() === selectedPOStatus.value.toLowerCase()) ||
-    //     (!selectedPOType || item.po_type === selectedPOType.value) ||
-    //     (!selectedSupplierName || item.supplier_name === selectedSupplierName.value) ||
-    //     (!selectedShipTo || item.ship_to === selectedShipTo.value) ||
-    //     (!selectedBillTo || item.bill_to === selectedBillTo.value) ||
-    //     (!selectedBuyerName || item.buyer_name === selectedBuyerName.value) ||
-    //     (!selectedTotalAmount || item.total_amount === parseFloat(selectedTotalAmount)) ||
-    //     (!selectedPOHeaderID || item.po_header_id === selectedPOHeaderID) ||
-    //     (!selectedVendorID || item.vendor_id === selectedVendorID) ||
-    //     (!selectedVendorSiteID || item.vendor_site_id === selectedVendorSiteID) ||
-    //     (!selectedVendorNumber || item.vendor_number === selectedVendorNumber)
-    //   );
-    // });
     const filteredData = items.filter((item) => {
-      return (
-        (!poNumber || item.po_number.toLowerCase().includes(poNumber.toLowerCase())) &&
-        (!selectedPOStatus || item.po_status === selectedPOStatus.value) &&
-        (!selectedPOType || item.po_type === selectedPOType.value) &&
-        (!selectedSupplierName || item.supplier_name === selectedSupplierName.value) &&
-        (!selectLocation || item.location === selectLocation.value) &&
-        (!selectedBuyerName || item.buyer_name === selectedBuyerName.value) &&
-        (!selectedTotalAmount || item.total_amount === parseFloat(selectedTotalAmount))&&
-        (!selectedVendorNumber || item.vendor_number === selectedVendorNumber)
+      
+      const matchesPONumber = poNumber ? item.po_number.toLowerCase().includes(poNumber.toLowerCase()) : true;
+      const matchesPOStatus = selectedPOStatus ? item.po_status === selectedPOStatus.value : true;
+      const matchesPOType = selectedPOType ? item.po_type === selectedPOType.value : true;
+      const matchesSupplierName = selectedSupplierName ? item.supplier_name === selectedSupplierName.value : true;
+      const matchesShipTo = selectedShipTo ? item.location === selectedShipTo.value : true;
+      const matchesBuyerName = selectedBuyerName ? item.Buyer === selectedBuyerName.value : true;
+      const matchesTotalAmount = selectedTotalAmount ? item.total_amount === parseFloat(selectedTotalAmount) : true;
+      const matchesPOHeaderID = selectedPOHeaderID ? item.poheader === selectedPOHeaderID : true;
+      const matchesVendorID = selectedVendorID ? item.vendor === selectedVendorID : true;
+      const matchesVendorSiteID = selectedVendorSiteID ? item.vendor === selectedVendorSiteID : true;
+      const matchesVendorNumber = selectedVendorNumber ? item.vendor_num === selectedVendorNumber : true;
+     
+      
+      return matchesPONumber && 
+             matchesPOStatus && 
+             matchesPOType && 
+             matchesSupplierName && 
+             matchesShipTo && 
+             matchesBuyerName && 
+             matchesTotalAmount && 
+             matchesPOHeaderID && 
+             matchesVendorID && 
+             matchesVendorSiteID &&
+             matchesVendorNumber;
 
-      );
     });
-    console.log("filteredData", filteredData)
-
+  
     setFilteredItems(filteredData);
-
+    console.log("Filtered Data:", filteredData);
   };
-
-
-
+  
+  
   return (
     <>
       <div
@@ -616,137 +625,157 @@ const OpenPoTable = () => {
           alignItems: "center",
           gap: "20px",
           fontWeight: "bold",
-
+          width:"100%"
+          
         }}
       >
-         <div
-          style={{
-            backgroundColor: "#F8FAFC",
-            paddingBottom: "5px",
-            paddingTop: "10px",
-            width: "100vw",
-            boxSizing: "border-box",
-            marginTop: "-8em",
-            marginLeft: "5em",
-            height: "50vh"
+        
 
 
+<div
+  style={{
+    backgroundColor: "#F8FAFC",
+    paddingBottom: "5px",
+    paddingTop: "10px",
+    width: "100%", 
+    
+    marginTop:"-8em",
+    marginLeft:"5em",
+    height:"50vh"
 
+    
+
+  }}
+>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(4, 1fr)",
+      gap: "2em",
+      padding: "1em",
+      marginLeft: "4em",
+      marginRight: "4em",
+      marginTop:"3em"
+      
+    }}
+  >
+    <Input
+        placeholder="PO Number"
+        value={poNumber} 
+        onChange={handlePoNumberChange} 
+        style={{
+          width: "200px", 
+          boxSizing: "border-box", 
+        }}
+      />
+    <CreatableSelect
+          className="basic-single"
+          classNamePrefix="select"
+          value={selectedPOStatus}
+          onChange={handlePOStatusChange}
+          name="po_status"
+          options={POStatusOptions}
+          styles={{
+            container: (provided) => ({ ...provided, width: 200 }),
+            marginTop: "20px",
           }}
-        >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "2em",
-              padding: "1em",
-              marginLeft: "4em",
-              marginRight: "1em",
-              marginTop: "3em"
+          onCreateOption={handlePOStatusChange}
+          placeholder=" PO Status"
+          isClearable
+        />
+    <CreatableSelect
+          className="basic-single"
+          classNamePrefix="select"
+          value={selectedPOType}
+          onChange={handlePOTypeChange}
+          name="po_type"
+          options={SelectedPOTypeOptions}
+          styles={{
+            container: (provided) => ({ ...provided, width: 200 }),
+            marginTop: "20px",
+          }}
+          onCreateOption={handlePOTypeChange}
+          placeholder="PO Type"
+          isClearable
+        />
+     
+        <CreatableSelect
+          className="basic-single"
+          classNamePrefix="select"
+          value={selectedSupplierName}
+          onChange={handleSupplierNameChange}
+          name="supplier_name"
+          options={selectedSupplierOptions}
+          styles={{
+            container: (provided) => ({ ...provided, width: 200 }),
+            marginTop: "20px",
+          }}
+          onCreateOption={handleSupplierNameChange}
+          placeholder=" Supplier Name"
+          isClearable
+        />
+      
 
-            }}
-          >
-            <Input
-              placeholder="PO Number"
-              value={poNumber}
-              onChange={handlePoNumberChange}
-              style={{
-                width: "200px",
-                boxSizing: "border-box",
-              }}
-            />
-            <CreatableSelect
-              className="basic-single"
-              classNamePrefix="select"
-              value={selectedPOStatus}
-              onChange={handlePOStatusChange}
-              name="po_status"
-              options={POStatusOptions}
-              styles={{
-                container: (provided) => ({ ...provided, width: 200 }),
-                marginTop: "20px",
-              }}
-              onCreateOption={handlePOStatusChange}
-              placeholder=" PO Status"
-              isClearable
-            />
-            <CreatableSelect
-              className="basic-single"
-              classNamePrefix="select"
-              value={selectedPOType}
-              onChange={handlePOTypeChange}
-              name="po_type"
-              options={SelectedPOTypeOptions}
-              styles={{
-                container: (provided) => ({ ...provided, width: 200 }),
-                marginTop: "20px",
-              }}
-              onCreateOption={handlePOTypeChange}
-              placeholder="PO Type"
-              isClearable
-            />
-
-            <CreatableSelect
-              className="basic-single"
-              classNamePrefix="select"
-              value={selectedSupplierName}
-              onChange={handleSupplierNameChange}
-              name="supplier_name"
-              options={selectedSupplierOptions}
-              onCreateOption={handleSupplierNameChange}
-              placeholder=" Supplier Name"
-              isClearable
-            />
-
-
-
-
-            <CreatableSelect
-              className="basic-single"
-              classNamePrefix="select"
-              value={selectLocation}
-              onChange={handleLocation}
-              name="Location"
-              options={selectLocationOptions}
-              onCreateOption={handleShipToChange}
-              placeholder="Location"
-              isClearable
-            />
-
-
-            {/* <CreatableSelect
-              className="basic-single"
-              classNamePrefix="select"
-              value={selectedBillTo}
-              onChange={handleBillToChange}
-              name="bill_to"
-              options={selectedBillToOptions}
-              onCreateOption={handleBillToChange}
-              placeholder="Bill To"
-              isClearable
-            /> */}
-
-            <CreatableSelect
-              className="basic-single"
-              classNamePrefix="select"
-              value={selectedBuyerName}
-              onChange={handleBuyerNameChange}
-              name="buyer_name"
-              options={selectedBuyerNameOptions}
-              onCreateOption={handleBuyerNameChange}
-              placeholder="Buyer Name"
-              isClearable
-            />
-            <Input
-              placeholder="Total Amount"
-              value={selectedTotalAmount}
-              onChange={handleTotalChange}
-              style={{
-                width: "200px",
-                boxSizing: "border-box",
-              }}
-            />
-            {/* <CreatableSelect
+      
+       
+        <CreatableSelect
+          className="basic-single"
+          classNamePrefix="select"
+          value={selectedShipTo}
+          onChange={handleShipToChange}
+          name="ship_to"
+          options={selectedShipToOptions}
+          styles={{
+            container: (provided) => ({ ...provided, width: 200 }),
+            marginTop: "20px",
+          }}
+          onCreateOption={handleShipToChange}
+          placeholder="Location"
+          isClearable
+        />
+      
+      
+        {/* <CreatableSelect
+          className="basic-single"
+          classNamePrefix="select"
+          value={selectedBillTo}
+          onChange={handleBillToChange}
+          name="bill_to"
+          options={selectedBillToOptions}
+          styles={{
+            container: (provided) => ({ ...provided, width: 200 }),
+            marginTop: "20px",
+          }}
+          onCreateOption={handleBillToChange}
+          placeholder="Bill To"
+          isClearable
+        /> */}
+      
+      <CreatableSelect
+          className="basic-single"
+          classNamePrefix="select"
+          value={selectedBuyerName}
+          onChange={handleBuyerNameChange}
+          name="buyer_name"
+          options={selectedBuyerNameOptions}
+          styles={{
+            container: (provided) => ({ ...provided, width: 200 }),
+            marginTop: "20px",
+          }}
+          onCreateOption={handleBuyerNameChange}
+          placeholder="Buyer Name"
+          isClearable
+        />
+    <Input
+        placeholder="Total Amount"
+        value={selectedTotalAmount} 
+        onChange={handleTotalChange} 
+        style={{
+          width: "200px", 
+          boxSizing: "border-box", 
+        }}
+      />
+   {/* <CreatableSelect
           className="basic-single"
           classNamePrefix="select"
           value={selectedStatus}
@@ -757,174 +786,175 @@ const OpenPoTable = () => {
           placeholder="Status"
           isClearable
         /> */}
-            <Input
-              placeholder="PO Header ID"
-              value={selectedPOHeaderID}
-              onChange={handlePoHeaderChange}
-              style={{
-                width: "200px",
-                boxSizing: "border-box",
-              }}
-            />
-            {/* <Input
-              placeholder="Vendor Name"
-              value={selectedVendorID}
-              onChange={handleVendorIdChange}
-              style={{
-                width: "200px",
-                boxSizing: "border-box",
-              }}
-            /> */}
-            <Input
-              placeholder="Vendor Site ID"
-              value={selectedVendorSiteID}
-              onChange={handleVendorSiteChange}
-              style={{
-                width: "200px",
-                boxSizing: "border-box",
-              }}
-            />
-            <Input
-              placeholder="Vendor Number"
-              value={selectedVendorNumber}
-              onChange={handleVendorNumber}
-              style={{
-                width: "200px",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "20px",
-              margin: "20px 0",
-            }}
-          >
-            <Button
-              style={{
-                backgroundColor: "#3570c3",
-                color: "white",
-                cursor: "pointer",
-                height: "35px",
-                width: "100px", // Consistent button width
-              }}
-              onClick={filterData}
-            >
-              Find
-            </Button>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                backgroundColor: Hovered2 ? "#e1e1e2" : "transparent",
-                padding: "6px 12px",
-                borderRadius: "4px",
-                cursor: "pointer",
-                marginRight: "20px"
-              }}
-              onMouseEnter={() => setIsHovered2(true)}
-              onMouseLeave={() => setIsHovered2(false)}
-              //   onClick={handleDeleteSelectedRows}
-              onClick={handleClear}
-            >
-              <DismissRegular
-                style={{
-                  color: "#1281d7",
-                  fontSize: "20px",
-                  marginRight: "5px"
-                }}
-              />
-              <span
-                style={{
-                  fontSize: "14px",
-                  color: "#000",
-
-                }}
-              >
-                Clear
-              </span>
-            </div>
-          </div>
+    <Input
+        placeholder="PO Header ID"
+        value={selectedPOHeaderID} 
+        onChange={handlePoHeaderChange} 
+        style={{
+          width: "200px", 
+          boxSizing: "border-box", 
+        }}
+      />
+    {/* <Input
+        placeholder="Vendor Name"
+        value={selectedVendorID} 
+        onChange={handleVendorIdChange} 
+        style={{
+          width: "200px", 
+          boxSizing: "border-box", 
+        }}
+      /> */}
+    <Input
+        placeholder="Vendor Site ID"
+        value={selectedVendorSiteID} 
+        onChange={handleVendorSiteChange} 
+        style={{
+          width: "200px", 
+          boxSizing: "border-box", 
+        }}
+      />
+    <Input
+        placeholder="Vendor Number"
+        value={selectedVendorNumber} 
+        onChange={handleVendorNumber} 
+        style={{
+          width: "200px", 
+          boxSizing: "border-box", 
+        }}
+      />
+  </div>
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "flex-end",
+      gap: "20px",
+      margin: "20px 0",
+    }}
+  >
+    <Button
+      style={{
+        backgroundColor: "#3570c3",
+        color: "white",
+        cursor: "pointer",
+        height: "35px",
+        width: "100px", // Consistent button width
+      }}
+      onClick={filterData}
+    >
+      Find
+    </Button>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "4px", 
+        backgroundColor: Hovered2 ? "#e1e1e2" : "transparent",
+        padding: "6px 12px", 
+        borderRadius: "4px", 
+        cursor: "pointer",
+        marginRight:"20px"
+      }}
+      onMouseEnter={() => setIsHovered2(true)}
+      onMouseLeave={() => setIsHovered2(false)}
+    //   onClick={handleDeleteSelectedRows}
+    onClick={handleClear}
+    >
+      <DismissRegular
+        style={{
+          color: "#1281d7", 
+          fontSize: "20px",
+          marginRight:"5px"
+        }}
+      />
+      <span
+        style={{
+          fontSize: "14px",
+          color: "#000",
+          
+        }}
+      >
+        Clear
+      </span>
+    </div>
+  </div>
+</div>
+        
+        
+<div
+  style={{
+    marginTop: "30em", 
+    width:"30%",
+    marginRight:"4em"
+  }}
+>
+        <Search
+          placeholder="Search PO"
+          onSearchChange={handleSearchChange}
+          
+        />
         </div>
-
-
-        <div
-          style={{
-            marginTop: "30em", // Add spacing below the above div
-
-            marginRight: "2.5em"
-          }}
-        >
-          <Search
-            placeholder="Search PO"
-            onSearchChange={handleSearchChange}
-
-          />
-        </div>
-
+       
       </div>
       <div
         style={{
           height: "60vh",
           overflow: "scroll",
           marginTop: "40px",
-          overflowX: "auto"
+          overflowx: "auto"
         }}
       >
-        <DataGrid
-          items={filtered}
-          key={items.length}
-          columns={columns}
-          sortable
-          selectionMode="multiselect"
-          onSelectionChange={handleSelectionChange}
-          getRowId={(_, index) => index}
-          focusMode="composite"
-          style={{ minWidth: "600px" }}
-        >
-          <DataGridHeader>
-            <DataGridRow>
-              {({ renderHeaderCell, columnId }) => (
-                <DataGridHeaderCell
-                  onClick={() => handleSort(columnId)}
-                  style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-                >
-                  {renderHeaderCell()}
-                  {sortState.columnId === columnId &&
-                    (sortState.sortDirection === "ascending" ? (
-                      <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
-                    ) : (
-                      <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
-                    ))}
-                </DataGridHeaderCell>
-              )}
-            </DataGridRow>
-          </DataGridHeader>
-          <DataGridBody>
-            {({ item, rowId }) => (
-              <DataGridRow
-                key={rowId}
-                onClick={(e) => handleRowClick(e, item)}
-                selected={selectedRows.has(rowId)}
+       <DataGrid
+      
+      items={filtered}
+      key={items.length}
+      columns={columns}
+      sortable
+      selectionMode="multiselect"
+      onSelectionChange={handleSelectionChange}
+      getRowId={(_, index) => index}
+      focusMode="composite"
+      style={{ minWidth: "600px" }}
+    >
+      <DataGridHeader>
+        <DataGridRow>
+          {({ renderHeaderCell, columnId }) => (
+            <DataGridHeaderCell
+              onClick={() => handleSort(columnId)}
+              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+            >
+              {renderHeaderCell()}
+              {sortState.columnId === columnId &&
+                (sortState.sortDirection === "ascending" ? (
+                  <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
+                ) : (
+                  <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
+                ))}
+            </DataGridHeaderCell>
+          )}
+        </DataGridRow>
+      </DataGridHeader>
+      <DataGridBody>
+        {({ item, rowId }) => (
+          <DataGridRow
+            key={rowId}
+            onClick={(e) => handleRowClick(e, item)}
+            selected={selectedRows.has(rowId)}
+          >
+            {({ renderCell }) => (
+              <DataGridCell
+                style={{
+                  wordWrap: "break-word",
+                  whiteSpace: "normal",
+                  overflow: "hidden",
+                }}
               >
-                {({ renderCell }) => (
-                  <DataGridCell
-                    style={{
-                      wordWrap: "break-word",
-                      whiteSpace: "normal",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {renderCell(item)}
-                  </DataGridCell>
-                )}
-              </DataGridRow>
+                {renderCell(item)}
+              </DataGridCell>
             )}
-          </DataGridBody>
-        </DataGrid>
+          </DataGridRow>
+        )}
+      </DataGridBody>
+    </DataGrid>
       </div>
     </>
   );

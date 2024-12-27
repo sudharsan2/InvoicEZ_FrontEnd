@@ -29,7 +29,7 @@ const containerStyle = {
   
   // justifyContent: "space-around",
   padding: "8px",
-  marginLeft:"3em"
+  // marginLeft:"3em"
 };
 
 const itemStyle = {
@@ -101,7 +101,7 @@ const IssuefixPage = () => {
   return (
     <div style={{maxHeight:"88vh",overflowY:"auto"}}>
       <div ref={divRef1}>
-        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
+        <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
@@ -121,10 +121,10 @@ const IssuefixPage = () => {
             display: "flex",
             justifyContent: "flexStart",
             padding: "1px",
-            marginLeft:"3em"
+           
           }}
         >
-          <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>No Match Found</h3>
+          <h3 style={{ fontSize: "1.5em"}}>No Match Found</h3>
         </div>
         <div>
           <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -170,10 +170,10 @@ const IssuefixPage = () => {
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+      <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center"}}>
       <Divider style={{ marginTop:"2em"}} />
     </div>
-      <div style={{marginLeft:"3em",marginTop:"-2em"}}>
+      <div style={{marginTop:"-2em"}}>
         {height > 0 ? <IssuefixTable height={height} setTableLength={setTableLength}/> : <p>Loading...</p>}
       </div>
     </div>

@@ -576,9 +576,9 @@ const NavDrawerDefault = (props) => {
                 }
                 onClick={() => {
                   navigate("/openpo");
-                  setValue("7");
+                  setValue("8");
                 }}
-                value="7"
+                value="8"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
                 }
@@ -604,9 +604,9 @@ const NavDrawerDefault = (props) => {
                 }
                 onClick={() => {
                   navigate("/history");
-                  setValue("8");
+                  setValue("7");
                 }}
-                value="8"
+                value="7"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
                 }

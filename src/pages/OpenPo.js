@@ -15,7 +15,6 @@ import {
   DismissRegular,
 } from "@fluentui/react-icons";
 import TagCounters from "../components/gridapprove";
-
 import Search from "../components/Search";
 import OpenPoTable from "../components/OpenPoTable";
 import { makeStyles, useId, Input, Label } from "@fluentui/react-components";
@@ -47,48 +46,6 @@ const OpenPO = () => {
   const [typeValue, setTypeValue] = useState("");
 
 
-
-
-
-  const handleCreate = (inputValue) => {
-    const newOption = { value: inputValue, label: inputValue };
-
-    setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
-    setSelectedOption(newOption);
-  };
-
-  const statusOptions = [
-    { value: "Approved", label: "Approved" },
-    { value: "In Process", label: "In Process" },
-  ];
-
-  const handleStatusChange = (newValue) => {
-    setSelectedStatus(newValue);
-
-  };
-
-  const typeOptions = [
-    { value: "Standard", label: "Standard" },
-  ];
-
-  const handleTypeChange = (newValue) => {
-    setSelectedType(newValue);
-    setTypeValue(newValue ? newValue.value : "");
-  };
-
-  const supplieroptions = [
-    { value: "JOINT HEALTH CARE", label: "JOINT HEALTH CARE" },
-    { value: "Medvin Group", label: "Medvin Group" },
-    { value: "PROFRAMA SH.a.", label: "PROFRAMA SH.a." },
-  ];
-
-  const handlesupplierchange = (newValue) => {
-    setselectedsupplier(newValue);
-    setTypeValue(newValue ? newValue.value : "");
-  };
-
-
-
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
       <div style={{ height: "5vh" }}>
@@ -113,18 +70,18 @@ const OpenPO = () => {
               justifyContent: "flexStart",
               padding: "1px",
               // marginLeft:"3em"
-              
+
             }}
           >
             <h3 style={{ fontSize: "1.5em" }}>Open PO</h3>
           </div>
-         
-                </div>
+
+        </div>
         <div style={{ width: "100%", height: "5vh" }} />
-        <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
-      {/* <Divider style={{ marginTop:"22em"}} /> */}
-    </div>
-        <div style={{marginTop:"-2em"}}>
+        <div style={{ display: 'flex', justifyContent: 'center', width: '90%', alignItems: "center", marginLeft: "3em" }}>
+          {/* <Divider style={{ marginTop:"22em"}} /> */}
+        </div>
+        <div style={{ marginTop: "-2em" }}>
           <OpenPoTable />
         </div>
       </div>

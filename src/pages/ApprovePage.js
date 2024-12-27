@@ -23,7 +23,7 @@ const UserApprove = () => {
   return (
     <div style={{maxHeight:"91vh",overflowY:"auto"}}>
       <div style={{ height: "5vh" }}>
-        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
+        <div className="Approvebreadcrump" >
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
@@ -43,22 +43,22 @@ const UserApprove = () => {
               display: "flex",
               justifyContent: "flexStart",
               padding: "1px",
-              marginLeft:"3em"
+             
               
             }}
           >
             <h3 style={{ fontSize: "1.5em" }}>Match Found</h3>
           </div>
 
-          <div style={{marginLeft:"3em"}}>
+          <div >
             <TagCounters type="approve" />
           </div>
         </div>
         <div style={{ width: "100%", height: "5vh" }} />
-        <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+        <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center"}}>
       <Divider style={{ marginTop:"4em"}} />
     </div>
-        <div style={{marginLeft:"3em",marginTop:"-2em"}}>
+        <div style={{marginTop:"-2em"}}>
           <TableApprove />
         </div>
       </div>

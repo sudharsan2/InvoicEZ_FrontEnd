@@ -109,7 +109,7 @@ const StoreHistory = () => {
   return (
     <div style={{overflowY:"auto",height:"90vh"}}>
       <div style={{ height: "5vh" }}>
-        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
+        <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
@@ -123,7 +123,7 @@ const StoreHistory = () => {
         </div>
       </div>
       <div>
-        <div style={{ maxHeight: "10vh" ,marginLeft:"3em"}}>
+        <div style={{ maxHeight: "10vh" }}>
           <div
             style={{
               display: "flex",
@@ -157,11 +157,11 @@ const StoreHistory = () => {
         </div>
         <div style={{ width: "100%", height: "5vh" ,marginTop:"4em"}} />
         
-        <div style={{marginTop:"16em",marginLeft:"3em"}}>
-        <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+        <div style={{marginTop:"16em",}}>
+        <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"1em"}}>
       <Divider style={{ marginTop:"4em"}} />
     </div>
-    <div style={{marginTop:"-2em",marginLeft:"2em"}}>
+    <div style={{marginTop:"-2em",}}>
     <StoreHistoryTable />
     </div>
           

@@ -1,7 +1,7 @@
 // API connection
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {message} from "antd";
+import { message } from "antd";
 import {
   ArrowClockwise24Regular,
   Delete28Regular,
@@ -87,7 +87,7 @@ const columns = [
   }),
 ];
 
-const StoreTable = ({setTableLength}) => {
+const StoreTable = ({ setTableLength }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
@@ -121,28 +121,28 @@ const StoreTable = ({setTableLength}) => {
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
       // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-      
-      
+
+
       // Map fetched data to the format expected by DataGrid
       const mappedItems = fetchedItems.map((item, index) => {
-        
-           
-      
+
+
+
         if (!item.po_headers || item.po_headers.length === 0) {
           console.warn(`No po_headers found for index ${index}`);
           return null; // Skip if no po_headers
         }
-        
-        const val = item.items.map((item)=>({
-              Igst:item.Igst
+
+        const val = item.items.map((item) => ({
+          Igst: item.Igst
         }));
-       
-        console.log("IGST",val);
-      
+
+        console.log("IGST", val);
+
         return item.po_headers.map((po_header) => ({
-          
-          
-          Id:po_header.id,
+
+
+          Id: po_header.id,
           po_number: po_header.po_number,
           po_type: po_header.po_type,
           po_status: po_header.po_status,
@@ -153,23 +153,23 @@ const StoreTable = ({setTableLength}) => {
           buyer_name: po_header.buyer_name,
           total_amount: po_header.total_amount,
           status: po_header.status,
-          customer:item.CustomerName,
-          invoice:item.InvoiceFile,
-          Igst_val:val.Igst
-          
-          
+          customer: item.CustomerName,
+          invoice: item.InvoiceFile,
+          Igst_val: val.Igst
+
+
 
         }));
       });
       // const flattenedMappedItems = mappedItems.flat().filter(Boolean);
       const flattenedMappedItems = mappedItems
-  .flat() 
-  .filter(Boolean)
-  .sort((a, b) => a.po_number.localeCompare(b.po_number));
+        .flat()
+        .filter(Boolean)
+        .sort((a, b) => a.po_number.localeCompare(b.po_number));
 
       setItems(flattenedMappedItems);
       setTableLength(flattenedMappedItems.length);
-      console.log("Mapped Items",flattenedMappedItems);
+      console.log("Mapped Items", flattenedMappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -208,10 +208,10 @@ const StoreTable = ({setTableLength}) => {
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
-  
+
     const filteredItems = items.filter((item) => {
       const searchLower = searchQuery?.trim().toLowerCase() || "";
-  
+
       return (
         // item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
         // item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
@@ -227,8 +227,8 @@ const StoreTable = ({setTableLength}) => {
         item.status?.toLowerCase().includes(searchLower)
       );
     });
-  
-    setFilteredItems(filteredItems); 
+
+    setFilteredItems(filteredItems);
   };
 
 
@@ -367,14 +367,14 @@ const StoreTable = ({setTableLength}) => {
 
   const [filtered, setFilteredItems] = useState([]);
   useEffect(() => {
-    setFilteredItems(items); 
+    setFilteredItems(items);
   }, [items])
 
   const [sortState, setSortState] = useState({
     columnId: "",
     sortDirection: "ascending",
   });
-  
+
   const handleSort = (columnId) => {
     let newSortDirection = "ascending";
 
@@ -384,7 +384,7 @@ const StoreTable = ({setTableLength}) => {
     }
 
     setSortState({ columnId, sortDirection: newSortDirection });
-    
+
 
     const sortedItems = [...filteredItems].sort((a, b) => {
       const aValue = a[columnId];
@@ -394,9 +394,9 @@ const StoreTable = ({setTableLength}) => {
       if (aValue > bValue) return newSortDirection === "ascending" ? 1 : -1;
       return 0;
     });
-    console.log("SORTED",sortedItems);
-    
-    setFilteredItems(sortedItems); 
+    console.log("SORTED", sortedItems);
+
+    setFilteredItems(sortedItems);
   };
 
   return (
@@ -449,15 +449,15 @@ const StoreTable = ({setTableLength}) => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent",
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
           }}
-          onMouseEnter={() => setIsHovered(true)} 
-          onMouseLeave={() => setIsHovered(false)} 
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           // onClick={fetchData}
           onClick={handleRefreshClick}
 
@@ -479,55 +479,55 @@ const StoreTable = ({setTableLength}) => {
         }}
       >
         <DataGrid
-      items={filtered}
-      columns={columns}
-      sortable
-      selectionMode="multiselect"
-      onSelectionChange={handleSelectionChange}
-      getRowId={(_, index) => index}
-      focusMode="composite"
-      style={{ minWidth: "600px" }}
-    >
-      <DataGridHeader>
-        <DataGridRow>
-          {({ renderHeaderCell, columnId }) => (
-            <DataGridHeaderCell
-              onClick={() => handleSort(columnId)}
-              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-            >
-              {renderHeaderCell()}
-              {sortState.columnId === columnId &&
-                (sortState.sortDirection === "ascending" ? (
-                  <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
-                ) : (
-                  <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
-                ))}
-            </DataGridHeaderCell>
-          )}
-        </DataGridRow>
-      </DataGridHeader>
-      <DataGridBody>
-        {({ item, rowId }) => (
-          <DataGridRow
-            key={rowId}
-            onClick={(e) => handleRowClick(e, item)}
-            selected={selectedRows.has(rowId)}
-          >
-            {({ renderCell }) => (
-              <DataGridCell
-                style={{
-                  wordWrap: "break-word",
-                  whiteSpace: "normal",
-                  overflow: "hidden",
-                }}
+          items={filtered}
+          columns={columns}
+          sortable
+          selectionMode="multiselect"
+          onSelectionChange={handleSelectionChange}
+          getRowId={(_, index) => index}
+          focusMode="composite"
+          style={{ minWidth: "600px" }}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell, columnId }) => (
+                <DataGridHeaderCell
+                  onClick={() => handleSort(columnId)}
+                  style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+                >
+                  {renderHeaderCell()}
+                  {sortState.columnId === columnId &&
+                    (sortState.sortDirection === "ascending" ? (
+                      <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
+                    ) : (
+                      <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
+                    ))}
+                </DataGridHeaderCell>
+              )}
+            </DataGridRow>
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow
+                key={rowId}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(rowId)}
               >
-                {renderCell(item)}
-              </DataGridCell>
+                {({ renderCell }) => (
+                  <DataGridCell
+                    style={{
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {renderCell(item)}
+                  </DataGridCell>
+                )}
+              </DataGridRow>
             )}
-          </DataGridRow>
-        )}
-      </DataGridBody>
-    </DataGrid>
+          </DataGridBody>
+        </DataGrid>
       </div>
     </>
   );
