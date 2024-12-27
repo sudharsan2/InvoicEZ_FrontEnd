@@ -10,7 +10,7 @@
     "@fluentui/react-components": "^9.54.17",
     "@fluentui/react-icons": "^2.0.261",
     "@fluentui/react-nav-preview": "^0.1.0",
-    "@mui/material": "^5.15.16",
+    "@mui/material": "^5.16.13",
     "@reduxjs/toolkit": "^2.2.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

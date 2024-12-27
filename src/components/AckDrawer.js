@@ -31,7 +31,7 @@ const useStyles = makeStyles({
 
 const AckDrawer = ({data,setIsOpen,isOpen,onClose}) => {
   const styles = useStyles();
-  const [type, setType] = useState("overlay");
+
 
  
   const restoreFocusSourceAttributes = useRestoreFocusSource();
@@ -91,7 +91,7 @@ const AckDrawer = ({data,setIsOpen,isOpen,onClose}) => {
     <div className={styles.root}>
       <Drawer
         {...restoreFocusSourceAttributes}
-        type={type}
+        type="overlay"
         position="end"
         separator
         open={isOpen}

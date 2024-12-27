@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 
 const ASNDrawer = ({ isOpen, setIsOpen }) => {
   const styles = useStyles();
-  const [type, setType] = useState("overlay");
+  
 
   
   const restoreFocusSourceAttributes = useRestoreFocusSource();
@@ -44,7 +44,7 @@ const ASNDrawer = ({ isOpen, setIsOpen }) => {
     <div className={styles.root}>
       <Drawer
         {...restoreFocusSourceAttributes}
-        type={type}
+        type="overlay"
         position="end"
         separator
         open={isOpen}

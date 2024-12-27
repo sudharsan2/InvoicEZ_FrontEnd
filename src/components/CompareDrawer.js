@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 const CompareDrawer = ({data,onClose}) => {
   const styles = useStyles();
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("overlay");
+  
 
   const handleClose = () => {
     setIsOpen(false);
@@ -77,7 +77,7 @@ const CompareDrawer = ({data,onClose}) => {
     <div className={styles.root}>
       <Drawer
         {...restoreFocusSourceAttributes}
-        type={type}
+        type="overlay"
         position="end"
         separator
         open={isOpen}
