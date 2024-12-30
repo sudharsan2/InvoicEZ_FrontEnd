@@ -1,11 +1,10 @@
 // API connection
 import React, { useEffect, useState } from "react";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+
 import axios from "axios";
 import {
   ArrowClockwise24Regular,
-  Delete28Regular,
-  TasksApp28Regular,
+  ArrowSortUpFilled, ArrowSortDownRegular
 } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
@@ -18,8 +17,8 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import Search from "./Search"; // Assuming your search component is imported here
-import { Button, notification } from "antd"; // Import Ant Design components
+import Search from "./Search"; 
+import {notification } from "antd"; 
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
 import { message } from "antd";
@@ -72,7 +71,6 @@ const StoreHistoryTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
-  const [po_id, set_Po_id] = useState("");
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
@@ -104,7 +102,7 @@ const StoreHistoryTable = () => {
       });
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
-      // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+      
 
       const mappedItems = fetchedItems.map((item, index) => {
         // Map over po_headers to get all po_numbers
@@ -214,102 +212,9 @@ const StoreHistoryTable = () => {
     setSelectedRows(data.selectedItems);
   };
 
-  //  delete API
-  const handleDeleteSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows);
-    if (selectedItemsArray.length === 0) {
-      notification.warning({
-        message: "No PO Selected",
-        description: "Please select at least one PO to delete.",
-      });
-      return;
-    }
+  
 
-    try {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-
-      const deletePromises = selectedItemsArray.map((item) =>
-        axios.delete(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
-        ),
-      );
-
-      await Promise.all(deletePromises);
-
-      const newItems = items.filter(
-        (item) =>
-          !selectedItemsArray.some(
-            (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
-          ), // Ensure to compare InvoiceId
-      );
-
-      setItems(newItems);
-
-      notification.success({
-        message: "Successfully deleted",
-        description: `You have successfully deleted: ${supplierNames}`,
-      });
-
-      dispatch(refreshActions.toggleInvoiceUploadRefresh());
-    } catch (error) {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-      notification.error({
-        message: "Deletion Failed",
-        description: `Deletion Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
-      });
-    }
-  };
-
-  // Approve API
-
-  const handleApproveSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
-    if (selectedItemsArray.length === 0) {
-      notification.warning({
-        message: "No PO Selected",
-        description: "Please select at least one PO to Approve.",
-      });
-      return;
-    }
-
-    try {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-
-      // Make API call to delete selected POs
-      await Promise.all(
-        selectedItemsArray.map((item) =>
-          axios.post(
-            `https://invoicezapi.focusrtech.com:57/user/oracle-payload/${po_id}`,
-          ),
-        ),
-      );
-
-      // Remove deleted items from the state
-      setItems(items.filter((item) => !selectedItemsArray.includes(item)));
-
-      // Show success notification
-      notification.success({
-        message: "Successfully Approved",
-        description: `You have successfully approved: ${supplierNames}`,
-      });
-      dispatch(refreshActions.toggleInvoiceUploadRefresh());
-    } catch (error) {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-      notification.error({
-        message: "Approval Failed",
-        description: `Approval Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
-      });
-    }
-  };
-
+  
   const [filtered, setFilteredItems] = useState([]);
   useEffect(() => {
     setFilteredItems(items); 

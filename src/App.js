@@ -1,11 +1,9 @@
-import logo from "./logo.svg";
+
 import "./App.css";
 import CustomLayout from "./components/layout";
 import NavDrawerDefault from "./components/drawer";
-import Sample from "./components/sample";
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./pages/Login";
+
 import Dashboard from "./pages/dashboard";
 import Employee from "./pages/Employee";
 import EmployeeForm from "./pages/employeeform";
@@ -57,8 +55,7 @@ import StoreTagCounters from "./pages/StoreDashboard";
 import StoreHistoryNavigate from "./pages/StoreHistoryNavigate";
 import UserPage from "./pages/UserPage";
 import GateEntryDetails from "./pages/GateEntryDetails";
-import SankeyChart from "./components/SankeyChart";
-import {  Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import OpenPo from "./pages/OpenPo";
 import StoreOpenPO from "./pages/StoreOpenPo";
@@ -66,23 +63,7 @@ import React, {useState,useEffect} from "react";
 import StoreOpenPODetails from "./pages/StoreOpenPODetails";
 import OpenPODetails from "./pages/OpenPoDetails";
 
-// const getUserRoleFromToken = () => {
-//   const token = localStorage.getItem("access_token");
-//   if (token) {
-//     try {
-//       const decodedToken = jwtDecode(token);
-//       return decodedToken.role; 
-//     } catch (error) {
-//       console.error("Error decoding token", error);
-//       return null;
-//     }
-//   }
-//   return null;
-// };
 
-// const userRole = getUserRoleFromToken();
-
-// console.log("roleAPP",userRole);
 
 function App() {
 
@@ -104,14 +85,14 @@ function App() {
     return null;
   };
 
-  // Effect to fetch role on app load or token change
+  
   useEffect(() => {
     const roleFromToken = getUserRoleFromToken();
     setUserRole(roleFromToken);
     setLoading(false);
   }, []);
 
-  // Function to update role dynamically (for child components like Login)
+  
   const setRoleFromChild = (role) => {
     setUserRole(role);
   };

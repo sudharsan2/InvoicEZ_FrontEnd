@@ -21,7 +21,7 @@ const handleTokenExpired = (exp) => {
   console.log(timeLeft);
   expiredTimer = window.setTimeout(() => {
     console.log("Session expired");
-    // You can do what ever you want here, like show a notification
+    // 
   }, timeLeft);
 };  
 

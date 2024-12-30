@@ -1,19 +1,18 @@
 // API connection
 import React, { useEffect, useState ,useRef} from "react";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+
 import axios from "axios";
 import {
-  ArrowClockwise28Regular,
-  Delete28Regular,
-  TasksApp28Regular,
+  
   PeopleTeamDelete24Regular,
   PeopleAdd24Regular,
   Edit24Filled,
   Key24Regular,
   Eye24Filled ,
-  EyeOff24Filled
+  EyeOff24Filled,ArrowSortUpFilled, ArrowSortDownRegular
+  
 } from "@fluentui/react-icons";
-import { UserAddOutlined, UserDeleteOutlined } from "@ant-design/icons";
+
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -25,12 +24,11 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import Search from "../components/Search";// Assuming your search component is imported here
-import { Button, notification } from "antd"; // Import Ant Design components
+
+import { Button, notification } from "antd"; 
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-import { message } from "antd";
-import { Modal, TextField, PrimaryButton, DefaultButton } from "@fluentui/react";
+
 import {
   Dropdown,
   Option,
@@ -43,7 +41,7 @@ const path = "/UserManagement";
 // Define columns for the DataGrid
 
 const UserTable = ({setGateCount,setStoreCount}) => {
-  const navigate = useNavigate();
+  
   const columns = [
     createTableColumn({
       columnId: "Id",
@@ -146,18 +144,20 @@ const [password, setPassword] = useState("");
 const [selectedUser, setSelectedUser] = useState(null);
 const [isPasswordVisible, setIsPasswordVisible] = useState(false);
  
+
+console.log(selectedUser)
 const togglePasswordVisibility = () => {
   setIsPasswordVisible((prev) => !prev);
 };
   const dispatch = useDispatch();
-  const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
+  
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
 
   const [RefreshUpload, SetRefreshUpload] = useState(null);
-
-  const [DeleteRefresh, SetDeleteRefresh] = useState(false);
+  console.log(RefreshUpload)
+  
 
   const popupRef = useRef(null);
 
@@ -231,9 +231,7 @@ const togglePasswordVisibility = () => {
   // Fetch data from the API when the component mounts
   const fetchData = async () => {
     try {
-      // const response = await axios.get(
-      //   "https://invoicezapi.focusrtech.com:57/user/user-list",
-      // );
+      
       const token = localStorage.getItem("access_token"); 
 
       const response = await axios.get(
@@ -246,9 +244,7 @@ const togglePasswordVisibility = () => {
       );
       const fetchedItems = response.data; 
       console.log("fetchedItems", fetchedItems);
-    //   set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-      //  console.log("InvId",InvoiceNumber);
-      // Map fetched data to the format expected by DataGrid
+    
       let Gate = 0;
         let Store = 0;
       const mappedItems = fetchedItems.map((item) => {
@@ -275,7 +271,7 @@ const togglePasswordVisibility = () => {
         return {
             Id: item.id,
             username: item.username,
-            role: item.role,
+            
             email: item.email,
             empId: item.empId,
             role:role,
@@ -303,9 +299,7 @@ const togglePasswordVisibility = () => {
     fetchData();
   }, [isInvoiceUploadRefreshed]);
 
-  const handleSearchChange = (value) => {
-    setSearchQuery(value);
-  };
+  
 
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
@@ -320,14 +314,7 @@ const togglePasswordVisibility = () => {
     );
   });
 
-  // const handleRowClick = (e, item) => {
-  //   if (e.target.type !== "checkbox") {
-  //     navigate(``, {
-  //       state: { poNumber: item.po_number, Id: item.Id },
-  //     });
-  //     console.log("ItemId", item.Id);
-  //   }
-  // };
+ 
 
   const handleSelectionChange = (event, data) => {
     console.log("handleSelectionChange", data.selectedItems);
@@ -343,10 +330,7 @@ const togglePasswordVisibility = () => {
   const handleSave = async () => {
     try {
       
-      // const updatedData = {
-      //   ...selectedRow, 
-        
-      // };
+    
 
       const roleMapping = {
         "Invoice Manager": 1,
@@ -427,11 +411,7 @@ const togglePasswordVisibility = () => {
         .map((item) => item.supplier_name)
         .join(", ");
 
-      // const deletePromises = selectedItemsArray.map((item) =>
-      //   axios.delete(
-      //     `https://invoicezapi.focusrtech.com:57/user/delete-user/${filteredItems[item].Id}`,
-      //   ),
-      // );
+      
       const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
@@ -475,49 +455,7 @@ const togglePasswordVisibility = () => {
   };
 
 
-  // Approve API
-
-  const handleApproveSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
-    if (selectedItemsArray.length === 0) {
-      notification.warning({
-        message: "No PO Selected",
-        description: "Please select at least one PO to Approve.",
-      });
-      return;
-    }
-
-    try {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-
-      // Make API call to delete selected POs
-      await Promise.all(
-        selectedItemsArray.map((item) =>
-          axios.post(`https://invoicezapi.focusrtech.com:57/user/oracle-payload/${po_id}`),
-        ),
-      );
-
-      // Remove deleted items from the state
-      setItems(items.filter((item) => !selectedItemsArray.includes(item)));
-
-      // Show success notification
-      notification.success({
-        message: "Successfully Approved",
-        description: `You have successfully approved: ${supplierNames}`,
-      });
-      dispatch(refreshActions.toggleInvoiceUploadRefresh());
-    } catch (error) {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-      notification.error({
-        message: "Approval Failed",
-        description: `Approval Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
-      });
-    }
-  };
+  
 
   const [showPopup, setShowPopup] = useState(false);
   const [formData, setFormData] = useState({
@@ -788,22 +726,7 @@ const togglePasswordVisibility = () => {
 )}
 
 
-        {/* <button
-          style={{
-            display: "flex",
-            alignItems: "center",
-            backgroundColor: "transparent",
-            border: "1px solid #fff",
-            padding: "6px 12px",
-            cursor: "pointer",
-            gap: "8px",
-            marginLeft: "2em",
-          }}
-          onClick={handleApproveSelectedRows}
-        >
-          <TasksApp28Regular style={{ color: "#1281d7" }} />
-          <span>Approve</span>
-        </button> */}
+        
 
         <button
           style={{
@@ -825,10 +748,7 @@ const togglePasswordVisibility = () => {
           <span>Delete User</span>
         </button>
 
-        {/* <Search
-          placeholder="Search PO or Supplier"
-          onSearchChange={handleSearchChange}
-        /> */}
+        
       </div>
       <div
         style={{

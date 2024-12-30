@@ -1,19 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate,} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDrawerPosition } from "../Store/refreshSlice";
 import {
-  NavCategory,
-  NavCategoryItem,
+ 
   NavDrawer,
   NavDrawerBody,
   NavDrawerFooter,
   NavDrawerHeader,
   NavDrawerHeaderNav,
-  NavDrawerProps,
+ 
   NavItem,
-  NavSubItem,
-  NavSubItemGroup,
+  
 } from "@fluentui/react-nav-preview";
 import {
   Board24Filled,
@@ -28,7 +26,7 @@ import {
   HeartPulse20Regular,
   MegaphoneLoud20Filled,
   MegaphoneLoud20Regular,
-  NavigationFilled,
+  
   NotePin20Filled,
   NotePin20Regular,
   People20Filled,
@@ -58,18 +56,12 @@ import {
   Navigation24Regular,
   DocumentCatchUp24Filled,
   DocumentCatchUp24Regular,
-  WrenchSettings24Filled,
-  WrenchSettings24Regular,
-  TasksApp24Regular,
-  TasksApp24Filled,
+  
   TargetArrow24Filled,
   TargetArrow24Regular,
   TargetDismiss24Filled,
   TargetDismiss24Regular,
-  DocumentTableCheckmark24Filled,
-  DocumentTableCheckmark24Regular,
-  TaskListSquareRtl24Filled,
-  TaskListSquareRtl24Regular,
+  
   VehicleTruckProfile24Filled,
   VehicleTruckProfile24Regular,
   Form28Regular,
@@ -84,22 +76,18 @@ import {
 
 import {
   Button,
-  Caption1Strong,
-  Label,
-  Radio,
-  RadioGroup,
+  
   makeStyles,
   shorthands,
   tokens,
-  useId,
+  
   Tooltip,
 
 } from "@fluentui/react-components";
-import { CiSettings } from "react-icons/ci";
+
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-// import { Dropdown, Option} from "@fluentui/react-components";
-// import  { DropdownProps } from "@fluentui/react-components";
+
 const useStyles = makeStyles({
   root: {
     // ...shorthands.border("2px", "solid", "#ccc"),
@@ -265,23 +253,20 @@ const NavDrawerDefault = (props) => {
 
   const styles = useStyles();
 
-  const labelId = useId("type-label");
+  
 
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  
   const [empId, setEmpId] = useState("");
-  const dropdownId = useId("dropdown");
+  
 
   const drawerPosition = useSelector((state) => state.refresh.drawerPosition);
-  // const styles = useStyles();
-  // const[value,setValue] = useState("1")
+  
   const value = localStorage.getItem("userDrawerPosition");
   console.log("value", { value });
-  const someClickHandler = () => {
-    navigate("/dashboard");
-  };
+ 
   const setValue = (value) => {
     dispatch(toggleDrawerPosition(value));
   };
@@ -291,7 +276,7 @@ const NavDrawerDefault = (props) => {
     if (storedUsername) {
       setUsername(storedUsername);
     }
-    // localStorage.setItem("userDrawerPosition", "1");
+    
   }, []);
 
   useEffect(() => {
@@ -301,10 +286,10 @@ const NavDrawerDefault = (props) => {
       try {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
-        const emailFromToken = decodedToken.email;
+        
         const empIdFromToken = decodedToken.empId;
 
-        setEmail(emailFromToken);
+       
         setEmpId(empIdFromToken);
       } catch (error) {
         console.error("Invalid token:", error);
@@ -320,7 +305,7 @@ const NavDrawerDefault = (props) => {
         // defaultSelectedCategoryValue="3"
 
         open={isOpen}
-        type={type}
+        type="inline"
         onOpenChange={(_, { open }) => setIsOpen(open)}
         size="small"
         className={useStyles.navdrawer}
@@ -932,63 +917,7 @@ const NavDrawerDefault = (props) => {
               </NavItem>
             </div>
             
-            {/* <div style={{ width: "100%" }}>
-              <div
-                style={
-                  themestate
-                    ? { marginTop: "2px", color: darktheme.fontcolordark }
-                    : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                }
-              >
-                <NavCategory value="6">
-                  <NavCategoryItem
-                    target="_blank"
-                    icon={
-                      <PersonStarRegular
-                        style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
-                        }
-                      />
-                    }
-                    // onClick={someClickHandler}
-                    value="3"
-                    className={
-                      themestate ? styles.navItemdark : styles.navItemlight
-                    }
-                    style={{ marginTop: "10px", fontSize: "17px" }}
-                    onClick={() => {
-                      setValue("3");
-                    }}
-                  >
-                    Issue
-                  </NavCategoryItem>
-                  <NavSubItemGroup>
-                    <NavSubItem
-                      value="4"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/ai");
-                        setValue("4");
-                      }}
-                    >
-                      AI Identified
-                    </NavSubItem>
-                    <NavSubItem
-                      value="5"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/issuefix");
-                        setValue("5");
-                      }}
-                    >
-                      Fix
-                    </NavSubItem>
-                  </NavSubItemGroup>
-                </NavCategory>
-              </div>
-            </div> */}
+            
 
             
           </NavDrawerBody>
@@ -1054,23 +983,7 @@ const NavDrawerDefault = (props) => {
         className={styles.content}
         style={themestate ? { background: darktheme.contentpagedark } : {}}
       >
-        {/* <Button appearance="primary" onClick={() => setIsOpen(!isOpen)}>
-          {type === "inline" ? "Toggle" : "Open"}
-        </Button>
-
-        <div className={styles.field}>
-          <Label id={labelId}>Type</Label>
-          <RadioGroup
-            value={type}
-            onChange={(_, data) => setType(data.value)}
-            aria-labelledby={labelId}
-          >
-            <Radio value="overlay" label="Overlay (Default)" />
-            <Radio value="inline" label="Inline" />
-          </RadioGroup>
-        </div> */}
-        {/* {Children} */}
-
+        
         {props.children}
       </div>
     </div>

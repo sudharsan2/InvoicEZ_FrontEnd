@@ -1032,9 +1032,10 @@ const OpenPODetails = () => {
           {selectedtab === "tab2" && (
             <div
               style={{
-                width: "100%",
+                width: "90vw",
                 display: "flex",
                 overflowY: "auto",
+                overflowX:"auto",
                 height: "40vh",
                 marginTop: "10px",
               }}
@@ -1195,10 +1196,14 @@ const OpenPODetails = () => {
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
+                        minWidth: "150px", 
+                        display: "flex", 
+                        alignItems: "center", 
+                        justifyContent: "space-between", 
                       }}>
                       Item Name
                         {sortedColumn === "item_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                          sortDirection === "asc" ? <ArrowSortDownRegular style={{ width: "16px", height: "26px" }}/> : <ArrowSortUpFilled style={{ width: "16px", height: "16px" }}/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("line_num")}
@@ -1206,10 +1211,11 @@ const OpenPODetails = () => {
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
+                        minWidth: "150px",
                       }}>
                       Line Number
                         {sortedColumn === "line_num" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
+                          sortDirection === "asc" ? <ArrowSortDownRegular style={{ width: "16px", height: "16px" }}/> : <ArrowSortUpFilled style={{ width: "16px", height: "16px" }}/>
                         )}
                       </TableHeaderCell>
                       <TableHeaderCell {...headerSortProps("quantity")}style={{
@@ -1249,6 +1255,10 @@ const OpenPODetails = () => {
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
+                        minWidth: "150px", 
+                        display: "flex", 
+                        alignItems: "center", 
+                        justifyContent: "space-between", 
                       }}>
                       Order Type
                         {sortedColumn === "order_type_lookup_code" && (

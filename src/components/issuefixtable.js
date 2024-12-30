@@ -1,9 +1,9 @@
 import * as React from "react";
 import {
   ArrowClockwise24Regular,
-  Delete24Regular,
+  Delete24Regular,ArrowSortUpFilled, ArrowSortDownRegular
 } from "@fluentui/react-icons";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -67,44 +67,19 @@ const IssuefixTable = ({ height, setTableLength }) => {
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [rowselect,setRowSelect]=useState(true);
   const navigate = useNavigate();
-  const [refreshKey, setRefreshKey] = useState(0);
+ 
   const getNumberOfLines = (invoice) => {
     return invoice.items ? invoice.items.length : 0;
   };
-  const [invid, setInvId] = useState("");
-
+ 
+  console.log(rowselect)
   const dispatch = useDispatch();
 
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
 
-  // useEffect(() => {
-  //   fetch("https://invoicezapi.focusrtech.com:57/user/no-invoice-list")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-
-  //       const formattedItems = data.map((invoice) => ({
-  //         invid: invoice.id,
-
-  //         invoiceNo: invoice.InvoiceId, // Use "InvoiceId" for invoice number
-  //         supplier: invoice.VendorName,
-  //         numberOfLines: getNumberOfLines(invoice),
-  //         invoiceDate: invoice.InvoiceDate,
-  //         totalAmount: invoice.InvoiceTotal,
-  //         statusVerified: invoice.statusVerified,
-  //       }));
-  //       console.log("Formatted Items:", formattedItems);
-  //       setInvId(formattedItems.InvoiceId) // Debugging log
-  //       setItems(formattedItems);
-  //       setTableLength(formattedItems.length);
-  //       console.log("height", height);
-
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //     });
-  // },  [refreshKey]);
+  
 
   const fetchData = (showMessage = false) => {
     if (showMessage) {
@@ -148,10 +123,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
     fetchData(); // Fetch the data when component is mounted
   }, [isInvoiceUploadRefreshed]);
 
-  // const handleRefresh = () => {
-  //   setRefreshKey((prevKey) => prevKey + 1); // Increment the refreshKey to trigger useEffect
-  // };
-
+  
   
  
 
@@ -205,29 +177,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
       console.warn("No rows selected for deletion");
     }
   };
-  // const handleSearchChange = (value) => {
-  //   setSearchQuery(value);
-  // };
-  // const filteredItems = items.filter((item) => {
-  //   return (
-  //     item.invid
-  //       ?.toString()
-  //       .toLowerCase()
-  //       .includes(searchQuery.toLowerCase()) ||
-  //     item.invoiceNo
-  //       ?.toString()
-  //       .toLowerCase()
-  //       .includes(searchQuery.toLowerCase()) ||
-  //     item.supplier?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //     item.numberOfLines
-  //       ?.toString()
-  //       .toLowerCase()
-  //       .includes(searchQuery.toLowerCase()) || // Convert numberOfLines to string
-  //     item.invoiceDate?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //     item.totalAmount?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //     item.statusVerified?.toLowerCase().includes(searchQuery.toLowerCase())
-  //   );
-  // });
+  
 
 
 
@@ -235,7 +185,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
     setSearchQuery(value);
   
     const filteredItems = items.filter((item) => {
-      // const searchQuery = value?.trim().toLowerCase() || "";
+      
       return (
         item.invid
           ?.toString()
@@ -262,7 +212,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
 
 
   const filteredItems = items.filter((item) => {
-    // const searchQuery = value?.trim().toLowerCase() || "";
+    
     return (
       item.invid
         ?.toString()
@@ -309,19 +259,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
   };
 
 
-  const handleUnSelectionChange = (event, data) => {
-    const newSelectedRows = new Set(selectedRows); // Create a copy of the selected rows
-    data.selectedItems.forEach((item) => {
-      // if (item) {
-      //   // Ensure invid is defined
-      newSelectedRows.add(item); // Store item.invid instead of item.invoiceNo
-      // } else {
-      //   console.warn("Selected item does not have an invid:", item);
-      console.log(item);
-    });
-    setSelectedRows(newSelectedRows); // Update state
-    // console.log("Selected IDs:", Array.from(newSelectedRows)); // Log selected IDs for debugging
-  };
+  
 
   const [filtered, setFilteredItems] = useState([]);
   useEffect(() => {

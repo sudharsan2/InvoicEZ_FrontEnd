@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
-  FolderRegular,
+  
   EditRegular,
-  OpenRegular,
+  
   DocumentRegular,
-  PeopleRegular,
-  DocumentPdfRegular,
-  VideoRegular,
+  
 } from "@fluentui/react-icons";
 import {
-  PresenceBadgeStatus,
-  Avatar,
+  
   DataGridBody,
   DataGridRow,
   DataGrid,
@@ -20,7 +17,7 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch,  } from "react-redux";
 import { refreshActions } from "../Store/Store";
 
 // Sample data

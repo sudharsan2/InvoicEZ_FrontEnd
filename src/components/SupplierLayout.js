@@ -1,7 +1,7 @@
 
 
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState,useEffect  } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   NavCategory,
@@ -11,7 +11,6 @@ import {
   NavDrawerFooter,
   NavDrawerHeader,
   NavDrawerHeaderNav,
-  NavDrawerProps,
   NavItem,
   NavSubItem,
   NavSubItemGroup,
@@ -29,7 +28,7 @@ import {
   HeartPulse20Regular,
   MegaphoneLoud20Filled,
   MegaphoneLoud20Regular,
-  NavigationFilled,
+  
   NotePin20Filled,
   NotePin20Regular,
   People20Filled,
@@ -60,28 +59,22 @@ import {
   Gavel24Filled ,
   Gavel24Regular,
   VehicleTruckProfile24Regular  ,
-  VehicleTruckProfile24Filled ,
+  VehicleTruckProfile24Filled ,Apps28Regular,Timer24Filled,Timer24Regular
 } from "@fluentui/react-icons";
-import {Apps28Regular,Timer24Filled,Timer24Regular} from "@fluentui/react-icons"
+
 import {
   Button,
-  Caption1Strong,
-  Label,
-  Radio,
-  RadioGroup,
+  
   makeStyles,
   shorthands,
   tokens,
   useId,
-  Tooltip,
+ 
 } from "@fluentui/react-components";
-import { CiSettings } from "react-icons/ci";
-import { useEffect } from "react";
+
+
 import { jwtDecode } from "jwt-decode";
-import { PiTrolleyFill } from "react-icons/pi";
-import { FaTruck } from "react-icons/fa";
-import { RiTimeLine } from "react-icons/ri";
-import { RiTimeFill } from "react-icons/ri";
+
 const useStyles = makeStyles({
   root: {
     // ...shorthands.border("2px", "solid", "#ccc"),
@@ -205,7 +198,7 @@ const Status = bundleIcon(Timer24Filled,Timer24Regular);
 const NavDrawerQuotationLoop = (props) => {
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  
 
   const lighttheme = useSelector((state) => state.theme.light);
 
@@ -217,19 +210,17 @@ const NavDrawerQuotationLoop = (props) => {
 
   const styles = useStyles();
 
-  const labelId = useId("type-label");
+ 
 
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  
   const [empId, setEmpId] = useState("");
   const [value,setValue] = useState("");
-  const someClickHandler = () => {
-    navigate("/employee");
-  };
+ 
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
+    const storedUsername = localStorage.getItem("username"); 
     // const storedrole = localStorage.getItem('role')
     if (storedUsername) {
       setUsername(storedUsername);
@@ -246,7 +237,7 @@ const NavDrawerQuotationLoop = (props) => {
         const emailFromToken = decodedToken.email;
         const empIdFromToken = decodedToken.empId;
 
-        setEmail(emailFromToken);
+      
         setEmpId(empIdFromToken);
       } catch (error) {
         console.error("Invalid token:", error);

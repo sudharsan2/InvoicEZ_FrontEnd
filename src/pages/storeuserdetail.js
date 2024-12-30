@@ -419,7 +419,7 @@ const StoreUserPage = () => {
             Quantity: matchingQuantity,
             po_number: PO_Num,
             line_value: poItem.line_num,
-            note: input, // Assuming `input` is a variable you defined earlier
+            note: input, 
             Igst: matchingInvoiceItem ? matchingInvoiceItem.Igst : null,
             Cgst: matchingInvoiceItem ? matchingInvoiceItem.Cgst : null,
             Sgst: matchingInvoiceItem ? matchingInvoiceItem.Sgst : null,
@@ -549,36 +549,50 @@ const StoreUserPage = () => {
 
   
 
-  const sortedData = [...data].sort((a, b) => {
-    if (!sortedColumn) return 0;
+  const getValue = (row, column) => row[column] || "";
 
-    const aValue = a[sortedColumn] || "";  
-    const bValue = b[sortedColumn] || "";
+const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
 
-    // Determine if the values are numeric
-    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
+const compareNumeric = (aValue, bValue, direction) => {
+  const aNumeric = parseFloat(aValue);
+  const bNumeric = parseFloat(bValue);
+  return direction === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+};
 
-    // Numeric comparison
-    if (isANumeric && isBNumeric) {
-      const aNumeric = parseFloat(aValue);
-      const bNumeric = parseFloat(bValue);
-      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
-    }
+const compareStrings = (aValue, bValue, direction) => {
+  const aString = String(aValue).toLowerCase();
+  const bString = String(bValue).toLowerCase();
+  return direction === "asc"
+    ? aString.localeCompare(bString)
+    : bString.localeCompare(aString);
+};
 
-    // String comparison using localeCompare for case-insensitive sorting
-    if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
-      const bString = String(bValue).toLowerCase();
-      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
-    }
+const compareMixed = (isANumeric, isBNumeric, direction) => {
+  if (isANumeric && !isBNumeric) return direction === "asc" ? -1 : 1;
+  if (!isANumeric && isBNumeric) return direction === "asc" ? 1 : -1;
+  return 0;
+};
 
-    // Mixed types: If one is numeric and the other is not, treat the numeric value as smaller
-    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
-    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
+const sortedData = [...data].sort((a, b) => {
+  if (!sortedColumn) return 0;
 
-    return 0; // If values are still equal
-  });
+  const aValue = getValue(a, sortedColumn);
+  const bValue = getValue(b, sortedColumn);
+
+  const isANumeric = isNumeric(aValue);
+  const isBNumeric = isNumeric(bValue);
+
+  if (isANumeric && isBNumeric) {
+    return compareNumeric(aValue, bValue, sortDirection);
+  }
+
+  if (!isANumeric && !isBNumeric) {
+    return compareStrings(aValue, bValue, sortDirection);
+  }
+
+  return compareMixed(isANumeric, isBNumeric, sortDirection);
+});
+
 
 
   return (

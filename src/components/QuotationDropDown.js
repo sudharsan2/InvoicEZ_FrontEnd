@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { refreshActions } from "../Store/Store";
 
 const QuotationDropDown = () => {
   const [selectedValues, setSelectedValues] = useState([]);
-  const [items, setItems] = useState([]); // Ensure initial state is an empty array
+  const [items, setItems] = useState([]); 
   const dispatch = useDispatch();
-
+  console.log(items);
   useEffect(() => {
-    // Fetch data when the component is mounted
+    
     fetchData();
   }, []);
 

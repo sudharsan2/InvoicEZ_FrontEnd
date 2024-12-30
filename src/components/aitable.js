@@ -3,10 +3,10 @@ import axios from "axios";
 import {
   ArrowClockwise24Regular,
   Delete24Regular,
-  TasksApp28Regular,
+  ArrowSortUpFilled, ArrowSortDownRegular
 } from "@fluentui/react-icons";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
+
 import {
   DataGrid,
   DataGridBody,
@@ -18,12 +18,11 @@ import {
   createTableColumn,
 } from "@fluentui/react-components";
 import Search from "./Search";
-import { Button, notification } from "antd";
+import { message, notification } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
-import {message} from "antd";
+
 const columns = [
   createTableColumn({
     columnId: "InvoiceId",
@@ -87,9 +86,7 @@ const AITable = ({ setTableLength }) => {
       message.success("Refreshing...");
     }
     try {
-      // const response = await axios.get(
-      //   "https://invoicezapi.focusrtech.com:57/user/morethanone-invoice-list",
-      // );
+     
 
       const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/morethanone-invoice-list", {
@@ -126,25 +123,10 @@ const AITable = ({ setTableLength }) => {
   
 
   const handleRefreshClick = () => {
-    fetchData(true); // Pass `true` to show the message when button is clicked
+    fetchData(true); 
   };
 
-  // const handleSearchChange = (value) => {
-  //   setSearchQuery(value);
-  // };
-  // const filteredItems = items.filter((item) => {
-  //   const searchLower = searchQuery?.trim().toLowerCase() || "";
-
-  //   return (
-  //     item.Id?.toString().toLowerCase().includes(searchLower) ||
-  //     item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
-  //     item.supplier_name?.toLowerCase().includes(searchLower) ||
-  //     item.city?.toLowerCase().includes(searchLower) ||
-  //     item.InvoiceDate?.toLowerCase().includes(searchLower) ||
-  //     item.InvoiceTotal?.toLowerCase().includes(searchLower) 
-  //     // item.ship_to?.toLowerCase().includes(searchLower)
-  //   );
-  // });
+  
 
 
 
@@ -251,41 +233,7 @@ const AITable = ({ setTableLength }) => {
     }
   };
 
-  const handleApproveSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows);
-    if (selectedItemsArray.length === 0) {
-      notification.warning({
-        message: "No PO Selected",
-        description: "Please select at least one PO to approve.",
-      });
-      return;
-    }
-
-    try {
-      const poNumbers = selectedItemsArray
-        .map((item) => item.po_number)
-        .join(", ");
-
-      await Promise.all(
-        selectedItemsArray.map((item) =>
-          axios.post(
-            `https://invoicezapi.focusrtech.com:57/user/approve-status/${filteredItems[item].po_number}`,
-          ),
-        ),
-      );
-
-      notification.success({
-        message: "Successfully approved",
-      });
-    } catch (error) {
-      const poNumbers = selectedItemsArray
-        .map((item) => item.po_number)
-        .join(", ");
-      notification.error({
-        message: "Approval Failed",
-      });
-    }
-  };
+  
 
   const [filtered, setFilteredItems] = useState([]);
   useEffect(() => {

@@ -1,96 +1,25 @@
-// import { Layout, Button } from "antd";
-// import {
-//   SearchOutlined,
-//   BellOutlined,
-//   LogoutOutlined,
-// } from "@ant-design/icons";
-// import "./layout.css";
-// import {
-//   UserOutlined,
-//   BarChartOutlined,
-//   TeamOutlined,
-// } from "@ant-design/icons";
-// import frLogo from "../media/frlogo.png";
-// import React, { useState, useEffect } from "react";
-// import Login from "../pages/Login";
-// import { useSelector, useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
-// import Drawer1 from "./drawer";
-// import {
-//   SearchBox,
-//   Field,
-//   Avatar,
-//   PopoverTrigger,
-//   PopoverSurface,
-//   makeStyles,
-//   Popover,
-//   Text,
-//   shorthands,
-//   Link,
-//   InfoLabel,
-// } from "@fluentui/react-components";
-// import {
-//   AlertBadgeRegular,
-//   QuestionRegular,
-//   WeatherSunnyRegular,
-//   WeatherMoonRegular,
-// } from "@fluentui/react-icons";
-// import { themeActions, refreshActions } from "../Store/Store";
-// import { calc } from "antd/es/theme/internal";
-// import { DarkModeSwitch } from "react-toggle-dark-mode";
-// // import { useNavigate } from "react-router-dom";
-// import { jwtDecode } from "jwt-decode";
-// import { ShareIos24Filled } from "@fluentui/react-icons";
-// import axios from "axios";
-// import InvoiceUpload from "./UploadInvoice";
-// import { useRef } from "react";
 
-// import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
-// import { Modal, Upload, notification, message } from "antd";
-// import WalkInCandidate from "./WalkinCandidate.jsx";
-
-// const { Header, Content, Footer, Sider } = Layout;
-// const { Dragger } = Upload;
-// const useStyles = makeStyles({
-//   contentHeader: {
-//     marginTop: "0",
-//   },
-//   text: {
-//     ...shorthands.overflow("hidden"),
-//     width: "240px",
-//     display: "block",
-//     color: "#424242",
-//   },
-//   r1572tok: {
-//     boxSizing: "border-box",
-//     color: "white",
-//     display: "flex",
-//   },
-// });
 import { jwtDecode } from "jwt-decode";
-import React, { useState, useEffect } from "react";
-import { Layout, Modal } from "antd";
+import React, { useState, useEffect ,useRef} from "react";
+
 import {
-  SearchBox,
-  Field,
+  
   PopoverTrigger,
   PopoverSurface,
   Popover,
   Avatar,
-  shorthands,
-  Link,
-  InfoLabel,
-  DatabaseSearchRegular,
+  Link, makeStyles, Text
+ 
 } from "@fluentui/react-components";
-
+import { shorthands } from '@griffel/react';
 import { AlertBadgeRegular } from "@fluentui/react-icons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./layout.css";
-import { useRef } from "react";
+
 import axios from "axios";
 import frLogo from "../media/frlogo.png";
-import { makeStyles, Text } from "@fluentui/react-components";
+
 const useStyles2 = makeStyles({
   contentHeader: {
     marginTop: "0",
@@ -109,7 +38,7 @@ const useStyles2 = makeStyles({
 });
 const ExampleContent = () => {
   const styles = useStyles2();
-  const lighttheme = useSelector((state) => state.theme.light);
+  
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
   const navigate = useNavigate();
@@ -272,45 +201,36 @@ const ExampleContent = () => {
   );
 };
 
-// const { Header, Content } = Layout;
-
-// const useStyles = makeStyles({
-//   text: {
-//     width: "240px",
-//     color: "#424242",
-//   },
-// });
 
 const CustomLayoutLoop = ({ children }) => {
-  // const styles = useStyles();
-  const navigate = useNavigate();
+  
+  
   const [username, setUsername] = useState("");
   const [notificationsVisible, setNotificationsVisible] = useState(false);
-  const [newCandidate, setNewCandidate] = useState(false); // State for Modal
+  
   const themestate = useSelector((state) => state.theme.theme);
   const [data, setData] = useState([]);
-  const notificationRef = useRef(null); // Create a ref for the notification container
+  const notificationRef = useRef(null); 
 
 
   const handleNotificationClick = () => {
-    setNotificationsVisible((prevState) => !prevState); // Toggle visibility
+    setNotificationsVisible((prevState) => !prevState); 
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Check if click is outside the notification container
+      
       if (
         notificationRef.current &&
         !notificationRef.current.contains(event.target)
       ) {
-        setNotificationsVisible(false); // Close notifications
+        setNotificationsVisible(false); 
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      // Cleanup event listener on component unmount
-      document.removeEventListener("mousedown", handleClickOutside);
+    document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -326,7 +246,7 @@ const CustomLayoutLoop = ({ children }) => {
       });
       const fetchedItems = response.data;
       console.log("fetchedItems...", fetchedItems);
-      // set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
+      
 
 
 
@@ -358,16 +278,9 @@ const CustomLayoutLoop = ({ children }) => {
   }, []);
 
 
-  const handleSignOut = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("username");
-    navigate("/");
-  };
+  
 
-  const handleNewCandidate = () => {
-    setNewCandidate(!newCandidate); // Toggle the modal visibility
-  };
+  
 
   return (
     <div>

@@ -1031,14 +1031,15 @@ const StoreOpenPODetails = () => {
           {selectedtab === "tab2" && (
             <div
               style={{
-                width: "100%",
+                width: "90vw",
                 display: "flex",
                 overflowY: "auto",
+                overflowX: "auto", 
                 height: "40vh",
                 marginTop: "10px",
               }}
             >
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: 1}}>
                 <Table>
                   {/* <TableHeader
                     style={{

@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{ useState }from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,11 +11,9 @@ import {
   CalendarMonthRegular,
   bundleIcon,
 } from "@fluentui/react-icons";
-import TagCounters from "../components/gridapprove";
-import ApproveTable from "../components/approvetable";
-import Search from "../components/Search";
+
 import AITable from "../components/aitable";
-import { useState } from "react";
+
 import { useLocation } from "react-router-dom";
 // improve AITable
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
@@ -66,8 +64,8 @@ const divstyle = {
 };
 
 const AIPage = () => {
-  const location = useLocation();
-  const { poNumber } = location.state || {};
+  
+  
   const [tableLength, setTableLength] = useState(0);
   
   const counters = [

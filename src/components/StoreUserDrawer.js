@@ -1,19 +1,14 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDrawerPosition } from "../Store/refreshSlice";
 import {
-  NavCategory,
-  NavCategoryItem,
+  NavItem,
   NavDrawer,
   NavDrawerBody,
   NavDrawerFooter,
   NavDrawerHeader,
   NavDrawerHeaderNav,
-  NavDrawerProps,
-  NavItem,
-  NavSubItem,
-  NavSubItemGroup,
 } from "@fluentui/react-nav-preview";
 import {
   Board24Filled,
@@ -28,7 +23,7 @@ import {
   HeartPulse20Regular,
   MegaphoneLoud20Filled,
   MegaphoneLoud20Regular,
-  NavigationFilled,
+  
   NotePin20Filled,
   NotePin20Regular,
   People20Filled,
@@ -68,21 +63,15 @@ import {
 
 import {
   Button,
-  Caption1Strong,
-  Label,
-  Radio,
-  RadioGroup,
+  
   makeStyles,
   shorthands,
   tokens,
   useId,
   Tooltip,
 } from "@fluentui/react-components";
-import { CiSettings } from "react-icons/ci";
-import { useEffect } from "react";
+
 import { jwtDecode } from "jwt-decode";
-// import { Dropdown, Option} from "@fluentui/react-components";
-// import  { DropdownProps } from "@fluentui/react-components";
 const useStyles = makeStyles({
   root: {
     // ...shorthands.border("2px", "solid", "#ccc"),
@@ -245,23 +234,19 @@ const NavDrawerDefaultStore = (props) => {
 
   const styles = useStyles();
 
-  const labelId = useId("type-label");
+  
 
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+ 
   const [empId, setEmpId] = useState("");
-  const dropdownId = useId("dropdown");
+  
   const History = bundleIcon(History24Filled,History24Regular);
   const drawerPosition = useSelector((state) => state.refresh.drawerPosition);
-  // const styles = useStyles();
-  // const[value,setValue] = useState("1")
   const value = localStorage.getItem("userDrawerPosition");
   console.log("value", { value });
-  const someClickHandler = () => {
-    navigate("/dashboard");
-  };
+  
   const setValue = (value) => {
     dispatch(toggleDrawerPosition(value));
   };
@@ -284,7 +269,7 @@ const NavDrawerDefaultStore = (props) => {
         const emailFromToken = decodedToken.email;
         const empIdFromToken = decodedToken.empId;
 
-        setEmail(emailFromToken);
+       
         setEmpId(empIdFromToken);
       } catch (error) {
         console.error("Invalid token:", error);

@@ -142,7 +142,7 @@ const useStyles = makeStyles({
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
-    backgroundPosition: "center",
+    // backgroundPosition: "center",
   },
   formWrapper: {
     display: "flex",

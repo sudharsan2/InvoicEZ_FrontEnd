@@ -4,15 +4,13 @@
 
 import React, { useState } from "react";
 import {
-  DrawerBody,
-  DrawerHeader,
-  DrawerHeaderTitle,
+  
   Drawer,
   makeStyles,
   useRestoreFocusSource,
-  useRestoreFocusTarget,
+  
 } from "@fluentui/react-components";
-import QuotationDrawerPage from "../pages/QuotationDrawerPage";
+
 import ASNDrawerPage from "../pages/ASNDrawerPage";
 
 const useStyles = makeStyles({
@@ -37,16 +35,16 @@ const useStyles = makeStyles({
 
 const ASNDrawer = ({ isOpen, setIsOpen }) => {
   const styles = useStyles();
-  const [type, setType] = useState("overlay");
+  
 
-  const restoreFocusTargetAttributes = useRestoreFocusTarget();
+  
   const restoreFocusSourceAttributes = useRestoreFocusSource();
 
   return (
     <div className={styles.root}>
       <Drawer
         {...restoreFocusSourceAttributes}
-        type={type}
+        type="overlay"
         position="end"
         separator
         open={isOpen}

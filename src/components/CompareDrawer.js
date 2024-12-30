@@ -1,18 +1,15 @@
 import React, { useState,useEffect } from "react";
 import {
-  DrawerBody,
-  DrawerHeader,
-  DrawerHeaderTitle,
+  
   Drawer,
   makeStyles,
-  tokens,
-  useId,
+ 
   useRestoreFocusSource,
-  useRestoreFocusTarget,
+ 
 } from "@fluentui/react-components";
-import { notification } from "antd";
+
 import ComparePage from "../pages/ComparePage";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import axios from "axios";
 import {message} from "antd";
 const useStyles = makeStyles({
@@ -38,14 +35,14 @@ const useStyles = makeStyles({
 const CompareDrawer = ({data,onClose}) => {
   const styles = useStyles();
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("overlay");
+  
 
   const handleClose = () => {
     setIsOpen(false);
     if (onClose) onClose(); 
   };
 
-  const restoreFocusTargetAttributes = useRestoreFocusTarget();
+  
   const restoreFocusSourceAttributes = useRestoreFocusSource();
 
   const selectedSupplier = useSelector(
@@ -55,8 +52,8 @@ const CompareDrawer = ({data,onClose}) => {
   const handleSubmit= async ()=>{
     console.log("Compare API ")
     try{
-      axios.defaults.baseURL = 'http://172.235.21.99:57';
-      const response = await axios.put(`/user/update-supplier/${data.id}/`, { supplier_id: selectedSupplier });
+      
+      const response = await axios.put(`http://172.235.21.99:57/user/update-supplier/${data.id}/`, { supplier_id: selectedSupplier });
       if (response.status === 200) {
         
         handleClose();
@@ -80,7 +77,7 @@ const CompareDrawer = ({data,onClose}) => {
     <div className={styles.root}>
       <Drawer
         {...restoreFocusSourceAttributes}
-        type={type}
+        type="overlay"
         position="end"
         separator
         open={isOpen}

@@ -1,36 +1,10 @@
-import { useEffect, useState } from "react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import {  React,useState } from "react";
+
+import { useNavigate , } from "react-router-dom";
 import {
   makeStyles,
-  Button,
-  Link,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbButton,
-  BreadcrumbDivider,
   TabList,
   Tab,
-  Table,
-  TableCell,
-  TableHeader,
-  TableSelectionCell,
-  TableRow,
-  TableBody,
-  TableHeaderCell,
-  useTableFeatures,
-  useTableSort,
-} from "@fluentui/react-components";
-// import line_data from "./data_approve";
-import { useLocation } from "react-router-dom";
-import axios from "axios";
-import { CgLayoutGrid } from "react-icons/cg";
-import { ArrowDownload28Regular } from "@fluentui/react-icons";
-/*eslint-disabled*/
-import CreatableSelect from "react-select/creatable";
-import { message } from "antd";
-import { notification } from "antd";
-import {
   DataGrid,
   DataGridBody,
   DataGridRow,
@@ -39,7 +13,14 @@ import {
   DataGridCell,
   TableCellLayout,
   createTableColumn,
+  
 } from "@fluentui/react-components";
+
+
+import axios from "axios";
+
+
+
 import { ArrowClockwise28Regular } from "@fluentui/react-icons";
 import Search from "./Search";
 const path = "/approve";
@@ -159,7 +140,6 @@ const InLoopTable = () => {
   const styles = useStyles();
   const [selectedtab, setSelectedTab] = React.useState("tab1");
   const [selectedRows, setSelectedRows] = useState(new Set());
-  const [po_id, set_Po_id] = useState("");
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
@@ -211,11 +191,12 @@ const InLoopTable = () => {
         from_date: "11/09/24",
         to_date: "11/09/24",
       });
-      // const fetchedItems = response.data;
+      const fetchedItems2 = response.data;
+      console.log(fetchedItems2);
       const fetchedItems = data.flatMap((item) =>
         item.lines.map((line) => ({
-          ...item, // Copy all properties from the original item
-          lines: [line], // Replace 'lines' with only one line item
+          ...item, 
+          lines: [line], 
         })),
       );
 
@@ -244,9 +225,7 @@ const InLoopTable = () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  
 
   return (
     <div style={{ height: "88vh", overflowY: "auto" }}>

@@ -1,7 +1,7 @@
 
 
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   NavCategory,
@@ -11,8 +11,7 @@ import {
   NavDrawerFooter,
   NavDrawerHeader,
   NavDrawerHeaderNav,
-  NavDrawerProps,
-  NavItem,
+  
   NavSubItem,
   NavSubItemGroup,
 } from "@fluentui/react-nav-preview";
@@ -29,7 +28,7 @@ import {
   HeartPulse20Regular,
   MegaphoneLoud20Filled,
   MegaphoneLoud20Regular,
-  NavigationFilled,
+  
   NotePin20Filled,
   NotePin20Regular,
   People20Filled,
@@ -56,23 +55,20 @@ import {
   DocumentTableSearch24Filled,
   DocumentTableSearch24Regular,
   Navigation24Filled,
-  Navigation24Regular,
+  Navigation24Regular,Apps28Regular
 } from "@fluentui/react-icons";
-import {Apps28Regular} from "@fluentui/react-icons"
+
 import {
   Button,
-  Caption1Strong,
-  Label,
-  Radio,
-  RadioGroup,
+  
   makeStyles,
   shorthands,
   tokens,
-  useId,
-  Tooltip,
+  
+ 
 } from "@fluentui/react-components";
-import { CiSettings } from "react-icons/ci";
-import { useEffect } from "react";
+
+
 import { jwtDecode } from "jwt-decode";
 const useStyles = makeStyles({
   root: {
@@ -194,7 +190,7 @@ const Settings = bundleIcon(Settings20Filled, Settings20Regular);
 const NavDrawerDefaultAdmin = (props) => {
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  
 
   const lighttheme = useSelector((state) => state.theme.light);
 
@@ -206,17 +202,15 @@ const NavDrawerDefaultAdmin = (props) => {
 
   const styles = useStyles();
 
-  const labelId = useId("type-label");
+  
 
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+
   const [empId, setEmpId] = useState("");
   const [value,setValue] = useState("");
-  const someClickHandler = () => {
-    navigate("/employee");
-  };
+   
   useEffect(() => {
     const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
     // const storedrole = localStorage.getItem('role')
@@ -235,7 +229,7 @@ const NavDrawerDefaultAdmin = (props) => {
         const emailFromToken = decodedToken.email;
         const empIdFromToken = decodedToken.empId;
 
-        setEmail(emailFromToken);
+       
         setEmpId(empIdFromToken);
       } catch (error) {
         console.error("Invalid token:", error);

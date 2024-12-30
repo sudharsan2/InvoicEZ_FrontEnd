@@ -1,23 +1,25 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  DrawerBody,
+  
   DrawerHeader,
   DrawerHeaderTitle,
   Drawer,
   Button,
   tokens,
-  flatTreeClassNames,
+  Text,
+  Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbDivider,
+    BreadcrumbButton,
+  
 } from "@fluentui/react-components";
 import { TextColumnWideRegular,BoardSplitRegular, LayerDiagonalPersonRegular,
     PersonStarRegular,PremiumPersonRegular,TableSearchRegular,CalendarMonthFilled,
     CalendarMonthRegular,
     bundleIcon,} from "@fluentui/react-icons";
-import { Avatar, Text,Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbDivider,
-    BreadcrumbButton, } from "@fluentui/react-components";
+
 import { makeStyles, shorthands } from '@griffel/react';
-import Drawers from "./hrdrawerbody"
+
 
 
 const useStyles = makeStyles({
@@ -49,10 +51,10 @@ export const Responsive = () => {
 
   const [isOpen, setIsOpen] = useState(true);
   const [change, setChange] = useState(false);
-  const [resize, setresize] = useState(60);
+  
   const [type, setType] = useState("inline");
   
-
+console.log(isOpen)
   
   const onMediaQueryChange = useCallback(({ matches }) => setType(matches ? "overlay" : "inline"), []);
 
@@ -76,7 +78,7 @@ export const Responsive = () => {
         position="start"
         open={true}
         onOpenChange={(_, { open }) => setIsOpen(open)}
-        style={change ? { width: `${resize}px`, backgroundColor:"#E9E9E9", transition:"width 0.5s" } : {backgroundColor:"#E9E9E9",  transition:"width 0.5s"}}
+        style={change ? { width: `100px`, backgroundColor:"#E9E9E9", transition:"width 0.5s" } : {backgroundColor:"#E9E9E9",  transition:"width 0.5s"}}
       >
         <div style={change?{display:"flex", justifyContent:"center", alignItems:"center", marginLeft:"10px"}:{display:"flex", alignItems:"center", marginLeft:"10px", width:"100%", cursor:'pointer'}} onClick={() => {
                           setChange(!change);

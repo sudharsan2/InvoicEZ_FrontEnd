@@ -1,13 +1,7 @@
 // API connection
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  ArrowClockwise24Regular,
-  Delete24Regular,
-  TasksApp28Regular,
-  DismissRegular,
-} from "@fluentui/react-icons";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+import { ArrowSortUpFilled, ArrowSortDownRegular ,DismissRegular,} from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -18,13 +12,12 @@ import {
   DataGridCell,
   TableCellLayout,
   createTableColumn,
+  makeStyles, Input, 
 } from "@fluentui/react-components";
-import { makeStyles, useId, Input, Label } from "@fluentui/react-components";
-import Search from "./Search"; // Assuming your search component is imported here
-import { Button, notification } from "antd"; // Import Ant Design components
+
+import Search from "./Search"; 
+import { Button,message} from "antd"; 
 import { useDispatch, useSelector } from "react-redux";
-import { refreshActions } from "../Store/Store";
-import {message} from "antd";
 import CreatableSelect from "react-select/creatable";
 // Define columns for the DataGrid
 const columns = [
@@ -106,50 +99,42 @@ const useStyles = makeStyles({
   },
 });
 const OpenPoTable = () => {
-  const [isHovered, setIsHovered] = useState(false);
+  
   const [Hovered2,setIsHovered2] = useState(false);
-  const [isrefresh, setIsRefresh] = useState(false);
+ 
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
-  const [po_id, set_Po_id] = useState("");
   
-  const [selectedOption,setSelectedOption] = useState(null);
-  // const [selectedPOStatus, setSelectedPOStatus] = useState(null);
   const navigate = useNavigate();
   
 
-  const styles = useStyles();
+ 
   const [poNumber, setPoNumber] = useState("");
   const [POStatusOptions, setPOStatusOptions] = useState([]);
   const [SelectedPOTypeOptions,setSelectedPOTypeOptions] = useState([]);
   const [selectedSupplierOptions, setSelectedSupplierNameOptions] = useState([]);
   const [selectedShipToOptions, setSelectedShipToOptions] = useState([]);
-  const [selectedBillToOptions, setSelectedBillToOptions] = useState([]);
+ 
   const [selectedBuyerNameOptions, setSelectedBuyerNameOptions] = useState([]);
   const [selectedPOStatus, setSelectedPOStatus] = useState(null);
   const [selectedPOType, setSelectedPOType] = useState(null);
   const [selectedSupplierName, setSelectedSupplierName] = useState(null);
   const [selectedShipTo, setSelectedShipTo] = useState(null);
-  const [selectedBillTo, setSelectedBillTo] = useState(null);
+  
   const [selectedBuyerName, setSelectedBuyerName] = useState(null);
   const [selectedTotalAmount, setSelectedTotalAmount] = useState("");
   const [selectedPOHeaderID, setSelectedPOHeaderID] = useState("");
   const [selectedVendorID, setSelectedVendorID] = useState("");
   const [selectedVendorSiteID, setSelectedVendorSiteID] = useState("");
   const [selectedVendorNumber, setSelectedVendorNumber] = useState("");
-  const [PONumberOPtions,setPONumberOPtions]=useState("");
-    const handleCreate = (inputValue) => {
-        const newOption = { value: inputValue, label: inputValue };
+ 
     
-        setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
-        setSelectedOption(newOption); 
-      };
       // INPUT FIELD
       const handlePoNumberChange = (e) => setPoNumber(e.target.value);
   const handleTotalChange = (e) => setSelectedTotalAmount(e.target.value);
   const handlePoHeaderChange = (e) => setSelectedPOHeaderID(e.target.value);
-  const handleVendorIdChange = (e) => setSelectedVendorID(e.target.value);
+  
   const handleVendorSiteChange = (e) => setSelectedVendorSiteID(e.target.value);
   const handleVendorNumber = (e) => setSelectedVendorNumber(e.target.value);
 
@@ -158,7 +143,7 @@ const OpenPoTable = () => {
     setSelectedPOType(null);
     setSelectedSupplierName(null);
     setSelectedShipTo(null);
-    setSelectedBillTo(null);
+   
     setSelectedBuyerName(null);
     setSelectedVendorNumber("");
     setSelectedVendorSiteID("");
@@ -174,7 +159,7 @@ const OpenPoTable = () => {
   const handlePOTypeChange = (option) => setSelectedPOType(option);
   const handleSupplierNameChange = (option) => setSelectedSupplierName(option);
   const handleShipToChange = (option) => setSelectedShipTo(option);
-  const handleBillToChange = (option) => setSelectedBillTo(option);
+  
   const handleBuyerNameChange = (option) => setSelectedBuyerName(option);
 
  
@@ -182,15 +167,13 @@ const OpenPoTable = () => {
   
   console.log("SELECTED",selectedShipTo)
 
-  const dispatch = useDispatch();
-  const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
+  
+ 
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
 
-  const [RefreshUpload, SetRefreshUpload] = useState(null);
-
-  const [DeleteRefresh, SetDeleteRefresh] = useState(false);
+  
 
 
  
@@ -262,7 +245,7 @@ const OpenPoTable = () => {
       setSelectedPOTypeOptions(getUniqueOptions(fetchedItems, "po_type") || []);
       setSelectedSupplierNameOptions(getUniqueOptions(fetchedItems, "supplier_name") || []);
       setSelectedShipToOptions(getUniqueOptions(fetchedItems, "location") || []);
-      setSelectedBillToOptions(getUniqueOptions(fetchedItems, "bill_to") || []);
+     
       setSelectedBuyerNameOptions(getUniqueOptions(fetchedItems, "buyer_name") || []);
       setItems(mappedItems || []);
       
@@ -276,9 +259,7 @@ const OpenPoTable = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    SetRefreshUpload(isInvoiceUploadRefreshed);
-  }, []);
+  
 
   useEffect(() => {
     console.log("Refreshed!!!");
@@ -399,115 +380,12 @@ const OpenPoTable = () => {
     setSelectedRows(data.selectedItems);
   };
 
-  const handleRefreshClick = () => {
-    fetchData(true); // Pass `true` to show the message when button is clicked
-  };
-
-  //  delete API
-  const handleDeleteSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows);
-    if (selectedItemsArray.length === 0) {
-      notification.warning({
-        message: "No PO Selected",
-        description: "Please select at least one PO to delete.",
-      });
-      return;
-    }
-
-    try {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-
-      // const deletePromises = selectedItemsArray.map((item) =>
-      //   axios.delete(
-      //     `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
-      //   ),
-      // );
-      const token = localStorage.getItem("access_token");
-      const deletePromises = selectedItemsArray.map((item) =>
-        axios.delete(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Add the authorization header
-            },
-          }
-        )
-      );
-
-      await Promise.all(deletePromises);
-
-      const newItems = items.filter(
-        (item) =>
-          !selectedItemsArray.some(
-            (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
-          ), 
-      );
-
-      setItems(newItems);
-      setSelectedRows(new Set());
-
-      notification.success({
-        message: "Successfully deleted",
-        description: `You have successfully deleted: ${supplierNames}`,
-      });
-
-      dispatch(refreshActions.toggleInvoiceUploadRefresh());
-    } catch (error) {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-      notification.error({
-        message: "Deletion Failed",
-        description: `Deletion Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
-      });
-    }
-  };
+  
 
   
-  // Approve API
-  const handleApproveSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
-    if (selectedItemsArray.length === 0) {
-      notification.warning({
-        message: "No PO Selected",
-        description: "Please select at least one PO to Approve.",
-      });
-      return;
-    }
 
-    try {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-
-      // Make API call to delete selected POs
-      await Promise.all(
-        selectedItemsArray.map((item) =>
-          axios.post(`https://invoicezapi.focusrtech.com:57/user/oracle-payload/${po_id}`),
-        ),
-      );
-
-      // Remove deleted items from the state
-      setItems(items.filter((item) => !selectedItemsArray.includes(item)));
-
-      // Show success notification
-      notification.success({
-        message: "Successfully Approved",
-        description: `You have successfully approved: ${supplierNames}`,
-      });
-      dispatch(refreshActions.toggleInvoiceUploadRefresh());
-    } catch (error) {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-      notification.error({
-        message: "Approval Failed",
-        description: `Approval Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
-      });
-    }
-  };
+  
+  
   const [filtered, setFilteredItems] = useState([]);
   useEffect(() => {
     setFilteredItems(items); 
@@ -521,7 +399,7 @@ const OpenPoTable = () => {
   const handleSort = (columnId) => {
     let newSortDirection = "ascending";
   
-    // Toggle sort direction if the same column is clicked
+    
     if (sortState.columnId === columnId) {
       newSortDirection =
         sortState.sortDirection === "ascending" ? "descending" : "ascending";
@@ -529,41 +407,33 @@ const OpenPoTable = () => {
   
     setSortState({ columnId, sortDirection: newSortDirection });
   
-    // Sorting logic
+    
     const sortedItems = [...filteredItems].sort((a, b) => {
-      const aValue = a[columnId] ?? null; // Treat null explicitly
-      const bValue = b[columnId] ?? null; // Treat null explicitly
+      const aValue = a[columnId];
+      const bValue = b[columnId];
   
-      // Handle null values first in ascending, last in descending
-      if (aValue === null && bValue !== null) {
-        return newSortDirection === "ascending" ? -1 : 1;
-      }
-      if (bValue === null && aValue !== null) {
-        return newSortDirection === "ascending" ? 1 : -1;
-      }
-  
-      // Handle numeric values
+      
       const aNumeric = !isNaN(parseFloat(aValue)) ? parseFloat(aValue) : null;
       const bNumeric = !isNaN(parseFloat(bValue)) ? parseFloat(bValue) : null;
   
       if (aNumeric !== null && bNumeric !== null) {
-        // Both are numeric
+       
         return newSortDirection === "ascending"
           ? aNumeric - bNumeric
           : bNumeric - aNumeric;
       }
   
       if (aNumeric !== null && bNumeric === null) {
-        // aValue is numeric, bValue is not
+        
         return newSortDirection === "ascending" ? -1 : 1;
       }
   
       if (aNumeric === null && bNumeric !== null) {
-        // bValue is numeric, aValue is not
+        
         return newSortDirection === "ascending" ? 1 : -1;
       }
   
-      // Fallback to string comparison
+      
       const aString = String(aValue || "").toLowerCase();
       const bString = String(bValue || "").toLowerCase();
   
@@ -576,9 +446,6 @@ const OpenPoTable = () => {
   
     setFilteredItems(sortedItems);
   };
-  
-  
-  
   
 
 
@@ -633,29 +500,32 @@ const OpenPoTable = () => {
 
 
 <div
-  style={{
-    backgroundColor: "#F8FAFC",
-    paddingBottom: "5px",
-    paddingTop: "10px",
-    width: "100%", 
-    
-    marginTop:"-8em",
-    marginLeft:"5em",
-    height:"50vh"
+ 
+    style={{
+      backgroundColor: "#F8FAFC",
+      // paddingBottom: "3px",
+      paddingTop: "10px",
+      width: "100%", 
+      marginTop: "-8em", 
+      height: "50vh", 
+      marginLeft:"12em",
+      paddingLeft:"1em",
+      paddingRight:"1em"
+     
+    }}
 
     
 
-  }}
+ 
 >
   <div
     style={{
       display: "grid",
-      gridTemplateColumns: "repeat(4, 1fr)",
+      gridTemplateColumns: "repeat(4, 1fr)", 
       gap: "2em",
       padding: "1em",
-      marginLeft: "4em",
-      marginRight: "4em",
-      marginTop:"3em"
+      marginTop: "4em", 
+      width: "100%", 
       
     }}
   >
@@ -795,15 +665,7 @@ const OpenPoTable = () => {
           boxSizing: "border-box", 
         }}
       />
-    {/* <Input
-        placeholder="Vendor Name"
-        value={selectedVendorID} 
-        onChange={handleVendorIdChange} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      /> */}
+    
     <Input
         placeholder="Vendor Site ID"
         value={selectedVendorSiteID} 
@@ -883,16 +745,22 @@ const OpenPoTable = () => {
 <div
   style={{
     marginTop: "30em", 
-    width:"30%",
-    marginRight:"4em"
+    width: "300px", 
+    maxWidth: "100%", 
+    minWidth: "200px",  
+    display: "flex", 
+    justifyContent: "center", 
+    marginLeft: "auto", 
+    marginRight: "auto", 
+    
+   
   }}
 >
-        <Search
-          placeholder="Search PO"
-          onSearchChange={handleSearchChange}
-          
-        />
-        </div>
+  <Search
+    placeholder="Search PO"
+    onSearchChange={handleSearchChange}
+  />
+</div>
        
       </div>
       <div

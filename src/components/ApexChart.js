@@ -3,8 +3,8 @@ import axios from "axios";
 import CanvasJSReact from "@canvasjs/react-charts";
 import "./ApexChart.css";
 
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+let CanvasJS = CanvasJSReact.CanvasJS;
+let CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const ApexChart = () => {
   const [data, setData] = useState([]);
@@ -53,13 +53,14 @@ const ApexChart = () => {
 
   let dataPoint = options.data[0].dataPoints;
   let total = dataPoint.reduce((acc, point) => acc + point.y, 0);
-  for (let i = 0; i < dataPoint.length; i++) {
+  for (const point of dataPoint) {
     if (total > 0) {
-      dataPoint[i].percentage = ((dataPoint[i].y / total) * 100).toFixed(2);
+      point.percentage = ((point.y / total) * 100).toFixed(2);
     } else {
-      dataPoint[i].percentage = 0;
+      point.percentage = 0;
     }
   }
+  
 
   const renderLegend = () => {
     return (
