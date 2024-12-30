@@ -160,7 +160,7 @@ const IssuefixDetails = () => {
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
         const response = await axios.get(
-          `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+          `http://172.235.21.99:5729/user/invoices-update/${invoiceNo}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Add the authorization header
@@ -204,7 +204,7 @@ const IssuefixDetails = () => {
 
   const handleSubmit = async () => {
 
-    const apiUrl = "https://invoicezapi.focusrtech.com:57/user/po-number";
+    const apiUrl = "http://172.235.21.99:5729/user/po-number";
 
     try {
 
@@ -240,7 +240,7 @@ const IssuefixDetails = () => {
   };
 
   const [fulldata, setFulldata] = useState({}); // Add state for full data
-  const [completedata, setCompletedata] = useState({});
+  
   const [oldrow, setOldrow] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
@@ -252,7 +252,7 @@ const IssuefixDetails = () => {
       const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
       const response = await axios.get(
-        `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+        `http://172.235.21.99:5729/user/invoices-update/${invoiceNo}/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -393,7 +393,7 @@ const IssuefixDetails = () => {
 
 
       const response = await fetch(
-        `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+        `http://172.235.21.99:5729/user/invoices-update/${invoiceNo}/`,
         {
           method: "PUT",
           headers: {
@@ -468,7 +468,7 @@ const IssuefixDetails = () => {
 
       const deletePromises = selectedItemsArray.map((inv_id) =>
         axios.delete(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
+          `http://172.235.21.99:5729/user/delete-invoice-item/${inv_id}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`, 
@@ -509,7 +509,7 @@ const IssuefixDetails = () => {
       const token = localStorage.getItem("access_token"); 
 
       const response = await fetch(
-        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceNo}`,
+        `http://172.235.21.99:5729/user/invoices-file/${invoiceNo}`,
         {
           method: "GET", 
           headers: {

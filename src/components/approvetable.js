@@ -119,21 +119,23 @@ const SummaryTable = ({
   setMultiple_MatchCount,
   
 }) => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); 
   const [selectedRows, setSelectedRows] = useState(new Set());
-  
   const [isWalkinUpload, setIsWalkinUpload] = useState(false);
-
   const [newCandidate, setNewCandidate] = useState(false);
   const [filtered, setFilteredItems] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [isrefresh, setIsRefresh] = useState(false);
   const [isupload, setIsUpload] = useState(false);
-  const navigate = useNavigate();
+  
   console.log("Walkin",isWalkinUpload);
-  const dispatch = useDispatch();
+ 
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
@@ -149,7 +151,7 @@ const SummaryTable = ({
     }
     try {
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/invoices", {
+      const response = await axios.get("http://172.235.21.99:5729/user/invoices", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -201,7 +203,7 @@ const SummaryTable = ({
           lines: item.items.length,
           buyer: item.CustomerName,
           Status: Status, 
-          // Store:item.storeuser
+          
         };
       });
       
@@ -218,7 +220,7 @@ const SummaryTable = ({
     }
   };
 
-  console.log("Fiiiii", items);
+  
 
   useEffect(() => {
     SetRefreshUpload(isInvoiceUploadRefreshed);
@@ -255,7 +257,7 @@ const SummaryTable = ({
   
     setFilteredItems(filteredItems); 
   };
-  // setFilteredItems(filteredItems)
+  
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || ""; // Use state value for searchQuery
   
@@ -324,7 +326,7 @@ const SummaryTable = ({
       const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].id}`,
+          `http://172.235.21.99:5729/user/delete-invoice/${filteredItems[item].id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Add the authorization header
@@ -383,7 +385,7 @@ const SummaryTable = ({
              await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${filteredItems[item].id}`,
+            `http://172.235.21.99:5729/user/update-storeuser/${filteredItems[item].id}`,
             {},
             {
               headers: {
@@ -547,7 +549,7 @@ const SummaryTable = ({
           onClick={handleNewCandidateBtn}
         >
           <ShareIos24Filled style={{ color: "#1281d7" }} />
-          {/* <TasksApp28Regular style={{ color: "#1281d7" }} /> */}
+          
           <span>Upload-Invoice</span>
         </button>
 

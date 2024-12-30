@@ -164,7 +164,7 @@ const PreviewPage = () => {
   ];
   const [isDrawerOpen,setIsDrawerOpen]=useState(false);
   const navigate = useNavigate();
-  const largeId = useId("input-large");
+  
   const handleASN = () => {
     setIsDrawerOpen(true);
     console.log("Status",isDrawerOpen)

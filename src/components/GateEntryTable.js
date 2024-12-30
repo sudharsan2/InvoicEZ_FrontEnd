@@ -16,7 +16,7 @@ import {
 } from "@fluentui/react-components";
 import Search from "./Search"; 
 import {message } from "antd"; 
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 
 import { ArrowSortUpFilled, ArrowSortDownRegular,ArrowClockwise24Regular, } from "@fluentui/react-icons";
 
@@ -112,7 +112,7 @@ const GateEntryTable = ({setTableLength}) => {
     }
     try {
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/storetrue-invoice", {
+      const response = await axios.get("http://172.235.21.99:5729/user/storetrue-invoice", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

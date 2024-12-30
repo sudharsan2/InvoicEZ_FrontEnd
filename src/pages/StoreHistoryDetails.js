@@ -108,7 +108,7 @@ const useStyles = makeStyles({
 
 const StoreHistoryDetails = () => {
   
-  const navigate = useNavigate();
+  
   const styles = useStyles();
   const themestate = false;
   const location = useLocation();
@@ -118,8 +118,7 @@ const StoreHistoryDetails = () => {
 
 
   const [entrytime, setEntrytime] = useState();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  
   const [poDate, setPoDate] = useState();
   const [postatus, setPoStatus] = useState();
   const [total, setTotal] = useState();
@@ -191,7 +190,7 @@ const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, h
       const token = localStorage.getItem("access_token"); 
 
         const response = await fetch(
-          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+          `http://172.235.21.99:5729/user/invoices-file/${inv_id}`,
           {
             method: "GET", 
             headers: {
@@ -217,7 +216,7 @@ const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, h
       try {
         const token = localStorage.getItem("access_token");
         const response = await axios.get(
-          `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
+          `http://172.235.21.99:5729/user/po-details/${Id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -233,10 +232,8 @@ const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, h
         setPoLineItems(fetchedItems);
         
       } catch (error) {
-        setError("Error fetching data. Please try again.");
+       
         console.error("Error fetching data:", error.response ? error.response.data : error.message);
-      } finally {
-        setLoading(false);
       }
     };
   

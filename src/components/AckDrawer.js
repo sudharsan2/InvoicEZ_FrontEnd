@@ -1,10 +1,8 @@
-import React, { useState,useEffect } from "react";
+import React, {useEffect } from "react";
 import {
-  
   Drawer,
   makeStyles,
   useRestoreFocusSource,
-  useRestoreFocusTarget,
 } from "@fluentui/react-components";
 import AckPage from "../pages/AckPage";
 import {message} from "antd"; 
@@ -50,7 +48,7 @@ const AckDrawer = ({data,setIsOpen,isOpen,onClose}) => {
     console.log("ACK API ")
     try{
       
-      const response = await axios.put(`https://invoicezapi.focusrtech.com:57/user/acknowledge-purchase-requisition/${data.id}/`);
+      const response = await axios.put(`http://172.235.21.99:5729/user/acknowledge-purchase-requisition/${data.id}/`);
       if (response.status === 200) {
         
         handleClose();
@@ -72,7 +70,7 @@ const AckDrawer = ({data,setIsOpen,isOpen,onClose}) => {
     console.log("REJ API ")
     try{
       
-      const response = await axios.put(`https://invoicezapi.focusrtech.com:57/user/update-status/${data.id}/`);
+      const response = await axios.put(`http://172.235.21.99:5729/user/update-status/${data.id}/`);
       if (response.status === 200) {
         
         handleClose();
@@ -95,7 +93,7 @@ const AckDrawer = ({data,setIsOpen,isOpen,onClose}) => {
         position="end"
         separator
         open={isOpen}
-        // onOpenChange={(_, { open }) => setIsOpen(open)}
+        
         onOpenChange={(_, { open }) => {
           setIsOpen(open)
           if (!open) handleClose(); // Trigger close logic when the drawer closes

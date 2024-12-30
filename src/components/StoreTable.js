@@ -1,8 +1,6 @@
 // API connection
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-
 import { ArrowSortUpFilled, ArrowSortDownRegular,ArrowClockwise24Regular, } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 
@@ -17,9 +15,9 @@ import {
   createTableColumn,
 } from "@fluentui/react-components";
 import Search from "./Search"; 
-import { message, notification } from "antd"; 
-import { useDispatch, useSelector } from "react-redux";
-import { refreshActions } from "../Store/Store";
+import { message, } from "antd"; 
+import {  useSelector } from "react-redux";
+
 
 // Define columns for the DataGrid
 const columns = [
@@ -110,7 +108,7 @@ const StoreTable = ({setTableLength}) => {
     }
     try {
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/storetrue-invoice", {
+      const response = await axios.get("http://172.235.21.99:5729/user/storetrue-invoice", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

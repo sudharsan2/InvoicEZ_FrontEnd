@@ -27,7 +27,7 @@ const QuotationDrawer = ({ data, userId, onClose }) => {
     console.log("Submitting API Call...");
     try {
       const response = await axios.post(
-        `https://invoicezapi.focusrtech.com:57/user/create-quotations/${data.id}`,
+        `http://172.235.21.99:5729/user/create-quotations/${data.id}`,
         {
           distribution_number: data.line_items[0].distribution_number,
           charge_account: handleFreightTerm,

@@ -299,11 +299,10 @@ const NavDrawerDefault = (props) => {
 
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
-      {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
+      
       <NavDrawer
         defaultSelectedValue={drawerPosition}
-        // defaultSelectedCategoryValue="3"
-
+       
         open={isOpen}
         type="inline"
         onOpenChange={(_, { open }) => setIsOpen(open)}
@@ -319,7 +318,7 @@ const NavDrawerDefault = (props) => {
             : { transition: "width 0.5s", borderRightStyle: "none" }
         }
       >
-        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
+        
 
         <NavDrawerHeader
           style={

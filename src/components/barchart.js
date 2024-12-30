@@ -18,7 +18,7 @@ const BarChartComponent = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://invoicezapi.focusrtech.com:57/user/dashboard-supplier-counts",
+          "http://172.235.21.99:5729/user/dashboard-supplier-counts",
         );
         const apiData = response.data;
 

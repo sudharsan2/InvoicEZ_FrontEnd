@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+
 import {
   makeStyles,
-  Button,
-  Link,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
@@ -14,26 +12,14 @@ import {
   Table,
   TableCell,
   TableHeader,
-  TableSelectionCell,
   TableRow,
   TableBody,
   TableHeaderCell,
-  createTableColumn,
-  useTableFeatures,
-  useTableSort,
-  Input,
   Divider
 } from "@fluentui/react-components";
-import line_data from "./data_approve";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { CgLayoutGrid } from "react-icons/cg";
-import { ArrowDownload28Regular } from "@fluentui/react-icons";
-/*eslint-disabled*/
-import CreatableSelect from "react-select/creatable";
-import { message } from "antd";
-import { notification } from "antd";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+import { ArrowSortUpFilled, ArrowSortDownRegular, ArrowDownload28Regular } from "@fluentui/react-icons";
 const path = "/storeuser";
 const path2 = "/approvepage";
 const path1 = "/dashboard";
@@ -61,10 +47,7 @@ const useStyles = makeStyles({
   content2: {
     width: "77vw",
     overflowY: "auto",
-    // paddingTop: "3vh",
     padding: "0 20px",
-
-    // maxHeight: "48vh",
   },
   controls: {
     display: "flex",
@@ -114,17 +97,13 @@ const GateEntryDetails = () => {
 const styles = useStyles();
   const themestate = false;
   
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const location = useLocation();
   const { poNumber, Id } = location.state || {};
-  console.log("ID", Id);
+
+//  <----States------>
   const [poDate, setPoDate] = useState();
   const [postatus, setPoStatus] = useState();
-  console.log(error)
-  console.log(loading)
   const [total, setTotal] = useState();
- 
   const [supplier, setSupplier] = useState();
   const [vendor, setVendor] = useState("");
   const [customer, setCustomer] = useState();
@@ -132,11 +111,23 @@ const styles = useStyles();
   const [invoicedate, setInvoiceDate] = useState();
   const [invoicetot, setInvoicetot] = useState();
   const [closedcode, setClosedCode] = useState();
-  const [po_id, set_Po_id] = useState("");
-
   const [inv_id, setInv_id] = useState();
-
+  const [entrytime, setEntrytime] = useState();
+  const [data, setData] = useState([]);
   
+
+
+  // ----Style 
+  const tabStyle = themestate ? { color: "white" } : {}
+  const classStyle = themestate ? "hovereffect dark" : "hovereffect"
+  const rowStyle = {
+    color: themestate ? "white" : "black", 
+    borderBottomColor: themestate ? "#383838" : "#ccc", 
+  };
+  const colorStyle = themestate ? "white" : "black";
+  const backStyle = themestate ? "#383838" : "white";
+  const bodyStyle = {color: themestate ? "rgb(245,245,245)" : ""}
+  const divStyle = themestate ? "white" : "";
 
   
  
@@ -144,28 +135,18 @@ const styles = useStyles();
   const [selectedtab, setSelectedTab] = React.useState("tab1");
   const purchaseOrder = {
     poNumber: poNumber,
-    // poDate: "09 May 2023",
     poTotalAmount: "95090",
     poCurrency: "INR",
     poStatus: "Open",
     lineMatching: "FULL / Partial Line Items",
-    // vendorAddress: "VendorAddress",
     customerAddress: "CustomerAddress",
-    // invoiceId: "InvoiceId",
     invoiceDate: "InvoiceDate",
     invoiceTotal: "InvoiceTotal",
     invoiceCurrency: "Invoice Currency",
     purchaseOrderNumberInInvoice: "PurchaseOrder Number in Invoice",
   };
-  const [sortState, setSortState] = useState({
-    sortDirection: "ascending",
-    sortColumn: "empid",
-  });
-  const [entrytime, setEntrytime] = useState();
- 
-  const [input,setInput] = useState("");
+
   
-  const [data, setData] = useState([]);
   
 
   const handleTabSelect2 = (event, data) => {
@@ -176,63 +157,16 @@ const styles = useStyles();
 
   
   
-  const columns = [
-    createTableColumn({
-      columnId: "id",
-      compare: (a, b) => a.id - b.id,
-    }),
-    createTableColumn({
-      columnId: "name",
-      compare: (a, b) => a.name.localeCompare(b.name),
-    }),
-    createTableColumn({
-      columnId: "description",
-      compare: (a, b) => a.description.localeCompare(b.description),
-    }),
-    createTableColumn({
-      columnId: "invoice_item_name",
-      compare: (a, b) => a.invoice_item_name.localeCompare(b.invoice_item_name),
-    }),
-    createTableColumn({
-      columnId: "unit_price",
-      compare: (a, b) => a.unit_price - b.unit_price,
-    }),
-    createTableColumn({
-      columnId: "quantity",
-      compare: (a, b) => a.quantity - b.quantity,
-    }),
-    createTableColumn({
-      columnId: "invoice_quantity",
-      compare: (a, b) => a.invoice_quantity - b.invoice_quantity,
-    }),
-    createTableColumn({
-      columnId: "final_po_quantity",
-      compare: (a, b) => a.final_po_quantity - b.final_po_quantity,
-    }),
-  ];
+ 
 
-  const {
-    sort: { getSortDirection, toggleColumnSort },
-  } = useTableFeatures(
-    {
-      columns,
-      items: data,
-    },
-    [
-      useTableSort({
-        sortState,
-        onSortChange: (e, nextSortState) => setSortState(nextSortState),
-      }),
-    ],
-  );
-
+ 
  
   const handleViewInvoice = async () => {
     try {
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
         const response = await fetch(
-          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+          `http://172.235.21.99:5729/user/invoices-file/${inv_id}`,
           {
             method: "GET",
             headers: {
@@ -256,154 +190,119 @@ const styles = useStyles();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("access_token"); // Retrieve the token securely
-
-    const response = await axios.get(
-      `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Add the authorization header
-        },
-      }
-    );
-        const fetchedItems = response.data;
-        console.log("FETCHED ITEMS",fetchedItems);
-        setInv_id(fetchedItems.invoice_info.id);
-        set_Po_id(fetchedItems.po_header.id);
-        
-        console.log("Learn", fetchedItems.po_lineitems);
-
-        const invoice_items = fetchedItems.invoice_info.items.map((item, index) => {
-          console.log("IGST", item.Igst);
-          console.log("CGST", item.Cgst);
-          console.log("SGST", item.Sgst);
-        
-          return {
-            Igst: item.Igst,
-            Cgst: item.Cgst,
-            Sgst: item.Sgst,
-            index: index, // Include the index to match with po_lineitems
-          };
-        });
-        
-        const normalizedPoLineItems = fetchedItems.po_lineitems.map((poItem, index) => {
-          console.log("PO", poItem);
-        
-          const matchingInvoiceItem = invoice_items[index]; // Find the corresponding invoice item
-          const PO_Num = fetchedItems.po_header.po_number;
-          const matchingQuantity = matchingInvoiceItem
-            ? matchingInvoiceItem.Quantity
-            : null;
-        
-          return {
-            id: poItem.id,
-            item_name: poItem.item_name,
-            item_description: poItem.item_description,
-            quantity: poItem.quantity,
-            unit_price: poItem.unit_price,
-            Quantity: matchingQuantity,
-            po_number: PO_Num,
-            line_value: poItem.line_num,
-            note: input, // Assuming `input` is a variable you defined earlier
-            Igst: matchingInvoiceItem ? matchingInvoiceItem.Igst : null,
-            Cgst: matchingInvoiceItem ? matchingInvoiceItem.Cgst : null,
-            Sgst: matchingInvoiceItem ? matchingInvoiceItem.Sgst : null,
-          };
-        });
-        
-        // Log or process the combined data as needed
-        console.log("Invoice Items:", invoice_items);
-        console.log("Normalized PO Line Items:", normalizedPoLineItems);
-        
-
-        setData(normalizedPoLineItems);
-          
-        // setData(normalizedPoLineItems);
-        
-        setTotal(fetchedItems.po_header.total_amount);
-        setPoDate(fetchedItems.po_lineitems[0]?.promised_date || "N/A"); // Assuming the first date is used
-        setPoStatus(fetchedItems.po_header.po_status);
-        setVendor(fetchedItems.invoice_info.VendorAddress);
-        setCustomer(fetchedItems.invoice_info.ShippingAddress);
-        setInvoiceId(fetchedItems.invoice_info.InvoiceId);
-        setInvoiceDate(fetchedItems.invoice_info.InvoiceDate);
-        setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
-        setSupplier(fetchedItems.po_header.supplier_name);
-        setEntrytime(fetchedItems.invoice_info.created_at);
-        fetchedItems.po_lineitems.forEach((item) => {
-          setClosedCode(item.closed_code);
-        });
-       
-        // vendor address
-        const vendorAddressObj = fetchedItems.invoice_info.VendorAddress;
-        console.log("obj1", vendorAddressObj);
-
-        if (vendorAddressObj) {
-          const formattedVendorAddress = `
-        ${vendorAddressObj.street_address || ""}
-        ${vendorAddressObj.city || ""},
-        ${vendorAddressObj.postal_code || ""},
-        ${vendorAddressObj.country_region || ""}
-    `
-            .trim()
-            .replace(/\s+/g, " ")
-            .replace(/,$/, "");
-
-          setVendor(formattedVendorAddress);
-        } else {
-          setVendor("NULL");
-          console.error("VendorAddress is missing");
-        }
-        console.log("data",data);
-        const vendorCustomerObj = fetchedItems.invoice_info.ShippingAddress;
-        console.log("obj", vendorAddressObj);
-
-        if (vendorCustomerObj) {
-          const formattedCustomerAddress = `
-        ${vendorCustomerObj.street_address || ""}
-        ${vendorCustomerObj.city || ""},
-        ${vendorCustomerObj.postal_code || ""},
-        ${vendorCustomerObj.country_region || ""}
-    `
-            .trim()
-            .replace(/\s+/g, " ")
-            .replace(/,$/, "");
-
-          setCustomer(formattedCustomerAddress);
-        } else {
-          setCustomer("NULL");
-          console.error("CustomerAddress is missing");
-        }
-      } catch (error) {
-        setError("Error fetching data. Please try again.");
-        console.error(
-          "Error fetching data:",
-          error.response ? error.response.data : error.message,
+        const token = localStorage.getItem("access_token");
+        const response = await axios.get(
+          `http://172.235.21.99:5729/user/po-details/${Id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
-      } finally {
-        setLoading(false);
-      }
+  
+        const fetchedItems = response.data;
+        console.log("FETCHED ITEMS", fetchedItems);
+  
+       
+        setHeaderDetails(fetchedItems);
+  
+        
+        const invoiceItems = normalizeInvoiceItems(fetchedItems.invoice_info.items);
+        const poLineItems = normalizePoLineItems(
+          fetchedItems.po_lineitems,
+          invoiceItems,
+          fetchedItems.po_header.po_number
+        );
+  
+        setData(poLineItems);
+  
+       
+        const vendorAddress = formatAddress(fetchedItems.invoice_info.VendorAddress);
+        const customerAddress = formatAddress(fetchedItems.invoice_info.ShippingAddress);
+  
+        setVendor(vendorAddress || "NULL");
+        setCustomer(customerAddress || "NULL");
+      } catch (error) {
+        handleFetchError(error);
+      } 
     };
-
+  
     if (poNumber) {
       fetchData();
     }
   }, [poNumber]);
-
-  // const sortedData = [...data].sort((a, b) => {
-  //   const aValue = a[sortState.sortColumn];
-  //   const bValue = b[sortState.sortColumn];
-
-  //   if (typeof aValue === "string" && typeof bValue === "string") {
-  //     return sortState.sortDirection === "ascending"
-  //       ? aValue.localeCompare(bValue)
-  //       : bValue.localeCompare(aValue);
-  //   }
-
-  //   return sortState.sortDirection === "ascending"
-  //     ? aValue - bValue
-  //     : bValue - aValue;
-  // });
+  
+  
+  const setHeaderDetails = (fetchedItems) => {
+    setInv_id(fetchedItems.invoice_info.id);
+    setTotal(fetchedItems.po_header.total_amount);
+    setPoDate(fetchedItems.po_lineitems[0]?.promised_date || "N/A");
+    setPoStatus(fetchedItems.po_header.po_status);
+    setInvoiceId(fetchedItems.invoice_info.InvoiceId);
+    setInvoiceDate(fetchedItems.invoice_info.InvoiceDate);
+    setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
+    setSupplier(fetchedItems.po_header.supplier_name);
+    setEntrytime(fetchedItems.invoice_info.created_at);
+    fetchedItems.po_lineitems.forEach((item) => setClosedCode(item.closed_code));
+  };
+  
+  const normalizeInvoiceItems = (items) =>
+    items.map((item, index) => ({
+      Igst: item.Igst,
+      Cgst: item.Cgst,
+      Sgst: item.Sgst,
+      index,
+    }));
+  
+  const normalizePoLineItems = (poItems, invoiceItems, poNumber) =>
+    poItems.map((poItem, index) => {
+      const matchingInvoiceItem = invoiceItems[index] || {};
+      return {
+        id: poItem.id,
+        item_name: poItem.item_name,
+        item_description: poItem.item_description,
+        quantity: poItem.quantity,
+        unit_price: poItem.unit_price,
+        Quantity: matchingInvoiceItem.Quantity || null,
+        po_number: poNumber,
+        line_value: poItem.line_num,
+        Igst: matchingInvoiceItem.Igst || null,
+        Cgst: matchingInvoiceItem.Cgst || null,
+        Sgst: matchingInvoiceItem.Sgst || null,
+      };
+    });
+  
+  const formatAddress = (address) => {
+    if (!address) {
+      console.error("Address is missing");
+      return null;
+    }
+    return `
+      ${address.street_address || ""}
+      ${address.city || ""},
+      ${address.postal_code || ""},
+      ${address.country_region || ""}
+    `
+      .trim()
+      .replace(/\s+/g, " ")
+      .replace(/,$/, "");
+  };
+  
+  const handleFetchError = (error) => {
+    
+    console.error(
+      "Error fetching data:",
+      error.response ? error.response.data : error.message
+    );
+  };
+  
+ 
+  const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, headerSortProps }) => (
+    <TableHeaderCell {...headerSortProps(column)}>
+      {label}
+      {sortedColumn === column && (
+        sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+      )}
+    </TableHeaderCell>
+  );
 
 
   const [sortedColumn, setSortedColumn] = useState(null);
@@ -434,36 +333,40 @@ const styles = useStyles();
 
   
 
+  const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
+  const compareNumeric = (aValue, bValue) => {
+    const aNumeric = parseFloat(aValue);
+    const bNumeric = parseFloat(bValue);
+    return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+  };
+  
+  
+  const compareStrings = (aValue, bValue) => {
+    const aString = String(aValue).toLowerCase();
+    const bString = String(bValue).toLowerCase();
+    return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+  };
+
   const sortedData = [...data].sort((a, b) => {
     if (!sortedColumn) return 0;
-
-    const aValue = a[sortedColumn] || "";  
+  
+    const aValue = a[sortedColumn] || "";
     const bValue = b[sortedColumn] || "";
-
-    // Determine if the values are numeric
-    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
-
-    // Numeric comparison
+  
+    const isANumeric = isNumeric(aValue);
+    const isBNumeric = isNumeric(bValue);
+  
     if (isANumeric && isBNumeric) {
-      const aNumeric = parseFloat(aValue);
-      const bNumeric = parseFloat(bValue);
-      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+      return compareNumeric(aValue, bValue);
     }
-
-    // String comparison using localeCompare for case-insensitive sorting
+  
     if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
-      const bString = String(bValue).toLowerCase();
-      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+      return compareStrings(aValue, bValue);
     }
-
-    // Mixed types: If one is numeric and the other is not, treat the numeric value as smaller
-    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
-    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
-
-    return 0; // If values are still equal
+  
+    return isANumeric ? -1 : 1;
   });
+  
 
 
   return (
@@ -485,7 +388,7 @@ const styles = useStyles();
           </Breadcrumb>
         </div>
         <div style={{ maxHeight: "20vh" }}>
-          <div className={styles.root}>
+          <div>
             <div className={styles.header}>
               <div
                 style={{
@@ -514,7 +417,7 @@ const styles = useStyles();
                 >
                   <p>Supplier</p>
                   <h2>{supplier}</h2>
-                  {/* <h2>Levin</h2> */}
+                 
                 </div>
                 <div
                   style={{
@@ -574,20 +477,7 @@ const styles = useStyles();
               >
                 Line Item
               </Tab>
-              {/* <Tab
-              value="tab3"
-              className={themestate ? "tab dark drawer" : "tab"}
-              style={{ border: "1px solid transparent" }}
-            >
-              PO
-            </Tab>
-            <Tab
-              value="tab4"
-              className={themestate ? "tab dark drawer" : "tab"}
-              style={{ border: "1px solid transparent" }}
-            >
-              Supplier
-            </Tab> */}
+              
               <div
                 style={{
                   display: "flex",
@@ -616,16 +506,16 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                       }}
                     >
                       PO Number:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle}
                     >
-                      {/* {purchaseOrder.poNumber} */}
+                      
                       {poNumber}
                     </div>
                   </div>
@@ -635,7 +525,7 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                         whiteSpace: "noWrap"
                       }}
                     >
@@ -643,7 +533,7 @@ const styles = useStyles();
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle}
                     >
                       {vendor}
                     </div>
@@ -654,16 +544,16 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                       }}
                     >
                       PO Date:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle}
                     >
-                      {/* {purchaseOrder.poDate} */}
+                    
                       {poDate}
                     </div>
                   </div>
@@ -675,7 +565,7 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                         whiteSpace: "noWrap"
                       }}
                     >
@@ -683,9 +573,9 @@ const styles = useStyles();
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle}
                     >
-                      {/* {purchaseOrder.customerAddress} */}
+                      
                       {customer}
                     </div>
                   </div>
@@ -695,14 +585,15 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                       }}
                     >
                       PO Total Amount:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle
+                      }
                     >
                       {total}
                     </div>
@@ -713,16 +604,16 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                       }}
                     >
                       Invoice ID:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle}
                     >
-                      {/* {purchaseOrder.invoiceId} */}
+                      
                       {invoiceid}
                     </div>
                   </div>
@@ -732,14 +623,14 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                       }}
                     >
                       PO Currency:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle}
                     >
                       {purchaseOrder.poCurrency}
                     </div>
@@ -749,16 +640,16 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                       }}
                     >
                       Invoice Date:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle}
                     >
-                      {/* {purchaseOrder.invoiceDate} */}
+                     
                       {invoicedate}
                     </div>
                   </div>
@@ -768,14 +659,14 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                       }}
                     >
                       PO Status:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle}
                     >
                       {postatus}
                     </div>
@@ -786,16 +677,16 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                       }}
                     >
                       Invoice Total:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle}
                     >
-                      {/* {purchaseOrder.invoiceTotal} */}
+                      
                       {invoicetot}
                     </div>
                   </div>
@@ -805,14 +696,14 @@ const styles = useStyles();
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {divStyle},
                       }}
                     >
                       Line Matching:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={bodyStyle}
                     >
                       {closedcode || "NULL"}
                     </div>
@@ -821,42 +712,10 @@ const styles = useStyles();
                   <div
                     className={`${styles.section} ${styles.invoiceCurrency}`}
                   >
-                    {/* <div
-                      className={styles.heading}
-                      style={{
-                        fontWeight: "bold",
-                        color: themestate ? "white" : "",
-                      }}
-                    >
-                      Invoice Currency:
-                    </div> */}
-                    {/* <div
-                      className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                    >
-                      {purchaseOrder.invoiceCurrency}
-                    </div> */}
+                
                   </div>
 
-                  {/* <div
-                    className={`${styles.section} ${styles.purchaseOrderNumber}`}
-                  >
-                    <div
-                      className={styles.heading}
-                      style={{
-                        fontWeight: "bold",
-                        color: themestate ? "white" : "",
-                      }}
-                    >
-                      Purchase Order Number in Invoice:
-                    </div>
-                    <div
-                      className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                    >
-                      {purchaseOrder.purchaseOrderNumberInInvoice}
-                    </div>
-                  </div> */}
+                  
                 </div>
                 <Divider style={{marginTop:"3em",width:"100%"}}/>
               </div>
@@ -879,190 +738,37 @@ const styles = useStyles();
                     style={{
                       position: "sticky",
                       top: 0,
-                      backgroundColor: themestate ? "#383838" : "white",
+                      backgroundColor:{backStyle},
                       zIndex: 1,
-                      color: themestate ? "white" : "black",
+                      color:{colorStyle},
                     }}
                   >
                     <TableRow
                       style={
-                        themestate
-                          ? { color: "white", borderBottomColor: "#383838" }
-                          : {}
+                       rowStyle
                       }
                     >
-                      <TableHeaderCell 
-                       style={{
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                        maxWidth: "200px",
-                      }}
-                      {...headerSortProps("id")}>
-                      Line Number
-                        {sortedColumn === "id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "200px",
-                        }}
-                        {...headerSortProps("po_number")}
-                      >
-                        PO Number in Supplier Invoice
-                        {sortedColumn === "po_number" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "300px",
-                        }}
-                        {...headerSortProps("item_description")}
-                      >
-                        Description
-                        {sortedColumn === "item_description" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "250px",
-                        }}
-                        {...headerSortProps("item_name")}
-                      >
-                         Item 
-                         {sortedColumn === "item_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("unit_price")}
-                      >
-                        Unit Price
-                        {sortedColumn === "unit_price" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      {/* <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("quantity")}
-                      >
-                        UOM
-                      </TableHeaderCell> */}
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("quantity")}
-                      >
-                        Quantity
-                        {sortedColumn === "quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      {/* <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Unit Price
-                      </TableHeaderCell> */}
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("line_value")}
-                      >
-                        Line Value
-                        {sortedColumn === "line_value" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Igst")}
-                      >
-                        IGST
-                        {sortedColumn === "Igst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Cgst")}
-                      >
-                        CGST
-                        {sortedColumn === "Cgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("Sgst")}
-                      >
-                        SGST
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      {/* <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Note
-                        {sortedColumn === "id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell> */}
+                      <TableHeaderCellWithSort column="id" label="Line Number" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="po_number" label="PO Number in Supplier Invoice" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="item_description" label="Description" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="item_name" label="Item " sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="unit_price" label="Unit Price" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="quantity" label="Quantity" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="line_value" label="Line Value" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Igst" label="Igst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Cgst" label="Cgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Sgst" label="Sgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                     
                     </TableRow>
                   </TableHeader>
 
-                  <TableBody style={themestate ? { color: "white" } : {}}>
+                  <TableBody style={tabStyle}>
                     {sortedData.map((item) => (
                       <TableRow
                         key={item.id}
-                        style={themestate ? { color: "white" } : {}}
+                        style={tabStyle}
                         className={
-                          themestate ? "hovereffect dark" : "hovereffect"
+                          classStyle
                         }
                       >
                         <TableCell

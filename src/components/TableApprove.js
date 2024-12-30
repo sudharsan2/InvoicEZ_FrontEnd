@@ -119,7 +119,7 @@ const TableApprove = () => {
       
 
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/one-invoice-list", {
+      const response = await axios.get("http://172.235.21.99:5729/user/one-invoice-list", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -250,7 +250,7 @@ const TableApprove = () => {
       const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
+          `http://172.235.21.99:5729/user/delete-invoice/${filteredItems[item].InvoiceId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Add the authorization header

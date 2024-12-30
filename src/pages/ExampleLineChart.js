@@ -19,7 +19,7 @@ const Example = () => {
       try {
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
     
-        const response = await fetch('https://invoicezapi.focusrtech.com:57/user/dashboard-monthwise-invoice', {
+        const response = await fetch('http://172.235.21.99:5729/user/dashboard-monthwise-invoice', {
           method: "GET", 
           headers: {
             "Content-Type": "application/json", 

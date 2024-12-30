@@ -51,7 +51,7 @@ const QuotationDropDown = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/suppliers",
+        "http://172.235.21.99:5729/user/suppliers",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);

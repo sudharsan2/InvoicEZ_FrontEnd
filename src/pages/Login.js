@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, notification } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
 import axios from "axios";
-import useIsMountedRef from "../hooks/useIsMountedRef";
+
 import "./login.css";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchLoginDetailsAsync,
-  getIsAuthenticatedFromAuth,
-  getIsLoadingFromAuth,
-  getErrorFromAuth,
-} from "../Store/authSlice";
+
+
 
 
 const Login = () => {
@@ -21,7 +16,7 @@ const Login = () => {
   
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
+ 
   
   const LoginSchema = Yup.object({
     username: Yup.string().required("Username is required"),
@@ -37,7 +32,7 @@ const Login = () => {
       setIsLoading(true);
       try {
         const response = await axios.post(
-          "https://invoicezapi.focusrtech.com:57/user/signin",
+          "http://172.235.21.99:5729/user/signin",
           {
             username: values.username,
             password: values.password,

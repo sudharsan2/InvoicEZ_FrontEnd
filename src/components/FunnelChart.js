@@ -18,7 +18,7 @@ const FunnelChartPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
+          "http://172.235.21.99:5729/user/statusForApprove",
         );
         const apiData = response.data;
 

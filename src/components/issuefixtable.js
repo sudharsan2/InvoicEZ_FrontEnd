@@ -88,7 +88,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
   
     const token = localStorage.getItem("access_token"); // Retrieve the token securely
   
-    fetch("https://invoicezapi.focusrtech.com:57/user/no-invoice-list", {
+    fetch("http://172.235.21.99:5729/user/no-invoice-list", {
       method: "GET", 
       headers: {
         "Content-Type": "application/json", 
@@ -142,7 +142,7 @@ const IssuefixTable = ({ height, setTableLength }) => {
         console.log(`Deleting item with ID: ${id}`);
         console.log("//", filteredItems[id].invid);
         return fetch(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[id].invid}`,
+          `http://172.235.21.99:5729/user/delete-invoice/${filteredItems[id].invid}`,
           {
             method: "DELETE",
             headers: {

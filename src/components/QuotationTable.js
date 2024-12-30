@@ -204,7 +204,7 @@ const QuotationTable = ({setStatusCounts}) => {
     }
     try {
       const response = await axios.get(
-        `https://invoicezapi.focusrtech.com:57/user/pr-details/supplier/${userId}/`,
+        `http://172.235.21.99:5729/user/pr-details/supplier/${userId}/`,
       );
 
       const data = response.data;

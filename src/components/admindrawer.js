@@ -2,7 +2,7 @@
 
 import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   NavCategory,
   NavCategoryItem,
@@ -16,44 +16,9 @@ import {
   NavSubItemGroup,
 } from "@fluentui/react-nav-preview";
 import {
-  Board24Filled,
-  Board24Regular,
-  BoxMultiple20Filled,
-  BoxMultiple20Regular,
-  DataArea20Filled,
-  DataArea20Regular,
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-  HeartPulse20Filled,
-  HeartPulse20Regular,
-  MegaphoneLoud20Filled,
-  MegaphoneLoud20Regular,
   
-  NotePin20Filled,
-  NotePin20Regular,
-  People20Filled,
-  People20Regular,
-  PeopleStar20Filled,
-  PeopleStar20Regular,
-  PersonFilled,
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-  PersonRegular,
-  PersonSearch20Filled,
-  PersonSearch20Regular,
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-  Settings20Filled,
-  Settings20Regular,
   bundleIcon,
-  LayerDiagonalPerson24Filled,
-  LayerDiagonalPerson24Regular,
-  PersonStar24Filled,
-  PersonStar24Regular,
-  PremiumPerson24Filled,
-  PremiumPerson24Regular,
-  DocumentTableSearch24Filled,
-  DocumentTableSearch24Regular,
+  
   Navigation24Filled,
   Navigation24Regular,Apps28Regular
 } from "@fluentui/react-icons";
@@ -72,10 +37,9 @@ import {
 import { jwtDecode } from "jwt-decode";
 const useStyles = makeStyles({
   root: {
-    // ...shorthands.border("2px", "solid", "#ccc"),
+   
     ...shorthands.overflow("hidden"),
-    // marginTop:"-2px",
-    // marginLeft:"-2px",
+    
 
     position: "fixed",
     left: 0,
@@ -107,18 +71,12 @@ const useStyles = makeStyles({
     marginInlineStart: `10px`,
   },
   hamburger: {
-    // backgroundColor: navItemTokens.backgroundColor,
-    // color: tokens.colorNeutralForeground2,
+    
     textDecorationLine: "none",
     marginLeft: "5px",
     marginTop: "10px",
 
-    ":hover": {
-      //   backgroundColor: navItemTokens.backgroundColorHover,
-    },
-    ":active": {
-      //   backgroundColor: navItemTokens.backgroundColorPressed,
-    },
+    
   },
   navItemlight: {
     marginTop: "10px",
@@ -147,45 +105,12 @@ const useStyles = makeStyles({
   },
 });
 
-const Person = bundleIcon(PersonFilled, PersonRegular);
-const Dashboard = bundleIcon(Board24Filled, Board24Regular);
-const Announcements = bundleIcon(MegaphoneLoud20Filled, MegaphoneLoud20Regular);
-const EmployeeSpotlight = bundleIcon(
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-);
 
-const LayerDiagonalPersonRegular = bundleIcon(
-  LayerDiagonalPerson24Filled,
-  LayerDiagonalPerson24Regular,
-);
-const PersonStarRegular = bundleIcon(PersonStar24Filled, PersonStar24Regular);
-const PremiumPersonRegular = bundleIcon(
-  PremiumPerson24Filled,
-  PremiumPerson24Regular,
-);
-const TableSearchRegular = bundleIcon(
-  DocumentTableSearch24Filled,
-  DocumentTableSearch24Regular,
-);
+
+
 const Navi = bundleIcon(Navigation24Filled, Navigation24Regular);
 
-const Search = bundleIcon(PersonSearch20Filled, PersonSearch20Regular);
-const PerformanceReviews = bundleIcon(
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-);
-const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular);
-const Interviews = bundleIcon(People20Filled, People20Regular);
-const HealthPlans = bundleIcon(HeartPulse20Filled, HeartPulse20Regular);
-const TrainingPrograms = bundleIcon(BoxMultiple20Filled, BoxMultiple20Regular);
-const CareerDevelopment = bundleIcon(PeopleStar20Filled, PeopleStar20Regular);
-const Analytics = bundleIcon(DataArea20Filled, DataArea20Regular);
-const Reports = bundleIcon(
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-);
-const Settings = bundleIcon(Settings20Filled, Settings20Regular);
+
 
 const NavDrawerDefaultAdmin = (props) => {
   const navigate = useNavigate();
@@ -210,6 +135,8 @@ const NavDrawerDefaultAdmin = (props) => {
 
   const [empId, setEmpId] = useState("");
   const [value,setValue] = useState("");
+
+  console.log(value);
    
   useEffect(() => {
     const storedUsername = localStorage.getItem("username"); 

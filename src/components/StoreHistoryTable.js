@@ -18,9 +18,9 @@ import {
   createTableColumn,
 } from "@fluentui/react-components";
 import Search from "./Search"; 
-import {notification } from "antd"; 
-import { useDispatch, useSelector } from "react-redux";
-import { refreshActions } from "../Store/Store";
+
+import {useSelector } from "react-redux";
+
 import { message } from "antd";
 // Define columns for the DataGrid
 const columns = [
@@ -91,7 +91,7 @@ const StoreHistoryTable = () => {
     try {
       
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
+      const response = await axios.get("http://172.235.21.99:5729/user/grn-history", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

@@ -47,7 +47,7 @@ const DropdownComponent = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/suppliers",
+        "http://172.235.21.99:5729/user/suppliers",
       );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
@@ -77,12 +77,6 @@ const DropdownComponent = () => {
         getOptionLabel={(e) => <div>{e.label}</div>}
         styles={customStyles} // Apply the custom styles
       />
-      {/* <p>Selected values:</p>
-      <ul>
-        {selectedValues.map(option => (
-          <li key={option.value}>{option.label}</li>
-        ))}
-      </ul> */}
     </div>
   );
 };

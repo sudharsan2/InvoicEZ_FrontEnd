@@ -93,7 +93,7 @@ const ResetPassword = () => {
     if (newPassword === confirmPassword) {
       try {
         const response = await axios.post(
-          "https://invoicezapi.focusrtech.com:57/user/reset-password",
+          "http://172.235.21.99:5729/user/reset-password",
           {
             password,
             token,

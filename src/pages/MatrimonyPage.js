@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState, useCallback } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,10 +6,9 @@ import {
   BreadcrumbButton,
 } from "@fluentui/react-components";
 import { KeyMultipleRegular } from "@fluentui/react-icons";
-import {  Input} from "@fluentui/react-components";
-
 
 import {
+  Input,
   makeStyles,
   Button,
   
@@ -19,13 +18,11 @@ import {
 } from "@fluentui/react-components";
 
 import { FaRegCopy } from "react-icons/fa";
-import { useState, useCallback } from "react";
 
 import { Calendar, DateRangeType } from "@fluentui/react";
 import { notification } from "antd";
 
-const path = "/admin";
-const path1 = "/dashboard";
+
 const path3 = "/matrimony";
 
 const containerStyle = {
@@ -74,12 +71,6 @@ const valueStyle = {
 };
 
 const useStyles = makeStyles({
-  root: {
-    // width: "77vw",
-    // height: "100vh",
-    // display: "flex",
-    // flexDirection: "column",
-  },
   control: {
     maxWidth: "300px",
   },
@@ -184,7 +175,7 @@ const Matrimony = () => {
   const counters = [
     { label: "Page Processed", value: page, color: "green" },
     { label: "Tokens Spent", value: token, color: "#d62727" },
-    { label: "Blob Storage Usage", value: blob || "0", color: "#1f497d" },
+    { label: "Blob Storage Usage", value: blob , color: "#1f497d" },
     { label: "Direct Approval", value: directapprove, color: "#d21994" },
   ];
   const values = [
@@ -214,12 +205,10 @@ const Matrimony = () => {
 
   let dateRangeString = "Not set";
   if (selectedDateRange) {
-    const rangeStart = selectedDateRange[0];
-    const rangeEnd = selectedDateRange[selectedDateRange.length - 1];
-    dateRangeString =
-      rangeStart.toDateString() + " - " + rangeEnd.toDateString();
+    const [rangeStart, rangeEnd] = [selectedDateRange[0], selectedDateRange.at(-1)];
+    dateRangeString = `${rangeStart.toDateString()} - ${rangeEnd.toDateString()}`;
   }
-
+  
   console.log(dateRangeString)
   // GET LLM
   const [apiKey, setApiKey] = useState("");
@@ -232,6 +221,12 @@ const Matrimony = () => {
 
   const inputId = "input"; // Define your input id if needed
 
+  const tabclassName=themestate ? "tab dark drawer" : "tab";
+  const tabStyle  = { border: "1px solid transparent" };
+ 
+
+
+
   const handleCopy = () => {
     navigator.clipboard.writeText(apiKey);
     notification.success({
@@ -241,7 +236,7 @@ const Matrimony = () => {
 
   const fetchLLMDetails = async () => {
     try {
-      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/llm-detail", {
+      const response = await fetch("http://172.235.21.99:5729/user/llm-detail", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -274,7 +269,7 @@ const Matrimony = () => {
     try {
       
 
-      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/statusForApprove", {
+      const response = await fetch("http://172.235.21.99:5729/user/statusForApprove", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -297,7 +292,7 @@ const Matrimony = () => {
   const fetchAzureDetails = async () => {
     try {
       
-      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/azure-detail", {
+      const response = await fetch("http://172.235.21.99:5729/user/azure-detail", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -342,7 +337,7 @@ const Matrimony = () => {
 
       console.log("Payload:", JSON.stringify(body)); // Log payload for verification
 
-      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/llm-detail", {
+      const response = await fetch("http://172.235.21.99:5729/user/llm-detail", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -433,6 +428,20 @@ const Matrimony = () => {
   const [isKey, isSetKey] = useState(true);
   const [isContainer, isSetContainer] = useState(true);
   const [isConnection, isSetConnection] = useState(true);
+
+  const val = isHidden ? "•".repeat(apiKey.length) : apiKey;
+  const val2 = isHidden ? "Show" : "Hide";
+  const val3 = isModelHidden ? "•".repeat(model.length) : model;
+  const val4 = isModelHidden ? "Show" : "Hide";
+  const val5 = isStorage ? "•".repeat(storage.length) : storage;
+  const val6 = isContainer ? "•".repeat(container.length) : container;
+  const val7 = isKey ? "•".repeat(key.length) : key;
+  const val8 = isConnection  ? "•".repeat(connection.length)  : connection;
+  const val9 = isStorage ? "Show" : "Hide";
+  const val10 = isContainer ? "Show" : "Hide";
+  const val11 = isKey ? "Show" : "Hide";
+  const val12 = isConnection ? "Show" : "Hide"
+
 
   const handleToggleVisibility = () => {
     setIsHidden(!isHidden);
@@ -577,15 +586,15 @@ const Matrimony = () => {
           >
             <Tab
               value="tab1"
-              className={themestate ? "tab dark drawer" : "tab"}
-              style={{ border: "1px solid transparent" }}
+              className={tabclassName}
+              style={tabStyle}
             >
               LLM
             </Tab>
             <Tab
               value="tab2"
-              className={themestate ? "tab dark drawer" : "tab"}
-              style={{ border: "1px solid transparent" }}
+              className={tabclassName}
+              style={tabStyle}
             >
               Cloud
             </Tab>
@@ -622,7 +631,7 @@ const Matrimony = () => {
                   <div className={styles.input}>
                     <Input
                       id="inputId"
-                      value={isHidden ? "•".repeat(apiKey.length) : apiKey}
+                      value={val}
                       onChange={(e) => setApiKey(e.target.value)}
                       onBlur={(e) => handleUpdate("apiKey", e.target.value)}
                       className={styles.inputWithIcon}
@@ -636,7 +645,7 @@ const Matrimony = () => {
                       }}
                       onClick={handleToggleVisibility}
                     >
-                      {isHidden ? "Show" : "Hide"}
+                      {val2}
                     </Button>{" "}
                   </div>
                 </div>
@@ -655,7 +664,7 @@ const Matrimony = () => {
                   <div className={styles.input}>
                     <Input
                       id={inputId}
-                      value={isModelHidden ? "•".repeat(model.length) : model}
+                      value={val3}
                       // value={model}
                       onChange={(e) => setModel(e.target.value)}
                       onBlur={(e) => handleUpdate("model", e.target.value)}
@@ -670,7 +679,7 @@ const Matrimony = () => {
                       }}
                       onClick={handleToggleModelVisibility}
                     >
-                      {isModelHidden ? "Show" : "Hide"}
+                      {val4}
                     </Button>
                   </div>
                 </div>
@@ -702,7 +711,7 @@ const Matrimony = () => {
                   <div className={styles.input}>
                     <Input
                       id={inputId}
-                      value={isStorage ? "•".repeat(storage.length) : storage}
+                      value={val5}
                       onChange={(e) => setStorage(e.target.value)}
                       onBlur={(e) =>
                         handleAzureUpdate("storage", e.target.value)
@@ -718,7 +727,7 @@ const Matrimony = () => {
                       }}
                       onClick={handleToggleStorageVisiblity}
                     >
-                      {isStorage ? "Show" : "Hide"}
+                      {val9}
                     </Button>
                   </div>
                 </div>
@@ -738,9 +747,7 @@ const Matrimony = () => {
                     <Input
                       id={inputId}
                       // value={container}
-                      value={
-                        isContainer ? "•".repeat(container.length) : container
-                      }
+                      value={val6}
                       onChange={(e) => setContainer(e.target.value)}
                       onBlur={(e) =>
                         handleAzureUpdate("container", e.target.value)
@@ -756,7 +763,7 @@ const Matrimony = () => {
                       }}
                       onClick={handleToggleContainerVisiblity}
                     >
-                      {isContainer ? "Show" : "Hide"}
+                      {val10}
                     </Button>
                   </div>
                 </div>
@@ -781,7 +788,7 @@ const Matrimony = () => {
                   <div className={styles.input}>
                     <Input
                       id={inputId}
-                      value={isKey ? "•".repeat(key.length) : key}
+                      value={val7}
                       onChange={(e) => setKey(e.target.value)}
                       onBlur={(e) => handleAzureUpdate("key", e.target.value)}
                       className={styles.inputWithIcon}
@@ -795,7 +802,7 @@ const Matrimony = () => {
                       }}
                       onClick={handleToggleKeyVisiblity}
                     >
-                      {isKey ? "Show" : "Hide"}
+                      {val11}
                     </Button>
                   </div>
                 </div>
@@ -820,11 +827,7 @@ const Matrimony = () => {
                   <div className={styles.input}>
                     <Input
                       id={inputId}
-                      value={
-                        isConnection
-                          ? "•".repeat(connection.length)
-                          : connection
-                      }
+                      value={val8}
                       onChange={(e) => setConnection(e.target.value)}
                       onBlur={(e) =>
                         handleAzureUpdate("connection", e.target.value)
@@ -840,7 +843,7 @@ const Matrimony = () => {
                       }}
                       onClick={handleToggleConnectionVisiblity}
                     >
-                      {isConnection ? "Show" : "Hide"}
+                      {val12}
                     </Button>
                   </div>
                 </div>

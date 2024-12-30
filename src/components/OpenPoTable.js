@@ -17,7 +17,7 @@ import {
 
 import Search from "./Search"; 
 import { Button,message} from "antd"; 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import CreatableSelect from "react-select/creatable";
 // Define columns for the DataGrid
 const columns = [
@@ -163,7 +163,7 @@ const OpenPoTable = () => {
   const handleBuyerNameChange = (option) => setSelectedBuyerName(option);
 
  
-  // const handleStatusChange = (option) =>setSelectedPOStatus(option);
+  
   
   console.log("SELECTED",selectedShipTo)
 
@@ -188,7 +188,7 @@ const OpenPoTable = () => {
     try {
      
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/allOpenPos/", {
+      const response = await axios.get("http://172.235.21.99:5729/user/allOpenPos/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

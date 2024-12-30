@@ -64,7 +64,7 @@ const StoreHistory = () => {
           
           const token = localStorage.getItem("access_token");
     
-          const response = await fetch("https://invoicezapi.focusrtech.com:57/user/dashboard-count-of-this-month", {
+          const response = await fetch("http://172.235.21.99:5729/user/dashboard-count-of-this-month", {
             method: "GET",
             headers: {
               "Content-Type": "application/json",

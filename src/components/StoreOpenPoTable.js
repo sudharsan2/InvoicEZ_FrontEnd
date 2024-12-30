@@ -17,10 +17,8 @@ import {
 } from "@fluentui/react-components";
 
 import Search from "./Search"; 
-import { Button, notification } from "antd"; 
-import { useDispatch, useSelector } from "react-redux";
-import { refreshActions } from "../Store/Store";
-import {message} from "antd";
+import { Button,message} from "antd"; 
+
 import CreatableSelect from "react-select/creatable";
 // Define columns for the DataGrid
 const columns = [
@@ -104,38 +102,35 @@ const useStyles = makeStyles({
 const StoreOpenPoTable = () => {
   
   const [Hovered2,setIsHovered2] = useState(false);
- 
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
-  
-  
-  
-  
-  const navigate = useNavigate();
- 
-
-  
   const [poNumber, setPoNumber] = useState("");
   const [POStatusOptions, setPOStatusOptions] = useState([]);
   const [SelectedPOTypeOptions,setSelectedPOTypeOptions] = useState([]);
   const [selectedSupplierOptions, setSelectedSupplierNameOptions] = useState([]);
   const [selectedShipToOptions, setSelectedShipToOptions] = useState([]);
-  
   const [selectedBuyerNameOptions, setSelectedBuyerNameOptions] = useState([]);
   const [selectedPOStatus, setSelectedPOStatus] = useState(null);
   const [selectedPOType, setSelectedPOType] = useState(null);
   const [selectedSupplierName, setSelectedSupplierName] = useState(null);
   const [selectedShipTo, setSelectedShipTo] = useState(null);
-  
   const [selectedBuyerName, setSelectedBuyerName] = useState(null);
   const [selectedTotalAmount, setSelectedTotalAmount] = useState("");
   const [selectedPOHeaderID, setSelectedPOHeaderID] = useState("");
   const [selectedVendorID, setSelectedVendorID] = useState("");
   const [selectedVendorSiteID, setSelectedVendorSiteID] = useState("");
   const [selectedVendorNumber, setSelectedVendorNumber] = useState("");
+  const[data,setData]=useState([]);
   
-    
+  const navigate = useNavigate();
+  
+
+
+
+  // Styles 
+
+  const backStyle =  Hovered2 ? "#e1e1e2" : "transparent"
       // INPUT FIELD
   const handlePoNumberChange = (e) => setPoNumber(e.target.value);
   const handleTotalChange = (e) => setSelectedTotalAmount(e.target.value);
@@ -172,14 +167,14 @@ const StoreOpenPoTable = () => {
   
   console.log("SELECTED",selectedShipTo)
 
-  const dispatch = useDispatch();
+ 
   
 
 
  
   
  
-  const[data,setData]=useState([]);
+  
  
   const fetchData = async (showMessage = false) => {
     if (showMessage) {
@@ -188,7 +183,7 @@ const StoreOpenPoTable = () => {
     try {
      
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/allOpenPos/", {
+      const response = await axios.get("http://172.235.21.99:5729/user/allOpenPos/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -362,7 +357,7 @@ const StoreOpenPoTable = () => {
   const handleSort = (columnId) => {
     let newSortDirection = "ascending";
   
-    // Toggle sort direction if the same column is clicked
+   
     if (sortState.columnId === columnId) {
       newSortDirection =
         sortState.sortDirection === "ascending" ? "descending" : "ascending";
@@ -370,33 +365,33 @@ const StoreOpenPoTable = () => {
   
     setSortState({ columnId, sortDirection: newSortDirection });
   
-    // Sort with handling for both numeric and string values
+   
     const sortedItems = [...filteredItems].sort((a, b) => {
       const aValue = a[columnId];
       const bValue = b[columnId];
   
-      // Handle numeric values
+     
       const aNumeric = !isNaN(parseFloat(aValue)) ? parseFloat(aValue) : null;
       const bNumeric = !isNaN(parseFloat(bValue)) ? parseFloat(bValue) : null;
   
       if (aNumeric !== null && bNumeric !== null) {
-        // Both values are numeric
+       
         return newSortDirection === "ascending"
           ? aNumeric - bNumeric
           : bNumeric - aNumeric;
       }
   
       if (aNumeric !== null && bNumeric === null) {
-        // aValue is numeric, bValue is not
+        
         return newSortDirection === "ascending" ? -1 : 1;
       }
   
       if (aNumeric === null && bNumeric !== null) {
-        // bValue is numeric, aValue is not
+        
         return newSortDirection === "ascending" ? 1 : -1;
       }
   
-      // Fallback to string comparison for non-numeric values
+     
       const aString = String(aValue || "").toLowerCase();
       const bString = String(bValue || "").toLowerCase();
   
@@ -437,6 +432,7 @@ const StoreOpenPoTable = () => {
     console.log("Filtered Data:", filteredData);
   };
   
+
   
   return (
     <>
@@ -457,7 +453,7 @@ const StoreOpenPoTable = () => {
  
  style={{
    backgroundColor: "#F8FAFC",
-   // paddingBottom: "3px",
+   
    paddingTop: "10px",
    width: "100%", 
    marginTop: "-8em", 
@@ -559,21 +555,7 @@ const StoreOpenPoTable = () => {
         />
       
       
-        {/* <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedBillTo}
-          onChange={handleBillToChange}
-          name="bill_to"
-          options={selectedBillToOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handleBillToChange}
-          placeholder="Bill To"
-          isClearable
-        /> */}
+        
       
       <CreatableSelect
           className="basic-single"
@@ -599,17 +581,7 @@ const StoreOpenPoTable = () => {
           boxSizing: "border-box", 
         }}
       />
-   {/* <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedStatus}
-          onChange={handleStatusChange}
-          name="status"
-          options={StatusOptions}
-          onCreateOption={handleCreateStatus}
-          placeholder="Status"
-          isClearable
-        /> */}
+   
     <Input
         placeholder="PO Header ID"
         value={selectedPOHeaderID} 
@@ -664,7 +636,7 @@ const StoreOpenPoTable = () => {
         display: "flex",
         alignItems: "center",
         gap: "4px", 
-        backgroundColor: Hovered2 ? "#e1e1e2" : "transparent",
+        backgroundColor:{backStyle},
         padding: "6px 12px", 
         borderRadius: "4px", 
         cursor: "pointer",
@@ -672,7 +644,7 @@ const StoreOpenPoTable = () => {
       }}
       onMouseEnter={() => setIsHovered2(true)}
       onMouseLeave={() => setIsHovered2(false)}
-    //   onClick={handleDeleteSelectedRows}
+    
     onClick={handleClear}
     >
       <DismissRegular

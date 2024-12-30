@@ -65,7 +65,7 @@ const FormPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://invoicezapi.focusrtech.com:57/user/form-links/${token}`,
+          `http://172.235.21.99:5729/user/form-links/${token}`,
         );
         setResponse1(response.data); // Assuming response.data contains the necessary data
       } catch (error) {
@@ -93,9 +93,10 @@ const FormPage = () => {
       console.log("Error fetching data:", response1);
 
       const response = await axios.put(
-        `https://invoicezapi.focusrtech.com:57/user/handleSubmitted/${response1.tokens}`,
+        `http://172.235.21.99:5729/user/handleSubmitted/${response1.tokens}`,
         formData,
       );
+      console.log(response)
       setChange(true);
     } catch (error) {
       console.error("Error:", error);
@@ -117,7 +118,6 @@ const FormPage = () => {
         style={{
           backgroundColor: "#b09280",
           marginTop: "3vh",
-          // marginBottom: "3vh",
           width: "fit-content",
           marginBottom: "3vh",
           borderRadius: "10px",

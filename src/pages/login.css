@@ -164,9 +164,7 @@ input:hover {
   font-size: 15px;
 }
 
-.additional-options input {
-  width: 20px;
-}
+
 
 .error {
   color: red;
@@ -182,7 +180,15 @@ input:hover {
 
 .additional-options input {
   color: #1b6b9a;
+  
 }
+
+.additional-options input {
+  color: #1b6b9a;
+  
+}
+
+
 
 .additional-options a {
   color: #1b6b9a;

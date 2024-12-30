@@ -70,7 +70,7 @@ const divstyle ={
 const UserPage = () => {
   const [height, setHeight] = useState(0);
   const divRef1 = useRef(null);
-  const [tableLength, setTableLength] = useState(0);
+ 
 
   useEffect(() => {
     const updateHeight = () => {
@@ -163,7 +163,7 @@ const UserPage = () => {
       <Divider style={{ marginTop:"2em"}} />
     </div>
       <div style={{marginLeft:"3em"}}>
-        {height > 0 ? <UserTable height={height} setTableLength={setTableLength} setStoreCount={setStoreCount}  setGateCount={setGateCount}/> : <p>Loading...</p>}
+        {height > 0 ? <UserTable height={height}  setStoreCount={setStoreCount}  setGateCount={setGateCount}/> : <p>Loading...</p>}
       </div>
     </div>
   );
