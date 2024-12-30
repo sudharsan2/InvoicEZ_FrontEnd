@@ -110,26 +110,10 @@ const useStyles = makeStyles({
 });
 
 const GateEntryDetails = () => {
-  const [selectedOption, setSelectedOption] = useState(null);
-  const navigate = useNavigate();
-
-  const [PONumberOPtions, setPONumberOPtions] = useState([]);
-
-  const handleCreate = (inputValue) => {
-    const newOption = { value: inputValue, label: inputValue };
-
-    setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
-    setSelectedOption(newOption); // Set the newly created option as the selected one
-  };
-
-  const handleChange = (option) => {
-    setSelectedOption(option);
-    // console.log("Selected PO Number:", option ? option.value : null);
-  };
-
-  const styles = useStyles();
+  
+const styles = useStyles();
   const themestate = false;
-  const [fetchedItems, setFetchedItems] = useState("");
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
@@ -137,9 +121,10 @@ const GateEntryDetails = () => {
   console.log("ID", Id);
   const [poDate, setPoDate] = useState();
   const [postatus, setPoStatus] = useState();
-  const [buyer, setBuyer] = useState();
+  console.log(error)
+  console.log(loading)
   const [total, setTotal] = useState();
-  const [status, setStatus] = useState();
+ 
   const [supplier, setSupplier] = useState();
   const [vendor, setVendor] = useState("");
   const [customer, setCustomer] = useState();
@@ -151,82 +136,10 @@ const GateEntryDetails = () => {
 
   const [inv_id, setInv_id] = useState();
 
-  // console.log("vendor", setVendor);
+  
 
-  const approvePo = async () => {
-    const url = `https://invoicezapi.focusrtech.com:57/user/GRNGeneration/${po_id}`;
-
-    try {
-      const response = await axios.post(url, {});
-
-      if (response.status === 200) {
-        message.success("GRN successfully Updated");
-        navigate(`/storeuser`);
-      }
-      console.log("Success:", response.data); // Handle the response data
-    } catch (error) {
-      notification.error({
-        message: "Approved Failed",
-        // description: `You have successfully Approved: ${po_id}`,
-      });
-      console.error("Error:", error);
-    }
-  };
-
-  const deleteInvoice = async () => {
-    const url = `https://invoicezapi.focusrtech.com:57/user/delete-pos/${inv_id}`;
-
-    try {
-      const response = await axios.delete(url);
-      if (response.status === 204) {
-        message.success("Revoked successfully");
-        navigate(`/approve`);
-      }
-    } catch (error) {
-      message.error(`Operation Unsuccessfull Please try again`);
-
-      console.error("Error:", error);
-    }
-  };
-
-  const handlePostApi = async () => {
-    console.log("Button clicked!");
-
-    if (!selectedOption || !selectedOption.value) {
-      message.warning("PO number not selected or entered.");
-      return;
-    }
-
-    if (!inv_id) {
-      message.error("Invoice ID is required.");
-      return;
-    }
-
-    const payload = {
-      po_number: selectedOption.value,
-      invoice_id: inv_id,
-    };
-
-    console.log("payload", payload);
-
-    try {
-      setLoad(true);
-      const response = await axios.post(
-        "https://invoicezapi.focusrtech.com:57/user/po-number",
-        payload,
-      );
-
-      if (response.status === 201) {
-        message.success("PO successfully Updated");
-        setLoad(false);
-        navigate(`/approve`);
-      } else {
-        message.error(`Operation Unsuccessfully Please try again`);
-      }
-    } catch (error) {
-      message.error(error);
-    }
-  };
+  
+ 
 
   const [selectedtab, setSelectedTab] = React.useState("tab1");
   const purchaseOrder = {
@@ -249,24 +162,19 @@ const GateEntryDetails = () => {
     sortColumn: "empid",
   });
   const [entrytime, setEntrytime] = useState();
-  const [load, setLoad] = useState(false);
+ 
   const [input,setInput] = useState("");
-  // const [data, setData] = useState("");
+  
   const [data, setData] = useState([]);
-  // console.log("data", data);
+  
 
   const handleTabSelect2 = (event, data) => {
-    // console.log({"currentmonth":currentMonthEmployees})
+    
     setSelectedTab(data.value);
   };
   
 
-  const handleInputChange = (e, fieldName) => {
-    const value = e.target.value;
-    setInput(value);
-    console.log(`Changed`,input);
-   
-  };
+  
   
   const columns = [
     createTableColumn({
@@ -318,11 +226,7 @@ const GateEntryDetails = () => {
     ],
   );
 
-  // const headerSortProps = (columnId) => ({
-  //   onClick: (e) => toggleColumnSort(e, columnId),
-  //   sortDirection: getSortDirection(columnId),
-  // });
-
+ 
   const handleViewInvoice = async () => {
     try {
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
@@ -592,85 +496,10 @@ const GateEntryDetails = () => {
                   marginTop: "0px",
                 }}
               >
-                {/* <div style={{ right: "5%", display: "flex", gap: "10px" }}>
-                  <Button onClick={() => deleteInvoice()}>Generate GRN</Button>
-                  <Button
-                    className=" buttoncolor"
-                    style={{ backgroundColor: "#3570c3", color: "white" }}
-                    onClick={() => approvePo()}
-                  >
-                    Generate GRN
-                  </Button>
-                </div> */}
+                
               </div>
 
-              {/* <div
-                style={{
-                  display: "flex",
-                  justifyContent: "end",
-                  alignItems: "center",
-                  width: "100%",
-                  marginTop: "20px",
-                }}
-              >
-                <CreatableSelect
-                  className="basic-single"
-                  classNamePrefix="select"
-                  value={selectedOption}
-                  onChange={handleChange}
-                  name="po_number"
-                  options={PONumberOPtions}
-                  styles={{
-                    container: (provided) => ({ ...provided, width: 200 }),
-                    marginTop: "20px",
-                  }}
-                  onCreateOption={handleCreate}
-                  placeholder="Select or Enter PO..."
-                  isClearable
-                />
-
-                <Button
-                  appearance="subtle"
-                  style={{
-                    color: "#0078d4",
-                    backgroundColor: "#fff",
-                    alignSelf: "flex-end",
-                    width: "auto",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: loading ? "not-allowed" : "pointer", // Change cursor to not-allowed when loading
-                    opacity: loading ? 0.6 : 1, // Change opacity when loading
-                  }}
-                  className={styles.wrapper}
-                  onClick={handlePostApi}
-                  disabled={load} // Disable button while loading
-                >
-                  {load ? (
-                    <div
-                      style={{
-                        border: "4px solid rgba(255, 255, 255, 0.3)", // Light background
-                        borderRadius: "50%",
-                        borderTop: "4px solid #0078d4", // Main color
-                        width: "20px",
-                        height: "20px",
-                        animation: "spin 1s linear infinite",
-                        marginRight: "8px", // Space between spinner and text
-                      }}
-                    />
-                  ) : (
-                    "Submit"
-                  )}
-                  <style>
-                    {`
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-                `}
-                  </style>
-                </Button>
-              </div> */}
+              
 
               <h2 style={{ margin: "20px 0 20px 0" }}>
                 PO:{purchaseOrder.poNumber}
@@ -1337,25 +1166,7 @@ const GateEntryDetails = () => {
                           {item.Sgst}
                         </TableCell>
 
-                        {/* {item.id &&(
-                          <TableCell
-                          style={{
-                            fontWeight: "bold",
-                            cursor: "pointer",
-                            maxWidth: "150px",
-                          }}
-                        >
                         
-                                  <Input
-                                    onChange={(e) => handleInputChange(e, "invoice_quantity")} 
-                                    type="text"
-                                    size="small"
-                                    style={{ width: "100%" }}
-                                  />
-                        </TableCell>
-                        )
-
-                        } */}
                         
 
                       </TableRow>

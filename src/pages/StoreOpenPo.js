@@ -1,50 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbDivider,
   BreadcrumbButton,
-  Divider,
-  Button
+  
 } from "@fluentui/react-components";
-import CreatableSelect from "react-select/creatable";
-import {
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-  bundleIcon,
-  DismissRegular,
-} from "@fluentui/react-icons";
-import TagCounters from "../components/gridapprove";
 
-import Search from "../components/Search";
+
 import StoreOpenPoTable from "../components/StoreOpenPoTable";
-import { makeStyles, useId, Input, Label } from "@fluentui/react-components";
-// const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
+import { makeStyles } from "@fluentui/react-components";
+
 const path = "/storeopenpo";
 const path1 = "/storedashboard";
 
 
-const useStyles = makeStyles({
-    root: {
-      
-      display: "flex",
-      flexDirection: "column",
-      gap: "2px",
-      maxWidth: "400px",
-    },
-  });
+
 
 const StoreOpenPO = () => {
-    const styles = useStyles();
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [PONumberOPtions, setPONumberOPtions] = useState([]);
-    const[Hovered2,setIsHovered2] = useState(false);
-    const handleCreate = (inputValue) => {
-        const newOption = { value: inputValue, label: inputValue };
     
-        setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
-        setSelectedOption(newOption); 
-      };
+    
+    
   return (
     <div style={{maxHeight:"91vh",overflowY:"auto"}}>
       <div style={{ height: "5vh" }}>
@@ -57,7 +33,7 @@ const StoreOpenPO = () => {
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>Open PO</BreadcrumbButton>
             </BreadcrumbItem>
-            {/* <BreadcrumbDivider /> */}
+           
           </Breadcrumb>
         </div>
       </div>
@@ -77,9 +53,7 @@ const StoreOpenPO = () => {
          
                 </div>
         <div style={{ width: "100%", height: "5vh" }} />
-        {/* <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
-      <Divider style={{ marginTop:"22em"}} />
-    </div> */}
+        
         <div style={{marginTop:"-2em"}}>
         <StoreOpenPoTable />
         </div>

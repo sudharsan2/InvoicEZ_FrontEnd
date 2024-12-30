@@ -124,12 +124,12 @@ const ExampleContent = () => {
           appearance="subtle"
           // href="http://localhost:3000/"
           onClick={() => {
-            // Clear tokens from local storage
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
+            
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
             localStorage.removeItem("username");
 
-            // Navigate to the login page
+           
             navigate("/");
           }}
           style={
@@ -182,7 +182,7 @@ const ExampleContent = () => {
                 : { fontSize: "1.5 em", width: "100%", marginBottom: "10px" }
             }
           >
-            {username} {/* Use the dynamically fetched username */}
+            {username}
           </Text>
           <Text
             truncate
@@ -203,7 +203,7 @@ const ExampleContent = () => {
                 }
             }
           >
-            {email} {/* Dynamically generate email based on username */}
+            {email} 
           </Text>
           <Text
             truncate
@@ -220,7 +220,7 @@ const ExampleContent = () => {
             }
           >
             {empId}
-            {/* Replace this with dynamic data if needed */}
+           
           </Text>
         </div>
       </div>
@@ -228,13 +228,13 @@ const ExampleContent = () => {
   );
 };
 
-// export default ExampleContent;
+
 
 const CustomLayout = ({ children }) => {
-  const [isDarkMode, setDarkMode] = useState(false);
+ 
   
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  
+  console.log(windowWidth)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const lighttheme = useSelector((state) => state.theme.light);
@@ -242,24 +242,15 @@ const CustomLayout = ({ children }) => {
   console.log(lighttheme,darktheme)
   const themestate = useSelector((state) => state.theme.theme);
   const [username, setUsername] = useState("");
-  const [isWalkinUpload, setIsWalkinUpload] = useState(false);
-  // console.log(isWalkinUpload)
+  
   const [newCandidate, setNewCandidate] = useState(false);
   const [isCardOpen, setIsCardOpen] = useState(false);
   const [items, setItems] = useState([]);
   const notificationRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);  // State to handle loading state
   const [isCleared, setIsCleared] = useState(false); 
-  console.log(isDarkMode)
-  // useEffect(() => {
-  //   const toggleCard = (event) => {
-  //     if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-  //       setIsCardOpen(false);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", toggleCard);
-  //   return () => document.removeEventListener("mousedown", toggleCard);
-  // }, []);
+ 
+  
 
 
 
@@ -309,7 +300,7 @@ const CustomLayout = ({ children }) => {
       message.success("Refreshing...");
     }
     try {
-      // const token = localStorage.getItem("access_token");
+   
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/unread-documents", {
         method: "GET",
         headers: {
@@ -365,7 +356,7 @@ const CustomLayout = ({ children }) => {
       }
     } catch (error) {
       console.error('Error:', error);
-      // alert('An error occurred while clearing notifications.');
+     
     } finally {
       setIsLoading(false); // Reset the loading state
     }
@@ -393,7 +384,7 @@ const CustomLayout = ({ children }) => {
 
   
 
-  const fileInputRef = useRef(null);
+  
 
   
 
@@ -405,44 +396,7 @@ const CustomLayout = ({ children }) => {
     dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Dispatch the action to toggle the state
   };
 
-  const handleFileChange = async (info) => {
-    const { status, originFileObj: file } = info.file;
-
-    if (status === "uploading") {
-      // Ignore this, as we're handling the file manually
-      return;
-    }
-
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        const response = await axios.post(
-          "https://invoicezapi.focusrtech.com:57/user/invoice-upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          },
-        );
-        console.log(response)
-        notification.success({
-          message: "Upload Successful",
-          description: `File ${file.name} uploaded successfully!`,
-        });
-        handleToggle();
-      } catch (error) {
-        console.error("Upload failed:", error);
-        notification.error({
-          message: "Upload Failed",
-          description:
-            "There was an error uploading the file. Please try again.",
-        });
-      }
-    }
-  };
+  
 
   
 
@@ -550,7 +504,7 @@ const CustomLayout = ({ children }) => {
               >
                 <div
                   className="card"
-                  // onClick={(e) => e.stopPropagation()}
+                 
                   style={{
                     background: "#fff",
                     width: "1200px", // Adjusted width for two tables

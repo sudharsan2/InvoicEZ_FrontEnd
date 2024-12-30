@@ -205,15 +205,15 @@ const NavDrawerDefaultAdmin = (props) => {
   
 
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("inline");
+ 
   const [username, setUsername] = useState("");
 
   const [empId, setEmpId] = useState("");
   const [value,setValue] = useState("");
    
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
-    // const storedrole = localStorage.getItem('role')
+    const storedUsername = localStorage.getItem("username"); 
+   
     if (storedUsername) {
       setUsername(storedUsername);
     }
@@ -226,7 +226,7 @@ const NavDrawerDefaultAdmin = (props) => {
       try {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
-        const emailFromToken = decodedToken.email;
+     
         const empIdFromToken = decodedToken.empId;
 
        
@@ -238,12 +238,12 @@ const NavDrawerDefaultAdmin = (props) => {
   }, []);
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
-      {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
+    
       <NavDrawer
         defaultSelectedValue="1"
         defaultSelectedCategoryValue="1"
         open={isOpen}
-        type={type}
+        type="inline"
         onOpenChange={(_, { open }) => setIsOpen(open)}
         size="small"
         className={useStyles.navdrawer}
@@ -257,7 +257,7 @@ const NavDrawerDefaultAdmin = (props) => {
             : { transition: "width 0.5s", borderRightStyle: "none" }
         }
       >
-        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
+       
 
         <NavDrawerHeader
           style={
@@ -313,130 +313,7 @@ const NavDrawerDefaultAdmin = (props) => {
                 : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
             }
           >
-            {/* <Tooltip
-              content={"Dashboard"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <Dashboard
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="1"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-
-            <Tooltip
-              content={"Employee"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <LayerDiagonalPersonRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="2"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-
-            <Tooltip
-              content={"Manager"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <PersonStarRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="3"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-
-            <Tooltip
-              content={"Reviewer"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <PremiumPersonRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="4"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-
-            <Tooltip
-              content={"Summary"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <TableSearchRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="5"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip> */}
+            
             <NavCategory value="1">
                   <NavCategoryItem
                     target="_blank"
@@ -449,7 +326,7 @@ const NavDrawerDefaultAdmin = (props) => {
                         }
                       />
                     }
-                    // onClick={someClickHandler}
+                   
                     value="2"
                     className={
                       themestate ? styles.navItemdark : styles.navItemlight
@@ -541,7 +418,7 @@ const NavDrawerDefaultAdmin = (props) => {
                         }
                       />
                     }
-                    // onClick={someClickHandler}
+                    
                     value="2"
                     className={
                       themestate ? styles.navItemdark : styles.navItemlight
@@ -587,14 +464,7 @@ const NavDrawerDefaultAdmin = (props) => {
           }
         >
           {!collapse && (
-            // <NavItem
-            //   value="21"
-            //   target="_blank"
-            // //   onClick={someClickHandler}
-            //   className={styles.navfooter}
-            // //   style={{color:"#E9E9E9"}}
-            // //   icon={<Person />}
-            // >
+            
             <div
               style={{
                 width: "100%",
@@ -622,41 +492,19 @@ const NavDrawerDefaultAdmin = (props) => {
                 V 0.0.1
               </p>
             </div>
-            // </NavItem>
+            
           )}
-          {/* <NavItem
-      icon={<Settings />}
-      target="_blank"
-      onClick={someClickHandler}
-      value="24"
-    >
-      App Settings
-    </NavItem> */}
+          
         </NavDrawerFooter>
-        {/* </div> */}
+       
       </NavDrawer>
-      {/* </div> */}
+      
 
       <div
         className={styles.content}
         style={themestate ? { background: darktheme.contentpagedark } : {}}
       >
-        {/* <Button appearance="primary" onClick={() => setIsOpen(!isOpen)}>
-          {type === "inline" ? "Toggle" : "Open"}
-        </Button>
-
-        <div className={styles.field}>
-          <Label id={labelId}>Type</Label>
-          <RadioGroup
-            value={type}
-            onChange={(_, data) => setType(data.value)}
-            aria-labelledby={labelId}
-          >
-            <Radio value="overlay" label="Overlay (Default)" />
-            <Radio value="inline" label="Inline" />
-          </RadioGroup>
-        </div> */}
-        {/* {Children} */}
+        
 
         {props.children}
       </div>

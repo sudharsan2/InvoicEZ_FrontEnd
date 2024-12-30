@@ -48,14 +48,17 @@ const useStyles = makeStyles({
 
 
 
-const StatusCell = ({ statusLabel }) => {
+  const StatusCell = ({ statusLabel }) => {
     const styles = useStyles();
-    const statusStyle =
-      statusLabel === "Acknowledged"
-        ? styles.statusAck
-        : statusLabel === "To be Acknowledged"
-        ? styles.statusTobe
-        : styles.statusReject;
+
+    let statusStyle;
+    if (statusLabel === "Acknowledged") {
+        statusStyle = styles.statusAck;
+    } else if (statusLabel === "To be Acknowledged") {
+        statusStyle = styles.statusTobe;
+    } else {
+        statusStyle = styles.statusReject;
+    }
   
     return (
       <TableCellLayout>

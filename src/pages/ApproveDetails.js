@@ -125,22 +125,22 @@ const ApprovePage = () => {
 
   const handleChange = (option) => {
     setSelectedOption(option);
-    // console.log("Selected PO Number:", option ? option.value : null);
+  
   };
 
   const styles = useStyles();
   const themestate = false;
-  const [fetchedItems, setFetchedItems] = useState("");
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
   const { poNumber, Id } = location.state || {};
-  console.log("ID", Id);
+  console.log("ID", Id,error);
   const [poDate, setPoDate] = useState();
   const [postatus, setPoStatus] = useState();
-  const [buyer, setBuyer] = useState();
+ 
   const [total, setTotal] = useState();
-  const [status, setStatus] = useState();
+  
   const [supplier, setSupplier] = useState();
   const [vendor, setVendor] = useState("");
   const [customer, setCustomer] = useState();
@@ -281,10 +281,10 @@ const ApprovePage = () => {
   const [load, setLoad] = useState(false);
 
   const [data, setData] = useState("");
-  // console.log("data", data);
+  
 
   const handleTabSelect2 = (event, data) => {
-    // console.log({"currentmonth":currentMonthEmployees})
+    
     setSelectedTab(data.value);
   };
 
@@ -323,25 +323,9 @@ const ApprovePage = () => {
     }),
   ];
 
-  const {
-    sort: { getSortDirection, toggleColumnSort },
-  } = useTableFeatures(
-    {
-      columns,
-      items: data,
-    },
-    [
-      useTableSort({
-        sortState,
-        onSortChange: (e, nextSortState) => setSortState(nextSortState),
-      }),
-    ],
-  );
+  
 
-  // const headerSortProps = (columnId) => ({
-  //   onClick: (e) => toggleColumnSort(e, columnId),
-  //   sortDirection: getSortDirection(columnId),
-  // });
+ 
 
 
   const handleSort = (column) => {
@@ -349,7 +333,7 @@ const ApprovePage = () => {
      
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
-      // Set sorting direction to ascending if a new column is clicked
+      
       setSortedColumn(column);
       setSortDirection("asc");
     }
@@ -409,18 +393,17 @@ const ApprovePage = () => {
         set_Po_id(fetchedItems.po_header.id);
 
         console.log("InvoiceId", fetchedItems.invoice_info.id);
+        console.log(po_id)
 
 
         const invoice_items = fetchedItems.invoice_info.items.map((item, index) => {
-          // console.log("IGST", item.Igst);
-          // console.log("CGST", item.Cgst);
-          // console.log("SGST", item.Sgst);
+        
         
           return {
             Igst: item.Igst,
             Cgst: item.Cgst,
             Sgst: item.Sgst,
-            index: index, // Include the index to match with po_lineitems
+            index: index, 
           };
         });
         
@@ -523,20 +506,7 @@ const ApprovePage = () => {
     }
   }, [poNumber]);
 
-  // const sortedData = [...data].sort((a, b) => {
-  //   const aValue = a[sortState.sortColumn];
-  //   const bValue = b[sortState.sortColumn];
-
-  //   if (typeof aValue === "string" && typeof bValue === "string") {
-  //     return sortState.sortDirection === "ascending"
-  //       ? aValue.localeCompare(bValue)
-  //       : bValue.localeCompare(aValue);
-  //   }
-
-  //   return sortState.sortDirection === "ascending"
-  //     ? aValue - bValue
-  //     : bValue - aValue;
-  // });
+  
 
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
@@ -558,18 +528,18 @@ const ApprovePage = () => {
       return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
     }
 
-    // String comparison using localeCompare for case-insensitive sorting
+    
     if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
+      const aString = String(aValue).toLowerCase(); 
       const bString = String(bValue).toLowerCase();
       return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
     }
 
-    // Mixed types: If one is numeric and the other is not, treat the numeric value as smaller
+    
     if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
     if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
 
-    return 0; // If values are still equal
+    return 0; 
   });
 
   
@@ -814,7 +784,7 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.poNumber} */}
+                  
                       {poNumber}
                     </div>
                   </div>
@@ -851,7 +821,7 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.poDate} */}
+                 
                       {poDate}
                     </div>
                   </div>
@@ -870,7 +840,7 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.customerAddress} */}
+                  
                       {customer}
                     </div>
                   </div>
@@ -907,7 +877,7 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.invoiceId} */}
+                 
                       {invoiceid}
                     </div>
                   </div>
@@ -943,7 +913,7 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.invoiceDate} */}
+                 
                       {invoicedate}
                     </div>
                   </div>
@@ -980,7 +950,7 @@ const ApprovePage = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.invoiceTotal} */}
+                    
                       {invoicetot}
                     </div>
                   </div>
@@ -1061,124 +1031,7 @@ const ApprovePage = () => {
             >
               <div style={{ flex: 1 }}>
                 <Table>
-                  {/* <TableHeader
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      backgroundColor: themestate ? "#383838" : "white",
-                      zIndex: 1,
-                      color: themestate ? "white" : "black",
-                    }}
-                  >
-                    <TableRow
-                      style={
-                        themestate
-                          ? { color: "white", borderBottomColor: "#383838" }
-                          : {}
-                      }
-                    >
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("PO_line_id")}
-                      >
-                        PO Line ID
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "200px",
-                        }}
-                        {...headerSortProps("name")}
-                      >
-                        Name
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "300px",
-                        }}
-                        {...headerSortProps("description")}
-                      >
-                        Description
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "250px",
-                        }}
-                        {...headerSortProps("invoice_item_name")}
-                      >
-                        Invc Item Name
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("unit_price")}
-                      >
-                        Unit Price
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("quantity")}
-                      >
-                        Quantity
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Invoice Quantity
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Igst
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Cgst
-                      </TableHeaderCell>
-                      <TableHeaderCell
-                        style={{
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          maxWidth: "150px",
-                        }}
-                        {...headerSortProps("invoice_quantity")}
-                      >
-                        Sgst
-                      </TableHeaderCell>
-                    </TableRow>
-                  </TableHeader> */}
+                  
 
 
 

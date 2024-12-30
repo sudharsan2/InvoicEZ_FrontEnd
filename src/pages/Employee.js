@@ -114,16 +114,16 @@ const PurchaseOrderPage = () => {
     sortDirection: 'ascending',
     sortColumn: 'empid',
   });
-//  const [data, setData] = useState([])
+
 
 
   const handleTabSelect2 = (event,data) => {
-    // console.log({"currentmonth":currentMonthEmployees})
+    
     setSelectedTab(data.value);
   };
 
 
-  const [data, setData] = useState(line_data);
+  const [data] = useState(line_data);
   
   
   const columns = [

@@ -117,7 +117,7 @@ const SummaryTable = ({
   setMatchCount,
   setTableLength,
   setMultiple_MatchCount,
-  setGateLength,
+  
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); 
@@ -209,7 +209,7 @@ const SummaryTable = ({
       setMatchCount(MatchCount);
       setMultiple_MatchCount(multiple_MatchCount);
       setTableLength(tablelength);
-      setGateLength(gatelength)
+      
       setItems(mappedItems);
 
       console.log("MAP IN SUMMARY",mappedItems);

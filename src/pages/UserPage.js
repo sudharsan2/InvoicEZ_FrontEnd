@@ -28,7 +28,7 @@ const containerStyle = {
   width: "100%",
   display: "flex",
   gap:"30px",
-  // justifyContent: "space-around",
+  
   padding: "8px",
   marginLeft:"0em"
 };
@@ -92,14 +92,13 @@ const UserPage = () => {
     };
   }, []);
 
-  //  console.log("tablelength",tableLength);
+  
   const[gateCount,setGateCount]=useState(0);
   const[storeCount,setStoreCount]=useState(0);
   const counters = [
     { label: "Gate User Count", value: gateCount, color: "#00bfbf" }, // Cyan
     { label: "Store User Count", value: storeCount, color: "#d62727" }, // Red
-    // { label: "User Resolved", value: 9, color: "#1f497d" }, // Dark Blue
-    // { label: "Refix", value: 4, color: "#d21994" }, // Magenta
+    
   ];
   return (
     <div style={{maxHeight:"88vh",overflowY:"auto"}}>
@@ -132,7 +131,7 @@ const UserPage = () => {
         <div>
           <div style={{ display: "flex", justifyContent: "flex-start" }}>
             
-            {/* <div style={{display:'flex', flexDirection:'column'}} */}
+            
             <div
               style={{
                 display: "flex",
@@ -153,21 +152,7 @@ const UserPage = () => {
           </div>
         ))}
       </div>
-              {/* New Filter Button */}
-              {/* <Button
-            icon={<FilterRegular />}
-            appearance="primary" // Gives it a highlighted primary style
-          >
-            New Filter
-          </Button> */}
-
-              {/* Clear Filter Button */}
-              {/* <Button
-            icon={<DismissCircleRegular />}
-            appearance="outline" // Gives it an outlined style
-          >
-            Clear Filter
-          </Button> */}
+             
 
 
             </div>

@@ -133,10 +133,10 @@ const UserTable = ({setGateCount,setStoreCount}) => {
   };
   const [isHovered, setIsHovered] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
-  const [po_id, set_Po_id] = useState("");
+  
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [showResetPopup, setShowResetPopup] = useState(false);
 const [email, setEmail] = useState("");
@@ -303,7 +303,7 @@ const togglePasswordVisibility = () => {
 
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || "";
-
+    
     return (
       item.Id?.toString().toLowerCase().includes(searchLower) ||
       item.username?.toString().toLowerCase().includes(searchLower) ||
@@ -345,10 +345,7 @@ const togglePasswordVisibility = () => {
       };
   
       
-      // const response = await axios.put(
-      //   `https://invoicezapi.focusrtech.com:57/user/edit-user/${selectedRow.Id}`,
-      //   updatedData 
-      // );
+     
 
       const response = await axios.put(
         `https://invoicezapi.focusrtech.com:57/user/edit-user/${selectedRow.Id}`,
@@ -395,7 +392,7 @@ const togglePasswordVisibility = () => {
   };
 
 
-  //  delete API
+  
   const handleDeleteSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows);
     if (selectedItemsArray.length === 0) {

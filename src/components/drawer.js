@@ -256,7 +256,7 @@ const NavDrawerDefault = (props) => {
   
 
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("inline");
+ 
   const [username, setUsername] = useState("");
   
   const [empId, setEmpId] = useState("");

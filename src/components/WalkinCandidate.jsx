@@ -87,14 +87,14 @@ const WalkInCandidate = ({ isWalkinUpload }) => {
         });
       }
       
-      // message.success(`${file.name} uploaded successfully.`);
+    
       file.status = "done";
       onSuccess();
 
-      // Dispatch the refresh action to trigger any reloads in other components
+     
       dispatch(refreshActions.toggleInvoiceUploadRefresh());
     } catch (error) {
-      // Handle error
+      
       console.error("Error uploading file:", error);
 
       if (

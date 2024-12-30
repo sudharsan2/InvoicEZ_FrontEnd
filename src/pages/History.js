@@ -15,7 +15,7 @@ import TagCounters from "../components/gridapprove";
 import HistoryTable from "../components/HistoryTable";
 import Search from "../components/Search";
 import Example from "./ExampleLineChart";
-// const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
+
 const path = "/history";
 const path1 = "/dashboard";
 

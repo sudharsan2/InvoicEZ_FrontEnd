@@ -139,7 +139,7 @@ const useStyles = makeStyles({
 // pop up message for table cell see more
 
 const AIDetailPage = () => {
-  const navigate = useNavigate();
+ 
   const dispatch = useDispatch();
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortedColumn2, setSortedColumn2] = useState(null);
@@ -172,7 +172,7 @@ const AIDetailPage = () => {
     sortDirection: "ascending",
     sortColumn: "empid",
   });
-  //  const [data, setData] = useState([])
+  
 
   const handleTabSelect2 = (event, data) => {
     // console.log({"currentmonth":currentMonthEmployees})
@@ -216,41 +216,8 @@ const AIDetailPage = () => {
     }),
   ];
 
-  const {
-    sort: { getSortDirection, toggleColumnSort },
-  } = useTableFeatures(
-    {
-      columns,
-      items: data,
-    },
-    [
-      useTableSort({
-        sortState,
-        onSortChange: (e, nextSortState) => setSortState(nextSortState),
-      }),
-    ],
-  );
-
-  // const headerSortProps = (columnId) => ({
-  //   onClick: (e) => toggleColumnSort(e, columnId),
-  //   sortDirection: getSortDirection(columnId),
-  // });
-
-  // const sortedData = [...data].sort((a, b) => {
-  //   const aValue = a[sortState.sortColumn];
-  //   const bValue = b[sortState.sortColumn];
-
-  //   if (typeof aValue === "string" && typeof bValue === "string") {
-  //     return sortState.sortDirection === "ascending"
-  //       ? aValue.localeCompare(bValue)
-  //       : bValue.localeCompare(aValue);
-  //   }
-
-  //   return sortState.sortDirection === "ascending"
-  //     ? aValue - bValue
-  //     : bValue - aValue;
-  // });
-
+  
+  
   const handleViewInvoice = async () => {
     try {
       const token = localStorage.getItem("access_token");
@@ -280,41 +247,23 @@ const AIDetailPage = () => {
   // Invoice Details
   const [invoiceData, setInvoiceData] = useState(null);
 
-  // const [items, setItems] = useState([]);
+  
   const location2 = useLocation();
   const [items, setItems] = useState([]);
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState(null);
   const [dataitem, setDataItem] = useState();
   const [poheader, setPoHeader] = useState();
-  // const [selectedOption, setSelectedOption] = useState(null);
-  const [invoiceId, setInvoiceId] = useState(null); // Placeholder for dynamically fetched invoice ID
-  const [vendor, setVendor] = useState("");
+  
+  const [invoiceId, setInvoiceId] = useState(null); 
+  
   const [load, setLoad] = useState(false);
-  const [showPopover, setShowPopover] = useState(null);
+  
   const [anchorEl, setAnchorEl] = useState(null);
+
+  console.log("InvoiceID",invoiceId)
   //  PopOver
 
-  // const handlePoNumberClick = async (poNumber) => {
-  //   console.log("test function called");
-  //   setSelectedInvoiceNumber(poNumber);
-  //   try {
-  //     // const response = await axios.get(`https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`);
-  //     // const fetchedData = response.data;
-
-  //     const selectedPoDetails = poheader.find(
-  //       (po) => po.po_number === poNumber,
-  //     );
-  //     console.log("SELECTED PO", selectedPoDetails);
-  //     // console.log("selectedPO",selectedPoDetails);
-  //     setDataItem(selectedPoDetails || {});
-  //     setItems(selectedPoDetails?.po_items || []);
-  //     // console.log("Fetched Invoice Details:", fetchedData);
-  //     console.log("Selected PO Details:", selectedPoDetails);
-  //     console.log("Po", items);
-  //   } catch (error) {
-  //     console.error("Error fetching invoice details:", error);
-  //   }
-  // };
+  
 
 
   const handlePoNumberClick = async (poNumber) => {
@@ -364,9 +313,7 @@ const AIDetailPage = () => {
   const fetchInvoiceDetails = async () => {
     if (invoiceNumber) {
       try {
-        // const response = await axios.get(
-        //   `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
-        // );
+       
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
         const response = await axios.get(
@@ -383,13 +330,12 @@ const AIDetailPage = () => {
         setInvoiceData(fetchedItem);
 
         setPoHeader(fetchedItem.po_headers);
-        // setVendor(fetchedItem.po_headers.id)
-        // console.log("SETVENDOR",vendor)
+        
         const poOptions = fetchedItem.po_headers.map((header) => ({
           value: header.po_number,
           label: header.po_number,
         }));
-        // console.log("poHEADERS", poOptions);
+       
         setPONumberOPtions(poOptions);
 
         setDataItem(fetchedItem.po_headers[0]);
@@ -488,32 +434,11 @@ const AIDetailPage = () => {
   const handleCreate = (inputValue) => {
     const newOption = { value: inputValue, label: inputValue };
 
-    // Add the new option to the list of existing options
+    
     setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
-    setSelectedOption(newOption); // Set the newly created option as the selected one
+    setSelectedOption(newOption); 
 
-    // Optionally, you can call your API to save the new PO number here
-    // Uncomment the following block if you want to save the PO number immediately when created.
-    /*
-    try {
-      const response = await fetch('https://invoicezapi.focusrtech.com:57/user/po-number', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ po_number: inputValue }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('PO number added successfully:', data);
-      } else {
-        console.error('Error adding PO number:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-    */
+    
   };
 
   const handlePostApi = async () => {
@@ -556,7 +481,7 @@ const AIDetailPage = () => {
       if (response.status === 201) {
         message.success("PO successfully Updated");
         setLoad(false);
-        // navigate(`/approve`); 
+       
         dispatch(toggleDrawerPosition("2"));
       } else {
         message.error("Operation Unsuccessfully. Please try again.");
@@ -681,10 +606,6 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
           <BreadcrumbItem>
             <BreadcrumbButton href={path}>{invoiceData.invoice_info.InvoiceId}</BreadcrumbButton>
           </BreadcrumbItem>
-          {/* <BreadcrumbDivider /> */}
-          {/* <BreadcrumbItem>
-            <BreadcrumbButton href={path}>{ poNumber }</BreadcrumbButton>
-          </BreadcrumbItem> */}
         </Breadcrumb>
       </div>
 
@@ -933,7 +854,7 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
               {/* </div> */}
             </div>
 
-            {/* Line Information Section */}
+           
             <h2 style={{ marginTop: "3em" }}>Line Information</h2>
             <div
               style={{
@@ -1052,9 +973,9 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
                   style={{
                     width: "90%",
                     display: "grid",
-                    gridTemplateColumns: "repeat(5, 2fr)", // 5 equal columns
-                    gridTemplateRows: "auto auto", // 2 rows with auto height based on content
-                    gap: "1rem", // Adds spacing between grid items
+                    gridTemplateColumns: "repeat(5, 2fr)", 
+                    gridTemplateRows: "auto auto", 
+                    gap: "1rem", 
                     paddingLeft: "2em",
                   }}
                 >

@@ -6,16 +6,12 @@ import {
   BreadcrumbButton,
   Divider
 } from "@fluentui/react-components";
-import {
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-  bundleIcon,
-} from "@fluentui/react-icons";
-import TagCounters from "../components/gridapprove";
+
+
 import StoreHistoryTable from "../components/StoreHistoryTable";
-import Search from "../components/Search";
+
 import Example from "./ExampleLineChart";
-// const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
+
 const path = "/storehistory";
 const path1 = "/storedashboard";
 
@@ -25,11 +21,10 @@ const containerStyle = {
     display: "flex",
     marginTop:"3em",
     
-    // justifyContent: "space-around",
+    
     padding: "8px",
     gap:"4em",
-    // justifyContent:"center",
-    // alignItems:"Center"
+    
 
   };
   
@@ -58,15 +53,7 @@ const containerStyle = {
     marginLeft: "0px", 
   };
   
-  const divstyle ={
-    display:"flex",
-    flexDirection:"column",
-    marginLeft:"20px",
-    paddingTop:"6em",
-    fontWeight:"bold",
   
-    
-  }
 
 const StoreHistory = () => {
     const[rows,setRows]=useState("");
@@ -103,7 +90,7 @@ const StoreHistory = () => {
     
     const counters = [
         { label: "Total Invoice Processed", value: rows, color: "#00bfbf" }, // Cyan
-        // { label: "Number of Invoice Processed", value: 2, color: "#d62727" }, // Red
+        
         
       ];
   return (
@@ -118,7 +105,7 @@ const StoreHistory = () => {
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>History</BreadcrumbButton>
             </BreadcrumbItem>
-            {/* <BreadcrumbDivider /> */}
+            
           </Breadcrumb>
         </div>
       </div>

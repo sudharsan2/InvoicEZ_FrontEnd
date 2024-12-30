@@ -152,47 +152,17 @@ const useStyles = makeStyles({
   },
 });
 
-const Person = bundleIcon(PersonFilled, PersonRegular);
-const Dashboard = bundleIcon(Board24Filled, Board24Regular);
-const Announcements = bundleIcon(MegaphoneLoud20Filled, MegaphoneLoud20Regular);
-const EmployeeSpotlight = bundleIcon(
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-);
 
-const LayerDiagonalPersonRegular = bundleIcon(
-  LayerDiagonalPerson24Filled,
-  LayerDiagonalPerson24Regular,
-);
+
 const Truck = bundleIcon(VehicleTruckProfile24Filled ,VehicleTruckProfile24Regular )
-const PersonStarRegular = bundleIcon(PersonStar24Filled, PersonStar24Regular);
-const PremiumPersonRegular = bundleIcon(
-  PremiumPerson24Filled,
-  PremiumPerson24Regular,
-);
-const TableSearchRegular = bundleIcon(
-  DocumentTableSearch24Filled,
-  DocumentTableSearch24Regular,
-);
+
 const Navi = bundleIcon(Navigation24Filled, Navigation24Regular);
 
-const Search = bundleIcon(PersonSearch20Filled, PersonSearch20Regular);
-const PerformanceReviews = bundleIcon(
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-);
-const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular);
-const Interviews = bundleIcon(People20Filled, People20Regular);
-const HealthPlans = bundleIcon(HeartPulse20Filled, HeartPulse20Regular);
-const TrainingPrograms = bundleIcon(BoxMultiple20Filled, BoxMultiple20Regular);
-const CareerDevelopment = bundleIcon(PeopleStar20Filled, PeopleStar20Regular);
-const Analytics = bundleIcon(DataArea20Filled, DataArea20Regular);
+
+
 const Asn = bundleIcon (Gavel24Filled,Gavel24Regular)
-const Reports = bundleIcon(
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-);
-const Settings = bundleIcon(Settings20Filled, Settings20Regular);
+
+
 const Status = bundleIcon(Timer24Filled,Timer24Regular);
 
 const NavDrawerQuotationLoop = (props) => {
@@ -213,7 +183,7 @@ const NavDrawerQuotationLoop = (props) => {
  
 
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("inline");
+  
   const [username, setUsername] = useState("");
   
   const [empId, setEmpId] = useState("");
@@ -221,7 +191,7 @@ const NavDrawerQuotationLoop = (props) => {
  
   useEffect(() => {
     const storedUsername = localStorage.getItem("username"); 
-    // const storedrole = localStorage.getItem('role')
+   
     if (storedUsername) {
       setUsername(storedUsername);
     }
@@ -234,7 +204,7 @@ const NavDrawerQuotationLoop = (props) => {
       try {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
-        const emailFromToken = decodedToken.email;
+      
         const empIdFromToken = decodedToken.empId;
 
       
@@ -246,12 +216,12 @@ const NavDrawerQuotationLoop = (props) => {
   }, []);
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
-      {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
+     
       <NavDrawer
         defaultSelectedValue="1"
         defaultSelectedCategoryValue="1"
         open={isOpen}
-        type={type}
+        type="inline"
         onOpenChange={(_, { open }) => setIsOpen(open)}
         size="small"
         className={useStyles.navdrawer}
@@ -265,8 +235,7 @@ const NavDrawerQuotationLoop = (props) => {
             : { transition: "width 0.5s", borderRightStyle: "none" }
         }
       >
-        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
-
+        
         <NavDrawerHeader
           style={
             themestate
@@ -333,7 +302,7 @@ const NavDrawerQuotationLoop = (props) => {
                         }
                       />
                     }
-                    // onClick={someClickHandler}
+                    
                     value="2"
                     className={
                       themestate ? styles.navItemdark : styles.navItemlight
@@ -360,7 +329,7 @@ const NavDrawerQuotationLoop = (props) => {
                       value="4"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        // navigate("/issuefix");
+                      
                         setValue("4");
                       }}
                     >
@@ -370,7 +339,7 @@ const NavDrawerQuotationLoop = (props) => {
                       value="4"
                       style={{ marginTop: "10px", fontSize: "17px" }}
                       onClick={() => {
-                        // navigate("/issuefix");
+                      
                         setValue("4");
                       }}
                     >
@@ -433,7 +402,7 @@ const NavDrawerQuotationLoop = (props) => {
                     }
                   />
                 }
-                // onClick={someClickHandler}
+                
                 value="1"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -466,7 +435,7 @@ const NavDrawerQuotationLoop = (props) => {
                     }
                   />
                 }
-                // onClick={someClickHandler}
+                
                 value="2"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -498,7 +467,7 @@ const NavDrawerQuotationLoop = (props) => {
                     }
                   />
                 }
-                // onClick={someClickHandler}
+                
                 value="3"
                 className={
                   themestate ? styles.navItemdark : styles.navItemlight
@@ -530,14 +499,7 @@ const NavDrawerQuotationLoop = (props) => {
           }
         >
           {!collapse && (
-            // <NavItem
-            //   value="21"
-            //   target="_blank"
-            // //   onClick={someClickHandler}
-            //   className={styles.navfooter}
-            // //   style={{color:"#E9E9E9"}}
-            // //   icon={<Person />}
-            // >
+            
             <div
               style={{
                 width: "100%",
@@ -565,41 +527,19 @@ const NavDrawerQuotationLoop = (props) => {
                 V 0.0.1
               </p>
             </div>
-            // </NavItem>
+            
           )}
-          {/* <NavItem
-      icon={<Settings />}
-      target="_blank"
-      onClick={someClickHandler}
-      value="24"
-    >
-      App Settings
-    </NavItem> */}
+          
         </NavDrawerFooter>
-        {/* </div> */}
+        
       </NavDrawer>
-      {/* </div> */}
+      
 
       <div
         className={styles.content}
         style={themestate ? { background: darktheme.contentpagedark } : {}}
       >
-        {/* <Button appearance="primary" onClick={() => setIsOpen(!isOpen)}>
-          {type === "inline" ? "Toggle" : "Open"}
-        </Button>
-
-        <div className={styles.field}>
-          <Label id={labelId}>Type</Label>
-          <RadioGroup
-            value={type}
-            onChange={(_, data) => setType(data.value)}
-            aria-labelledby={labelId}
-          >
-            <Radio value="overlay" label="Overlay (Default)" />
-            <Radio value="inline" label="Inline" />
-          </RadioGroup>
-        </div> */}
-        {/* {Children} */}
+        
 
         {props.children}
       </div>

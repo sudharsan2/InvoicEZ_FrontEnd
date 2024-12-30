@@ -52,7 +52,7 @@ import HistoryDetails from "./pages/HistoryDetails";
 import StoreHistoryDetails from "./pages/StoreHistoryDetails";
 import StoreHistory from "./pages/StoreHistory";
 import StoreTagCounters from "./pages/StoreDashboard";
-import StoreHistoryNavigate from "./pages/StoreHistoryNavigate";
+
 import UserPage from "./pages/UserPage";
 import GateEntryDetails from "./pages/GateEntryDetails";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
@@ -727,20 +727,6 @@ function App() {
           }
         />
 
-<Route
-          path="/storehistorypage"
-          element={
-            userRole === 'storeuser' ? (
-            <CustomLayoutLoop>
-               <NavDrawerDefaultStore>
-                <StoreHistoryNavigate />
-                </NavDrawerDefaultStore>
-            </CustomLayoutLoop>
-            ) : (
-              <Navigate to="/unauthorized" />  
-            )
-          }
-        />
 
 
 

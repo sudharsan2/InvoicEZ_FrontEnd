@@ -6,36 +6,24 @@ import {
   BreadcrumbButton,
 } from "@fluentui/react-components";
 import { KeyMultipleRegular } from "@fluentui/react-icons";
-import { useId, Input, Label } from "@fluentui/react-components";
-import { useMemo } from "react";
+import {  Input} from "@fluentui/react-components";
+
 
 import {
   makeStyles,
   Button,
-  Link,
+  
   TabList,
   Tab,
-  Table,
-  TableCell,
-  TableHeader,
-  TableSelectionCell,
-  TableRow,
-  TableBody,
-  TableHeaderCell,
-  createTableColumn,
-  useTableFeatures,
-  useTableSort,
+  
 } from "@fluentui/react-components";
-import ApproveTable from "../components/approvetable";
-import Search from "../components/Search";
-import TagCounters from "../components/gridapprove";
+
 import { FaRegCopy } from "react-icons/fa";
 import { useState, useCallback } from "react";
-// import  { Calendar, DateRangeType } from "@fluentui/react-calendar-compat";
+
 import { Calendar, DateRangeType } from "@fluentui/react";
 import { notification } from "antd";
-import { DatePicker } from "@fluentui/react";
-import { Field } from "@fluentui/react-components";
+
 const path = "/admin";
 const path1 = "/dashboard";
 const path3 = "/matrimony";
@@ -210,7 +198,7 @@ const Matrimony = () => {
 
   const [selectedtab, setSelectedTab] = React.useState("tab1");
   const handleTabSelect2 = (event, data) => {
-    // console.log({"currentmonth":currentMonthEmployees})
+    
     setSelectedTab(data.value);
   };
   const styles = useStyles();
@@ -232,6 +220,7 @@ const Matrimony = () => {
       rangeStart.toDateString() + " - " + rangeEnd.toDateString();
   }
 
+  console.log(dateRangeString)
   // GET LLM
   const [apiKey, setApiKey] = useState("");
   const [model, setModel] = useState("");
@@ -283,9 +272,7 @@ const Matrimony = () => {
 
   const fetchData = async () => {
     try {
-      // const response = await fetch(
-      //   "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
-      // );
+      
 
       const response = await fetch("https://invoicezapi.focusrtech.com:57/user/statusForApprove", {
         method: "GET",
@@ -309,7 +296,7 @@ const Matrimony = () => {
 
   const fetchAzureDetails = async () => {
     try {
-      // const response = await fetch("https://invoicezapi.focusrtech.com:57/user/azure-detail");
+      
       const response = await fetch("https://invoicezapi.focusrtech.com:57/user/azure-detail", {
         method: "GET",
         headers: {
@@ -327,16 +314,16 @@ const Matrimony = () => {
         setInvoice(data.invoice_processed);
         setBlob(data.blob_storage_usage);
       }
-      console.log("sdfghj-------", data.storage_account_name);
-      console.log("Invoice process", data.invoice_processed);
+     
     } catch (error) {
       console.error("Error fetching LLM details:", error);
-      // console.log("sdfghj-------",data[0].llm_apikey);
+      
     } finally {
       setLoading(false); // Set loading to false after fetch
     }
   };
 
+  console.log(loading)
   // PUT API --->LLM
   const handleUpdate = async (field, value) => {
     try {
@@ -483,10 +470,7 @@ const Matrimony = () => {
         >
           <div className="Approvebreadcrump">
             <Breadcrumb aria-label="Breadcrumb default example">
-              {/* <BreadcrumbItem>
-                <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
-              </BreadcrumbItem>
-              <BreadcrumbDivider /> */}
+              
               <BreadcrumbItem>
                 <BreadcrumbButton href={path3}>Control Center</BreadcrumbButton>
               </BreadcrumbItem>
@@ -617,11 +601,7 @@ const Matrimony = () => {
                 cursor: "pointer",
               }}
             >
-              {/* <ArrowDownload28Regular
-                  style={{ color: "#1281d7" }}
-                //   onClick={handleViewInvoice}
-                />{" "} */}
-              {/* <span onClick={handleViewInvoice}> View Invoice</span> */}
+              
             </div>
           </TabList>
           {/* Tabs start */}

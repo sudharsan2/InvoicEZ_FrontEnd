@@ -20,21 +20,7 @@ import {
 import { useDispatch,  } from "react-redux";
 import { refreshActions } from "../Store/Store";
 
-// Sample data
-const items = [
-  {
-    file: { label: "AB&CO", icon: <DocumentRegular /> },
-    author: { label: "test-123", status: "available" },
-    lastUpdated: { label: "29 May 2023", timestamp: 1 },
-    lastUpdate: {
-      label: "2000",
-      icon: <EditRegular />,
-    },
-    Freight: { label: "Airborn", timestamp: 1 },
-    Payment: { label: "29 May 2023", timestamp: 1 },
-    Supplier: { label: "L1", timestamp: 1 },
-  },
-];
+
 
 // Column definitions
 const columns = [
@@ -59,13 +45,7 @@ const columns = [
       <TableCellLayout>{item.distribution_amount}</TableCellLayout>
     ),
   }),
-  // createTableColumn({
-  //   columnId: "creation_date",
-  //   renderHeaderCell: () => "Creation Date",
-  //   renderCell: (item) => (
-  //     <TableCellLayout>{item.creation_date}</TableCellLayout>
-  //   ),
-  // }),
+  
   createTableColumn({
     columnId: "last_update_date",
     renderHeaderCell: () => "Last Update",
@@ -95,12 +75,12 @@ const SupplierTable = ({ data }) => {
   const dispatch = useDispatch();
 
   const onSelectionChange = (e, data1) => {
-    // Update selected rows based on selection
+    
     const selected = data1.selectedItems;
-    // console.log("Selected row data:", selected);
+ 
     const lastItem = Array.from(data1.selectedItems).pop();
     setSelectedRows(new Set(selected)); 
-    // You can dispatch the selected data as needed
+   
     dispatch(refreshActions.conformedSupplierValue(data.quotations[lastItem].supplier));
     console.log("Selected row data:", data.quotations[lastItem].supplier)
   };

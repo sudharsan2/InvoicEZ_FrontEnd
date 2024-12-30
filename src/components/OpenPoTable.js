@@ -180,16 +180,13 @@ const OpenPoTable = () => {
   
  
   const[data,setData]=useState([]);
-  // Fetch data from the API when the component mounts
+ 
   const fetchData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
     }
     try {
-      // const response = await axios.get(
-      //   "https://invoicezapi.focusrtech.com:57/user/one-invoice-list",
-      // );
-
+     
       const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/allOpenPos/", {
         method: "GET",
@@ -198,23 +195,14 @@ const OpenPoTable = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const fetchedItems = response.data || []; // Assuming data is in response.data
+      const fetchedItems = response.data || []; 
       console.log("fetchedItemsOPen", fetchedItems);
       setData(fetchedItems);
-    //   set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-      //  console.log("InvId",InvoiceNumber);
-      // Map fetched data to the format expected by DataGrid
+    
+    
+    
 
       
-      // const po_lineitems = fetchedItems.flatMap((po) =>
-      //   po.po_items.map((item) => ({
-      //     item_name: item.item_description,
-      //   }))
-      // );
-    
-    
-
-      // console.log("PO_LINE",po_lineitems);
       const mappedItems = fetchedItems.map((item) => ({
         // Id: item.po_headers[0].id,
         InvoiceId: item.id,
@@ -266,28 +254,7 @@ const OpenPoTable = () => {
     fetchData();
   }, [isInvoiceUploadRefreshed]);
 
-  // const handleSearchChange = (value) => {
-  //   setSearchQuery(value);
-  // };
-  // // console.log("--------->",filteredItems)
-  // const filteredItems = items.filter((item) => {
-  //   const searchLower = searchQuery?.trim().toLowerCase() || "";
-
-  //   return (
-  //     item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
-  //     item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
-  //     item.po_number?.toString().toLowerCase().includes(searchLower) ||
-  //     item.po_type?.toLowerCase().includes(searchLower) ||
-  //     item.po_status?.toLowerCase().includes(searchLower) ||
-  //     item.supplier_name?.toLowerCase().includes(searchLower) ||
-  //     item.location?.toLowerCase().includes(searchLower) ||
-  //     item.ship_to?.toLowerCase().includes(searchLower) ||
-  //     item.bill_to?.toLowerCase().includes(searchLower) ||
-  //     item.buyer_name?.toLowerCase().includes(searchLower) ||
-  //     item.total_amount?.toString().toLowerCase().includes(searchLower) ||
-  //     item.status?.toLowerCase().includes(searchLower)
-  //   );
-  // }).sort((a, b) => a.po_number.localeCompare(b.po_number));
+ 
 
 
 
@@ -365,7 +332,7 @@ const OpenPoTable = () => {
           po_items: selectedPOItems, 
           Supplier:item.supplier_name,
           Buyer:item.Buyer,
-          // need_by:item.need_by
+          
         },
         
       });
@@ -450,38 +417,30 @@ const OpenPoTable = () => {
 
 
   const filterData = () => {
-    const filteredData = items.filter((item) => {
-      
-      const matchesPONumber = poNumber ? item.po_number.toLowerCase().includes(poNumber.toLowerCase()) : true;
-      const matchesPOStatus = selectedPOStatus ? item.po_status === selectedPOStatus.value : true;
-      const matchesPOType = selectedPOType ? item.po_type === selectedPOType.value : true;
-      const matchesSupplierName = selectedSupplierName ? item.supplier_name === selectedSupplierName.value : true;
-      const matchesShipTo = selectedShipTo ? item.location === selectedShipTo.value : true;
-      const matchesBuyerName = selectedBuyerName ? item.Buyer === selectedBuyerName.value : true;
-      const matchesTotalAmount = selectedTotalAmount ? item.total_amount === parseFloat(selectedTotalAmount) : true;
-      const matchesPOHeaderID = selectedPOHeaderID ? item.poheader === selectedPOHeaderID : true;
-      const matchesVendorID = selectedVendorID ? item.vendor === selectedVendorID : true;
-      const matchesVendorSiteID = selectedVendorSiteID ? item.vendor === selectedVendorSiteID : true;
-      const matchesVendorNumber = selectedVendorNumber ? item.vendor_num === selectedVendorNumber : true;
-     
-      
-      return matchesPONumber && 
-             matchesPOStatus && 
-             matchesPOType && 
-             matchesSupplierName && 
-             matchesShipTo && 
-             matchesBuyerName && 
-             matchesTotalAmount && 
-             matchesPOHeaderID && 
-             matchesVendorID && 
-             matchesVendorSiteID &&
-             matchesVendorNumber;
-
+    
+    const filters = {
+      poNumber: poNumber ? item => item.po_number.toLowerCase().includes(poNumber.toLowerCase()) : () => true,
+      poStatus: selectedPOStatus ? item => item.po_status === selectedPOStatus.value : () => true,
+      poType: selectedPOType ? item => item.po_type === selectedPOType.value : () => true,
+      supplierName: selectedSupplierName ? item => item.supplier_name === selectedSupplierName.value : () => true,
+      shipTo: selectedShipTo ? item => item.location === selectedShipTo.value : () => true,
+      buyerName: selectedBuyerName ? item => item.Buyer === selectedBuyerName.value : () => true,
+      totalAmount: selectedTotalAmount ? item => item.total_amount === parseFloat(selectedTotalAmount) : () => true,
+      poHeaderID: selectedPOHeaderID ? item => item.poheader === selectedPOHeaderID : () => true,
+      vendorID: selectedVendorID ? item => item.vendor === selectedVendorID : () => true,
+      vendorSiteID: selectedVendorSiteID ? item => item.vendor === selectedVendorSiteID : () => true,
+      vendorNumber: selectedVendorNumber ? item => item.vendor_num === selectedVendorNumber : () => true,
+    };
+  
+    
+    const filteredData = items.filter(item => {
+      return Object.values(filters).every(filterFn => filterFn(item));
     });
   
     setFilteredItems(filteredData);
     console.log("Filtered Data:", filteredData);
   };
+  
   
   
   return (
@@ -503,7 +462,6 @@ const OpenPoTable = () => {
  
     style={{
       backgroundColor: "#F8FAFC",
-      // paddingBottom: "3px",
       paddingTop: "10px",
       width: "100%", 
       marginTop: "-8em", 

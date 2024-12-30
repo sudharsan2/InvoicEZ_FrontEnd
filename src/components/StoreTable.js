@@ -93,10 +93,10 @@ const StoreTable = ({setTableLength}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
-  const [po_id, set_Po_id] = useState("");
+ 
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
@@ -161,7 +161,7 @@ const StoreTable = ({setTableLength}) => {
 
         }));
       });
-      // const flattenedMappedItems = mappedItems.flat().filter(Boolean);
+     
       const flattenedMappedItems = mappedItems
   .flat() 
   .filter(Boolean)

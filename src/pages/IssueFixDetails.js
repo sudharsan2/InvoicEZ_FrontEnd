@@ -37,13 +37,13 @@ import "./dashboard.css";
 import { message } from "antd";
 import { ArrowDownload28Regular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
-// import { refreshActions } from "../Store/Store";
+
 const path = "/issuefix";
 const path1 = "/dashboard";
 
 const useStyles = makeStyles({
   root: {
-    // width: "80vw",
+    
     height: "88vh",
     overflowY: "auto",
     display: "flex",
@@ -123,23 +123,13 @@ const useStyles = makeStyles({
 
 const IssuefixDetails = () => {
   const navigate = useNavigate();
-  const [height, setHeight] = useState(0);
+  
   const divRef = useRef(null);
 
-  useEffect(() => {
-    if (divRef.current) {
-      setHeight(divRef.current.offsetHeight); // Calculate the height of the div based on its content
-    }
-  }, []);
-  // const dispatch = useDispatch();
+  
   const styles = useStyles();
-  const themestate = false;
-  const [selectedtab, setSelectedTab] = React.useState("tab1");
-  const [selectedOption, setSelectedOption] = React.useState("");
-  const [vendorName, setVendorName] = useState("super");
-  // const [rows, setRows] = useState([
-  //   { no: 1, type: '', amount: '', description: '', poLine: '', unitPrice: '', quantity: '', unitOfMeasurement: '', taxAmount: '', hsnCode: '' }
-  // ]);
+  
+  
 
   const [formData, setFormData] = useState({
     vendorName: "",
@@ -166,9 +156,7 @@ const IssuefixDetails = () => {
     // Fetch data from the API
     const fetchData = async () => {
       try {
-        // const response = await axios.get(
-        //   `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
-        // );
+      
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
         const response = await axios.get(
@@ -192,18 +180,15 @@ const IssuefixDetails = () => {
             Quantity: item.items.Quantity || "",
             Unit: item.items.Unit || "",
             UnitPrice: item.items.UnitPrice || "",
-            // ProductCode: item.ProductCode || "",
+            
             Amount: item.items.Amount || "",
             SubTotal: item.items.SubTotal || "",
-            // TotalTax: item.TotalTax || "",
-            // Date: item.Date || "",
-            // Tax: item.Tax || "",
+            
             PreviousUnpaidBalance: item.items.PreviousUnpaidBalance || "",
             Igst: item.items.Igst || "",
             Cgst: item.items.Cgst || "",
             Sgst: item.items.Sgst || "",
-            // AmountDue: item.AmountDue || "",
-            // Add any other fields here as needed
+            
           })),
         );
       } catch (error) {
@@ -213,12 +198,7 @@ const IssuefixDetails = () => {
 
     fetchData();
   }, []);
-  // 2
-  // const handleInputChange = (index, key, value) => {
-  //   setRows((prevRows) =>
-  //     prevRows.map((row, i) => (i === index ? { ...row, [key]: value } : row)),
-  //   );
-  // };
+ 
 
   const [poNumber, setPoNumber] = useState("");
 
@@ -265,12 +245,10 @@ const IssuefixDetails = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
 
-  // Fetch data from the API when the component mounts
+ 
   const fetchData = async () => {
     try {
-      // const response = await axios.get(
-      //   `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
-      // );
+      
       const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
       const response = await axios.get(
@@ -297,8 +275,8 @@ const IssuefixDetails = () => {
         purchaseOrder: data.PurchaseOrder,
         entrytime: data.created_at,
       });
-      setCompletedata(data);
-      // Update the full data in state
+      
+      
       setFulldata(response.data.invoice_info);
 
       setOldrow(
@@ -329,8 +307,7 @@ const IssuefixDetails = () => {
 
       setRows(
         data.items.map((item, index) => ({
-          // id: index+1,
-          // inv_id:data.id,
+          
           id: item.id,
           Description: item.Description,
           Quantity: item.Quantity,
@@ -358,7 +335,7 @@ const IssuefixDetails = () => {
 
 
   const handleformSubmit = async () => {
-    // Update the full data state based on formData and rows
+    
     const updatedFulldata = {
       ...fulldata, // Spread fulldata to retain existing properties
       VendorName: formData.vendorName,
@@ -444,30 +421,7 @@ const IssuefixDetails = () => {
     }
   };
 
-  // const handleInputChange = (index, field, value) => {
-  //   const newRows = [...rows];
-  //   newRows[index][field] = value;
-  //   setRows(newRows);
-  // };
-
-  // const addLine = () => {
-  //   setRows([
-  //     ...rows,
-  //     {
-  //       no: rows.length + 1,
-  //       type: "",
-  //       amount: "",
-  //       description: "",
-  //       poLine: "",
-  //       unitPrice: "",
-  //       quantity: "",
-  //       unitOfMeasurement: "",
-  //       taxAmount: "",
-  //       hsnCode: "",
-  //     },
-  //   ]);
-  // };
-
+ 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -488,66 +442,19 @@ const IssuefixDetails = () => {
   }, [isInvoiceUploadRefreshed]);
 
 
-  // const [selectedRows, setSelectedRows] = useState([]);
+ 
   const [selectedRows, setSelectedRows] = useState(new Set());
 
 
-  const [tableData, setTableData] = useState(rows);
-  // Toggle selection of a single row
-  // const toggleRowSelection = (rowId) => {
-  //   console.log("Row ID",rowId);
-  //   setSelectedRows((prevSelectedRows) =>
-  //     prevSelectedRows.includes(rowId)
-  //       ? prevSelectedRows.filter((id) => id !== rowId) // Deselect row
-  //       : [...prevSelectedRows, rowId] // Select row
-  //   );
-  //   console.log("Selected Rows",selectedRows);
-  // };
+  
   console.log("ROWS", rows)
 
 
-  // const handleDeleteSelectedRows = async () => {
-
-  //   if (selectedRows.length === 0) {
-  //     notification.warning({
-  //       message: "No PO Selected",
-  //       description: "Please select at least one PO to delete.",
-  //     });
-  //     return;
-  //   }
-
-  //   try {
-
-
-  //     const deletePromises = selectedRows.map((inv_id) =>
-  //       axios.delete(
-  //         `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
-  //       ),
-  //     );
-
-  //     await Promise.all(deletePromises);
-
-
-
-
-  //     notification.success({
-  //       message: "Successfully deleted",
-
-  //     });
-
-  //     // dispatch(refreshActions.toggleInvoiceUploadRefresh());
-  //   } catch (error) {
-
-  //     notification.error({
-  //       message: "Deletion Failed",
-
-  //     });
-  //   }
-  // };
+  
 
 
   const handleDeleteSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
+    const selectedItemsArray = Array.from(selectedRows); 
     if (selectedItemsArray.length === 0) {
       notification.warning({
         message: "No PO Selected",
@@ -557,14 +464,14 @@ const IssuefixDetails = () => {
     }
 
     try {
-      const token = localStorage.getItem("access_token"); // Retrieve the token securely
+      const token = localStorage.getItem("access_token"); 
 
       const deletePromises = selectedItemsArray.map((inv_id) =>
         axios.delete(
           `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Add the authorization header
+              Authorization: `Bearer ${token}`, 
             },
           }
         )
@@ -584,7 +491,7 @@ const IssuefixDetails = () => {
         description: `Deleted items: ${selectedItemsArray.join(", ")}`,
       });
 
-      dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Trigger refresh action if necessary
+      dispatch(refreshActions.toggleInvoiceUploadRefresh()); 
     } catch (error) {
       notification.error({
         message: "Deletion Failed",
@@ -599,14 +506,14 @@ const IssuefixDetails = () => {
 
   const handleViewInvoice = async () => {
     try {
-      const token = localStorage.getItem("access_token"); // Retrieve the token securely
+      const token = localStorage.getItem("access_token"); 
 
       const response = await fetch(
         `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceNo}`,
         {
-          method: "GET", // Specify the HTTP method explicitly
+          method: "GET", 
           headers: {
-            Authorization: `Bearer ${token}`, // Add the authorization header
+            Authorization: `Bearer ${token}`, 
           },
         }
       );
@@ -623,33 +530,11 @@ const IssuefixDetails = () => {
     }
   };
 
-  const handlePOChange = (event) => { };
+  
 
-  // Adding new row
+  
 
-  const [rows1, setRows1] = useState([
-    {
-      id: 1,
-      description: "",
-      quantity: "",
-      unit: "",
-      unitPrice: "",
-      amount: "",
-      subtotal: "",
-      previousUnpaidBalance: "",
-      Igst: "",
-      Cgst: "",
-      Sgst: "",
-    },
-  ]);
-
-  // const handleInputChange = (index, key, value) => {
-  //   setRows1((prevRows) =>
-  //     prevRows.map((row, i) =>
-  //       i === index ? { ...row, [key]: value } : row
-  //     )
-  //   );
-  // };
+  
 
 
   const handleInputChange = (index, key, value) => {
@@ -660,7 +545,7 @@ const IssuefixDetails = () => {
 
   const handleAddRow = () => {
     const newRow = {
-      // id: rows.length + 1, // increment the id based on the current rows
+      
       Description: "",
       Quantity: "",
       Unit: "",
@@ -679,22 +564,7 @@ const IssuefixDetails = () => {
 
 
 
-  // checkbox
-
-
-
-
-  // const toggleRowSelection = (rowid) => {
-  //   console.log("Invoice ID:", rowid);
-
-  //   setSelectedRows((prevSelectedRows) =>
-  //     prevSelectedRows.includes(rowid)
-  //       ? prevSelectedRows.filter((id) => id !== rowid) // Deselect row
-  //       : [...prevSelectedRows, rowid] // Select row
-  //   );
-
-  //   console.log("Selected Rows:", selectedRows);
-  // };
+  
 
   const toggleRowSelection = (rowid) => {
     console.log("Invoice ID:", rowid);
@@ -711,25 +581,16 @@ const IssuefixDetails = () => {
 
     console.log("Selected Rows:", Array.from(selectedRows));
   };
-  // const toggleSelectAll = () => {
-  //   if (selectedRows.length === rows.length) {
-  //     setSelectedRows([]); // Deselect all
-  //     console.log("Deselect All");
-  //   } else {
-  //     const allSelectedRows = rows.map((row) => row.id);
-  //     setSelectedRows(allSelectedRows); // Select all rows by their `id`
-  //     console.log("Selected Rows:", allSelectedRows); // Log selected rows
-  //   }
-  // };
+  
 
   const toggleSelectAll = () => {
     if (selectedRows.size === rows.length) {
-      setSelectedRows(new Set()); // Deselect all rows
+      setSelectedRows(new Set()); 
       console.log("Deselect All");
     } else {
-      const allSelectedRows = new Set(rows.map((row) => row.id)); // Map `row.id` for consistency
-      setSelectedRows(allSelectedRows); // Select all rows
-      console.log("Selected Rows:", Array.from(allSelectedRows)); // Log selected rows
+      const allSelectedRows = new Set(rows.map((row) => row.id)); 
+      setSelectedRows(allSelectedRows); 
+      console.log("Selected Rows:", Array.from(allSelectedRows)); 
     }
   };
 
@@ -802,10 +663,7 @@ const IssuefixDetails = () => {
                 <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
               </BreadcrumbItem>
               <BreadcrumbDivider />
-              {/* <BreadcrumbItem>
-                <BreadcrumbButton href={path}>Issues</BreadcrumbButton>
-              </BreadcrumbItem>
-              <BreadcrumbDivider /> */}
+              
               <BreadcrumbItem>
                 <BreadcrumbButton href={path}>
                   {formData.vendorName}
@@ -1152,8 +1010,7 @@ const IssuefixDetails = () => {
 </div>
 
                   
-                  {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button> */}
-                  {/* <Delete24Regular style={{ cursor: "pointer", padding: "2px", height: "35px", color: "#1281d7" }} onClick={handleDeleteSelectedRows}></Delete24Regular><span style={{ fontSize: "14px", color: "#000", marginTop: "6px", marginLeft: "-6px",cursor:"pointer" }}>Delete</span> */}
+                  
                 </div>
 
               </div>
@@ -1258,7 +1115,7 @@ const IssuefixDetails = () => {
                 </Table>
 
 
-                {/* <Button onClick={addLine} style={{ marginTop: "10px" }}>+ Add Line</Button> */}
+                
               </div>
             </div>
           </div>
