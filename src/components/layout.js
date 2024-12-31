@@ -45,7 +45,7 @@ const useStyles = makeStyles({
     marginTop: "0",
   },
   text: {
-    ...shorthands.overflow("hidden"),
+    overflow: "hidden",
     width: "240px",
     display: "block",
     color: "#424242",
@@ -236,7 +236,7 @@ const CustomLayout = ({ children }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   console.log(windowWidth)
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+ 
   const lighttheme = useSelector((state) => state.theme.light);
   const darktheme = useSelector((state) => state.theme.dark);
   console.log(lighttheme,darktheme)

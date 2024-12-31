@@ -1,9 +1,9 @@
 import React,{ useState, useEffect, useRef } from "react";
 
 import axios from "axios";
-import { useLocation } from "react-router-dom";
-import { notification } from "antd";
-import { ArrowSortUpFilled, ArrowSortDownRegular,Add24Regular, Delete24Regular } from "@fluentui/react-icons";
+import { useLocation,useNavigate } from "react-router-dom";
+import { notification,message } from "antd";
+import { ArrowSortUpFilled, ArrowSortDownRegular,Add24Regular, Delete24Regular,ArrowDownload28Regular } from "@fluentui/react-icons";
 
 import {
   makeStyles,
@@ -24,9 +24,9 @@ import {
 import { refreshActions } from "../Store/Store";
 import { useDispatch, useSelector } from "react-redux";
 import "./dashboard.css";
-import { message } from "antd";
-import { ArrowDownload28Regular } from "@fluentui/react-icons";
-import { useNavigate } from "react-router-dom";
+
+
+
 
 const path = "/issuefix";
 const path1 = "/dashboard";
@@ -608,34 +608,37 @@ const IssuefixDetails = () => {
   
   const sortedData = [...rows].sort((a, b) => {
     if (!sortedColumn) return 0;
-
+  
     const aValue = a[sortedColumn] || "";
     const bValue = b[sortedColumn] || "";
-
-
-    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
-
-
-    if (isANumeric && isBNumeric) {
-      const aNumeric = parseFloat(aValue);
-      const bNumeric = parseFloat(bValue);
-      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+  
+    const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
+  
+    const compareValues = (valA, valB, direction, type) => {
+      if (type === "numeric") {
+        const diff = parseFloat(valA) - parseFloat(valB);
+        return direction === "asc" ? diff : -diff;
+      }
+      if (type === "string") {
+        return direction === "asc"
+          ? String(valA).localeCompare(String(valB))
+          : String(valB).localeCompare(String(valA));
+      }
+      return direction === "asc" ? -1 : 1;
+    };
+  
+    const aNumeric = isNumeric(aValue);
+    const bNumeric = isNumeric(bValue);
+  
+    if (aNumeric && bNumeric) {
+      return compareValues(aValue, bValue, sortDirection, "numeric");
     }
-
-
-    if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase();
-      const bString = String(bValue).toLowerCase();
-      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+    if (!aNumeric && !bNumeric) {
+      return compareValues(aValue, bValue, sortDirection, "string");
     }
-
-
-    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
-    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
-
-    return 0;
+    return aNumeric ? compareValues(0, 1, sortDirection) : compareValues(1, 0, sortDirection);
   });
+  
 
 
   // Table Header Style

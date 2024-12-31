@@ -25,7 +25,7 @@ const useStyles2 = makeStyles({
     marginTop: "0",
   },
   text: {
-    ...shorthands.overflow("hidden"),
+    overflow: "hidden",
     width: "240px",
     display: "block",
     color: "#424242",

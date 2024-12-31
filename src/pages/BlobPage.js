@@ -7,11 +7,7 @@ import {
   makeStyles, Button
 } from "@fluentui/react-components";
 
-import {
-  bundleIcon,
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-} from "@fluentui/react-icons";
+
 
 const path = "/blob";
 const path1 = "http://localhost:3000/";
@@ -26,8 +22,7 @@ const counters = [
     width: "100%",
     display: "flex",
     
-    // justifyContent: "space-around",
-    padding: "8px",
+       padding: "8px",
     marginLeft:"0em"
   };
 

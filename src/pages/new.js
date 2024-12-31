@@ -6,7 +6,7 @@ import { EyeOutlined } from "@ant-design/icons";
 import axios from "axios";
 import "./login.css";
 
-import { useDispatch} from "react-redux";
+
 
 import { jwtDecode } from "jwt-decode";
 import logo from "../media/logo1000.png";
@@ -22,6 +22,7 @@ const LoginPage = ({ setRoleFromChild }) => {
   });
   const [role, setRole] = useState("");
 
+  console.log(role)
   useEffect(() => {
     const token = localStorage.getItem("access_token");
    

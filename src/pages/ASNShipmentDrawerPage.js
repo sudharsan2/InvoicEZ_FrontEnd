@@ -1,5 +1,4 @@
-import React ,{useState} from "react";
-import {Input} from "@fluentui/react-components";
+import React  from "react";
 
 import {ArrowLeft24Regular,ArrowUpload24Regular,  } from "@fluentui/react-icons";
 import DatePickerComponent from "../components/DatePicker";
@@ -8,6 +7,7 @@ import {
  
   Button,
   makeStyles,
+  Input
 } from "@fluentui/react-components";
 
 
@@ -25,47 +25,12 @@ import {useNavigate} from "react-router-dom";
 
 
 
-const useStyles = makeStyles({
-    statusBullet: {
-      display: "inline-block",
-      width: "8px",
-      height: "8px",
-      borderRadius: "50%",
-      marginRight: "8px",
-    },
-    statusRFQ: { backgroundColor: "yellow" },
-    statusTodo: { backgroundColor: "red" },
-    statusCompare: { backgroundColor: "green" },
-    iconButtonContainer: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent:"flex-end",
-      gap: "8px",
-      marginTop: "2em",
-      marginLeft: "65%",
-    },
-    iconButton: {
-      display: "flex",
-      alignItems: "center",
-      backgroundColor: "transparent",
-      border: "1px solid #fff",
-      padding: "6px 12px",
-      cursor: "pointer",
-      gap: "8px",
-    },
-    icon: {
-      color: "#1281d7",
-      fontSize: "24px", 
-    },
-    popoverContent: {
-      zIndex: 1500,
-    },
-  });
+
   
 
   
 const ASNShipmentDrawerPage = () => {
-    const [popoverOpen, setPopoverOpen] = useState(false);
+   
     
  
   

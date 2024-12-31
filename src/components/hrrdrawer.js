@@ -25,7 +25,7 @@ import { makeStyles, shorthands } from '@griffel/react';
 const useStyles = makeStyles({
   root: {
     ...shorthands.border("2px", "solid", "#ccc"),
-    ...shorthands.overflow("hidden"),
+    overflow: "hidden",
     marginTop:"5.35vh",
     position:"fixed",
     left:0,
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
 
   content: {
     ...shorthands.margin(tokens.spacingVerticalXL, tokens.spacingHorizontalXL),
-    ...shorthands.flex(1),
+    flex:1,
 
     gridRowGap: tokens.spacingVerticalXXL,
   },

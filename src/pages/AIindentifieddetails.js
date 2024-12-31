@@ -153,7 +153,7 @@ const AIDetailPage = () => {
   const [invoiceId, setInvoiceId] = useState(null); 
   const [load, setLoad] = useState(false);
   
-
+  console.log(invoiceId);
   // Styles 
   
 const getThemeStyle = (themeState, lightStyle, darkStyle) => (themeState ? darkStyle : lightStyle);
@@ -517,31 +517,27 @@ const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
 
 
 const sortedPoItems = (() => {
-  if (!dataitem || !Array.isArray(dataitem.po_items) || !sortedColumn2) return [...dataitem.po_items];
+  if (!dataitem || !Array.isArray(dataitem.po_items) || !sortedColumn2) return [...(dataitem?.po_items || [])];
 
   const dataKey = columnKeyMap[sortedColumn2];
   if (!dataKey) return [...dataitem.po_items];
 
   const getComparableValue = (item) => {
     const value = item[dataKey] || "";
-    return !isNaN(parseFloat(value)) && isFinite(value) 
-      ? parseFloat(value) 
-      : value.toString();
+    return !isNaN(parseFloat(value)) && isFinite(value) ? parseFloat(value) : value.toString();
   };
 
-  const compareItems = (a, b) => {
+  return [...dataitem.po_items].sort((a, b) => {
     const aComparable = getComparableValue(a);
     const bComparable = getComparableValue(b);
+    const direction = sortDirection === "asc" ? 1 : -1;
 
-    return aComparable < bComparable
-      ? sortDirection === "asc" ? -1 : 1
-      : aComparable > bComparable
-        ? sortDirection === "asc" ? 1 : -1
-        : 0;
-  };
-
-  return [...dataitem.po_items].sort(compareItems);
+    if (aComparable < bComparable) return -direction;
+    if (aComparable > bComparable) return direction;
+    return 0;
+  });
 })();
+
 
 
 

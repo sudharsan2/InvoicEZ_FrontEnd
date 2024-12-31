@@ -174,6 +174,7 @@ const QuotationTable = ({setStatusCounts}) => {
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  
   useEffect(() => {
     if (selectedRowData && selectedRowData.status === "To be Acknowledged") {
       setIsDrawerOpen(true);
@@ -192,7 +193,8 @@ const QuotationTable = ({setStatusCounts}) => {
   
     if (token) {
       userId = getUserIdFromToken(token);
-      if (!userId) return; // Stop if invalid token
+      if (!userId) return;
+      setUserID(userId) 
     }
   
     try {
@@ -384,7 +386,7 @@ const QuotationTable = ({setStatusCounts}) => {
       </div>
       {selectedRowData && selectedRowData.status === "quotation" && <QuotationDrawer data={selectedRowData} userId={userId} onClose={() => fetchData()}/>}
       {selectedRowData && selectedRowData.status === "To be Acknowledged" && <AckDrawer data={selectedRowData} isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} onClose={() => fetchData()}/>}
-      {/* <QuotationDrawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} /> */}
+      
     </div>
   );
 };

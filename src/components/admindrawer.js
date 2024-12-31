@@ -38,7 +38,7 @@ import { jwtDecode } from "jwt-decode";
 const useStyles = makeStyles({
   root: {
    
-    ...shorthands.overflow("hidden"),
+    overflow: "hidden",
     
 
     position: "fixed",
@@ -50,7 +50,7 @@ const useStyles = makeStyles({
     backgroundColor: "#fff",
   },
   content: {
-    ...shorthands.flex(1),
+    flex:1,
     ...shorthands.padding("16px"),
 
     display: "grid",

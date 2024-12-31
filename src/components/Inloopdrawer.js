@@ -39,7 +39,7 @@ import {toggleSecondaryDrawerPosition } from "../Store/refreshSlice";
 const useStyles = makeStyles({
   root: {
     
-    ...shorthands.overflow("hidden"),
+    overflow: "hidden",
     
 
     position: "fixed",
@@ -51,7 +51,7 @@ const useStyles = makeStyles({
     backgroundColor: "#fff",
   },
   content: {
-    ...shorthands.flex(1),
+    flex:1,
     ...shorthands.padding("16px"),
 
     display: "grid",
@@ -169,7 +169,7 @@ const NavDrawerDefaultLoop = (props) => {
 
   // styles for Inlooop
   // Function to get drawer style based on collapse state
-  
+
 const getDrawerStyle = (collapse) => ({
   transition: "width 0.5s",
   borderRightStyle: "none",

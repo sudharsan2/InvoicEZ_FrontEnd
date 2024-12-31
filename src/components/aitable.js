@@ -74,7 +74,7 @@ const AITable = ({ setTableLength }) => {
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [invoiceId, setInvoiceId] = useState(null);
   
-  const { invoiceNumber } = location2.state || {};
+ 
 
   
   const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);

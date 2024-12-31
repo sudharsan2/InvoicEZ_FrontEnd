@@ -123,11 +123,11 @@ const ApprovePage = () => {
   const [po_id, set_Po_id] = useState("");
   const [inv_id, setInv_id] = useState();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+ 
   const [load, setLoad] = useState(false);
   const [data, setData] = useState("");
 
-
+  console.log(po_id)
   // ----Styles--- 
   const cursorStyle = loading ? "not-allowed" : "pointer";
   const opacityStyle = loading ? 0.6 : 1;
@@ -443,7 +443,7 @@ const ApprovePage = () => {
   
   
   const handleError = (error) => {
-    setError("Error fetching data. Please try again.");
+   
     console.error(
       "Error fetching data:",
       error.response ? error.response.data : error.message

@@ -240,8 +240,11 @@ const StoreOpenPODetails = () => {
     if (!isANumeric && !isBNumeric) {
       return sortByType(aValue, bValue, sortDirection, "string");
     }
-    return sortDirection === "asc" ? (isANumeric ? -1 : 1) : (isANumeric ? 1 : -1);
+  
+    const directionMultiplier = sortDirection === "asc" ? -1 : 1;
+    return isANumeric ? directionMultiplier : -directionMultiplier;
   };
+  
   
   const sortedData = Array.isArray(data)
     ? [...data].sort((a, b) => {

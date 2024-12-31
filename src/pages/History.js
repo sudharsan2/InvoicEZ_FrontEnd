@@ -6,14 +6,10 @@ import {
   BreadcrumbButton,
   Divider
 } from "@fluentui/react-components";
-import {
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-  bundleIcon,
-} from "@fluentui/react-icons";
-import TagCounters from "../components/gridapprove";
+
+
 import HistoryTable from "../components/HistoryTable";
-import Search from "../components/Search";
+
 import Example from "./ExampleLineChart";
 
 const path = "/history";
@@ -25,11 +21,10 @@ const containerStyle = {
     display: "flex",
     marginTop:"3em",
     
-    // justifyContent: "space-around",
+   
     padding: "8px",
     gap:"4em",
-    // justifyContent:"center",
-    // alignItems:"Center"
+    
 
   };
   

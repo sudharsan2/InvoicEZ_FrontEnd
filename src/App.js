@@ -2,7 +2,7 @@ import "./App.css";
 import CustomLayout from "./components/layout";
 import NavDrawerDefault from "./components/drawer";
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes,Navigate} from "react-router-dom";
 import Dashboard from "./pages/dashboard";
 import Employee from "./pages/Employee";
 import EmployeeForm from "./pages/employeeform";
@@ -53,7 +53,7 @@ import StoreHistory from "./pages/StoreHistory";
 import StoreTagCounters from "./pages/StoreDashboard";
 import UserPage from "./pages/UserPage";
 import GateEntryDetails from "./pages/GateEntryDetails";
-import { Navigate } from 'react-router-dom';
+
 import { jwtDecode } from "jwt-decode";
 import OpenPo from "./pages/OpenPo";
 import StoreOpenPO from "./pages/StoreOpenPo";

@@ -14,7 +14,7 @@ import {
 import TodoTable from "../components/TodoTable";
 import DropDown from "../components/DropDown";
 import { refreshActions } from "../Store/Store";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 const path = "/inloop";
