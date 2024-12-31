@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import axios from "axios"; // Import axios
-import { makeStyles, tokens, Input } from "@fluentui/react-components";
+import { makeStyles, tokens} from "@fluentui/react-components";
 import "./Forget.css";
 
 const useStyles = makeStyles({
@@ -12,11 +12,11 @@ const useStyles = makeStyles({
     alignItems: "center",
     minHeight: "100vh",
     width: "100vw",
-    // backgroundImage: 'url("..\media\Forgetpawd.jpg")',
+    
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
-    // backgroundPosition: "center",
+    
   },
   formWrapper: {
     display: "flex",

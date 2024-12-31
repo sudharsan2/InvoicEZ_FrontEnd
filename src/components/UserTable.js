@@ -784,7 +784,7 @@ const togglePasswordVisibility = () => {
         {({ item, rowId }) => (
           <DataGridRow
             key={rowId}
-            // onClick={(e) => handleRowClick(e, item)}
+            
             selected={selectedRows.has(rowId)}
           >
             {({ renderCell }) => (
@@ -980,7 +980,7 @@ const togglePasswordVisibility = () => {
       }}
       onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
     >
-      {/* <h3 style={{ marginBottom: "15px" }}>Reset Password</h3> */}
+     
       <form onSubmit={handleResetSubmit}>
         <label style={{ display: "block", marginBottom: "10px" }}>
           Email:

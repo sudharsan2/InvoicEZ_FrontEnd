@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import React from "react";
+import React,{ useEffect, useState } from "react";
+
 
 import {
   makeStyles,
@@ -30,13 +30,7 @@ const path2 = "/storeopenpodet";
 const path1 = "/storedashboard";
 
 const useStyles = makeStyles({
-  root: {
-    // width: "77vw",
-    // height: "88vh",
-    // overflowY: "auto",
-    // display: "flex",
-    // flexDirection: "column",
-  },
+  
 
   header: {
     padding: "20px",
@@ -216,43 +210,54 @@ const StoreOpenPODetails = () => {
   
 
   
-const compareNumeric = (aValue, bValue, direction) => {
-  const aNumeric = parseFloat(aValue);
-  const bNumeric = parseFloat(bValue);
-  return direction === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
-};
-
-
-const compareString = (aValue, bValue, direction) => {
-  const aString = String(aValue).toLowerCase();
-  const bString = String(bValue).toLowerCase();
-  return direction === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
-};
-
-
-const sortedData = Array.isArray(data) ? [...data].sort((a, b) => {
-  if (!sortedColumn) return 0;
-
-  const aValue = a[sortedColumn] || "";
-  const bValue = b[sortedColumn] || "";
-
-  const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-  const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
-
-  if (isANumeric && isBNumeric) {
-    return compareNumeric(aValue, bValue, sortDirection);
-  }
-
-  if (!isANumeric && !isBNumeric) {
-    return compareString(aValue, bValue, sortDirection);
-  }
-
+   const compareNumeric = (aValue, bValue, direction) => {
+    const aNumeric = parseFloat(aValue);
+    const bNumeric = parseFloat(bValue);
+    return direction === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+  };
   
-  if (isANumeric) return sortDirection === "asc" ? -1 : 1;
-  if (isBNumeric) return sortDirection === "asc" ? 1 : -1;
-
-  return 0;
-}) : [];
+  const compareString = (aValue, bValue, direction) => {
+    const aString = String(aValue).toLowerCase();
+    const bString = String(bValue).toLowerCase();
+    return direction === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+  };
+  
+  const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
+  
+  const getValueForSorting = (row, column) => row[column] || "";
+  
+  const sortByType = (aValue, bValue, sortDirection, type) => {
+    if (type === "numeric") {
+      return compareNumeric(aValue, bValue, sortDirection);
+    }
+    return compareString(aValue, bValue, sortDirection);
+  };
+  
+  const compareValues = (aValue, bValue, isANumeric, isBNumeric, sortDirection) => {
+    if (isANumeric && isBNumeric) {
+      return sortByType(aValue, bValue, sortDirection, "numeric");
+    }
+    if (!isANumeric && !isBNumeric) {
+      return sortByType(aValue, bValue, sortDirection, "string");
+    }
+    return sortDirection === "asc" ? (isANumeric ? -1 : 1) : (isANumeric ? 1 : -1);
+  };
+  
+  const sortedData = Array.isArray(data)
+    ? [...data].sort((a, b) => {
+        if (!sortedColumn) return 0;
+  
+        const aValue = getValueForSorting(a, sortedColumn);
+        const bValue = getValueForSorting(b, sortedColumn);
+  
+        const isANumeric = isNumeric(aValue);
+        const isBNumeric = isNumeric(bValue);
+  
+        return compareValues(aValue, bValue, isANumeric, isBNumeric, sortDirection);
+      })
+    : [];
+  
+   
 
 
 

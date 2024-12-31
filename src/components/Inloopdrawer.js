@@ -168,44 +168,104 @@ const NavDrawerDefaultLoop = (props) => {
 
 
   // styles for Inlooop
-  const drawerStyle = collapse
-    ? { width: "57px", transition: "width 0.5s", borderRightStyle: "none" }
-    : { transition: "width 0.5s", borderRightStyle: "none" };
-
-  const headerStyle = themestate
-    ? { backgroundColor: darktheme.sidebarcolordark, cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-    : { cursor: "pointer", WebkitTapHighlightColor: "transparent" };
-
-  const iconStyle1 = {
-    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+  const drawerStyle = {
+    transition: "width 0.5s",
+    borderRightStyle: "none",
   };
-
-  const Footer = themestate ? { backgroundColor: darktheme.sidebarcolordark } : {}
-
-  const footerStyle = themestate
-  ? { marginBottom: "30px", color: darktheme.fontcolordark }
-  : { marginBottom: "30px", color: lighttheme.fontcolorlight };
+  
+  if (collapse) {
+    drawerStyle.width = "57px";
+  }
   
 
-  const sidebarStyle = {
-    backgroundColor: themestate ? darktheme.sidebarcolordark : { height: "20px" },
+    const headerStyle = { cursor: "pointer", WebkitTapHighlightColor: "transparent" };
+    if (themestate) {
+      headerStyle.backgroundColor = darktheme.sidebarcolordark;
+    }
+    
 
-  };
+    const iconStyle1 = {};
+    if (themestate) {
+      iconStyle1.color = darktheme.fontcolordark;
+    } else {
+      iconStyle1.color = lighttheme.fontcolorlight;
+    }
+    
+
+  let Footer = {};
+
+if (themestate) {
+  Footer = { backgroundColor: darktheme.sidebarcolordark };
+}
+
+
+  const footerStyle = { marginBottom: "30px" };
+
+  if (themestate) {
+    footerStyle.color = darktheme.fontcolordark;
+  } else {
+    footerStyle.color = lighttheme.fontcolorlight;
+  }
+  
+
+  const sidebarStyle = {};
+
+if (themestate) {
+  sidebarStyle.backgroundColor = darktheme.sidebarcolordark;
+} else {
+  sidebarStyle.height = "20px";
+}
 
   const commonStyle = { marginTop: "10px", fontSize: "17px" };
   
   const commonTextStyle = {
     marginTop: "2px",
-    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+    color: null,
   };
+  
+  if (themestate) {
+    commonTextStyle.color = darktheme.fontcolordark;
+  } else {
+    commonTextStyle.color = lighttheme.fontcolorlight;
+  }
+  
+  let style = {};
+
+if (themestate) {
+  style = { background: darktheme.contentpagedark };
+}
+
+return <div style={style}>Your content here</div>;
+
 
   const iconStyle = (iconColor) => ({
     fontSize: "24px",
     color: iconColor,
   });
 
-  const tooltipAppearance = themestate ? "inverted" : "normal";
-  const getNavItemClass = () => (themestate ? styles.navItemdark : styles.navItemlight);
+  const tooltipAppearance = themestate && "inverted" || "normal";
+
+  const getNavItemClass = () => {
+    let navItemClass;
+    
+    if (themestate) {
+      navItemClass = styles.navItemdark;
+    } else {
+      navItemClass = styles.navItemlight;
+    }
+  
+    return navItemClass;
+  };
+
+  let iconColor;
+
+if (themestate) {
+  iconColor = darktheme.fontcolordark;
+} else {
+  iconColor = lighttheme.fontcolorlight;
+}
+
+  
 
   
   const handleNavClick = (path, value) => {
@@ -260,7 +320,7 @@ const NavDrawerDefaultLoop = (props) => {
       <Tooltip content="Purchase Requisition" positioning="after" withArrow appearance={tooltipAppearance}>
         <NavItem
           target="_blank"
-          icon={<Dashboard style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+          icon={<Dashboard style={iconStyle(iconColor)} />}
           value="1"
           className={getNavItemClass()}
           style={commonStyle}
@@ -274,7 +334,7 @@ const NavDrawerDefaultLoop = (props) => {
       <Tooltip content="Purchase Order" positioning="after" withArrow appearance={tooltipAppearance}>
         <NavItem
           target="_blank"
-          icon={<Trolly style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+          icon={<Trolly style={iconStyle(iconColor)}/>}
           value="2"
           className={getNavItemClass()}
           style={commonStyle}
@@ -288,7 +348,7 @@ const NavDrawerDefaultLoop = (props) => {
       <Tooltip content="ASN Creation" positioning="after" withArrow appearance={tooltipAppearance}>
         <NavItem
           target="_blank"
-          icon={<Truck style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+          icon={<Truck style={iconStyle(iconColor)} />}
           value="3"
           className={getNavItemClass()}
           style={commonStyle}
@@ -303,7 +363,7 @@ const NavDrawerDefaultLoop = (props) => {
         <NavCategory value="4">
           <NavCategoryItem
             target="_blank"
-            icon={<Apps28Regular style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+            icon={<Apps28Regular style={iconStyle(iconColor)} />}
             value="4"
             className={getNavItemClass()}
             style={commonStyle}
@@ -355,7 +415,7 @@ const NavDrawerDefaultLoop = (props) => {
                 target="_blank"
                 icon={
                   <Dashboard
-                  style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
+                  style={iconStyle(iconColor)}
                   />
                 }
                 
@@ -382,7 +442,7 @@ const NavDrawerDefaultLoop = (props) => {
                 icon={
                   <Trolly 
                    
-                      style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
+                  style={iconStyle(iconColor)}
       
                   />
                 }
@@ -408,7 +468,7 @@ const NavDrawerDefaultLoop = (props) => {
                 target="_blank"
                 icon={
                   <Truck
-                  style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
+                  style={iconStyle(iconColor)}
                   />
                 }
                 
@@ -433,7 +493,7 @@ const NavDrawerDefaultLoop = (props) => {
                     target="_blank"
                     icon={
                       <Apps28Regular
-                      style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
+                      style={iconStyle(iconColor)}
                       />
                     }
                     
@@ -525,7 +585,7 @@ const NavDrawerDefaultLoop = (props) => {
 
       <div
         className={styles.content}
-        style={themestate ? { background: darktheme.contentpagedark } : {}}
+        style={style}
       >
 
         {props.children}

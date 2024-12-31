@@ -6,6 +6,7 @@ import {
   ArrowClockwise24Regular,
   Delete24Regular,
   TasksApp24Regular,
+  ArrowSortUpFilled, ArrowSortDownRegular,ShareIos24Filled
 } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,14 +20,13 @@ import {
   createTableColumn,
 } from "@fluentui/react-components";
 import Search from "./Search"; 
-import {  notification,message } from "antd"; 
+import {  notification,message, Modal } from "antd"; 
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
 
 
-import { Modal } from "antd";
 import WalkInCandidate from "./WalkinCandidate";
-import { ArrowSortUpFilled, ArrowSortDownRegular,ShareIos24Filled } from "@fluentui/react-icons";
+
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({

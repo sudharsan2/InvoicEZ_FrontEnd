@@ -1,38 +1,28 @@
-import { useState, useEffect, useRef } from "react";
-import React from "react";
+import React,{ useState, useEffect, useRef } from "react";
+
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { notification } from "antd";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
-import { Add24Regular, Delete24Regular } from "@fluentui/react-icons";
+import { ArrowSortUpFilled, ArrowSortDownRegular,Add24Regular, Delete24Regular } from "@fluentui/react-icons";
+
 import {
   makeStyles,
   Button,
-  Link,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
   BreadcrumbDivider,
-  Textarea,
   Input,
-  Dropdown,
-  Tab,
   Table,
   TableCell,
   TableHeader,
-  TableSelectionCell,
   TableRow,
   TableBody,
   TableHeaderCell,
   Checkbox,
-  createTableColumn,
-  useTableFeatures,
-  useTableSort,
 } from "@fluentui/react-components";
 import { refreshActions } from "../Store/Store";
 import { useDispatch, useSelector } from "react-redux";
-import { TextField } from "@fluentui/react/lib/TextField";
-import line_data from "./data_approve";
 import "./dashboard.css";
 import { message } from "antd";
 import { ArrowDownload28Regular } from "@fluentui/react-icons";
@@ -57,14 +47,14 @@ const useStyles = makeStyles({
     overflowY: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
-    // maxHeight: "48vh",
+    
   },
   content2: {
-    // width: "77vw",
+    
     overflowY: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
-    // maxHeight: "48vh",
+   
   },
   controls: {
     display: "flex",

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import React from "react";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
-import { useNavigate } from "react-router-dom";
+import { ArrowSortUpFilled, ArrowSortDownRegular,ArrowDownload28Regular } from "@fluentui/react-icons";
+
 import {
   makeStyles,
- 
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
@@ -14,19 +13,16 @@ import {
   Table,
   TableCell,
   TableHeader,
- 
   TableRow,
   TableBody,
   TableHeaderCell,
-  createTableColumn,
+  
   
   Divider,
 } from "@fluentui/react-components";
-
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
-import { ArrowDownload28Regular } from "@fluentui/react-icons";
 
 
 const path = "/storehistorydetails";
@@ -34,13 +30,7 @@ const path2 = "/storehistory";
 const path1 = "/storedashboard";
 
 const useStyles = makeStyles({
-  root: {
-    // width: "77vw",
-    // height: "88vh",
-    // overflowY: "auto",
-    // display: "flex",
-    // flexDirection: "column",
-  },
+
 
   header: {
     padding: "20px",

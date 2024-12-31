@@ -6,19 +6,13 @@ import {
   BreadcrumbButton,
   Divider
 } from "@fluentui/react-components";
-import {
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-  bundleIcon,
-} from "@fluentui/react-icons";
 
 import AITable from "../components/aitable";
 
-import { useLocation } from "react-router-dom";
+
 // improve AITable
-const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
+
 const path = "/dashboard";
-const path1 = "http://localhost:3000/";
 const path2 = "/ai";
 
 const containerStyle = {

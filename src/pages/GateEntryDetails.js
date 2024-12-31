@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+
 
 import {
   makeStyles,
@@ -25,14 +25,7 @@ const path2 = "/approvepage";
 const path1 = "/dashboard";
 
 const useStyles = makeStyles({
-  root: {
-    // width: "77vw",
-    // height: "88vh",
-    // overflowY: "auto",
-    // display: "flex",
-    // flexDirection: "column",
-  },
-
+  
   header: {
     padding: "20px",
   },

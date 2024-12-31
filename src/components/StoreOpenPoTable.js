@@ -90,15 +90,7 @@ const columns = [
   
 ];
 
-const useStyles = makeStyles({
-  root: {
-    
-    display: "flex",
-    flexDirection: "column",
-    gap: "2px",
-    maxWidth: "400px",
-  },
-});
+
 const StoreOpenPoTable = () => {
   
   const [Hovered2,setIsHovered2] = useState(false);
@@ -128,9 +120,9 @@ const StoreOpenPoTable = () => {
 
 
 
-  // Styles 
+ 
 
-  const backStyle =  Hovered2 ? "#e1e1e2" : "transparent"
+  
       // INPUT FIELD
   const handlePoNumberChange = (e) => setPoNumber(e.target.value);
   const handleTotalChange = (e) => setSelectedTotalAmount(e.target.value);
@@ -170,7 +162,11 @@ const StoreOpenPoTable = () => {
  
   
 
-
+// Styles
+let backgroundColor = "transparent";
+if (Hovered2) {
+  backgroundColor = "#e1e1e2";
+}
  
   
  
@@ -355,83 +351,81 @@ const StoreOpenPoTable = () => {
   });
   
   const handleSort = (columnId) => {
-    let newSortDirection = "ascending";
+    const getNewSortDirection = (currentState, column) =>
+      currentState.columnId === column && currentState.sortDirection === "ascending"
+        ? "descending"
+        : "ascending";
   
-   
-    if (sortState.columnId === columnId) {
-      newSortDirection =
-        sortState.sortDirection === "ascending" ? "descending" : "ascending";
-    }
+    const compareValues = (aValue, bValue, direction) => {
+      const isNumeric = (val) => !isNaN(parseFloat(val));
+      const aNumeric = isNumeric(aValue) ? parseFloat(aValue) : null;
+      const bNumeric = isNumeric(bValue) ? parseFloat(bValue) : null;
   
-    setSortState({ columnId, sortDirection: newSortDirection });
-  
-   
-    const sortedItems = [...filteredItems].sort((a, b) => {
-      const aValue = a[columnId];
-      const bValue = b[columnId];
-  
-     
-      const aNumeric = !isNaN(parseFloat(aValue)) ? parseFloat(aValue) : null;
-      const bNumeric = !isNaN(parseFloat(bValue)) ? parseFloat(bValue) : null;
-  
-      if (aNumeric !== null && bNumeric !== null) {
-       
-        return newSortDirection === "ascending"
-          ? aNumeric - bNumeric
-          : bNumeric - aNumeric;
+      if (aNumeric !== null || bNumeric !== null) {
+        return direction === "ascending"
+          ? (aNumeric || 0) - (bNumeric || 0)
+          : (bNumeric || 0) - (aNumeric || 0);
       }
   
-      if (aNumeric !== null && bNumeric === null) {
-        
-        return newSortDirection === "ascending" ? -1 : 1;
-      }
-  
-      if (aNumeric === null && bNumeric !== null) {
-        
-        return newSortDirection === "ascending" ? 1 : -1;
-      }
-  
-     
       const aString = String(aValue || "").toLowerCase();
       const bString = String(bValue || "").toLowerCase();
   
-      return newSortDirection === "ascending"
+      return direction === "ascending"
         ? aString.localeCompare(bString)
         : bString.localeCompare(aString);
-    });
+    };
   
-    console.log("SORTED", sortedItems);
+    const newSortDirection = getNewSortDirection(sortState, columnId);
+    setSortState({ columnId, sortDirection: newSortDirection });
+  
+    const sortedItems = [...filteredItems].sort((a, b) =>
+      compareValues(a[columnId], b[columnId], newSortDirection)
+    );
   
     setFilteredItems(sortedItems);
   };
   
+  
 
 
   const filterData = () => {
-    
-    const filters = {
-      poNumber: poNumber ? item => item.po_number.toLowerCase().includes(poNumber.toLowerCase()) : () => true,
-      poStatus: selectedPOStatus ? item => item.po_status === selectedPOStatus.value : () => true,
-      poType: selectedPOType ? item => item.po_type === selectedPOType.value : () => true,
-      supplierName: selectedSupplierName ? item => item.supplier_name === selectedSupplierName.value : () => true,
-      shipTo: selectedShipTo ? item => item.location === selectedShipTo.value : () => true,
-      buyerName: selectedBuyerName ? item => item.Buyer === selectedBuyerName.value : () => true,
-      totalAmount: selectedTotalAmount ? item => item.total_amount === parseFloat(selectedTotalAmount) : () => true,
-      poHeaderID: selectedPOHeaderID ? item => item.poheader === selectedPOHeaderID : () => true,
-      vendorID: selectedVendorID ? item => item.vendor === selectedVendorID : () => true,
-      vendorSiteID: selectedVendorSiteID ? item => item.vendor === selectedVendorSiteID : () => true,
-      vendorNumber: selectedVendorNumber ? item => item.vendor_num === selectedVendorNumber : () => true,
-    };
+    const filterCriteria = [
+      { key: "po_number", value: poNumber, comparator: (item, value) => item.po_number.toLowerCase().includes(value.toLowerCase()) },
+      { key: "po_status", value: selectedPOStatus?.value, comparator: (item, value) => item.po_status === value },
+      { key: "po_type", value: selectedPOType?.value, comparator: (item, value) => item.po_type === value },
+      { key: "supplier_name", value: selectedSupplierName?.value, comparator: (item, value) => item.supplier_name === value },
+      { key: "location", value: selectedShipTo?.value, comparator: (item, value) => item.location === value },
+      { key: "Buyer", value: selectedBuyerName?.value, comparator: (item, value) => item.Buyer === value },
+      { key: "total_amount", value: selectedTotalAmount, comparator: (item, value) => item.total_amount === parseFloat(value) },
+      { key: "poheader", value: selectedPOHeaderID, comparator: (item, value) => item.poheader === value },
+      { key: "vendor", value: selectedVendorID, comparator: (item, value) => item.vendor === value },
+      { key: "vendor_site", value: selectedVendorSiteID, comparator: (item, value) => item.vendor === value },
+      { key: "vendor_num", value: selectedVendorNumber, comparator: (item, value) => item.vendor_num === value },
+    ];
   
-    
-    const filteredData = items.filter(item => {
-      return Object.values(filters).every(filterFn => filterFn(item));
-    });
+    const filteredData = items.filter(item =>
+      filterCriteria.every(({ value, comparator }) => (value ? comparator(item, value) : true))
+    );
   
     setFilteredItems(filteredData);
     console.log("Filtered Data:", filteredData);
   };
+
+
+  // Table Header
+  const getSortIcon = (columnId) => {
+    if (sortState.columnId !== columnId) {
+      return null;
+    }
   
+    const style = { marginLeft: "5px" };
+  
+    if (sortState.sortDirection === "ascending") {
+      return <ArrowSortUpFilled style={style} />;
+    }
+  
+    return <ArrowSortDownRegular style={style} />;
+  };
 
   
   return (
@@ -636,7 +630,7 @@ const StoreOpenPoTable = () => {
         display: "flex",
         alignItems: "center",
         gap: "4px", 
-        backgroundColor:{backStyle},
+        backgroundColor,
         padding: "6px 12px", 
         borderRadius: "4px", 
         cursor: "pointer",
@@ -717,12 +711,7 @@ const StoreOpenPoTable = () => {
               style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
             >
               {renderHeaderCell()}
-              {sortState.columnId === columnId &&
-                (sortState.sortDirection === "ascending" ? (
-                  <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
-                ) : (
-                  <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
-                ))}
+              {getSortIcon(columnId)}
             </DataGridHeaderCell>
           )}
         </DataGridRow>

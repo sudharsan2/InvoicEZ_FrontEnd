@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,7 +8,7 @@ import {
 
 import CompareDrawerTable from "../components/CompareDrawerTable";
 import SupplierTable from "../components/SupplierTable";
-import { useSelector } from "react-redux";
+
 
 const path = "/inloop";
 const path1 = "http://localhost:3000/";

@@ -6,20 +6,12 @@ import {
   BreadcrumbButton,
   Divider
 } from "@fluentui/react-components";
-import {
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-  bundleIcon,
-} from "@fluentui/react-icons";
-import TagCounters from "../components/gridapprove";
-import ApproveTable from "../components/approvetable";
-import Search from "../components/Search";
-import IssuefixTable from "../components/issuefixtable";
-import { Button, makeStyles } from "@fluentui/react-components";
-import { FilterRegular, DismissCircleRegular } from "@fluentui/react-icons"; // Import icons
 
-const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
-const path = "/approve";
+
+import IssuefixTable from "../components/issuefixtable";
+
+
+
 const path1 = "/dashboard";
 const path2 = "/issuefix";
 
@@ -27,9 +19,9 @@ const containerStyle = {
   width: "100%",
   display: "flex",
   
-  // justifyContent: "space-around",
+  
   padding: "8px",
-  // marginLeft:"3em"
+ 
 };
 
 const itemStyle = {
@@ -94,9 +86,7 @@ const IssuefixPage = () => {
    console.log("tablelength",tableLength);
   const counters = [
     { label: "To Do", value: tableLength, color: "#00bfbf" }, // Cyan
-    // { label: "AI Identified", value: 2, color: "#d62727" }, // Red
-    // { label: "User Resolved", value: 9, color: "#1f497d" }, // Dark Blue
-    // { label: "Refix", value: 4, color: "#d21994" }, // Magenta
+    
   ];
   return (
     <div style={{maxHeight:"88vh",overflowY:"auto"}}>

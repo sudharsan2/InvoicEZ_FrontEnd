@@ -16,15 +16,13 @@ import {
   TableRow,
   TableBody,
   TableHeaderCell,
-  createTableColumn,
+
   tokens,
 } from "@fluentui/react-components";
-import line_data from "./data_approve";
 import{useLocation } from "react-router-dom";
 import AiNav from "../components/ainavbar";
 import CreatableSelect from "react-select/creatable";
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState ,useEffect} from "react";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import axios from "axios";
 import { Popover } from "@mui/material";

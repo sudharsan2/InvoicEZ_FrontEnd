@@ -16,7 +16,7 @@ import {
   TableRow,
   TableBody,
   TableHeaderCell,
-  createTableColumn,
+  
  
   Divider,
 } from "@fluentui/react-components";
@@ -30,13 +30,7 @@ const path2 = "/openpodet";
 const path1 = "/dashboard";
 
 const useStyles = makeStyles({
-  root: {
-    // width: "77vw",
-    // height: "88vh",
-    // overflowY: "auto",
-    // display: "flex",
-    // flexDirection: "column",
-  },
+
 
   header: {
     padding: "20px",
@@ -194,36 +188,52 @@ const OpenPODetails = () => {
 
   
 
-  const sortedData = [...data].sort((a, b) => {
-    if (!sortedColumn) return 0;
-
-    const aValue = a[sortedColumn] || "";  
-    const bValue = b[sortedColumn] || "";
-
-    
-    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
-
-   
+  const compareNumeric = (aValue, bValue, direction) => {
+    const aNumeric = parseFloat(aValue);
+    const bNumeric = parseFloat(bValue);
+    return direction === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+  };
+  
+  const compareString = (aValue, bValue, direction) => {
+    const aString = String(aValue).toLowerCase();
+    const bString = String(bValue).toLowerCase();
+    return direction === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+  };
+  
+  const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
+  
+  const getValueForSorting = (row, column) => row[column] || "";
+  
+  const sortByType = (aValue, bValue, sortDirection, type) => {
+    if (type === "numeric") {
+      return compareNumeric(aValue, bValue, sortDirection);
+    }
+    return compareString(aValue, bValue, sortDirection);
+  };
+  
+  const compareValues = (aValue, bValue, isANumeric, isBNumeric, sortDirection) => {
     if (isANumeric && isBNumeric) {
-      const aNumeric = parseFloat(aValue);
-      const bNumeric = parseFloat(bValue);
-      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+      return sortByType(aValue, bValue, sortDirection, "numeric");
     }
-
-   
     if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
-      const bString = String(bValue).toLowerCase();
-      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+      return sortByType(aValue, bValue, sortDirection, "string");
     }
-
-    
-    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
-    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
-
-    return 0; 
-  });
+    return sortDirection === "asc" ? (isANumeric ? -1 : 1) : (isANumeric ? 1 : -1);
+  };
+  
+  const sortedData = Array.isArray(data)
+    ? [...data].sort((a, b) => {
+        if (!sortedColumn) return 0;
+  
+        const aValue = getValueForSorting(a, sortedColumn);
+        const bValue = getValueForSorting(b, sortedColumn);
+  
+        const isANumeric = isNumeric(aValue);
+        const isBNumeric = isNumeric(bValue);
+  
+        return compareValues(aValue, bValue, isANumeric, isBNumeric, sortDirection);
+      })
+    : [];
 
   
 

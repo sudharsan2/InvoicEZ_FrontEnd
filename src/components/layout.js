@@ -26,7 +26,7 @@ import {
   QuestionRegular,
   ShareIos24Filled
 } from "@fluentui/react-icons";
-import { themeActions, refreshActions } from "../Store/Store";
+
 
 import { jwtDecode } from "jwt-decode";
 
@@ -34,9 +34,9 @@ import axios from "axios";
 
 
 
-import { Modal, Upload, notification, message, Layout } from "antd";
+import { Modal, Upload, message, Layout } from "antd";
 import WalkInCandidate from "./WalkinCandidate.jsx";
-import { DarkMode } from "@mui/icons-material";
+
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Dragger } = Upload;
