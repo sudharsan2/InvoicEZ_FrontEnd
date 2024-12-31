@@ -5,7 +5,7 @@ import {
   Delete24Regular,
   ArrowSortUpFilled, ArrowSortDownRegular
 } from "@fluentui/react-icons";
-import { useLocation,useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 
 import {
   DataGrid,

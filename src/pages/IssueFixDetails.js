@@ -616,21 +616,19 @@ const IssuefixDetails = () => {
     const aNumeric = isNumeric(aValue);
     const bNumeric = isNumeric(bValue);
   
-    const compareValues = (valA, valB, direction) => {
-      if (aNumeric && bNumeric) {
-        return direction === "asc" ? valA - valB : valB - valA;
-      }
-      return direction === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
-    };
+    const compareValues = (valA, valB, direction) => (
+      direction === "asc"
+        ? valA - valB
+        : valB - valA
+    );
   
-    
-    if (aNumeric && bNumeric || (!aNumeric && !bNumeric)) {
-      return compareValues(aValue, bValue, sortDirection);
-    }
+    if (aNumeric && bNumeric) return compareValues(parseFloat(aValue), parseFloat(bValue), sortDirection);
+    if (!aNumeric && !bNumeric) return compareValues(aValue.toLowerCase(), bValue.toLowerCase(), sortDirection);
   
-    
     return aNumeric ? -1 : 1;
   });
+  
+  
   
   
 
