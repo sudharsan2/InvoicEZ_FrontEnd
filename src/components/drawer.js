@@ -16,46 +16,13 @@ import {
 import {
   Board24Filled,
   Board24Regular,
-  BoxMultiple20Filled,
-  BoxMultiple20Regular,
-  DataArea20Filled,
-  DataArea20Regular,
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-  HeartPulse20Filled,
-  HeartPulse20Regular,
-  MegaphoneLoud20Filled,
-  MegaphoneLoud20Regular,
   
-  NotePin20Filled,
-  NotePin20Regular,
-  People20Filled,
-  People20Regular,
-  PeopleStar20Filled,
-  PeopleStar20Regular,
-  PersonFilled,
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-  PersonRegular,
-  PersonSearch20Filled,
-  PersonSearch20Regular,
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-  Settings24Filled,
-  Settings24Regular,
+  
   bundleIcon,
-  BoxMultipleCheckmark24Regular,
-  BoxMultipleCheckmark24Filled,
-  ClockBill24Regular,
-  ClockBill24Filled,
-  BeakerEdit24Filled,
-  BeakerEdit24Regular,
-  Cart24Filled,
-  Cart24Regular,
+  
   Navigation24Filled,
   Navigation24Regular,
-  DocumentCatchUp24Filled,
-  DocumentCatchUp24Regular,
+
   
   TargetArrow24Filled,
   TargetArrow24Regular,
@@ -306,7 +273,7 @@ const NavDrawerDefault = (props) => {
   
   // ---- Body Style ----
   const bodyStyle = {
-    marginTop: "-20px",
+    marginTop: "0px",
     color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
   };
   

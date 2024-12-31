@@ -163,6 +163,35 @@ const NavDrawerDefaultAdmin = (props) => {
       }
     }
   }, []);
+
+
+  // Stytles
+
+  const footerStyle = themestate
+  ? { marginBottom: "20px", color: darktheme.fontcolordark }
+  : { marginBottom: "20px", color: lighttheme.fontcolorlight }
+
+
+  const classStyle = themestate ? styles.navItemdark : styles.navItemlight
+
+  const headerStyle = {
+    cursor: "pointer",
+    WebkitTapHighlightColor: "transparent",
+    ...(themestate && { backgroundColor: darktheme.sidebarcolordark })
+  };
+
+  const newStyle = themestate
+  ? { color: darktheme.fontcolordark }
+  : { color: lighttheme.fontcolorlight }
+  
+  const divStyle = collapse
+  ? {
+      width: `56px`,
+      transition: "width 0.5s",
+      borderRightStyle: "none",
+    }
+  : { transition: "width 0.5s", borderRightStyle: "none" }
+
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
     
@@ -175,26 +204,14 @@ const NavDrawerDefaultAdmin = (props) => {
         size="small"
         className={useStyles.navdrawer}
         style={
-          collapse
-            ? {
-                width: `56px`,
-                transition: "width 0.5s",
-                borderRightStyle: "none",
-              }
-            : { transition: "width 0.5s", borderRightStyle: "none" }
+          divStyle
         }
       >
        
 
         <NavDrawerHeader
           style={
-            themestate
-              ? {
-                  backgroundColor: darktheme.sidebarcolordark,
-                  cursor: "pointer",
-                  WebkitTapHighlightColor: "transparent",
-                }
-              : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+            headerStyle
           }
         >
           <NavDrawerHeaderNav
@@ -207,9 +224,7 @@ const NavDrawerDefaultAdmin = (props) => {
               icon={
                 <Navi
                   style={
-                    themestate
-                      ? { color: darktheme.fontcolordark }
-                      : { color: lighttheme.fontcolorlight }
+                    newStyle
                   }
                 />
               }
@@ -231,13 +246,7 @@ const NavDrawerDefaultAdmin = (props) => {
         {collapse ? (
           <NavDrawerBody
             style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+             headerStyle
             }
           >
             
@@ -247,16 +256,14 @@ const NavDrawerDefaultAdmin = (props) => {
                     icon={
                       <Apps28Regular
                         style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
+                          newStyle
                         }
                       />
                     }
                    
                     value="2"
                     className={
-                      themestate ? styles.navItemdark : styles.navItemlight
+                      classStyle
                     }
                     style={{ marginTop: "10px", fontSize: "17px" }}
                     onClick={() => {
@@ -292,13 +299,7 @@ const NavDrawerDefaultAdmin = (props) => {
         ) : (
           <NavDrawerBody
             style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+             headerStyle
             }
           >
             {/* DETAILS OF USER  */}
@@ -339,16 +340,14 @@ const NavDrawerDefaultAdmin = (props) => {
                     icon={
                       <Apps28Regular
                         style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
+                          newStyle
                         }
                       />
                     }
                     
                     value="2"
                     className={
-                      themestate ? styles.navItemdark : styles.navItemlight
+                      classStyle
                     }
                     style={{ marginTop: "10px", fontSize: "17px" }}
                     onClick={() => {
@@ -402,18 +401,14 @@ const NavDrawerDefaultAdmin = (props) => {
             >
               <p
                 style={
-                  themestate
-                    ? { marginBottom: "30px", color: darktheme.fontcolordark }
-                    : { marginBottom: "30px", color: lighttheme.fontcolorlight }
+                  footerStyle
                 }
               >
                 by FocusR AI
               </p>
               <p
                 style={
-                  themestate
-                    ? { marginTop: "-20px", color: darktheme.fontcolordark }
-                    : { marginTop: "-20px", color: lighttheme.fontcolorlight }
+                  footerStyle
                 }
               >
                 V 0.0.1

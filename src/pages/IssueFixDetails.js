@@ -605,6 +605,7 @@ const IssuefixDetails = () => {
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
 
+  
   const sortedData = [...rows].sort((a, b) => {
     if (!sortedColumn) return 0;
 

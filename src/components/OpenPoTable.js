@@ -369,23 +369,25 @@ const OpenPoTable = () => {
         ? "descending"
         : "ascending";
   
-    const compareValues = (aValue, bValue, direction) => {
-      const isNumeric = (val) => !isNaN(parseFloat(val));
-      const aNumeric = isNumeric(aValue) ? parseFloat(aValue) : null;
-      const bNumeric = isNumeric(bValue) ? parseFloat(bValue) : null;
+    const isNumeric = (val) => !isNaN(parseFloat(val));
+    const toComparable = (value) =>
+      isNumeric(value) ? parseFloat(value) : String(value || "").toLowerCase();
   
-      if (aNumeric !== null || bNumeric !== null) {
-        return direction === "ascending"
-          ? (aNumeric || 0) - (bNumeric || 0)
-          : (bNumeric || 0) - (aNumeric || 0);
+    const compareNumeric = (a, b, direction) =>
+      direction === "ascending" ? a - b : b - a;
+  
+    const compareString = (a, b, direction) =>
+      direction === "ascending" ? a.localeCompare(b) : b.localeCompare(a);
+  
+    const compareValues = (aValue, bValue, direction) => {
+      const aComparable = toComparable(aValue);
+      const bComparable = toComparable(bValue);
+  
+      if (isNumeric(aComparable) || isNumeric(bComparable)) {
+        return compareNumeric(aComparable || 0, bComparable || 0, direction);
       }
   
-      const aString = String(aValue || "").toLowerCase();
-      const bString = String(bValue || "").toLowerCase();
-  
-      return direction === "ascending"
-        ? aString.localeCompare(bString)
-        : bString.localeCompare(aString);
+      return compareString(aComparable, bComparable, direction);
     };
   
     const newSortDirection = getNewSortDirection(sortState, columnId);
@@ -397,6 +399,7 @@ const OpenPoTable = () => {
   
     setFilteredItems(sortedItems);
   };
+  
   
 
 
@@ -564,21 +567,7 @@ const getSortIcon = (columnId) => {
         />
       
       
-        {/* <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedBillTo}
-          onChange={handleBillToChange}
-          name="bill_to"
-          options={selectedBillToOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handleBillToChange}
-          placeholder="Bill To"
-          isClearable
-        /> */}
+        
       
       <CreatableSelect
           className="basic-single"
@@ -604,17 +593,7 @@ const getSortIcon = (columnId) => {
           boxSizing: "border-box", 
         }}
       />
-   {/* <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedStatus}
-          onChange={handleStatusChange}
-          name="status"
-          options={StatusOptions}
-          onCreateOption={handleCreateStatus}
-          placeholder="Status"
-          isClearable
-        /> */}
+   
     <Input
         placeholder="PO Header ID"
         value={selectedPOHeaderID} 

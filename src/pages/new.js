@@ -51,7 +51,7 @@ const LoginPage = ({ setRoleFromChild }) => {
       setIsLoading(true);
       try {
         const response = await axios.post(
-          "https://invoicezapi.focusrtech.com:57/user/signin",
+          "http://172.235.21.99:5729/user/signin",
           {
             username: values.username,
             password: values.password,
@@ -105,16 +105,7 @@ const LoginPage = ({ setRoleFromChild }) => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-  };
+  
 
   return (
     <div className="Login"
@@ -240,7 +231,6 @@ const LoginPage = ({ setRoleFromChild }) => {
           style={{
             width: "100%",
             padding: "1em",
-            // backgroundColor: "#9333EA",
             backgroundColor: "#e6c5e2",
             color: "white",
             border: "none",

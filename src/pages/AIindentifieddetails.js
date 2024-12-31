@@ -155,16 +155,19 @@ const AIDetailPage = () => {
   
 
   // Styles 
-  const cursorStyle = load ? "not-allowed" : "pointer";
-  const loadStyle = load ? 0.6 : 1;
-  const classStyle = themestate ? "tab dark drawer" : "tab";
-  const tabStyle = themestate ? "rgb(245,245,245)" : "";
-  const backStyle = themestate ? "#383838" : "white";
-  const innerStyle = themestate ? "white" : "black";
-  const bodyStyle = themestate
-  ? { color: "white", borderBottomColor: "#383838" }
-  : {};
-  const tableBodyStyle = themestate ? { color: "white" } : {};
+  
+const getThemeStyle = (themeState, lightStyle, darkStyle) => (themeState ? darkStyle : lightStyle);
+
+
+const cursorStyle = load ? "not-allowed" : "pointer";
+const loadStyle = load ? 0.6 : 1;
+const classStyle = getThemeStyle(themestate, "tab", "tab dark drawer");
+const tabStyle = getThemeStyle(themestate, "", "rgb(245,245,245)");
+const backStyle = getThemeStyle(themestate, "white", "#383838");
+const innerStyle = getThemeStyle(themestate, "black", "white");
+const bodyStyle = getThemeStyle(themestate, {}, { color: "white", borderBottomColor: "#383838" });
+const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
+
  
 
 
@@ -299,13 +302,14 @@ const AIDetailPage = () => {
   }
 
   const invoiceInfo = [
-    { label: "Invoice Number", value: invoiceData?.invoice_info?.InvoiceId || "N/A" },
-    { label: "Invoice Date", value: invoiceData?.invoice_info?.InvoiceDate || "N/A" },
-    { label: "Invoice Due Date", value: invoiceData?.invoice_info?.DueDate || "Null" },
-    { label: "Invoice Total Amount", value: invoiceData?.invoice_info?.InvoiceTotal || "N/A" },
-    { label: "Tax Amount", value: invoiceData?.Tax || "N/A" },
-    { label: "Currency", value: invoiceData?.Currency || "N/A" },
+    { label: "Invoice Number", value: invoiceData?.invoice_info?.InvoiceId ?? "N/A" },
+    { label: "Invoice Date", value: invoiceData?.invoice_info?.InvoiceDate ?? "N/A" },
+    { label: "Invoice Due Date", value: invoiceData?.invoice_info?.DueDate ?? "Null" },
+    { label: "Invoice Total Amount", value: invoiceData?.invoice_info?.InvoiceTotal ?? "N/A" },
+    { label: "Tax Amount", value: invoiceData?.Tax ?? "N/A" },
+    { label: "Currency", value: invoiceData?.Currency ?? "N/A" },
   ];
+  
   
 
   const inv_id = invoiceData.invoice_info.id;
@@ -513,29 +517,32 @@ const AIDetailPage = () => {
 
 
 const sortedPoItems = (() => {
-  if (!dataitem || !Array.isArray(dataitem.po_items)) return [];
-
-  if (!sortedColumn2) return [...dataitem.po_items];
+  if (!dataitem || !Array.isArray(dataitem.po_items) || !sortedColumn2) return [...dataitem.po_items];
 
   const dataKey = columnKeyMap[sortedColumn2];
   if (!dataKey) return [...dataitem.po_items];
 
-  return [...dataitem.po_items].sort((a, b) => {
-    const getComparableValue = (item) => {
-      const value = item[dataKey] || "";
-      return !isNaN(parseFloat(value)) && isFinite(value) 
-        ? parseFloat(value) 
-        : value.toString();
-    };
+  const getComparableValue = (item) => {
+    const value = item[dataKey] || "";
+    return !isNaN(parseFloat(value)) && isFinite(value) 
+      ? parseFloat(value) 
+      : value.toString();
+  };
 
+  const compareItems = (a, b) => {
     const aComparable = getComparableValue(a);
     const bComparable = getComparableValue(b);
 
-    if (aComparable < bComparable) return sortDirection === "asc" ? -1 : 1;
-    if (aComparable > bComparable) return sortDirection === "asc" ? 1 : -1;
-    return 0;
-  });
+    return aComparable < bComparable
+      ? sortDirection === "asc" ? -1 : 1
+      : aComparable > bComparable
+        ? sortDirection === "asc" ? 1 : -1
+        : 0;
+  };
+
+  return [...dataitem.po_items].sort(compareItems);
 })();
+
 
 
 const renderDetail = (label, value) => (
