@@ -64,7 +64,6 @@ const AITable = ({ setTableLength }) => {
 
 
   const navigate = useNavigate();
-  const location2 = useLocation();
   const dispatch = useDispatch();
 
   const [isHovered, setIsHovered] = useState(false);

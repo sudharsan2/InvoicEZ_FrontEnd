@@ -613,31 +613,25 @@ const IssuefixDetails = () => {
     const bValue = b[sortedColumn] || "";
   
     const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
-  
-    const compareValues = (valA, valB, direction, type) => {
-      if (type === "numeric") {
-        const diff = parseFloat(valA) - parseFloat(valB);
-        return direction === "asc" ? diff : -diff;
-      }
-      if (type === "string") {
-        return direction === "asc"
-          ? String(valA).localeCompare(String(valB))
-          : String(valB).localeCompare(String(valA));
-      }
-      return direction === "asc" ? -1 : 1;
-    };
-  
     const aNumeric = isNumeric(aValue);
     const bNumeric = isNumeric(bValue);
   
-    if (aNumeric && bNumeric) {
-      return compareValues(aValue, bValue, sortDirection, "numeric");
+    const compareValues = (valA, valB, direction) => {
+      if (aNumeric && bNumeric) {
+        return direction === "asc" ? valA - valB : valB - valA;
+      }
+      return direction === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+    };
+  
+    
+    if (aNumeric && bNumeric || (!aNumeric && !bNumeric)) {
+      return compareValues(aValue, bValue, sortDirection);
     }
-    if (!aNumeric && !bNumeric) {
-      return compareValues(aValue, bValue, sortDirection, "string");
-    }
-    return aNumeric ? compareValues(0, 1, sortDirection) : compareValues(1, 0, sortDirection);
+  
+    
+    return aNumeric ? -1 : 1;
   });
+  
   
 
 

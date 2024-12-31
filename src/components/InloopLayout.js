@@ -11,7 +11,7 @@ import {
   Link, makeStyles, Text
  
 } from "@fluentui/react-components";
-import { shorthands } from '@griffel/react';
+
 import { AlertBadgeRegular } from "@fluentui/react-icons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";

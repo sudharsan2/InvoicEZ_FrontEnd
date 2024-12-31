@@ -302,12 +302,12 @@ const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
   }
 
   const invoiceInfo = [
-    { label: "Invoice Number", value: invoiceData?.invoice_info?.InvoiceId ?? "N/A" },
-    { label: "Invoice Date", value: invoiceData?.invoice_info?.InvoiceDate ?? "N/A" },
-    { label: "Invoice Due Date", value: invoiceData?.invoice_info?.DueDate ?? "Null" },
-    { label: "Invoice Total Amount", value: invoiceData?.invoice_info?.InvoiceTotal ?? "N/A" },
-    { label: "Tax Amount", value: invoiceData?.Tax ?? "N/A" },
-    { label: "Currency", value: invoiceData?.Currency ?? "N/A" },
+    { label: "Invoice Number", value: invoiceData?.invoice_info?.InvoiceId || "N/A" },
+    { label: "Invoice Date", value: invoiceData?.invoice_info?.InvoiceDate || "N/A" },
+    { label: "Invoice Due Date", value: invoiceData?.invoice_info?.DueDate || "Null" },
+    { label: "Invoice Total Amount", value: invoiceData?.invoice_info?.InvoiceTotal || "N/A" },
+    { label: "Tax Amount", value: invoiceData?.Tax || "N/A" },
+    { label: "Currency", value: invoiceData?.Currency || "N/A" },
   ];
   
   
@@ -340,10 +340,10 @@ const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
   };
 
   const vendorInfo = [
-  { label: "Vendor Name", value: invoiceData?.invoice_info?.VendorName || "N/A" },
-  { label: "Vendor Address", value: formatAddress(invoiceData?.invoice_info?.VendorAddress) || "N/A" },
-  { label: "Vendor Contact Information", value: invoiceData?.VendorContact || "N/A" },
-  { label: "Vendor Tax ID", value: invoiceData?.VendorTaxId || "N/A" },
+  { label: "Vendor Name", value: invoiceData?.invoice_info?.VendorName },
+  { label: "Vendor Address", value: formatAddress(invoiceData?.invoice_info?.VendorAddress) },
+  { label: "Vendor Contact Information", value: invoiceData?.VendorContact},
+  { label: "Vendor Tax ID", value: invoiceData?.VendorTaxId  },
 ];
 
 
@@ -543,7 +543,7 @@ const sortedPoItems = (() => {
 
 const renderDetail = (label, value) => (
   <div>
-    <b>{label}:</b> {value || "N/A"}
+    <b>{label}:</b> {value}
   </div>
 );
 
@@ -676,7 +676,7 @@ const renderDetail = (label, value) => (
               }}
             >
               <p>Potential PO</p>
-              <h2>{poheader?.length || 0}</h2>
+              <h2>{poheader?.length}</h2>
             </div>
             <div
               style={{

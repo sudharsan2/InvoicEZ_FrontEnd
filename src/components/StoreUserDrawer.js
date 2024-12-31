@@ -37,7 +37,7 @@ import {
 } from "@fluentui/react-components";
 
 import { jwtDecode } from "jwt-decode";
-import { icons } from "lucide-react";
+
 const useStyles = makeStyles({
   root: {
     

@@ -6,7 +6,7 @@ import frLogo from "../media/frlogo.png";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import React, { useState, useEffect,useRef } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -17,7 +17,6 @@ import {
   makeStyles,
   Popover,
   Text,
-  shorthands,
   Link,
   
 } from "@fluentui/react-components";
