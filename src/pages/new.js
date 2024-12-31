@@ -113,7 +113,6 @@ const LoginPage = ({ setRoleFromChild }) => {
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
-      // console.log("Login attempted with:", formData);
     }, 1500);
   };
 

@@ -168,28 +168,30 @@ const NavDrawerDefaultLoop = (props) => {
 
 
   // styles for Inlooop
-  const drawerStyle = {
-    transition: "width 0.5s",
-    borderRightStyle: "none",
-  };
+  // Function to get drawer style based on collapse state
   
-  if (collapse) {
-    drawerStyle.width = "57px";
-  }
-  
+const getDrawerStyle = (collapse) => ({
+  transition: "width 0.5s",
+  borderRightStyle: "none",
+  width: collapse ? "57px" : "auto",
+});
 
-    const headerStyle = { cursor: "pointer", WebkitTapHighlightColor: "transparent" };
-    if (themestate) {
-      headerStyle.backgroundColor = darktheme.sidebarcolordark;
-    }
-    
 
-    const iconStyle1 = {};
-    if (themestate) {
-      iconStyle1.color = darktheme.fontcolordark;
-    } else {
-      iconStyle1.color = lighttheme.fontcolorlight;
-    }
+const getHeaderStyle = (themestate, darktheme) => ({
+  cursor: "pointer",
+  WebkitTapHighlightColor: "transparent",
+  backgroundColor: themestate ? darktheme.sidebarcolordark : "transparent",
+});
+
+const getIconStyle = (themestate, darktheme, lighttheme) => ({
+  color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+});
+
+
+const drawerStyle = getDrawerStyle(collapse);
+const headerStyle = getHeaderStyle(themestate, darktheme);
+const iconStyle1 = getIconStyle(themestate, darktheme, lighttheme);
+
     
 
   let Footer = {};
@@ -235,7 +237,7 @@ if (themestate) {
   style = { background: darktheme.contentpagedark };
 }
 
-return <div style={style}>Your content here</div>;
+
 
 
   const iconStyle = (iconColor) => ({

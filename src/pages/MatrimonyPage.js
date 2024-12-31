@@ -71,6 +71,7 @@ const valueStyle = {
 };
 
 const useStyles = makeStyles({
+  
   control: {
     maxWidth: "300px",
   },
@@ -119,10 +120,10 @@ const useStyles = makeStyles({
   content2: {
     width: "77vw",
     overflowY: "auto",
-    // paddingTop: "3vh",
+   
     padding: "0 20px",
 
-    // maxHeight: "48vh",
+    
   },
   controls: {
     display: "flex",
@@ -390,7 +391,7 @@ const Matrimony = () => {
       console.log("Payload:", JSON.stringify(body));
 
       const response = await fetch(
-        "https://invoicezapi.focusrtech.com:57/user/azure-detail",
+        "http://172.235.21.99:5729/user/azure-detail",
         {
           method: "PUT",
           headers: {
@@ -429,18 +430,32 @@ const Matrimony = () => {
   const [isContainer, isSetContainer] = useState(true);
   const [isConnection, isSetConnection] = useState(true);
 
-  const val = isHidden ? "•".repeat(apiKey.length) : apiKey;
-  const val2 = isHidden ? "Show" : "Hide";
-  const val3 = isModelHidden ? "•".repeat(model.length) : model;
-  const val4 = isModelHidden ? "Show" : "Hide";
-  const val5 = isStorage ? "•".repeat(storage.length) : storage;
-  const val6 = isContainer ? "•".repeat(container.length) : container;
-  const val7 = isKey ? "•".repeat(key.length) : key;
-  const val8 = isConnection  ? "•".repeat(connection.length)  : connection;
-  const val9 = isStorage ? "Show" : "Hide";
-  const val10 = isContainer ? "Show" : "Hide";
-  const val11 = isKey ? "Show" : "Hide";
-  const val12 = isConnection ? "Show" : "Hide"
+  function getValue(isHidden, text) {
+    return isHidden ? "•".repeat(text.length) : text;
+  }
+  
+  function getToggleText(isHidden) {
+    return isHidden ? "Show" : "Hide";
+  }
+  
+  const val = getValue(isHidden, apiKey);
+  const val2 = getToggleText(isHidden);
+  
+  const val3 = getValue(isModelHidden, model);
+  const val4 = getToggleText(isModelHidden);
+  
+  const val5 = getValue(isStorage, storage);
+  const val9 = getToggleText(isStorage);
+  
+  const val6 = getValue(isContainer, container);
+  const val10 = getToggleText(isContainer);
+  
+  const val7 = getValue(isKey, key);
+  const val11 = getToggleText(isKey);
+  
+  const val8 = getValue(isConnection, connection);
+  const val12 = getToggleText(isConnection);
+  
 
 
   const handleToggleVisibility = () => {
@@ -665,7 +680,7 @@ const Matrimony = () => {
                     <Input
                       id={inputId}
                       value={val3}
-                      // value={model}
+                      
                       onChange={(e) => setModel(e.target.value)}
                       onBlur={(e) => handleUpdate("model", e.target.value)}
                       className={styles.inputWithIcon}
@@ -746,7 +761,6 @@ const Matrimony = () => {
                   <div className={styles.input}>
                     <Input
                       id={inputId}
-                      // value={container}
                       value={val6}
                       onChange={(e) => setContainer(e.target.value)}
                       onBlur={(e) =>

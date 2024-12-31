@@ -357,24 +357,20 @@ const IssuefixDetails = () => {
           Cgst: item.Cgst,
           Sgst: item.Cgst,
           // Assign values from oldrow for fields not updated in rows
-          Date: oldItem ? oldItem.Date : null,
-          TotalTax: oldItem ? oldItem.TotalTax : null,
-          Tax: oldItem ? oldItem.Tax : null,
-          AmountDue: oldItem ? oldItem.AmountDue : null,
-          ServiceStartDate: oldItem ? oldItem.ServiceStartDate : null,
-          ServiceEndDate: oldItem ? oldItem.ServiceEndDate : null,
-          ServiceAddressRecipient: oldItem
-            ? oldItem.ServiceAddressRecipient
-            : null,
-          RemittanceAddressRecipient: oldItem
-            ? oldItem.RemittanceAddressRecipient
-            : null,
-          ServiceAddress: oldItem ? oldItem.ServiceAddress : null,
-          RemittanceAddress: oldItem ? oldItem.RemittanceAddress : null,
+          Date: oldItem.Date || null,
+        TotalTax: oldItem.TotalTax || null,
+        Tax: oldItem.Tax || null,
+        AmountDue: oldItem.AmountDue || null,
+        ServiceStartDate: oldItem.ServiceStartDate || null,
+        ServiceEndDate: oldItem.ServiceEndDate || null,
+        ServiceAddressRecipient: oldItem.ServiceAddressRecipient || null,
+        RemittanceAddressRecipient: oldItem.RemittanceAddressRecipient || null,
+        ServiceAddress: oldItem.ServiceAddress || null,
+        RemittanceAddress: oldItem.RemittanceAddress || null,
           // Add any other fields as needed
         };
       }),
-      // Add any other properties like po_headers, if needed
+    
     };
     console.log("ITEMS", updatedFulldata);
     try {
@@ -641,6 +637,16 @@ const IssuefixDetails = () => {
   });
 
 
+  // Table Header Style
+  const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, headerSortProps }) => (
+    <TableHeaderCell {...headerSortProps(column)}>
+      {label}
+      {sortedColumn === column && (
+        sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+      )}
+    </TableHeaderCell>
+  );
+
 
   const areAllSelected = selectedRows.length === rows.length;
   return (
@@ -749,7 +755,6 @@ const IssuefixDetails = () => {
                     style={{
                       color: "#1281d7",
                       marginTop: "10px",
-                      // marginRight: "00px"
                     }}
                     onClick={handleViewInvoice}
                   />{" "}
@@ -938,7 +943,7 @@ const IssuefixDetails = () => {
     display: "flex",
     alignItems: "center",
     gap: "4px", 
-    backgroundColor: isHovered2 ? "#e1e1e2" : "transparent",
+    backgroundColor: isHovered2 && "#e1e1e2",
     padding: "6px 12px", 
     borderRadius: "4px", 
     cursor: "pointer",
@@ -1021,61 +1026,17 @@ const IssuefixDetails = () => {
                           title="Select All"
                         />
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("id")}>No
-                        {sortedColumn === "id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Description")}>Description
-                        {sortedColumn === "Description" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Quantity")}>Quantity
-                        {sortedColumn === "Quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Unit")}>Unit
-                        {sortedColumn === "Unit" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("UnitPrice")}>Unit Price
-                        {sortedColumn === "UnitPrice" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Amount")}>Amount
-                        {sortedColumn === "Amount" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("SubTotal")}>Subtotal
-                        {sortedColumn === "SubTotal" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("PreviousUnpaidBalance")}>Previous Unpaid Balance
-                        {sortedColumn === "PreviousUnpaidBalance" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Igst")}>Igst
-                        {sortedColumn === "Igst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Cgst")}>Cgst
-                        {sortedColumn === "Cgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>Sgst
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
+                      <TableHeaderCellWithSort column="id" label="No" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Description" label="Description" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Quantity" label="Quantity" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Unit" label="Unit" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Unit Price" label="UnitPrice" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Amount" label="Amount" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Subtotal" label="Subtotal" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="PreviousUnpaidBalance" label="Previous Unpaid Balance" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Igst" label="Igst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Cgst" label="Cgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="Sgst" label="Sgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
                     </TableRow>
                   </TableHeader>
                   <TableBody>
