@@ -90,10 +90,8 @@ import { jwtDecode } from "jwt-decode";
 
 const useStyles = makeStyles({
   root: {
-    // ...shorthands.border("2px", "solid", "#ccc"),
-    ...shorthands.overflow("hidden"),
-    // marginTop:"-2px",
-    // marginLeft:"-2px",
+    // Replaced shorthands.overflow("hidden") with overflow: "hidden"
+    overflow: "hidden",
 
     position: "fixed",
     left: 0,
@@ -104,8 +102,10 @@ const useStyles = makeStyles({
     backgroundColor: "#fff",
   },
   content: {
-    ...shorthands.flex(1),
-    ...shorthands.padding("16px"),
+    // Replaced shorthands.flex(1) with flex: 1
+    flex: 1,
+    // Replaced shorthands.padding("16px") with padding: "16px"
+    padding: "16px",
 
     display: "grid",
     justifyContent: "flex-start",
@@ -122,21 +122,12 @@ const useStyles = makeStyles({
   },
 
   headingContent: {
-    marginInlineStart: `10px`,
+    marginInlineStart: "10px",
   },
   hamburger: {
-    // backgroundColor: navItemTokens.backgroundColor,
-    // color: tokens.colorNeutralForeground2,
     textDecorationLine: "none",
     marginLeft: "5px",
     marginTop: "10px",
-
-    ":hover": {
-      //   backgroundColor: navItemTokens.backgroundColorHover,
-    },
-    ":active": {
-      //   backgroundColor: navItemTokens.backgroundColorPressed,
-    },
   },
   navItemlight: {
     marginTop: "10px",
@@ -193,6 +184,7 @@ const useStyles = makeStyles({
     },
   },
 });
+
 
 const Person = bundleIcon(PersonFilled, PersonRegular);
 const Dashboard = bundleIcon(Board24Filled, Board24Regular);
@@ -256,7 +248,7 @@ const NavDrawerDefault = (props) => {
   
 
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("inline");
+ 
   const [username, setUsername] = useState("");
   
   const [empId, setEmpId] = useState("");
@@ -266,7 +258,62 @@ const NavDrawerDefault = (props) => {
   
   const value = localStorage.getItem("userDrawerPosition");
   console.log("value", { value });
- 
+
+  const tabstyl = collapse ? {
+      width: `75px`,
+      transition: "width 0.5s",
+      borderRightStyle: "none",
+    }
+  : { transition: "width 0.5s", borderRightStyle: "none" };
+
+  
+
+ const tabstyl7 = themestate
+  ? { marginTop: "-20px", color: darktheme.fontcolordark }
+  : { marginTop: "-20px", color: lighttheme.fontcolorlight };
+
+  const tabstyl2 =   themestate
+  ? {
+      backgroundColor: darktheme.sidebarcolordark,
+      cursor: "pointer",
+      WebkitTapHighlightColor: "transparent",
+    }
+  : { cursor: "pointer", WebkitTapHighlightColor: "transparent" };
+
+
+  const tabstyl3 =  themestate
+  ? { color: darktheme.fontcolordark }
+  : { color: lighttheme.fontcolorlight };
+
+
+
+  const tabstyl4 =     themestate
+  ? { backgroundColor: darktheme.sidebarcolordark, height: "20px" }
+  : { height: "20px" };
+
+  const tabstyl5 = themestate ? styles.navItemdark : styles.navItemlight;
+  
+
+  const tabstyl6 = themestate ? { background: darktheme.contentpagedark } : {};
+
+  const appear = themestate ? "inverted" : "normal";
+
+  const tabstyl8 = themestate
+  ? { marginBottom: "30px", color: darktheme.fontcolordark }
+  : { marginBottom: "30px", color: lighttheme.fontcolorlight };
+
+  const tabstyl9 = themestate ? { backgroundColor: darktheme.sidebarcolordark } : {};
+
+  const tabstyl10 = themestate
+  ? { marginTop: "2px", color: darktheme.fontcolordark }
+  : { marginTop: "2px", color: lighttheme.fontcolorlight };
+
+
+
+
+
+
+  
   const setValue = (value) => {
     dispatch(toggleDrawerPosition(value));
   };
@@ -309,28 +356,12 @@ const NavDrawerDefault = (props) => {
         onOpenChange={(_, { open }) => setIsOpen(open)}
         size="small"
         className={useStyles.navdrawer}
-        style={
-          collapse
-            ? {
-                width: `75px`,
-                transition: "width 0.5s",
-                borderRightStyle: "none",
-              }
-            : { transition: "width 0.5s", borderRightStyle: "none" }
-        }
+        style={tabstyl}
       >
         {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
 
         <NavDrawerHeader
-          style={
-            themestate
-              ? {
-                  backgroundColor: darktheme.sidebarcolordark,
-                  cursor: "pointer",
-                  WebkitTapHighlightColor: "transparent",
-                }
-              : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-          }
+          style={tabstyl2}
         >
           <NavDrawerHeaderNav
             onClick={() => {
@@ -341,11 +372,8 @@ const NavDrawerDefault = (props) => {
               appearance="transparent"
               icon={
                 <Navi
-                  style={
-                    themestate
-                      ? { color: darktheme.fontcolordark }
-                      : { color: lighttheme.fontcolorlight }
-                  }
+                  style={tabstyl3}
+
                 />
               }
               className={styles.hamburger}
@@ -356,40 +384,23 @@ const NavDrawerDefault = (props) => {
           </NavDrawerHeaderNav>
         </NavDrawerHeader>
         <div
-          style={
-            themestate
-              ? { backgroundColor: darktheme.sidebarcolordark, height: "20px" }
-              : { height: "20px" }
-          }
+          style={tabstyl4}
         ></div>
-
         {collapse ? (
           <NavDrawerBody
-            style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-            }
+            style={tabstyl2}
           >
             <Tooltip
               content={"Home"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
+              appearance={appear}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Dashboard
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -397,9 +408,7 @@ const NavDrawerDefault = (props) => {
                   setValue("1");
                 }}
                 value="1"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
               ></NavItem>
             </Tooltip>
 
@@ -407,17 +416,14 @@ const NavDrawerDefault = (props) => {
               content={"Gate Entry"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
+              appearance={appear}
+
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Truck
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -425,9 +431,7 @@ const NavDrawerDefault = (props) => {
                   setValue("2");
                 }}
                 value="2"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
               ></NavItem>
             </Tooltip>
 
@@ -435,17 +439,13 @@ const NavDrawerDefault = (props) => {
               content={"Summary"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
+              appearance={appear}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Summary
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -453,9 +453,7 @@ const NavDrawerDefault = (props) => {
                   setValue("6");
                 }}
                 value="6"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
               ></NavItem>
             </Tooltip>
 
@@ -463,17 +461,13 @@ const NavDrawerDefault = (props) => {
               content={"Match Found"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
+              appearance={appear}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Match
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -481,9 +475,8 @@ const NavDrawerDefault = (props) => {
                   setValue("3");
                 }}
                 value="3"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
+                
               ></NavItem>
             </Tooltip>
 
@@ -491,17 +484,13 @@ const NavDrawerDefault = (props) => {
               content={"Multiple Match Found"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
+              appearance={appear}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Multiple
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -509,9 +498,7 @@ const NavDrawerDefault = (props) => {
                   setValue("4");
                 }}
                 value="4"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
               ></NavItem>
             </Tooltip>
 
@@ -519,17 +506,14 @@ const NavDrawerDefault = (props) => {
               content={"No Match Found"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
+              appearance={appear}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Fix
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
+                  
                   />
                 }
                 onClick={() => {
@@ -537,26 +521,21 @@ const NavDrawerDefault = (props) => {
                   setValue("5");
                 }}
                 value="5"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
               ></NavItem>
             </Tooltip>
             <Tooltip
               content={"Open PO"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
+              appearance={appear}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <OpenPO
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
+               
                   />
                 }
                 onClick={() => {
@@ -564,9 +543,8 @@ const NavDrawerDefault = (props) => {
                   setValue("8");
                 }}
                 value="8"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
+                
               ></NavItem>
             </Tooltip>
 
@@ -574,17 +552,13 @@ const NavDrawerDefault = (props) => {
               content={"History"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
+              appearance={appear}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <History
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -592,9 +566,7 @@ const NavDrawerDefault = (props) => {
                   setValue("7");
                 }}
                 value="7"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
               ></NavItem>
             </Tooltip>
 
@@ -604,15 +576,7 @@ const NavDrawerDefault = (props) => {
           </NavDrawerBody>
         ) : (
           <NavDrawerBody
-            style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-            }
+            style={tabstyl2}
           >
             {/* DETAILS OF USER  */}
             <div
@@ -650,18 +614,12 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Dashboard
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 // onClick={someClickHandler}
                 value="1"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
                   navigate("/dashboard");
@@ -669,11 +627,8 @@ const NavDrawerDefault = (props) => {
                 }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={tabstyl10}
+                 
                 >
                   Home
                 </div>
@@ -684,11 +639,7 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Truck
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -696,17 +647,12 @@ const NavDrawerDefault = (props) => {
                   setValue("2");
                 }}
                 value="2"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={tabstyl10}
+                  
                 >
                   Gate Entry
                 </div>
@@ -717,11 +663,7 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Summary
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -729,17 +671,11 @@ const NavDrawerDefault = (props) => {
                   setValue("6");
                 }}
                 value="6"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={tabstyl10}
                 >
                   Summary
                 </div>
@@ -751,11 +687,8 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Match
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
+
                   />
                 }
                 onClick={() => {
@@ -763,17 +696,11 @@ const NavDrawerDefault = (props) => {
                   setValue("3");
                 }}
                 value="3"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={tabstyl10}
                 >
                   Match Found
                 </div>
@@ -784,11 +711,7 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Multiple
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -796,17 +719,11 @@ const NavDrawerDefault = (props) => {
                   setValue("4");
                 }}
                 value="4"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={tabstyl10}
                 >
                   Multiple Match Found
                 </div>
@@ -817,11 +734,8 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Fix
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
+
                   />
                 }
                 onClick={() => {
@@ -829,17 +743,11 @@ const NavDrawerDefault = (props) => {
                   setValue("5");
                 }}
                 value="5"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={tabstyl10}
                 >
                   No Match Found
                 </div>
@@ -852,11 +760,7 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <OpenPO
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -864,17 +768,11 @@ const NavDrawerDefault = (props) => {
                   setValue("8");
                 }}
                 value="8"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={tabstyl10}
                 >
                   Open PO
                 </div>
@@ -888,11 +786,7 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <History
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                    style={tabstyl3}
                   />
                 }
                 onClick={() => {
@@ -900,17 +794,11 @@ const NavDrawerDefault = (props) => {
                   setValue("7");
                 }}
                 value="7"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={tabstyl5}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={tabstyl10}
                 >
                   History
                 </div>
@@ -924,9 +812,8 @@ const NavDrawerDefault = (props) => {
         )}
 
         <NavDrawerFooter
-          style={
-            themestate ? { backgroundColor: darktheme.sidebarcolordark } : {}
-          }
+          style={tabstyl9}
+          
         >
           {!collapse && (
             // <NavItem
@@ -946,20 +833,12 @@ const NavDrawerDefault = (props) => {
               }}
             >
               <p
-                style={
-                  themestate
-                    ? { marginBottom: "30px", color: darktheme.fontcolordark }
-                    : { marginBottom: "30px", color: lighttheme.fontcolorlight }
-                }
+                style={tabstyl8}
               >
                 by FocusR AI
               </p>
               <p
-                style={
-                  themestate
-                    ? { marginTop: "-20px", color: darktheme.fontcolordark }
-                    : { marginTop: "-20px", color: lighttheme.fontcolorlight }
-                }
+                style={tabstyl7}
               >
                 V 0.0.1
               </p>
@@ -981,13 +860,14 @@ const NavDrawerDefault = (props) => {
 
       <div
         className={styles.content}
-        style={themestate ? { background: darktheme.contentpagedark } : {}}
+        style={tabstyl6}
       >
         
         {props.children}
       </div>
     </div>
   );
-};
+}
+
 
 export default NavDrawerDefault;

@@ -2,7 +2,7 @@
 
 import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import {
   NavCategory,
   NavCategoryItem,
@@ -72,10 +72,8 @@ import {
 import { jwtDecode } from "jwt-decode";
 const useStyles = makeStyles({
   root: {
-    // ...shorthands.border("2px", "solid", "#ccc"),
-    ...shorthands.overflow("hidden"),
-    // marginTop:"-2px",
-    // marginLeft:"-2px",
+    // Replaced shorthands.overflow with full CSS property
+    overflow: "hidden",
 
     position: "fixed",
     left: 0,
@@ -86,8 +84,10 @@ const useStyles = makeStyles({
     backgroundColor: "#fff",
   },
   content: {
-    ...shorthands.flex(1),
-    ...shorthands.padding("16px"),
+    // Replaced shorthands.flex(1) with flex: 1
+    flex: 1,
+    // Replaced shorthands.padding("16px") with padding: "16px"
+    padding: "16px",
 
     display: "grid",
     justifyContent: "flex-start",
@@ -107,18 +107,9 @@ const useStyles = makeStyles({
     marginInlineStart: `10px`,
   },
   hamburger: {
-    // backgroundColor: navItemTokens.backgroundColor,
-    // color: tokens.colorNeutralForeground2,
     textDecorationLine: "none",
     marginLeft: "5px",
     marginTop: "10px",
-
-    ":hover": {
-      //   backgroundColor: navItemTokens.backgroundColorHover,
-    },
-    ":active": {
-      //   backgroundColor: navItemTokens.backgroundColorPressed,
-    },
   },
   navItemlight: {
     marginTop: "10px",
@@ -146,6 +137,7 @@ const useStyles = makeStyles({
     },
   },
 });
+
 
 const Person = bundleIcon(PersonFilled, PersonRegular);
 const Dashboard = bundleIcon(Board24Filled, Board24Regular);
@@ -205,15 +197,67 @@ const NavDrawerDefaultAdmin = (props) => {
   
 
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("inline");
+ 
   const [username, setUsername] = useState("");
 
   const [empId, setEmpId] = useState("");
   const [value,setValue] = useState("");
+
+  const tabstyle = 
+  {
+    width: { true: "56px", false: undefined }[collapse],
+    transition: "width 0.5s",
+    borderRightStyle: "none"
+  }
+  
+  
+  const tabstyle1 = {
+    backgroundColor: { true: darktheme.sidebarcolordark, false: undefined }[themestate],
+    cursor: "pointer",
+    WebkitTapHighlightColor: "transparent"
+  };
+  
+
+  const tabstyle2 = {
+    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+  };
+  
+
+  const tabstyle5 = {
+    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+  };
+  
+
+  const tabstyle6 = styles[{ true: "navItemdark", false: "navItemlight" }[themestate]];
+
+  const tabstyle7 = {
+    backgroundColor: { true: darktheme.sidebarcolordark, false: undefined }[themestate]
+  };
+  
+ 
+
+  const tabstyle8 = {
+    marginBottom: "30px",
+    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+  };
+  
+
+  
+  const tabstyle10 = {
+    background: { true: darktheme.contentpagedark, false: undefined }[themestate]
+  };
+  
+  const tabstyle9 = {
+    marginTop: "-20px",
+    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+  };
+  
+
+ 
    
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
-    // const storedrole = localStorage.getItem('role')
+    const storedUsername = localStorage.getItem("username"); 
+   
     if (storedUsername) {
       setUsername(storedUsername);
     }
@@ -226,7 +270,7 @@ const NavDrawerDefaultAdmin = (props) => {
       try {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
-        const emailFromToken = decodedToken.email;
+     
         const empIdFromToken = decodedToken.empId;
 
        
@@ -238,37 +282,21 @@ const NavDrawerDefaultAdmin = (props) => {
   }, []);
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
-      {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
+    
       <NavDrawer
         defaultSelectedValue="1"
         defaultSelectedCategoryValue="1"
         open={isOpen}
-        type={type}
+        type="inline"
         onOpenChange={(_, { open }) => setIsOpen(open)}
         size="small"
         className={useStyles.navdrawer}
-        style={
-          collapse
-            ? {
-                width: `56px`,
-                transition: "width 0.5s",
-                borderRightStyle: "none",
-              }
-            : { transition: "width 0.5s", borderRightStyle: "none" }
-        }
+        style={tabstyle}
       >
-        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
+       
 
         <NavDrawerHeader
-          style={
-            themestate
-              ? {
-                  backgroundColor: darktheme.sidebarcolordark,
-                  cursor: "pointer",
-                  WebkitTapHighlightColor: "transparent",
-                }
-              : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-          }
+          style={tabstyle1}
         >
           <NavDrawerHeaderNav
             onClick={() => {
@@ -279,11 +307,7 @@ const NavDrawerDefaultAdmin = (props) => {
               appearance="transparent"
               icon={
                 <Navi
-                  style={
-                    themestate
-                      ? { color: darktheme.fontcolordark }
-                      : { color: lighttheme.fontcolorlight }
-                  }
+                  style={tabstyle2}
                 />
               }
               className={styles.hamburger}
@@ -294,166 +318,25 @@ const NavDrawerDefaultAdmin = (props) => {
           </NavDrawerHeaderNav>
         </NavDrawerHeader>
         <div
-          style={
-            themestate
-              ? { backgroundColor: darktheme.sidebarcolordark, height: "20px" }
-              : { height: "20px" }
-          }
+          style={tabstyle2}
         ></div>
 
         {collapse ? (
           <NavDrawerBody
-            style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-            }
+            style={tabstyle1}
           >
-            {/* <Tooltip
-              content={"Dashboard"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <Dashboard
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="1"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-
-            <Tooltip
-              content={"Employee"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <LayerDiagonalPersonRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="2"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-
-            <Tooltip
-              content={"Manager"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <PersonStarRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="3"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-
-            <Tooltip
-              content={"Reviewer"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <PremiumPersonRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="4"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip>
-
-            <Tooltip
-              content={"Summary"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <TableSearchRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                onClick={someClickHandler}
-                value="5"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-              ></NavItem>
-            </Tooltip> */}
+            
             <NavCategory value="1">
                   <NavCategoryItem
                     target="_blank"
                     icon={
                       <Apps28Regular
-                        style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
-                        }
+                        style={tabstyle5}
                       />
                     }
-                    // onClick={someClickHandler}
+                   
                     value="2"
-                    className={
-                      themestate ? styles.navItemdark : styles.navItemlight
-                    }
+                    className={tabstyle6}
                     style={{ marginTop: "10px", fontSize: "17px" }}
                     onClick={() => {
                       setValue("2");
@@ -487,15 +370,7 @@ const NavDrawerDefaultAdmin = (props) => {
           </NavDrawerBody>
         ) : (
           <NavDrawerBody
-            style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-            }
+            style={tabstyle1}  
           >
             {/* DETAILS OF USER  */}
             <div style={{ width: "100%" }}>
@@ -534,18 +409,12 @@ const NavDrawerDefaultAdmin = (props) => {
                     target="_blank"
                     icon={
                       <Apps28Regular
-                        style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
-                        }
+                        style={tabstyle5}
                       />
                     }
-                    // onClick={someClickHandler}
+                    
                     value="2"
-                    className={
-                      themestate ? styles.navItemdark : styles.navItemlight
-                    }
+                    className={tabstyle6}
                     style={{ marginTop: "10px", fontSize: "17px" }}
                     onClick={() => {
                       setValue("2");
@@ -582,19 +451,10 @@ const NavDrawerDefaultAdmin = (props) => {
         )}
 
         <NavDrawerFooter
-          style={
-            themestate ? { backgroundColor: darktheme.sidebarcolordark } : {}
-          }
+          style={tabstyle7}
         >
           {!collapse && (
-            // <NavItem
-            //   value="21"
-            //   target="_blank"
-            // //   onClick={someClickHandler}
-            //   className={styles.navfooter}
-            // //   style={{color:"#E9E9E9"}}
-            // //   icon={<Person />}
-            // >
+            
             <div
               style={{
                 width: "100%",
@@ -604,59 +464,29 @@ const NavDrawerDefaultAdmin = (props) => {
               }}
             >
               <p
-                style={
-                  themestate
-                    ? { marginBottom: "30px", color: darktheme.fontcolordark }
-                    : { marginBottom: "30px", color: lighttheme.fontcolorlight }
-                }
+                style={tabstyle8}
               >
                 by FocusR AI
               </p>
               <p
-                style={
-                  themestate
-                    ? { marginTop: "-20px", color: darktheme.fontcolordark }
-                    : { marginTop: "-20px", color: lighttheme.fontcolorlight }
-                }
+                style={tabstyle9}
               >
                 V 0.0.1
               </p>
             </div>
-            // </NavItem>
+            
           )}
-          {/* <NavItem
-      icon={<Settings />}
-      target="_blank"
-      onClick={someClickHandler}
-      value="24"
-    >
-      App Settings
-    </NavItem> */}
+          
         </NavDrawerFooter>
-        {/* </div> */}
+       
       </NavDrawer>
-      {/* </div> */}
+      
 
       <div
         className={styles.content}
-        style={themestate ? { background: darktheme.contentpagedark } : {}}
+        style={tabstyle10}
       >
-        {/* <Button appearance="primary" onClick={() => setIsOpen(!isOpen)}>
-          {type === "inline" ? "Toggle" : "Open"}
-        </Button>
-
-        <div className={styles.field}>
-          <Label id={labelId}>Type</Label>
-          <RadioGroup
-            value={type}
-            onChange={(_, data) => setType(data.value)}
-            aria-labelledby={labelId}
-          >
-            <Radio value="overlay" label="Overlay (Default)" />
-            <Radio value="inline" label="Inline" />
-          </RadioGroup>
-        </div> */}
-        {/* {Children} */}
+        
 
         {props.children}
       </div>

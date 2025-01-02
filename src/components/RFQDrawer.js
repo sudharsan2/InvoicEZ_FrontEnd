@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 const RFQDrawer = ({data,onClose}) => {
   const styles = useStyles();
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("overlay");
+  
 
   
   const restoreFocusSourceAttributes = useRestoreFocusSource();
@@ -46,7 +46,7 @@ const RFQDrawer = ({data,onClose}) => {
     <div className={styles.root}>
       <Drawer
         {...restoreFocusSourceAttributes}
-        type={type}
+        type="overlay"
         position="end"
         separator
         open={isOpen}

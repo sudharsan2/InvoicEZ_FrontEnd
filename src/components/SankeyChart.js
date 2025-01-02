@@ -2,86 +2,6 @@
 
 
 
-// import React from "react";
-// import { Sankey, Tooltip } from "recharts";
-
-// const SankeyChart = () => {
-//   const data = {
-//     nodes: [
-//       { name: "Invoice Processed", value: 357898.3 },
-//       { name: "Match Found", value: 354 },
-//       { name: "Multiple Match Found", value: 291741 },
-//       { name: "No Match Found", value: 62429 },
-//       { name: "Supplier Line Matching", value: 10 },
-//       { name: "Supplier Matching", value: 15 },
-//       { name: "PO Number Matching", value: 20 },
-//     ],
-//     links: [
-//       { source: 0, target: 1, value: 10 }, // Invoice Processed -> Match Found
-//       { source: 0, target: 2, value: 15 }, // Invoice Processed -> Multiple Match Found
-//       { source: 0, target: 3, value: 20 }, // Invoice Processed -> No Match Found
-//       { source: 1, target: 4, value: 5 }, // Match Found -> Supplier Line Matching
-//       { source: 1, target: 5, value: 3 }, // Match Found -> Supplier Matching
-//       { source: 1, target: 6, value: 2 }, // Match Found -> PO Number Matching
-//     ],
-//   };
-
-//   // Custom node rendering with names and counts
-//   const renderNode = (nodeProps) => {
-//     const { x, y, width, height, index } = nodeProps;
-//     const node = data.nodes[index];
-
-//     return (
-//       <g>
-//         {/* Node rectangle */}
-//         <rect
-//           x={x}
-//           y={y}
-//           width={width}
-//           height={height}
-//           fill="#0078D4"
-//         //   stroke="#333"
-//           strokeWidth={1}
-//         />
-//         {/* Node text (name and value) */}
-//         <text
-//           x={x + width + 5} // Move the text slightly to the right of the node
-//           y={y + height / 2}
-//           textAnchor="start" // Align text to the left
-//           dominantBaseline="middle"
-//           fill="black"
-//           fontSize={14}
-//         >
-//           {node.name} - {node.value}
-//         </text>
-//       </g>
-//     );
-//   };
-
-//   return (
-//     <Sankey
-//       width={1200}
-//       height={500}
-//       data={data}
-//       nodePadding={30}
-//       margin={{
-//         left: 100,
-//         right: 200,
-//         top: 50,
-//         bottom: 50,
-//       }}
-//       node={renderNode} // Pass custom node renderer
-//       link={{ stroke: "#77c878" }}
-//     >
-//       <Tooltip />
-//     </Sankey>
-//   );
-// };
-
-// export default SankeyChart;
-
-
-
 
 
 
@@ -91,21 +11,17 @@ import { Sankey, Tooltip } from "recharts";
 const SankeyChart = () => {
   const [chartData, setChartData] = useState({
     nodes: [
-      { name: "Invoice Processed", value: 0 }, // Total invoices
+      { name: "Invoice Processed", value: 0 }, 
       { name: "Match Found", value: 0 },
       { name: "Multiple Match Found", value: 0 },
       { name: "No Match Found", value: 0 },
-      // { name: "Line Items Matching", value: 0 },
-      // { name: "Supplier Matching", value: 0 },
-      // { name: "PO Number Matching", value: 0 },
+      
     ],
     links: [
       { source: 0, target: 1, value: 10 },
       { source: 0, target: 2, value: 15 },
       { source: 0, target: 3, value: 20 },
-      // { source: 1, target: 4, value: 0 },
-      // { source: 1, target: 5, value: 0 },
-      // { source: 1, target: 6, value: 0 },
+      
     ],
   });
 
@@ -162,41 +78,81 @@ const SankeyChart = () => {
     return { fixCount, matchCount, multipleMatchCount };
   };
   
+  // const updateChartData = (invoiceData, statusData) => {
+  //   const { fixCount, matchCount, multipleMatchCount } =
+  //     calculateInvoiceCounts(invoiceData);
+  
+  //   setChartData((prevState) => ({
+  //     ...prevState,
+  //     nodes: prevState.nodes.map((node, index) => {
+  //       if (index === 0)
+  //         return {
+  //           ...node,
+  //           value: fixCount + matchCount + multipleMatchCount,
+  //         };
+  //       if (index === 1) return { ...node, value: matchCount };
+  //       if (index === 2) return { ...node, value: multipleMatchCount };
+  //       if (index === 3) return { ...node, value: fixCount };
+  //       if (index === 4)
+  //         return { ...node, value: statusData.LineItemsMatchingCount || 0.1 };
+  //       if (index === 5)
+  //         return { ...node, value: statusData.SupplierMatchingCount || 0.1 };
+  //       if (index === 6)
+  //         return { ...node, value: statusData.PONumberMatchingCount || 0.1 };
+  //       return node;
+  //     }),
+  //     links: prevState.links.map((link) => {
+  //       if (link.target === 1) return { ...link, value: matchCount };
+  //       if (link.target === 2) return { ...link, value: multipleMatchCount };
+  //       if (link.target === 3) return { ...link, value: fixCount };
+  //       if (link.target === 4)
+  //         return { ...link, value: statusData.LineItemsMatchingCount || 0.1 };
+  //       if (link.target === 5)
+  //         return { ...link, value: statusData.SupplierMatchingCount || 0.1 };
+  //       if (link.target === 6)
+  //         return { ...link, value: statusData.PONumberMatchingCount || 0.1 };
+  //       return link;
+  //     }),
+  //   }));
+  // };
+  
+
   const updateChartData = (invoiceData, statusData) => {
     const { fixCount, matchCount, multipleMatchCount } =
       calculateInvoiceCounts(invoiceData);
   
+    // Mapping for node values
+    const nodeValueMap = [
+      fixCount + matchCount + multipleMatchCount,
+      matchCount,
+      multipleMatchCount,
+      fixCount,
+      statusData.LineItemsMatchingCount || 0.1,
+      statusData.SupplierMatchingCount || 0.1,
+      statusData.PONumberMatchingCount || 0.1,
+    ];
+  
+    // Mapping for link values
+    const linkValueMap = {
+      1: matchCount,
+      2: multipleMatchCount,
+      3: fixCount,
+      4: statusData.LineItemsMatchingCount || 0.1,
+      5: statusData.SupplierMatchingCount || 0.1,
+      6: statusData.PONumberMatchingCount || 0.1,
+    };
+  
+    // Update chart data
     setChartData((prevState) => ({
       ...prevState,
-      nodes: prevState.nodes.map((node, index) => {
-        if (index === 0)
-          return {
-            ...node,
-            value: fixCount + matchCount + multipleMatchCount,
-          };
-        if (index === 1) return { ...node, value: matchCount };
-        if (index === 2) return { ...node, value: multipleMatchCount };
-        if (index === 3) return { ...node, value: fixCount };
-        if (index === 4)
-          return { ...node, value: statusData.LineItemsMatchingCount || 0.1 };
-        if (index === 5)
-          return { ...node, value: statusData.SupplierMatchingCount || 0.1 };
-        if (index === 6)
-          return { ...node, value: statusData.PONumberMatchingCount || 0.1 };
-        return node;
-      }),
-      links: prevState.links.map((link) => {
-        if (link.target === 1) return { ...link, value: matchCount };
-        if (link.target === 2) return { ...link, value: multipleMatchCount };
-        if (link.target === 3) return { ...link, value: fixCount };
-        if (link.target === 4)
-          return { ...link, value: statusData.LineItemsMatchingCount || 0.1 };
-        if (link.target === 5)
-          return { ...link, value: statusData.SupplierMatchingCount || 0.1 };
-        if (link.target === 6)
-          return { ...link, value: statusData.PONumberMatchingCount || 0.1 };
-        return link;
-      }),
+      nodes: prevState.nodes.map((node, index) => ({
+        ...node,
+        value: nodeValueMap[index] ?? node.value, // Default to the existing value if not mapped
+      })),
+      links: prevState.links.map((link) => ({
+        ...link,
+        value: linkValueMap[link.target] ?? link.value, // Default to the existing value if not mapped
+      })),
     }));
   };
   

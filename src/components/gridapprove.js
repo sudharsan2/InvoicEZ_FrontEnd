@@ -40,10 +40,7 @@ const TagCounters = ({ type }) => {
 
   const fetchData = async () => {
     try {
-      // const response = await fetch(
-      //   "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
-      // );
-
+     
       const authToken = localStorage.getItem("access_token"); 
 
   const response = await fetch(

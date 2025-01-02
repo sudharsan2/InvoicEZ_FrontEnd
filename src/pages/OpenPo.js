@@ -4,8 +4,7 @@ import {
   BreadcrumbItem,
   BreadcrumbDivider,
   BreadcrumbButton,
-  Divider,
-  Button
+  
 } from "@fluentui/react-components";
 import CreatableSelect from "react-select/creatable";
 import {
@@ -15,10 +14,11 @@ import {
   DismissRegular,
 } from "@fluentui/react-icons";
 import TagCounters from "../components/gridapprove";
+
 import Search from "../components/Search";
 import OpenPoTable from "../components/OpenPoTable";
-import { makeStyles, useId, Input, Label } from "@fluentui/react-components";
-// const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
+import { makeStyles } from "@fluentui/react-components";
+
 const path = "/openpo";
 const path1 = "/dashboard";
 
@@ -36,16 +36,16 @@ const useStyles = makeStyles({
 
 
 const OpenPO = () => {
-  const styles = useStyles();
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [PONumberOPtions, setPONumberOPtions] = useState([]);
-  const [Hovered2, setIsHovered2] = useState(false);
-  const [selectedType, setSelectedType] = useState(null);
-  const [selectedsupplier, setselectedsupplier] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState(null);
-  const [typeValue, setTypeValue] = useState("");
-
-
+    const styles = useStyles();
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [PONumberOPtions, setPONumberOPtions] = useState([]);
+    const[Hovered2,setIsHovered2] = useState(false);
+    const handleCreate = (inputValue) => {
+        const newOption = { value: inputValue, label: inputValue };
+    
+        setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
+        setSelectedOption(newOption); 
+      };
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
       <div style={{ height: "5vh" }}>
@@ -70,7 +70,7 @@ const OpenPO = () => {
               justifyContent: "flexStart",
               padding: "1px",
               // marginLeft:"3em"
-
+              
             }}
           >
             <h3 style={{ fontSize: "1.5em" }}>Open PO</h3>
@@ -78,10 +78,10 @@ const OpenPO = () => {
 
         </div>
         <div style={{ width: "100%", height: "5vh" }} />
-        <div style={{ display: 'flex', justifyContent: 'center', width: '90%', alignItems: "center", marginLeft: "3em" }}>
-          {/* <Divider style={{ marginTop:"22em"}} /> */}
-        </div>
-        <div style={{ marginTop: "-2em" }}>
+        <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+      {/* <Divider style={{ marginTop:"22em"}} /> */}
+    </div>
+        <div style={{marginTop:"-2em"}}>
           <OpenPoTable />
         </div>
       </div>

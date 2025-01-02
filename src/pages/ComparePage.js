@@ -5,12 +5,11 @@ import {
   BreadcrumbDivider,
   BreadcrumbButton,
 } from "@fluentui/react-components";
-import TagCounters from "../components/gridapprove";
-import Search from "../components/Search";
+
 import CompareDrawerTable from "../components/CompareDrawerTable";
 import SupplierTable from "../components/SupplierTable";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import { useSelector } from "react-redux";
+
 const path = "/inloop";
 const path1 = "http://localhost:3000/";
 
@@ -68,34 +67,15 @@ const ComparePage = ({data,onSubmit}) => {
       color: "#004378",
     },
   ];
-  const [selectedRow, setSelectedRow] = useState("");
+  
   useEffect(() => {
     console.log("compare Data", data);
   }, [data]);
 
-  const selectedSupplier = useSelector(
-    (state) => state.refresh.conformedSupplier,
-  );
-
-  const handleRowClick = () => {
-    setSelectedRow();
-  };
-
-//   const handleSupplier= async ()=>{
-    
-//     try{
-//       axios.defaults.baseURL = 'http://172.235.21.99:57';
-//       const response = await axios.put(`/user/update-supplier/${data.id}/`, { supplier_id: selectedSupplier });
-      
-//     }
-//     catch(error)
-//   {
-//      console.log("Error",error);
-//   }
+  
 
   
-  
-// }
+
 
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>

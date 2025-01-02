@@ -17,10 +17,8 @@ import {
 } from "@fluentui/react-components";
 
 import Search from "./Search"; 
-import { Button, notification } from "antd"; 
-import { useDispatch, useSelector } from "react-redux";
-import { refreshActions } from "../Store/Store";
-import {message} from "antd";
+import { Button,message} from "antd"; 
+
 import CreatableSelect from "react-select/creatable";
 // Define columns for the DataGrid
 const columns = [
@@ -92,50 +90,39 @@ const columns = [
   
 ];
 
-const useStyles = makeStyles({
-  root: {
-    
-    display: "flex",
-    flexDirection: "column",
-    gap: "2px",
-    maxWidth: "400px",
-  },
-});
+
 const StoreOpenPoTable = () => {
   
   const [Hovered2,setIsHovered2] = useState(false);
- 
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
-  const [po_id, set_Po_id] = useState("");
-  
-  const [selectedOption,setSelectedOption] = useState(null);
-  
-  const navigate = useNavigate();
-  console.log(selectedOption);
-
-  const styles = useStyles();
   const [poNumber, setPoNumber] = useState("");
   const [POStatusOptions, setPOStatusOptions] = useState([]);
   const [SelectedPOTypeOptions,setSelectedPOTypeOptions] = useState([]);
   const [selectedSupplierOptions, setSelectedSupplierNameOptions] = useState([]);
   const [selectedShipToOptions, setSelectedShipToOptions] = useState([]);
-  
   const [selectedBuyerNameOptions, setSelectedBuyerNameOptions] = useState([]);
   const [selectedPOStatus, setSelectedPOStatus] = useState(null);
   const [selectedPOType, setSelectedPOType] = useState(null);
   const [selectedSupplierName, setSelectedSupplierName] = useState(null);
   const [selectedShipTo, setSelectedShipTo] = useState(null);
-  
   const [selectedBuyerName, setSelectedBuyerName] = useState(null);
   const [selectedTotalAmount, setSelectedTotalAmount] = useState("");
   const [selectedPOHeaderID, setSelectedPOHeaderID] = useState("");
   const [selectedVendorID, setSelectedVendorID] = useState("");
   const [selectedVendorSiteID, setSelectedVendorSiteID] = useState("");
   const [selectedVendorNumber, setSelectedVendorNumber] = useState("");
+  const[data,setData]=useState([]);
   
-    
+  const navigate = useNavigate();
+  
+
+
+
+ 
+
+  
       // INPUT FIELD
   const handlePoNumberChange = (e) => setPoNumber(e.target.value);
   const handleTotalChange = (e) => setSelectedTotalAmount(e.target.value);
@@ -169,28 +156,28 @@ const StoreOpenPoTable = () => {
   const handleBuyerNameChange = (option) => setSelectedBuyerName(option);
 
  
-  // const handleStatusChange = (option) =>setSelectedPOStatus(option);
   
   console.log("SELECTED",selectedShipTo)
 
-  const dispatch = useDispatch();
+ 
   
 
-
+// Styles
+let backgroundColor = "transparent";
+if (Hovered2) {
+  backgroundColor = "#e1e1e2";
+}
  
   
  
-  const[data,setData]=useState([]);
-  // Fetch data from the API when the component mounts
+  
+ 
   const fetchData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
     }
     try {
-      // const response = await axios.get(
-      //   "https://invoicezapi.focusrtech.com:57/user/one-invoice-list",
-      // );
-
+     
       const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/allOpenPos/", {
         method: "GET",
@@ -199,25 +186,18 @@ const StoreOpenPoTable = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const fetchedItems = response.data || []; // Assuming data is in response.data
+      const fetchedItems = response.data || []; 
       console.log("fetchedItemsOPen", fetchedItems);
       setData(fetchedItems);
-    //   set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-      //  console.log("InvId",InvoiceNumber);
-      // Map fetched data to the format expected by DataGrid
-
+   
       
-      // const po_lineitems = fetchedItems.flatMap((po) =>
-      //   po.po_items.map((item) => ({
-      //     item_name: item.item_description,
-      //   }))
-      // );
+     
     
     
 
-      // console.log("PO_LINE",po_lineitems);
+     
       const mappedItems = fetchedItems.map((item) => ({
-        // Id: item.po_headers[0].id,
+        
         InvoiceId: item.id,
         InvoiceNumber: item.InvoiceId,
         po_number: item.po_number,
@@ -261,28 +241,7 @@ const StoreOpenPoTable = () => {
 
   
 
-  // const handleSearchChange = (value) => {
-  //   setSearchQuery(value);
-  // };
-  // // console.log("--------->",filteredItems)
-  // const filteredItems = items.filter((item) => {
-  //   const searchLower = searchQuery?.trim().toLowerCase() || "";
-
-  //   return (
-  //     item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
-  //     item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
-  //     item.po_number?.toString().toLowerCase().includes(searchLower) ||
-  //     item.po_type?.toLowerCase().includes(searchLower) ||
-  //     item.po_status?.toLowerCase().includes(searchLower) ||
-  //     item.supplier_name?.toLowerCase().includes(searchLower) ||
-  //     item.location?.toLowerCase().includes(searchLower) ||
-  //     item.ship_to?.toLowerCase().includes(searchLower) ||
-  //     item.bill_to?.toLowerCase().includes(searchLower) ||
-  //     item.buyer_name?.toLowerCase().includes(searchLower) ||
-  //     item.total_amount?.toString().toLowerCase().includes(searchLower) ||
-  //     item.status?.toLowerCase().includes(searchLower)
-  //   );
-  // }).sort((a, b) => a.po_number.localeCompare(b.po_number));
+  
 
 
 
@@ -360,7 +319,7 @@ const StoreOpenPoTable = () => {
           po_items: selectedPOItems, 
           Supplier:item.supplier_name,
           Buyer:item.Buyer,
-          // need_by:item.need_by
+          
         },
         
       });
@@ -375,115 +334,12 @@ const StoreOpenPoTable = () => {
     setSelectedRows(data.selectedItems);
   };
 
-  const handleRefreshClick = () => {
-    fetchData(true); // Pass `true` to show the message when button is clicked
-  };
-
-  //  delete API
-  const handleDeleteSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows);
-    if (selectedItemsArray.length === 0) {
-      notification.warning({
-        message: "No PO Selected",
-        description: "Please select at least one PO to delete.",
-      });
-      return;
-    }
-
-    try {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-
-      // const deletePromises = selectedItemsArray.map((item) =>
-      //   axios.delete(
-      //     `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
-      //   ),
-      // );
-      const token = localStorage.getItem("access_token");
-      const deletePromises = selectedItemsArray.map((item) =>
-        axios.delete(
-          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].InvoiceId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Add the authorization header
-            },
-          }
-        )
-      );
-
-      await Promise.all(deletePromises);
-
-      const newItems = items.filter(
-        (item) =>
-          !selectedItemsArray.some(
-            (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
-          ), 
-      );
-
-      setItems(newItems);
-      setSelectedRows(new Set());
-
-      notification.success({
-        message: "Successfully deleted",
-        description: `You have successfully deleted: ${supplierNames}`,
-      });
-
-      dispatch(refreshActions.toggleInvoiceUploadRefresh());
-    } catch (error) {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-      notification.error({
-        message: "Deletion Failed",
-        description: `Deletion Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
-      });
-    }
-  };
+  
 
   
-  // Approve API
-  const handleApproveSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
-    if (selectedItemsArray.length === 0) {
-      notification.warning({
-        message: "No PO Selected",
-        description: "Please select at least one PO to Approve.",
-      });
-      return;
-    }
 
-    try {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-
-      // Make API call to delete selected POs
-      await Promise.all(
-        selectedItemsArray.map((item) =>
-          axios.post(`https://invoicezapi.focusrtech.com:57/user/oracle-payload/${po_id}`),
-        ),
-      );
-
-      // Remove deleted items from the state
-      setItems(items.filter((item) => !selectedItemsArray.includes(item)));
-
-      // Show success notification
-      notification.success({
-        message: "Successfully Approved",
-        description: `You have successfully approved: ${supplierNames}`,
-      });
-      dispatch(refreshActions.toggleInvoiceUploadRefresh());
-    } catch (error) {
-      const supplierNames = selectedItemsArray
-        .map((item) => item.supplier_name)
-        .join(", ");
-      notification.error({
-        message: "Approval Failed",
-        description: `Approval Failed for: ${supplierNames}. ${error.response?.data?.message || "An error occurred."}`,
-      });
-    }
-  };
+  
+ 
   const [filtered, setFilteredItems] = useState([]);
   useEffect(() => {
     setFilteredItems(items); 
@@ -495,92 +351,96 @@ const StoreOpenPoTable = () => {
   });
   
   const handleSort = (columnId) => {
-    let newSortDirection = "ascending";
-  
-    // Toggle sort direction if the same column is clicked
-    if (sortState.columnId === columnId) {
-      newSortDirection =
-        sortState.sortDirection === "ascending" ? "descending" : "ascending";
-    }
-  
-    setSortState({ columnId, sortDirection: newSortDirection });
-  
-    // Sort with handling for both numeric and string values
-    const sortedItems = [...filteredItems].sort((a, b) => {
-      const aValue = a[columnId];
-      const bValue = b[columnId];
-  
-      // Handle numeric values
-      const aNumeric = !isNaN(parseFloat(aValue)) ? parseFloat(aValue) : null;
-      const bNumeric = !isNaN(parseFloat(bValue)) ? parseFloat(bValue) : null;
-  
-      if (aNumeric !== null && bNumeric !== null) {
-        // Both values are numeric
-        return newSortDirection === "ascending"
-          ? aNumeric - bNumeric
-          : bNumeric - aNumeric;
+    const getNewSortDirection = (currentState, column) => {
+      if (currentState.columnId !== column) {
+        return "ascending";
       }
   
-      if (aNumeric !== null && bNumeric === null) {
-        // aValue is numeric, bValue is not
-        return newSortDirection === "ascending" ? -1 : 1;
+      if (currentState.sortDirection === "ascending") {
+        return "descending";
+      } else {
+        return "ascending";
+      }
+    };
+  
+    const compareValues = (aValue, bValue, direction) => {
+      const isNumeric = (val) => !isNaN(parseFloat(val));
+      const aNumeric = isNumeric(aValue) ? parseFloat(aValue) : null;
+      const bNumeric = isNumeric(bValue) ? parseFloat(bValue) : null;
+  
+      if (aNumeric !== null || bNumeric !== null) {
+        if (direction === "ascending") {
+          return (aNumeric || 0) - (bNumeric || 0);
+        } else {
+          return (bNumeric || 0) - (aNumeric || 0);
+        }
       }
   
-      if (aNumeric === null && bNumeric !== null) {
-        // bValue is numeric, aValue is not
-        return newSortDirection === "ascending" ? 1 : -1;
-      }
-  
-      // Fallback to string comparison for non-numeric values
       const aString = String(aValue || "").toLowerCase();
       const bString = String(bValue || "").toLowerCase();
   
-      return newSortDirection === "ascending"
-        ? aString.localeCompare(bString)
-        : bString.localeCompare(aString);
-    });
+      if (direction === "ascending") {
+        return aString.localeCompare(bString);
+      } else {
+        return bString.localeCompare(aString);
+      }
+    };
   
-    console.log("SORTED", sortedItems);
+    // Calculate the new sort direction
+    const newSortDirection = getNewSortDirection(sortState, columnId);
   
+    // Update the sort state
+    setSortState({ columnId, sortDirection: newSortDirection });
+  
+    // Sort items based on the new direction
+    const sortedItems = filteredItems.slice().sort((a, b) => 
+      compareValues(a[columnId], b[columnId], newSortDirection)
+    );
+  
+    // Update the filtered items
     setFilteredItems(sortedItems);
   };
-  
 
 
   const filterData = () => {
-    const filteredData = items.filter((item) => {
-      
-      const matchesPONumber = poNumber ? item.po_number.toLowerCase().includes(poNumber.toLowerCase()) : true;
-      const matchesPOStatus = selectedPOStatus ? item.po_status === selectedPOStatus.value : true;
-      const matchesPOType = selectedPOType ? item.po_type === selectedPOType.value : true;
-      const matchesSupplierName = selectedSupplierName ? item.supplier_name === selectedSupplierName.value : true;
-      const matchesShipTo = selectedShipTo ? item.location === selectedShipTo.value : true;
-      const matchesBuyerName = selectedBuyerName ? item.Buyer === selectedBuyerName.value : true;
-      const matchesTotalAmount = selectedTotalAmount ? item.total_amount === parseFloat(selectedTotalAmount) : true;
-      const matchesPOHeaderID = selectedPOHeaderID ? item.poheader === selectedPOHeaderID : true;
-      const matchesVendorID = selectedVendorID ? item.vendor === selectedVendorID : true;
-      const matchesVendorSiteID = selectedVendorSiteID ? item.vendor === selectedVendorSiteID : true;
-      const matchesVendorNumber = selectedVendorNumber ? item.vendor_num === selectedVendorNumber : true;
-     
-      
-      return matchesPONumber && 
-             matchesPOStatus && 
-             matchesPOType && 
-             matchesSupplierName && 
-             matchesShipTo && 
-             matchesBuyerName && 
-             matchesTotalAmount && 
-             matchesPOHeaderID && 
-             matchesVendorID && 
-             matchesVendorSiteID &&
-             matchesVendorNumber;
-
-    });
+    const filterCriteria = [
+      { key: "po_number", value: poNumber, comparator: (item, value) => item.po_number.toLowerCase().includes(value.toLowerCase()) },
+      { key: "po_status", value: selectedPOStatus?.value, comparator: (item, value) => item.po_status === value },
+      { key: "po_type", value: selectedPOType?.value, comparator: (item, value) => item.po_type === value },
+      { key: "supplier_name", value: selectedSupplierName?.value, comparator: (item, value) => item.supplier_name === value },
+      { key: "location", value: selectedShipTo?.value, comparator: (item, value) => item.location === value },
+      { key: "Buyer", value: selectedBuyerName?.value, comparator: (item, value) => item.Buyer === value },
+      { key: "total_amount", value: selectedTotalAmount, comparator: (item, value) => item.total_amount === parseFloat(value) },
+      { key: "poheader", value: selectedPOHeaderID, comparator: (item, value) => item.poheader === value },
+      { key: "vendor", value: selectedVendorID, comparator: (item, value) => item.vendor === value },
+      { key: "vendor_site", value: selectedVendorSiteID, comparator: (item, value) => item.vendor === value },
+      { key: "vendor_num", value: selectedVendorNumber, comparator: (item, value) => item.vendor_num === value },
+    ];
+  
+    const filteredData = items.filter(item =>
+      filterCriteria.every(({ value, comparator }) => (value ? comparator(item, value) : true))
+    );
   
     setFilteredItems(filteredData);
     console.log("Filtered Data:", filteredData);
   };
+
+
+  // Table Header
+  const getSortIcon = (columnId) => {
+    if (sortState.columnId !== columnId) {
+      return null;
+    }
   
+    const style = { marginLeft: "5px" };
+  
+    if (sortState.sortDirection === "ascending") {
+      return <ArrowSortUpFilled style={style} />;
+    }
+  
+    return <ArrowSortDownRegular style={style} />;
+  };
+
   
   return (
     <>
@@ -601,7 +461,7 @@ const StoreOpenPoTable = () => {
  
  style={{
    backgroundColor: "#F8FAFC",
-   // paddingBottom: "3px",
+   
    paddingTop: "10px",
    width: "100%", 
    marginTop: "-8em", 
@@ -703,21 +563,7 @@ const StoreOpenPoTable = () => {
         />
       
       
-        {/* <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedBillTo}
-          onChange={handleBillToChange}
-          name="bill_to"
-          options={selectedBillToOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handleBillToChange}
-          placeholder="Bill To"
-          isClearable
-        /> */}
+        
       
       <CreatableSelect
           className="basic-single"
@@ -743,17 +589,7 @@ const StoreOpenPoTable = () => {
           boxSizing: "border-box", 
         }}
       />
-   {/* <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedStatus}
-          onChange={handleStatusChange}
-          name="status"
-          options={StatusOptions}
-          onCreateOption={handleCreateStatus}
-          placeholder="Status"
-          isClearable
-        /> */}
+   
     <Input
         placeholder="PO Header ID"
         value={selectedPOHeaderID} 
@@ -808,7 +644,7 @@ const StoreOpenPoTable = () => {
         display: "flex",
         alignItems: "center",
         gap: "4px", 
-        backgroundColor: Hovered2 ? "#e1e1e2" : "transparent",
+        backgroundColor,
         padding: "6px 12px", 
         borderRadius: "4px", 
         cursor: "pointer",
@@ -816,7 +652,7 @@ const StoreOpenPoTable = () => {
       }}
       onMouseEnter={() => setIsHovered2(true)}
       onMouseLeave={() => setIsHovered2(false)}
-    //   onClick={handleDeleteSelectedRows}
+    
     onClick={handleClear}
     >
       <DismissRegular
@@ -889,12 +725,7 @@ const StoreOpenPoTable = () => {
               style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
             >
               {renderHeaderCell()}
-              {sortState.columnId === columnId &&
-                (sortState.sortDirection === "ascending" ? (
-                  <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
-                ) : (
-                  <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
-                ))}
+              {getSortIcon(columnId)}
             </DataGridHeaderCell>
           )}
         </DataGridRow>

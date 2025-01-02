@@ -186,13 +186,14 @@ const InLoopTable = () => {
   const fetchData = async () => {
     console.log("fetchdata");
     try {
-      const response = await axios.post("http:172.235.21.99:57/user/club-pr", {
+      const response = await axios.post("https://invoicezapi.focusrtech.com:57/user/club-pr", {
         org_id: 821,
         from_date: "11/09/24",
         to_date: "11/09/24",
       });
       const fetchedItems2 = response.data;
       console.log(fetchedItems2);
+      // eslint-disable-next-line no-undef
       const fetchedItems = data.flatMap((item) =>
         item.lines.map((line) => ({
           ...item, 
@@ -202,6 +203,7 @@ const InLoopTable = () => {
 
       console.log("FETCHED", fetchedItems);
 
+      // eslint-disable-next-line no-undef
       set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
       const mappedItems = fetchedItems.map((item) => ({
         Id: item.po_headers[0].id,

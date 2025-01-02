@@ -1,10 +1,10 @@
 
 import { message } from "antd";
-import { ArrowSortUpFilled, ArrowSortDownRegular ,ArrowDownload28Regular} from "@fluentui/react-icons";
+import { ArrowSortUpFilled, ArrowSortDownRegular, ArrowDownload28Regular } from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
- 
+
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
@@ -14,7 +14,7 @@ import {
   Table,
   TableCell,
   TableHeader,
-  
+
   TableRow,
   TableBody,
   TableHeaderCell,
@@ -24,7 +24,7 @@ import {
   tokens,
 } from "@fluentui/react-components";
 import line_data from "./data_approve";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import AiNav from "../components/ainavbar";
 
@@ -77,8 +77,8 @@ const useStyles = makeStyles({
     padding: "20px",
   },
   content1: {
-    display: "flex", 
-    flexWrap: "wrap", 
+    display: "flex",
+    flexWrap: "wrap",
     overflowY: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
@@ -139,14 +139,14 @@ const useStyles = makeStyles({
 // pop up message for table cell see more
 
 const AIDetailPage = () => {
-  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortedColumn2, setSortedColumn2] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
 
 
-  
+
 
 
 
@@ -159,7 +159,7 @@ const AIDetailPage = () => {
   ]);
 
   const [selectedOption, setSelectedOption] = useState(null);
- 
+
 
   const styles = useStyles();
   const themestate = false;
@@ -172,7 +172,16 @@ const AIDetailPage = () => {
     sortDirection: "ascending",
     sortColumn: "empid",
   });
-  //  const [data, setData] = useState([])
+
+  const TableHeaderWithSort = ({ columnKey, label }) => (
+    <TableHeaderCell {...headerSortProps(columnKey)}>
+      {label}
+      {sortedColumn === columnKey && (
+        sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+      )}
+    </TableHeaderCell>
+  );
+
 
   const handleTabSelect2 = (event, data) => {
     // console.log({"currentmonth":currentMonthEmployees})
@@ -216,40 +225,7 @@ const AIDetailPage = () => {
     }),
   ];
 
-  const {
-    sort: { getSortDirection, toggleColumnSort },
-  } = useTableFeatures(
-    {
-      columns,
-      items: data,
-    },
-    [
-      useTableSort({
-        sortState,
-        onSortChange: (e, nextSortState) => setSortState(nextSortState),
-      }),
-    ],
-  );
 
-  // const headerSortProps = (columnId) => ({
-  //   onClick: (e) => toggleColumnSort(e, columnId),
-  //   sortDirection: getSortDirection(columnId),
-  // });
-
-  // const sortedData = [...data].sort((a, b) => {
-  //   const aValue = a[sortState.sortColumn];
-  //   const bValue = b[sortState.sortColumn];
-
-  //   if (typeof aValue === "string" && typeof bValue === "string") {
-  //     return sortState.sortDirection === "ascending"
-  //       ? aValue.localeCompare(bValue)
-  //       : bValue.localeCompare(aValue);
-  //   }
-
-  //   return sortState.sortDirection === "ascending"
-  //     ? aValue - bValue
-  //     : bValue - aValue;
-  // });
 
   const handleViewInvoice = async () => {
     try {
@@ -280,59 +256,41 @@ const AIDetailPage = () => {
   // Invoice Details
   const [invoiceData, setInvoiceData] = useState(null);
 
-  // const [items, setItems] = useState([]);
+
   const location2 = useLocation();
   const [items, setItems] = useState([]);
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState(null);
   const [dataitem, setDataItem] = useState();
   const [poheader, setPoHeader] = useState();
-  // const [selectedOption, setSelectedOption] = useState(null);
-  const [invoiceId, setInvoiceId] = useState(null); // Placeholder for dynamically fetched invoice ID
-  const [vendor, setVendor] = useState("");
+
+  const [invoiceId, setInvoiceId] = useState(null);
+
   const [load, setLoad] = useState(false);
-  const [showPopover, setShowPopover] = useState(null);
+
   const [anchorEl, setAnchorEl] = useState(null);
+
+  console.log("InvoiceID", invoiceId)
   //  PopOver
 
-  // const handlePoNumberClick = async (poNumber) => {
-  //   console.log("test function called");
-  //   setSelectedInvoiceNumber(poNumber);
-  //   try {
-  //     // const response = await axios.get(`https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`);
-  //     // const fetchedData = response.data;
 
-  //     const selectedPoDetails = poheader.find(
-  //       (po) => po.po_number === poNumber,
-  //     );
-  //     console.log("SELECTED PO", selectedPoDetails);
-  //     // console.log("selectedPO",selectedPoDetails);
-  //     setDataItem(selectedPoDetails || {});
-  //     setItems(selectedPoDetails?.po_items || []);
-  //     // console.log("Fetched Invoice Details:", fetchedData);
-  //     console.log("Selected PO Details:", selectedPoDetails);
-  //     console.log("Po", items);
-  //   } catch (error) {
-  //     console.error("Error fetching invoice details:", error);
-  //   }
-  // };
 
 
   const handlePoNumberClick = async (poNumber) => {
     console.log("Test function called");
     setSelectedInvoiceNumber(poNumber);
-  
+
     try {
-      
-      if ( poheader && Array.isArray(poheader)) {
+
+      if (poheader && Array.isArray(poheader)) {
         const selectedPoDetails = poheader.find(
           (po) => po.po_number === poNumber
         );
         console.log("SELECTED PO", selectedPoDetails);
-  
-        
+
+
         setDataItem(selectedPoDetails || {});
         setItems(selectedPoDetails?.po_items || []);
-  
+
         console.log("Selected PO Details:", selectedPoDetails);
         console.log("Po Items:", items);
       } else {
@@ -344,7 +302,7 @@ const AIDetailPage = () => {
       console.error("Error handling PO number click:", error);
     }
   };
-  
+
   // pop over
   const handleClick = (event, item) => {
     setAnchorEl(event.currentTarget);
@@ -364,9 +322,7 @@ const AIDetailPage = () => {
   const fetchInvoiceDetails = async () => {
     if (invoiceNumber) {
       try {
-        // const response = await axios.get(
-        //   `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
-        // );
+
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
         const response = await axios.get(
@@ -383,18 +339,17 @@ const AIDetailPage = () => {
         setInvoiceData(fetchedItem);
 
         setPoHeader(fetchedItem.po_headers);
-        // setVendor(fetchedItem.po_headers.id)
-        // console.log("SETVENDOR",vendor)
+
         const poOptions = fetchedItem.po_headers.map((header) => ({
           value: header.po_number,
           label: header.po_number,
         }));
-        // console.log("poHEADERS", poOptions);
+
         setPONumberOPtions(poOptions);
 
         setDataItem(fetchedItem.po_headers[0]);
 
-      
+
       } catch (error) {
         console.error("Error fetching invoice data", error);
       }
@@ -426,7 +381,7 @@ const AIDetailPage = () => {
   ];
 
   const inv_id = invoiceData.invoice_info.id;
- 
+
 
   const formatAddress = (address) => {
     if (!address) return "N/A";
@@ -488,32 +443,11 @@ const AIDetailPage = () => {
   const handleCreate = (inputValue) => {
     const newOption = { value: inputValue, label: inputValue };
 
-    // Add the new option to the list of existing options
+
     setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
-    setSelectedOption(newOption); // Set the newly created option as the selected one
+    setSelectedOption(newOption);
 
-    // Optionally, you can call your API to save the new PO number here
-    // Uncomment the following block if you want to save the PO number immediately when created.
-    /*
-    try {
-      const response = await fetch('https://invoicezapi.focusrtech.com:57/user/po-number', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ po_number: inputValue }),
-      });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log('PO number added successfully:', data);
-      } else {
-        console.error('Error adding PO number:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-    */
   };
 
   const handlePostApi = async () => {
@@ -556,7 +490,7 @@ const AIDetailPage = () => {
       if (response.status === 201) {
         message.success("PO successfully Updated");
         setLoad(false);
-        // navigate(`/approve`); 
+
         dispatch(toggleDrawerPosition("2"));
       } else {
         message.error("Operation Unsuccessfully. Please try again.");
@@ -601,15 +535,6 @@ const AIDetailPage = () => {
       maxWidth: column === "Description" ? "150px" : "200px",
     },
   });
-  const headerSortProps2 = (column) => ({
-    onClick: () => handleSort2(column),
-    style: {
-      fontWeight: "bold",
-      cursor: "pointer",
-      maxWidth: column === "Description" ? "150px" : "200px",
-    },
-  });
-
 
   const sortedLineItems = [...invoiceData.invoice_info.items].sort((a, b) => {
     if (!sortedColumn) return 0;
@@ -641,8 +566,8 @@ const AIDetailPage = () => {
 
 
 
-const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
-  ? [...dataitem.po_items].sort((a, b) => {
+  const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
+    ? [...dataitem.po_items].sort((a, b) => {
       if (!sortedColumn2) return 0;
 
       const dataKey = columnKeyMap[sortedColumn2];
@@ -659,9 +584,9 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
 
       if (aComparable < bComparable) return sortDirection === "asc" ? -1 : 1;
       if (aComparable > bComparable) return sortDirection === "asc" ? 1 : -1;
-      return 0; 
-  })
-  : []; 
+      return 0;
+    })
+    : [];
 
 
 
@@ -681,10 +606,6 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
           <BreadcrumbItem>
             <BreadcrumbButton href={path}>{invoiceData.invoice_info.InvoiceId}</BreadcrumbButton>
           </BreadcrumbItem>
-          {/* <BreadcrumbDivider /> */}
-          {/* <BreadcrumbItem>
-            <BreadcrumbButton href={path}>{ poNumber }</BreadcrumbButton>
-          </BreadcrumbItem> */}
         </Breadcrumb>
       </div>
 
@@ -734,8 +655,8 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  cursor: load ? "not-allowed" : "pointer",
-                  opacity: load ? 0.6 : 1,
+                  cursor: { true: "not-allowed", false: "pointer" }[load],
+                  opacity: { true: 0.6, false: 1 }[load]
                 }}
                 className={styles.wrapper}
                 onClick={handlePostApi}
@@ -797,8 +718,8 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
               }}
             >
               <p>Potential PO</p>
-              <h2>{poheader ? poheader.length : 0}</h2>
-            </div>
+              <h2>{(poheader && poheader.length) || 0}</h2>
+              </div>
             <div
               style={{
                 marginLeft: "3vw",
@@ -824,14 +745,14 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
           >
             <Tab
               value="tab3"
-              className={themestate ? "tab dark drawer" : "tab"}
+              className={`tab ${ { true: "dark drawer", false: "" }[themestate] }`}
               style={{ border: "1px solid transparent" }}
             >
               Invoice
             </Tab>
             <Tab
               value="tab4"
-              className={themestate ? "tab dark drawer" : "tab"}
+              className={`tab ${ { true: "dark drawer", false: "" }[themestate] }`}
               style={{ border: "1px solid transparent" }}
             >
               PO
@@ -861,7 +782,7 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
             <div
               className={styles.content}
               style={{
-                color: themestate ? "rgb(245,245,245)" : "",
+                color: { true: "rgb(245,245,245)", false: "" }[themestate],
                 display: "grid",
                 gridTemplateColumns: "repeat(6, 3fr)",
                 gap: "20px",
@@ -881,7 +802,7 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
                     className={styles.heading}
                     style={{
                       fontWeight: "bold",
-                      color: themestate ? "white" : "",
+                      color: { true: "white", false: "" }[themestate],
                       marginRight: "5px",
                     }}
                   >
@@ -897,7 +818,7 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
               className={styles.content}
               style={{
 
-                color: themestate ? "rgb(245,245,245)" : "",
+                color: { true: "rgb(245,245,245)", false: "" }[themestate],
                 display: "grid",
                 gridTemplateColumns: "repeat(6, 3fr)",
                 gap: "20px",
@@ -921,7 +842,7 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
                     className={styles.heading}
                     style={{
                       fontWeight: "bold",
-                      color: themestate ? "white" : "",
+                      color: { true: "white", false: "" }[themestate],
                       marginRight: "5px",
                     }}
                   >
@@ -933,7 +854,7 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
               {/* </div> */}
             </div>
 
-            {/* Line Information Section */}
+
             <h2 style={{ marginTop: "3em" }}>Line Information</h2>
             <div
               style={{
@@ -951,64 +872,28 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
                     style={{
                       position: "sticky",
                       top: 0,
-                      backgroundColor: themestate ? "#383838" : "white",
+                      backgroundColor: { true: "#383838", false: "white" }[themestate],
                       zIndex: 1,
-                      color: themestate ? "white" : "black",
+                      color: { true: "white", false: "black" }[themestate]
                     }}
                   >
                     <TableRow
                       style={
-                        themestate ? { color: "white", borderBottomColor: "#383838" } : {}
+                        themestate && { color: "white", borderBottomColor: "#383838" } || {}
                       }
                     >
-                      <TableHeaderCell {...headerSortProps("Description")}>
-                        Description
-                        {sortedColumn === "Description" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Quantity")}>
-                        Quantity
-                        {sortedColumn === "Quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("UnitPrice")}>
-                        Unit Price
-                        {sortedColumn === "UnitPrice" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Discount")}>
-                        Discount
-                        {sortedColumn === "Discount" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("ProductCode")}>
-                        Product Code
-                        {sortedColumn === "ProductCode" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Igst")}>
-                        Igst
-                        {sortedColumn === "Igst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Cgst")}>
-                        Cgst
-                        {sortedColumn === "Cgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>
-                        Sgst
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
-                      </TableHeaderCell>
+                      {[
+                        { key: "Description", label: "Description" },
+                        { key: "Quantity", label: "Quantity" },
+                        { key: "UnitPrice", label: "Unit Price" },
+                        { key: "Discount", label: "Discount" },
+                        { key: "ProductCode", label: "Product Code" },
+                        { key: "Igst", label: "Igst" },
+                        { key: "Cgst", label: "Cgst" },
+                        { key: "Sgst", label: "Sgst" },
+                      ].map(({ key, label }) => (
+                        <TableHeaderWithSort key={key} columnKey={key} label={label} />
+                      ))}
                     </TableRow>
                   </TableHeader>
 
@@ -1052,9 +937,9 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
                   style={{
                     width: "90%",
                     display: "grid",
-                    gridTemplateColumns: "repeat(5, 2fr)", // 5 equal columns
-                    gridTemplateRows: "auto auto", // 2 rows with auto height based on content
-                    gap: "1rem", // Adds spacing between grid items
+                    gridTemplateColumns: "repeat(5, 2fr)",
+                    gridTemplateRows: "auto auto",
+                    gap: "1rem",
                     paddingLeft: "2em",
                   }}
                 >
@@ -1090,61 +975,39 @@ const sortedPoItems = (dataitem && Array.isArray(dataitem.po_items))
                         style={{
                           position: "sticky",
                           top: 0,
-                          backgroundColor: themestate ? "#383838" : "white",
+                          backgroundColor: { true: "#383838", false: "white" }[themestate],
                           zIndex: 1,
-                          color: themestate ? "white" : "black",
+                          color: { true: "white", false: "black" }[themestate],
                         }}
                       >
                         <TableRow
                           style={
-                            themestate
-                              ? { color: "white", borderBottomColor: "#383838" }
-                              : {}
+                            themestate && { color: "white", borderBottomColor: "#383838" } || {}
+
                           }
                         >
-                          <TableHeaderCell {...headerSortProps2("Line Number")}>
-                            Line Number
-                            {sortedColumn2 === "Line Number" && (
-                              sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                            )}
-                          </TableHeaderCell>
-                          <TableHeaderCell {...headerSortProps2("Item Name")}>
-                            Item Name
-                            {sortedColumn2 === "Item Name" && (
-                              sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                            )}
-                          </TableHeaderCell>
-                          <TableHeaderCell {...headerSortProps2("Quantity")}>
-                            Quantity
-                            {sortedColumn2 === "Quantity" && (
-                              sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                            )}
-                          </TableHeaderCell>
-                          <TableHeaderCell {...headerSortProps2("Unit Price")}>
-                            Unit Price
-                            {sortedColumn2 === "Unit Price" && (
-                              sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                            )}
-                          </TableHeaderCell>
-                          <TableHeaderCell {...headerSortProps2("Amount Billed")}>
-                            Amount Billed
-                            {sortedColumn2 === "Amount Billed" && (
-                              sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                            )}
-                          </TableHeaderCell>
-                          <TableHeaderCell style={{ fontWeight: "bold" }}>
-                            Actions
-                          </TableHeaderCell>
+                          {[
+                            { key: "Line Number", label: "Line Number" },
+                            { key: "Item Name", label: "Item Name" },
+                            { key: "Quantity", label: "Quantity" },
+                            { key: "Unit Price", label: "Unit Price" },
+                            { key: "Amount Billed", label: "Amount Billed" },
+                          ].map(({ key, label }) => (
+                            <TableHeaderWithSort key={key} columnKey={key} label={label} />
+                          ))}
+
+                          {/* Static column for actions */}
+                          <TableHeaderCell style={{ fontWeight: "bold" }}>Actions</TableHeaderCell>
                         </TableRow>
                       </TableHeader>
 
 
-                      <TableBody style={themestate ? { color: "white" } : {}}>
+                      <TableBody style={{ color: { true: "white", false: "black" }[themestate] }}                      >
                         {sortedPoItems.map((item) => (
                           <TableRow
                             key={item.id}
-                            style={themestate ? { color: "white" } : {}}
-                            className={themestate ? "hovereffect dark" : "hovereffect"}
+                            style={{ color: { true: "white", false: "black" }[themestate] }}
+                            className={`hovereffect ${{ true: "dark", false: "" }[themestate]}`}
                           >
                             <TableCell
                               style={{

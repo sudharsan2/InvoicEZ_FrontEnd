@@ -69,12 +69,16 @@ const useStyles = makeStyles({
 
 const StatusCell = ({ statusLabel }) => {
   const styles = useStyles();
-  const statusStyle =
-    statusLabel === "quotation"
-      ? styles.statusTodo
-      : statusLabel === "To be Acknowledge"
-      ? styles.statusRFQ
-      : styles.statusCompare;
+
+  let statusStyle;
+  if (statusLabel === "quotation") {
+    statusStyle = styles.statusTodo;
+  } else if (statusLabel === "To be Acknowledge") {
+    statusStyle = styles.statusRFQ;
+  } else {
+    statusStyle = styles.statusCompare;
+  }
+
 
   return (
     <TableCellLayout>
@@ -193,7 +197,7 @@ const QuotationTable = ({setStatusCounts}) => {
         userId = decodedToken.user_id;
         setUserID(userId);
         console.log("ID", userId);
-        // const empIdFromToken = decodedToken.empId;
+        
       } catch (error) {
         console.error("Invalid token:", error);
       }
@@ -274,7 +278,7 @@ const QuotationTable = ({setStatusCounts}) => {
     setSearchQuery(value);
   };
 
-  
+  console.log("Search",searchQuery);
 
   const handleRowClick = (e,item) => {
     if(e.target.type==="checkbox")
@@ -287,7 +291,7 @@ const QuotationTable = ({setStatusCounts}) => {
       setSelectedRowData(item);
     }, 0);
        
-    // setSelectedRowData(item);
+    
     setSelectedStatus(item.status);
     console.log("status", item.status);
     console.log("items", item);

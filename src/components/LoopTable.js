@@ -91,14 +91,7 @@ const columns = [
     renderHeaderCell: () => "Description",
     renderCell: (item) => <TableCellLayout>{item.description}</TableCellLayout>,
   }),
-  //
-  // createTableColumn({
-  //   columnId: "status",
-  //   renderHeaderCell: () => "Status",
-  //   renderCell: (item) => <TableCellLayout>{item.status}</TableCellLayout>,
-  // }),
-
-  
+ 
     createTableColumn({
       columnId: "status",
       renderHeaderCell: () => "Status",
@@ -151,8 +144,7 @@ const LoopTable = ({ data ,setStatusCounts }) => {
   const [items, setItems] = useState([]);
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
-  // const [mulipleRowData,setMultipleRowData]=useState([]);
-  // const [selectedRowsSet, setSelectedRowsSet] = useState(new Set());
+ 
   
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.messageNotify,
@@ -292,7 +284,7 @@ const LoopTable = ({ data ,setStatusCounts }) => {
    
       console.log("Length",a.length===0);
     setSelectedStatus(truth);
-    // setMultipleRowData(a);
+   
   };
 
   return (

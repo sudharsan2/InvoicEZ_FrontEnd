@@ -159,6 +159,11 @@ const LoginPage = ({ setRoleFromChild }) => {
         // Update role in App.js immediately
         setRoleFromChild(roleFromToken);
 
+        notification.success({
+          message: "Login Successful",
+          description: "You have successfully logged in",
+        });
+
         // Navigate based on role
         switch (roleFromToken) {
           case "admin":
@@ -178,6 +183,13 @@ const LoginPage = ({ setRoleFromChild }) => {
         }
       } catch (error) {
         console.error("Login failed:", error);
+
+        notification.error({
+          message: "Login Failed",
+          description:
+            error.response?.data?.message || "An error occurred during login.",
+        });
+
         if (error.response) {
           setErrors({ auth: error.response.data.message });
         } else {

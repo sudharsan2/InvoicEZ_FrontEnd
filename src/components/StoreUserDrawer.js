@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDrawerPosition } from "../Store/refreshSlice";
@@ -13,83 +13,41 @@ import {
 import {
   Board24Filled,
   Board24Regular,
-  BoxMultiple20Filled,
-  BoxMultiple20Regular,
-  DataArea20Filled,
-  DataArea20Regular,
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-  HeartPulse20Filled,
-  HeartPulse20Regular,
-  MegaphoneLoud20Filled,
-  MegaphoneLoud20Regular,
-  
-  NotePin20Filled,
-  NotePin20Regular,
-  People20Filled,
-  People20Regular,
-  PeopleStar20Filled,
-  PeopleStar20Regular,
-  PersonFilled,
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-  PersonRegular,
-  PersonSearch20Filled,
-  PersonSearch20Regular,
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-  Settings24Filled,
-  Settings24Regular,
   bundleIcon,
   BoxMultipleCheckmark24Regular,
   BoxMultipleCheckmark24Filled,
-  ClockBill24Regular,
-  ClockBill24Filled,
-  BeakerEdit24Filled,
-  BeakerEdit24Regular,
-  Cart24Filled,
-  Cart24Regular,
   Navigation24Filled,
   Navigation24Regular,
-  DocumentCatchUp24Filled,
-  DocumentCatchUp24Regular,
-  WrenchSettings24Filled,
-  WrenchSettings24Regular,
   History24Regular,
   History24Filled,
-  DatabaseSearch24Filled ,
+  DatabaseSearch24Filled,
   DatabaseSearch24Regular
 } from "@fluentui/react-icons";
 
 import {
   Button,
-  
+
   makeStyles,
   shorthands,
   tokens,
-  useId,
+
   Tooltip,
 } from "@fluentui/react-components";
 
 import { jwtDecode } from "jwt-decode";
 const useStyles = makeStyles({
   root: {
-    // ...shorthands.border("2px", "solid", "#ccc"),
-    ...shorthands.overflow("hidden"),
-    // marginTop:"-2px",
-    // marginLeft:"-2px",
-
+    overflow: "hidden",  // Replace shorthand with the full property
     position: "fixed",
     left: 0,
     width: "100%",
     height: "100%",
     display: "flex",
-
     backgroundColor: "#fff",
   },
   content: {
-    ...shorthands.flex(1),
-    ...shorthands.padding("16px"),
+    flex: 1,  // Replace shorthand with the full property
+    padding: "16px",  // Replace shorthand with the full property
 
     display: "grid",
     justifyContent: "flex-start",
@@ -109,18 +67,9 @@ const useStyles = makeStyles({
     marginInlineStart: `10px`,
   },
   hamburger: {
-    // backgroundColor: navItemTokens.backgroundColor,
-    // color: tokens.colorNeutralForeground2,
     textDecorationLine: "none",
     marginLeft: "5px",
     marginTop: "10px",
-
-    ":hover": {
-      //   backgroundColor: navItemTokens.backgroundColorHover,
-    },
-    ":active": {
-      //   backgroundColor: navItemTokens.backgroundColorPressed,
-    },
   },
   navItemlight: {
     marginTop: "10px",
@@ -178,46 +127,20 @@ const useStyles = makeStyles({
   },
 });
 
-const Person = bundleIcon(PersonFilled, PersonRegular);
+
+
 const Dashboard = bundleIcon(Board24Filled, Board24Regular);
-const Announcements = bundleIcon(MegaphoneLoud20Filled, MegaphoneLoud20Regular);
-const EmployeeSpotlight = bundleIcon(
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-);
+
 
 const LayerDiagonalPersonRegular = bundleIcon(
   BoxMultipleCheckmark24Filled,
   BoxMultipleCheckmark24Regular,
 );
-const PersonStarRegular = bundleIcon(ClockBill24Filled, ClockBill24Regular);
-const PremiumPersonRegular = bundleIcon(
-  BeakerEdit24Filled,
-  BeakerEdit24Regular,
-);
-const TableSearchRegular = bundleIcon(Cart24Filled, Cart24Regular);
-const Usage = bundleIcon(DocumentCatchUp24Filled, DocumentCatchUp24Regular);
+
+
 const Navi = bundleIcon(Navigation24Filled, Navigation24Regular);
 
-const Fix = bundleIcon(WrenchSettings24Filled, WrenchSettings24Regular);
-
-const Search = bundleIcon(PersonSearch20Filled, PersonSearch20Regular);
-const PerformanceReviews = bundleIcon(
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-);
-const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular);
-const Interviews = bundleIcon(People20Filled, People20Regular);
-const HealthPlans = bundleIcon(HeartPulse20Filled, HeartPulse20Regular);
-const TrainingPrograms = bundleIcon(BoxMultiple20Filled, BoxMultiple20Regular);
-const CareerDevelopment = bundleIcon(PeopleStar20Filled, PeopleStar20Regular);
-const OpenPo = bundleIcon(DatabaseSearch24Filled ,DatabaseSearch24Regular )
-const Analytics = bundleIcon(DataArea20Filled, DataArea20Regular);
-const Reports = bundleIcon(
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-);
-const Settings = bundleIcon(Settings24Filled, Settings24Regular);
+const OpenPo = bundleIcon(DatabaseSearch24Filled, DatabaseSearch24Regular)
 
 const NavDrawerDefaultStore = (props) => {
   const navigate = useNavigate();
@@ -234,29 +157,29 @@ const NavDrawerDefaultStore = (props) => {
 
   const styles = useStyles();
 
-  
+
 
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("inline");
+
   const [username, setUsername] = useState("");
- 
+
   const [empId, setEmpId] = useState("");
-  
-  const History = bundleIcon(History24Filled,History24Regular);
+
+  const History = bundleIcon(History24Filled, History24Regular);
   const drawerPosition = useSelector((state) => state.refresh.drawerPosition);
   const value = localStorage.getItem("userDrawerPosition");
   console.log("value", { value });
-  
+
   const setValue = (value) => {
     dispatch(toggleDrawerPosition(value));
   };
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
-    // const storedrole = localStorage.getItem('role')
+    const storedUsername = localStorage.getItem("username");
+
     if (storedUsername) {
       setUsername(storedUsername);
     }
-    // localStorage.setItem("userDrawerPosition", "1");
+
   }, []);
 
   useEffect(() => {
@@ -266,10 +189,10 @@ const NavDrawerDefaultStore = (props) => {
       try {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
-        const emailFromToken = decodedToken.email;
+
         const empIdFromToken = decodedToken.empId;
 
-       
+
         setEmpId(empIdFromToken);
       } catch (error) {
         console.error("Invalid token:", error);
@@ -279,38 +202,32 @@ const NavDrawerDefaultStore = (props) => {
 
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
-      {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
+
       <NavDrawer
         defaultSelectedValue={drawerPosition}
-        // defaultSelectedCategoryValue="3"
+
 
         open={isOpen}
-        type={type}
+        type="inline"
         onOpenChange={(_, { open }) => setIsOpen(open)}
         size="small"
         className={useStyles.navdrawer}
-        style={
-          collapse
-            ? {
-                width: `59px`,
-                transition: "width 0.5s",
-                borderRightStyle: "none",
-              }
-            : { transition: "width 0.5s", borderRightStyle: "none" }
-        }
+        style={{
+          width: { true: "59px", false: undefined }[collapse],
+          transition: "width 0.5s",
+          borderRightStyle: "none"
+        }}
+
       >
-        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
+
 
         <NavDrawerHeader
-          style={
-            themestate
-              ? {
-                  backgroundColor: darktheme.sidebarcolordark,
-                  cursor: "pointer",
-                  WebkitTapHighlightColor: "transparent",
-                }
-              : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-          }
+          style={{
+            backgroundColor: { true: darktheme.sidebarcolordark, false: undefined }[themestate],
+            cursor: "pointer",
+            WebkitTapHighlightColor: "transparent"
+          }}
+
         >
           <NavDrawerHeaderNav
             onClick={() => {
@@ -321,11 +238,10 @@ const NavDrawerDefaultStore = (props) => {
               appearance="transparent"
               icon={
                 <Navi
-                  style={
-                    themestate
-                      ? { color: darktheme.fontcolordark }
-                      : { color: lighttheme.fontcolorlight }
-                  }
+                  style={{
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+
                 />
               }
               className={styles.hamburger}
@@ -336,40 +252,36 @@ const NavDrawerDefaultStore = (props) => {
           </NavDrawerHeaderNav>
         </NavDrawerHeader>
         <div
-          style={
-            themestate
-              ? { backgroundColor: darktheme.sidebarcolordark, height: "20px" }
-              : { height: "20px" }
-          }
+          style={{
+            backgroundColor: { true: darktheme.sidebarcolordark, false: undefined }[themestate],
+            height: "20px"
+          }}
+
         ></div>
 
         {collapse ? (
           <NavDrawerBody
-            style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-            }
+          style={{
+            backgroundColor: { true: darktheme.sidebarcolordark, false: undefined }[themestate],
+            cursor: "pointer",
+            WebkitTapHighlightColor: "transparent"
+          }}
+          
           >
             <Tooltip
               content={"Dashboard"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
+              appearance={ { true: "inverted", false: "normal" }[themestate] }
+              >
               <NavItem
                 target="_blank"
                 icon={
                   <Dashboard
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                  style={{
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+                  
                   />
                 }
                 onClick={() => {
@@ -377,9 +289,8 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("1");
                 }}
                 value="1"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
+
               ></NavItem>
             </Tooltip>
 
@@ -387,17 +298,16 @@ const NavDrawerDefaultStore = (props) => {
               content={"Generate Gate Entry"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
+              appearance={ { true: "inverted", false: "normal" }[themestate] }
+              >
               <NavItem
                 target="_blank"
                 icon={
                   <LayerDiagonalPersonRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                  style={{
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+                  
                   />
                 }
                 onClick={() => {
@@ -405,9 +315,7 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("2");
                 }}
                 value="2"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
               ></NavItem>
             </Tooltip>
 
@@ -415,17 +323,16 @@ const NavDrawerDefaultStore = (props) => {
               content={"Open PO"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
+              appearance={ { true: "inverted", false: "normal" }[themestate] }
+              >
               <NavItem
                 target="_blank"
                 icon={
                   <OpenPo
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                  style={{
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+                  
                   />
                 }
                 onClick={() => {
@@ -433,9 +340,8 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("4");
                 }}
                 value="4"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
+
               ></NavItem>
             </Tooltip>
 
@@ -443,17 +349,16 @@ const NavDrawerDefaultStore = (props) => {
               content={"History"}
               positioning="after"
               withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
+              appearance={ { true: "inverted", false: "normal" }[themestate] }
+              >
               <NavItem
                 target="_blank"
                 icon={
                   <History
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                  style={{
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+                  
                   />
                 }
                 onClick={() => {
@@ -461,25 +366,21 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("3");
                 }}
                 value="3"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
+
               ></NavItem>
             </Tooltip>
 
-            
+
           </NavDrawerBody>
         ) : (
           <NavDrawerBody
-            style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-            }
+          style={{
+            backgroundColor: { true: darktheme.sidebarcolordark, false: undefined }[themestate],
+            cursor: "pointer",
+            WebkitTapHighlightColor: "transparent"
+          }}
+          
           >
             {/* DETAILS OF USER  */}
             <div
@@ -517,18 +418,15 @@ const NavDrawerDefaultStore = (props) => {
                 target="_blank"
                 icon={
                   <Dashboard
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                  style={{
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+                  
                   />
                 }
-                // onClick={someClickHandler}
+
                 value="1"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
                   navigate("/storedashboard");
@@ -536,11 +434,11 @@ const NavDrawerDefaultStore = (props) => {
                 }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={{
+                    marginTop: "2px",
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+                  
                 >
                   Dashboard
                 </div>
@@ -551,11 +449,10 @@ const NavDrawerDefaultStore = (props) => {
                 target="_blank"
                 icon={
                   <LayerDiagonalPersonRegular
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                  style={{
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+                  
                   />
                 }
                 onClick={() => {
@@ -563,17 +460,15 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("2");
                 }}
                 value="2"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={{
+                    marginTop: "2px",
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+                  
                 >
                   Generate Gate Entry
                 </div>
@@ -585,11 +480,10 @@ const NavDrawerDefaultStore = (props) => {
                 target="_blank"
                 icon={
                   <OpenPo
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                  style={{
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+                  
                   />
                 }
                 onClick={() => {
@@ -597,17 +491,15 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("4");
                 }}
                 value="4"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                style={{
+                  marginTop: "2px",
+                  color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                }}
+                
                 >
                   Open PO
                 </div>
@@ -618,11 +510,10 @@ const NavDrawerDefaultStore = (props) => {
                 target="_blank"
                 icon={
                   <History
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                  style={{
+                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                  }}
+                  
                   />
                 }
                 onClick={() => {
@@ -630,82 +521,24 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("3");
                 }}
                 value="3"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
+                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                style={{
+                  marginTop: "2px",
+                  color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+                }}
+                
                 >
                   History
                 </div>
               </NavItem>
             </div>
-            
-            {/* <div style={{ width: "100%" }}>
-              <div
-                style={
-                  themestate
-                    ? { marginTop: "2px", color: darktheme.fontcolordark }
-                    : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                }
-              >
-                <NavCategory value="6">
-                  <NavCategoryItem
-                    target="_blank"
-                    icon={
-                      <PersonStarRegular
-                        style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
-                        }
-                      />
-                    }
-                    // onClick={someClickHandler}
-                    value="3"
-                    className={
-                      themestate ? styles.navItemdark : styles.navItemlight
-                    }
-                    style={{ marginTop: "10px", fontSize: "17px" }}
-                    onClick={() => {
-                      setValue("3");
-                    }}
-                  >
-                    Issue
-                  </NavCategoryItem>
-                  <NavSubItemGroup>
-                    <NavSubItem
-                      value="4"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/ai");
-                        setValue("4");
-                      }}
-                    >
-                      AI Identified
-                    </NavSubItem>
-                    <NavSubItem
-                      value="5"
-                      style={{ marginTop: "10px", fontSize: "17px" }}
-                      onClick={() => {
-                        navigate("/issuefix");
-                        setValue("5");
-                      }}
-                    >
-                      Fix
-                    </NavSubItem>
-                  </NavSubItemGroup>
-                </NavCategory>
-              </div>
-            </div> */}
 
-            
+
+
+
           </NavDrawerBody>
         )}
 
@@ -715,14 +548,7 @@ const NavDrawerDefaultStore = (props) => {
           }
         >
           {!collapse && (
-            // <NavItem
-            //   value="21"
-            //   target="_blank"
-            // //   onClick={someClickHandler}
-            //   className={styles.navfooter}
-            // //   style={{color:"#E9E9E9"}}
-            // //   icon={<Person />}
-            // >
+
             <div
               style={{
                 width: "100%",
@@ -732,59 +558,37 @@ const NavDrawerDefaultStore = (props) => {
               }}
             >
               <p
-                style={
-                  themestate
-                    ? { marginBottom: "30px", color: darktheme.fontcolordark }
-                    : { marginBottom: "30px", color: lighttheme.fontcolorlight }
-                }
+               style={{
+                marginTop: "30px",
+                color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+              }}
+              
               >
                 by FocusR AI
               </p>
               <p
-                style={
-                  themestate
-                    ? { marginTop: "-20px", color: darktheme.fontcolordark }
-                    : { marginTop: "-20px", color: lighttheme.fontcolorlight }
-                }
+               style={{
+                marginTop: "-20px",
+                color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
+              }}
+              
               >
                 V 0.0.1
               </p>
             </div>
-            // </NavItem>
+
           )}
-          {/* <NavItem
-      icon={<Settings />}
-      target="_blank"
-      onClick={someClickHandler}
-      value="24"
-    >
-      App Settings
-    </NavItem> */}
+
         </NavDrawerFooter>
-        {/* </div> */}
+
       </NavDrawer>
-      {/* </div> */}
+
 
       <div
         className={styles.content}
         style={themestate ? { background: darktheme.contentpagedark } : {}}
       >
-        {/* <Button appearance="primary" onClick={() => setIsOpen(!isOpen)}>
-          {type === "inline" ? "Toggle" : "Open"}
-        </Button>
 
-        <div className={styles.field}>
-          <Label id={labelId}>Type</Label>
-          <RadioGroup
-            value={type}
-            onChange={(_, data) => setType(data.value)}
-            aria-labelledby={labelId}
-          >
-            <Radio value="overlay" label="Overlay (Default)" />
-            <Radio value="inline" label="Inline" />
-          </RadioGroup>
-        </div> */}
-        {/* {Children} */}
 
         {props.children}
       </div>

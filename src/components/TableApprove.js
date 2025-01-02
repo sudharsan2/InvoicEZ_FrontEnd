@@ -93,7 +93,7 @@ const TableApprove = () => {
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [po_id, set_Po_id] = useState("");
   const navigate = useNavigate();
-
+  console.log("PO",po_id);
   const dispatch = useDispatch();
   
   const isInvoiceUploadRefreshed = useSelector(
@@ -102,23 +102,21 @@ const TableApprove = () => {
 
   const [RefreshUpload, SetRefreshUpload] = useState(null);
 
-  const [DeleteRefresh, SetDeleteRefresh] = useState(false);
+  
 
 
  
   console.log(RefreshUpload)
-  console.log(DeleteRefresh)
+  
  
 
-  // Fetch data from the API when the component mounts
+  
   const fetchData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
     }
     try {
-      // const response = await axios.get(
-      //   "https://invoicezapi.focusrtech.com:57/user/one-invoice-list",
-      // );
+      
 
       const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/one-invoice-list", {
@@ -131,7 +129,7 @@ const TableApprove = () => {
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
       set_Po_id(fetchedItems[0]["po_headers"][0]["id"]);
-      //  console.log("InvId",InvoiceNumber);
+      
       // Map fetched data to the format expected by DataGrid
       const mappedItems = fetchedItems.map((item) => ({
         Id: item.po_headers[0].id,
@@ -346,7 +344,7 @@ const TableApprove = () => {
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
-            // height: "vh",
+            
           }}
           onMouseEnter={() => setIsRefresh(true)} 
           onMouseLeave={() => setIsRefresh(false)} 
@@ -368,7 +366,7 @@ const TableApprove = () => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          // onClick={fetchData}
+          
           onMouseEnter={() => setIsHovered(true)} 
           onMouseLeave={() => setIsHovered(false)} 
           onClick={handleRefreshClick}

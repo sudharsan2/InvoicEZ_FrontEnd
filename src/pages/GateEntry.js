@@ -6,18 +6,12 @@ import {
   BreadcrumbButton,
 } from "@fluentui/react-components";
 import {Divider} from "@fluentui/react-components"
-import {
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-  bundleIcon,
-} from "@fluentui/react-icons";
-import TagCounters from "../components/gridapprove";
-import GateEntryTable from "../components/GateEntryTable";
-import Search from "../components/Search";
-import { ShareIos24Filled } from "@fluentui/react-icons";
-import StoreTable from "../components/StoreTable";
 
-// const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
+
+import GateEntryTable from "../components/GateEntryTable";
+
+
+
 const path = "/gateentry";
 const path1 = "/dashboard";
 const containerStyle = {

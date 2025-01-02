@@ -53,7 +53,7 @@ const CompareDrawer = ({data,onClose}) => {
     console.log("Compare API ")
     try{
       
-      const response = await axios.put(`http://172.235.21.99:57/user/update-supplier/${data.id}/`, { supplier_id: selectedSupplier });
+      const response = await axios.put(`https://invoicezapi.focusrtech.com:57/user/update-supplier/${data.id}/`, { supplier_id: selectedSupplier });
       if (response.status === 200) {
         
         handleClose();

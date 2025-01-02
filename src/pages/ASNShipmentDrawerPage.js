@@ -16,14 +16,12 @@ import { Add28Regular,ArrowLeft24Regular,Document24Regular,ArrowUpload24Regular,
 import DatePickerComponent from "../components/DatePicker";
 import { MdOutlineFilterAltOff } from "react-icons/md";
 import {
-  Popover,
-  PopoverSurface,
-  PopoverTrigger,
+ 
   Button,
   makeStyles,
 } from "@fluentui/react-components";
-// import DropDown from "../components/DropDown";
-import { DatePicker } from "antd";
+
+
 import {useNavigate} from "react-router-dom";
 const path = "/asn";
 const path1 = "http://localhost:3000/";
@@ -31,44 +29,13 @@ const path1 = "http://localhost:3000/";
 
 
 
-const containerStyle = {
-  width: "100%",
-  display: "flex",
-  gap: "3em",
-  padding: "8px",
-  marginLeft: "0em",
-};
 
-const itemStyle = {
-  display: "flex",
-  alignItems: "flex-start",
-};
 
-const lineStyle = (color) => ({
-  width: "3px",
-  height: "50px",
-  backgroundColor: color,
-  marginRight: "12px",
-});
 
-const labelStyle = {
-  fontSize: "14px",
-  fontWeight: "normal",
-  marginBottom: "10px",
-};
 
-const valueStyle = {
-  fontSize: "28px",
-  fontWeight: "bold",
-  color: "#333",
-  marginLeft: "0px",
-};
 
-const buttonContainerStyle = {
-  display: "flex",
-  justifyContent: "flex-start",
-  padding: "16px 0",
-};
+
+
 
 const useStyles = makeStyles({
     statusBullet: {
@@ -112,11 +79,8 @@ const useStyles = makeStyles({
 const ASNShipmentDrawerPage = () => {
     const [popoverOpen, setPopoverOpen] = useState(false);
     const togglePopover = () => setPopoverOpen(!popoverOpen);
- const styles = useStyles();
-  const counters = [
-    { label: "Generate ASN Number", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
-    
-  ];
+ 
+  
   const navigate = useNavigate();
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>

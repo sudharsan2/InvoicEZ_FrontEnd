@@ -28,7 +28,7 @@ import { useNavigate } from "react-router-dom";
 import DropDown from "../components/DropDown";
 import { DatePicker } from "antd";
 import { Field, Textarea } from "@fluentui/react-components";
-// import Search from "../components/Search";
+
 const useStyles = makeStyles({
     root: {
     
@@ -50,10 +50,10 @@ const useStyles = makeStyles({
   
 const ASNCreate = () => {
     const navigate = useNavigate();
-    const inputId = useId("input");
-  const styles = useStyles();
+   
+  
 
-  const largeId = useId("input-large");
+  
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
 

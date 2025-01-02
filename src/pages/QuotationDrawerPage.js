@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
   Input,
@@ -6,42 +6,15 @@ import {
   Field,
   Textarea,
 } from "@fluentui/react-components";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+
 import QuotationDropDown from "../components/QuotationDropDown";
 import DatePickerComponent from "../components/DatePicker";
 
 const QuotationDrawerPage = ({ formData, onFormDataChange,data, userId ,onSubmit}) => {
-  const dispatch = useDispatch();
-  const handleFreightTerm = useSelector((state) => state.refresh.freightterm);
+ 
+ 
 
-  // const [formData, setFormData] = useState({
-  //   price: "",
-  //   deliverySchedule: null,
-  //   payment: "",
-  // });
-
-  // // Handler functions to update state
-  // const handlePriceChange = (e) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     price: e.target.value,
-  //   }));
-  // };
-
-  // const handlePaymentChange = (value) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     payment: value,
-  //   }));
-  // };
-
-  // const handleDeliveryScheduleChange = (date) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     deliverySchedule: date,
-  //   }));
-  // };
+  
 
   
   const handlePriceChange = (e) => {
@@ -121,11 +94,7 @@ const QuotationDrawerPage = ({ formData, onFormDataChange,data, userId ,onSubmit
             maxWidth: "30%",
           }}
         >
-          {/* <span style={{ marginBottom: "10px" }}>Delivery Schedule</span>  */}
-          {/* <DatePickerComponent
-            value={formData.deliverySchedule}
-            onChange={handleDeliveryScheduleChange}
-          />  */}
+          
 
 <DatePickerComponent
     value={formData.deliverySchedule}

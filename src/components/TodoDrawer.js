@@ -8,7 +8,7 @@ import {
   Drawer,
   makeStyles,
   useRestoreFocusSource,
-  useRestoreFocusTarget,
+ 
 } from "@fluentui/react-components";
 import TodoPage from "../pages/Todo";
 import { notification ,message} from "antd";
@@ -39,7 +39,7 @@ const useStyles = makeStyles({
 const TodoDrawer = ({data,onClose}) => {
   const styles = useStyles();
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("overlay");
+  
  
 
   const handleClose = () => {
@@ -84,7 +84,7 @@ const TodoDrawer = ({data,onClose}) => {
     <div className={styles.root}>
       <Drawer
         {...restoreFocusSourceAttributes}
-        type={type}
+        type="overlay"
         position="end"
         separator
         open={isOpen}

@@ -4,8 +4,7 @@ import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
   makeStyles,
-  Button,
-  Link,
+  
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
@@ -15,7 +14,7 @@ import {
   Table,
   TableCell,
   TableHeader,
-  TableSelectionCell,
+  
   TableRow,
   TableBody,
   TableHeaderCell,
@@ -24,13 +23,13 @@ import {
   useTableSort,
   Divider,
 } from "@fluentui/react-components";
-import line_data from "./data_approve";
+
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { CgLayoutGrid } from "react-icons/cg";
+
 import { ArrowDownload28Regular } from "@fluentui/react-icons";
-/*eslint-disabled*/
-import CreatableSelect from "react-select/creatable";
+
+
 import { message } from "antd";
 import { notification } from "antd";
 
@@ -62,10 +61,10 @@ const useStyles = makeStyles({
   content2: {
     width: "77vw",
     overflowY: "auto",
-    // paddingTop: "3vh",
+    
     padding: "0 20px",
 
-    // maxHeight: "48vh",
+   
   },
   controls: {
     display: "flex",
@@ -115,33 +114,23 @@ const HistoryDetails = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const navigate = useNavigate();
 
-  const [PONumberOPtions, setPONumberOPtions] = useState([]);
+  
 
-  const handleCreate = (inputValue) => {
-    const newOption = { value: inputValue, label: inputValue };
-
-    setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
-    setSelectedOption(newOption); // Set the newly created option as the selected one
-  };
-
-  const handleChange = (option) => {
-    setSelectedOption(option);
-    // console.log("Selected PO Number:", option ? option.value : null);
-  };
+  
 
   const styles = useStyles();
   const themestate = false;
-  const [fetchedItems, setFetchedItems] = useState("");
-  const [loading, setLoading] = useState(true);
+  
+  
   const [error, setError] = useState(null);
   const location = useLocation();
   const { poNumber, Id } = location.state || {};
   console.log("ID", Id);
   const [poDate, setPoDate] = useState();
   const [postatus, setPoStatus] = useState();
-  const [buyer, setBuyer] = useState();
+  
   const [total, setTotal] = useState();
-  const [status, setStatus] = useState();
+ 
   const [supplier, setSupplier] = useState();
   const [vendor, setVendor] = useState("");
   const [customer, setCustomer] = useState();
@@ -149,12 +138,12 @@ const HistoryDetails = () => {
   const [invoicedate, setInvoiceDate] = useState();
   const [invoicetot, setInvoicetot] = useState();
   const [closedcode, setClosedCode] = useState();
-  const [po_id, set_Po_id] = useState("");
+ 
 
   const [inv_id, setInv_id] = useState();
 
   console.log("Invoice Id", inv_id);
-
+  console.log("Error",error)
   const approvePo = async () => {
     const url = `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${inv_id}`;
 
@@ -169,78 +158,27 @@ const HistoryDetails = () => {
     } catch (error) {
       notification.error({
         message: "Approved Failed",
-        // description: `You have successfully Approved: ${po_id}`,
+        
       });
       console.error("Error:", error);
     }
   };
 
-  const deleteInvoice = async () => {
-    const url = `https://invoicezapi.focusrtech.com:57/user/delete-pos/${inv_id}`;
+  
 
-    try {
-      const response = await axios.delete(url);
-      if (response.status === 204) {
-        message.success("Revoked successfully");
-        navigate(`/approve`);
-      }
-    } catch (error) {
-      message.error(`Operation Unsuccessfull Please try again`);
-
-      console.error("Error:", error);
-    }
-  };
-
-  const handlePostApi = async () => {
-    console.log("Button clicked!");
-
-    if (!selectedOption || !selectedOption.value) {
-      message.warning("PO number not selected or entered.");
-      return;
-    }
-
-    if (!inv_id) {
-      message.error("Invoice ID is required.");
-      return;
-    }
-
-    const payload = {
-      po_number: selectedOption.value,
-      invoice_id: inv_id,
-    };
-
-    console.log("payload", payload);
-
-    try {
-      setLoad(true);
-      const response = await axios.post(
-        "https://invoicezapi.focusrtech.com:57/user/po-number",
-        payload,
-      );
-
-      if (response.status === 201) {
-        message.success("PO successfully Updated");
-        setLoad(false);
-        navigate(`/approve`);
-      } else {
-        message.error(`Operation Unsuccessfully Please try again`);
-      }
-    } catch (error) {
-      message.error(error);
-    }
-  };
+  
 
   const [selectedtab, setSelectedTab] = React.useState("tab1");
   const purchaseOrder = {
     poNumber: poNumber,
-    // poDate: "09 May 2023",
+    
     poTotalAmount: "95090",
     poCurrency: "INR",
     poStatus: "Open",
     lineMatching: "FULL / Partial Line Items",
-    // vendorAddress: "VendorAddress",
+    
     customerAddress: "CustomerAddress",
-    // invoiceId: "InvoiceId",
+   
     invoiceDate: "InvoiceDate",
     invoiceTotal: "InvoiceTotal",
     invoiceCurrency: "Invoice Currency",
@@ -250,13 +188,13 @@ const HistoryDetails = () => {
     sortDirection: "ascending",
     sortColumn: "empid",
   });
-  const [load, setLoad] = useState(false);
+  
 
   const [data, setData] = useState("");
-  // console.log("data", data);
+  
 
   const handleTabSelect2 = (event, data) => {
-    // console.log({"currentmonth":currentMonthEmployees})
+   
     setSelectedTab(data.value);
   };
   const [entrytime, setEntrytime] = useState();
@@ -296,39 +234,21 @@ const HistoryDetails = () => {
     }),
   ];
 
-  const {
-    sort: { getSortDirection, toggleColumnSort },
-  } = useTableFeatures(
-    {
-      columns,
-      items: data,
-    },
-    [
-      useTableSort({
-        sortState,
-        onSortChange: (e, nextSortState) => setSortState(nextSortState),
-      }),
-    ],
-  );
+  
 
-  // const headerSortProps = (columnId) => ({
-  //   onClick: (e) => toggleColumnSort(e, columnId),
-  //   sortDirection: getSortDirection(columnId),
-  // });
+  
 
   const handleViewInvoice = async () => {
     try {
-      // const response = await fetch(
-      //   `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
-      // );
-      const token = localStorage.getItem("access_token"); // Retrieve the token securely
+     
+      const token = localStorage.getItem("access_token"); 
 
         const response = await fetch(
           `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
           {
-            method: "GET", // Specify the HTTP method explicitly
+            method: "GET", 
             headers: {
-              Authorization: `Bearer ${token}`, // Add the authorization header
+              Authorization: `Bearer ${token}`, 
             },
           }
         );
@@ -348,36 +268,31 @@ const HistoryDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await axios.get(
-        //   `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
-        // );
-        const token = localStorage.getItem("access_token"); // Retrieve the token securely
+        
+        const token = localStorage.getItem("access_token"); 
 
     const response = await axios.get(
       `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`, // Add the authorization header
+          Authorization: `Bearer ${token}`, 
         },
       }
     );
         const fetchedItems = response.data;
 
         setInv_id(fetchedItems.invoice_info.id);
-        set_Po_id(fetchedItems.po_header.id);
-
+       
         console.log("InvoiceId", fetchedItems.invoice_info.id);
 
         const invoice_items = fetchedItems.invoice_info.items.map((item, index) => {
-          // console.log("IGST", item.Igst);
-          // console.log("CGST", item.Cgst);
-          // console.log("SGST", item.Sgst);
+          
         
           return {
             Igst: item.Igst,
             Cgst: item.Cgst,
             Sgst: item.Sgst,
-            index: index, // Include the index to match with po_lineitems
+            index: index, 
           };
         });
         
@@ -408,12 +323,12 @@ const HistoryDetails = () => {
         );
 
 
-        // Log or process the combined data as needed
+        
         console.log(normalizedPoLineItems);
 
         setData(normalizedPoLineItems);
         setTotal(fetchedItems.po_header.total_amount);
-        setPoDate(fetchedItems.po_lineitems[0]?.promised_date || "N/A"); // Assuming the first date is used
+        setPoDate(fetchedItems.po_lineitems[0]?.promised_date || "N/A"); 
         setPoStatus(fetchedItems.po_header.po_status);
         setVendor(fetchedItems.invoice_info.VendorAddress);
         setCustomer(fetchedItems.invoice_info.ShippingAddress);
@@ -471,9 +386,7 @@ const HistoryDetails = () => {
           "Error fetching data:",
           error.response ? error.response.data : error.message,
         );
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     if (poNumber) {
@@ -481,20 +394,7 @@ const HistoryDetails = () => {
     }
   }, [poNumber]);
 
-  // const sortedData = [...data].sort((a, b) => {
-  //   const aValue = a[sortState.sortColumn];
-  //   const bValue = b[sortState.sortColumn];
-
-  //   if (typeof aValue === "string" && typeof bValue === "string") {
-  //     return sortState.sortDirection === "ascending"
-  //       ? aValue.localeCompare(bValue)
-  //       : bValue.localeCompare(aValue);
-  //   }
-
-  //   return sortState.sortDirection === "ascending"
-  //     ? aValue - bValue
-  //     : bValue - aValue;
-  // });
+  
 
 
    
@@ -585,84 +485,11 @@ const HistoryDetails = () => {
                 }}
               >
                 <div style={{ right: "5%", display: "flex", gap: "10px" }}>
-                  {/* <Button onClick={() => deleteInvoice()}>Revoke</Button>
-                  <Button
-                    className=" buttoncolor"
-                    style={{ backgroundColor: "#3570c3", color: "white" }}
-                    onClick={() => approvePo()}
-                  >
-                    Approve
-                  </Button> */}
+                  
                 </div>
               </div>
 
-              {/* <div
-                style={{
-                  display: "flex",
-                  justifyContent: "end",
-                  alignItems: "center",
-                  width: "100%",
-                  marginTop: "20px",
-                }}
-              >
-                <CreatableSelect
-                  className="basic-single"
-                  classNamePrefix="select"
-                  value={selectedOption}
-                  onChange={handleChange}
-                  name="po_number"
-                  options={PONumberOPtions}
-                  styles={{
-                    container: (provided) => ({ ...provided, width: 200 }),
-                    marginTop: "20px",
-                  }}
-                  onCreateOption={handleCreate}
-                  placeholder="Select or Enter PO..."
-                  isClearable
-                />
-
-                <Button
-                  appearance="subtle"
-                  style={{
-                    color: "#0078d4",
-                    backgroundColor: "#fff",
-                    alignSelf: "flex-end",
-                    width: "auto",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: loading ? "not-allowed" : "pointer", // Change cursor to not-allowed when loading
-                    opacity: loading ? 0.6 : 1, // Change opacity when loading
-                  }}
-                  className={styles.wrapper}
-                  onClick={handlePostApi}
-                  disabled={load} // Disable button while loading
-                >
-                  {load ? (
-                    <div
-                      style={{
-                        border: "4px solid rgba(255, 255, 255, 0.3)", // Light background
-                        borderRadius: "50%",
-                        borderTop: "4px solid #0078d4", // Main color
-                        width: "20px",
-                        height: "20px",
-                        animation: "spin 1s linear infinite",
-                        marginRight: "8px", // Space between spinner and text
-                      }}
-                    />
-                  ) : (
-                    "Submit"
-                  )}
-                  <style>
-                    {`
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-                `}
-                  </style>
-                </Button>
-              </div> */}
+              
 
               <h2 style={{ margin: "20px 0 20px 0" }}>
                 PO:{purchaseOrder.poNumber}
@@ -737,20 +564,7 @@ const HistoryDetails = () => {
               >
                 Line Item
               </Tab>
-              {/* <Tab
-              value="tab3"
-              className={themestate ? "tab dark drawer" : "tab"}
-              style={{ border: "1px solid transparent" }}
-            >
-              PO
-            </Tab>
-            <Tab
-              value="tab4"
-              className={themestate ? "tab dark drawer" : "tab"}
-              style={{ border: "1px solid transparent" }}
-            >
-              Supplier
-            </Tab> */}
+              
               <div
                 style={{
                   display: "flex",
@@ -788,7 +602,7 @@ const HistoryDetails = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.poNumber} */}
+                   
                       {poNumber}
                     </div>
                   </div>
@@ -825,7 +639,7 @@ const HistoryDetails = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.poDate} */}
+                 
                       {poDate}
                     </div>
                   </div>
@@ -846,7 +660,7 @@ const HistoryDetails = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.customerAddress} */}
+                
                       {customer}
                     </div>
                   </div>
@@ -883,7 +697,7 @@ const HistoryDetails = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.invoiceId} */}
+                   
                       {invoiceid}
                     </div>
                   </div>
@@ -919,7 +733,7 @@ const HistoryDetails = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.invoiceDate} */}
+                 
                       {invoicedate}
                     </div>
                   </div>
@@ -956,7 +770,7 @@ const HistoryDetails = () => {
                       className={styles.content}
                       style={{ color: themestate ? "rgb(245,245,245)" : "" }}
                     >
-                      {/* {purchaseOrder.invoiceTotal} */}
+                    
                       {invoicetot}
                     </div>
                   </div>
@@ -979,45 +793,9 @@ const HistoryDetails = () => {
                     </div>
                   </div>
 
-                  <div
-                    className={`${styles.section} ${styles.invoiceCurrency}`}
-                  >
-                    {/* <divs
-                      className={styles.heading}
-                      style={{
-                        fontWeight: "bold",
-                        color: themestate ? "white" : "",
-                      }}
-                    >
-                      Invoice Currency:
-                    </div> */}
-                    {/* <div
-                      className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                    >
-                      {purchaseOrder.invoiceCurrency}
-                    </div> */}
-                  </div>
+                  
 
-                  {/* <div
-                    className={`${styles.section} ${styles.purchaseOrderNumber}`}
-                  >
-                    <div
-                      className={styles.heading}
-                      style={{
-                        fontWeight: "bold",
-                        color: themestate ? "white" : "",
-                      }}
-                    >
-                      Purchase Order Number in Invoice:
-                    </div>
-                    <div
-                      className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
-                    >
-                      {purchaseOrder.purchaseOrderNumberInInvoice}
-                    </div>
-                  </div> */}
+                  
                   
                 </div>
               </div>

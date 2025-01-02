@@ -10,11 +10,8 @@ import {
   CalendarMonthRegular,
   bundleIcon,
 } from "@fluentui/react-icons";
-// import TagCounters from "../components/gridapprove";
-import ApproveTable from "../components/approvetable";
-import Search from "../components/Search"; 
-import TagCounters from "../components/gridapprove";
-const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
+
+
 const path = "/admin";
 const path1 = "http://localhost:3000/";
 // Grid

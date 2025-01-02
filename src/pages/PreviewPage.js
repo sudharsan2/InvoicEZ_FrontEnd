@@ -5,41 +5,32 @@ import {
   BreadcrumbDivider,
   BreadcrumbButton,
 } from "@fluentui/react-components";
-import TagCounters from "../components/gridapprove";
-import Search from "../components/Search";
-import ASNTable from "../components/ASNTable";
-import DropDownComponent from "../components/DropDown";
-import { ArrowClockwise28Regular } from "@fluentui/react-icons";
-import {  TabList, Tab } from "@fluentui/react-components";
-import { tokens, Divider } from "@fluentui/react-components";
-import { Add28Regular,Add24Filled,Eye24Filled } from "@fluentui/react-icons";
+
+import {Divider } from "@fluentui/react-components";
+
 import DatePickerComponent from "../components/DatePicker";
-import { MdOutlineFilterAltOff } from "react-icons/md";
+
 import { makeStyles, useId,  Label } from "@fluentui/react-components";
-import ASNCreateTable from "../components/ASNCreationTable";
+
 import {
-  Popover,
-  PopoverSurface,
-  PopoverTrigger,
+ 
   Button,
   
 } from "@fluentui/react-components";
 import DropDown from "../components/DropDown";
-import { DatePicker } from "antd";
-import { Field, Textarea } from "@fluentui/react-components";
+
 import {
-    FolderRegular,
+    
     EditRegular,
     DocumentRegular,
-    PeopleRegular,
-    DocumentPdfRegular,
+    
     ArrowLeft24Regular,
     ArrowClockwise24Regular
   } from "@fluentui/react-icons";
   import { useNavigate } from "react-router-dom";
   import ASNDrawer from "../components/ASNDrawer";
   import {
-    Avatar,
+    
     DataGrid,
     DataGridBody,
     DataGridCell,
@@ -48,20 +39,10 @@ import {
     DataGridRow,
     TableCellLayout,
     createTableColumn,
-    Input,
+    
   } from "@fluentui/react-components";
   import { GrSubtractCircle } from "react-icons/gr";
-const useStyles = makeStyles({
-    root: {
-    
-      display: "flex",
-      flexDirection: "column",
-     
-      gap: "2px",
-      
-      maxWidth: "400px",
-    },
-  });
+
 
 
 
@@ -83,9 +64,8 @@ const useStyles = makeStyles({
   ];
   
 const PreviewPage = () => {
-    const [data, setData] = React.useState(items);
-    const inputId = useId("input");
-  const styles = useStyles();
+    const [data] = React.useState(items);
+    
 
   const columns = [
     createTableColumn({

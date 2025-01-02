@@ -114,16 +114,30 @@ const PurchaseOrderPage = () => {
     sortDirection: 'ascending',
     sortColumn: 'empid',
   });
-//  const [data, setData] = useState([])
+
 
 
   const handleTabSelect2 = (event,data) => {
-    // console.log({"currentmonth":currentMonthEmployees})
+    
     setSelectedTab(data.value);
   };
 
 
-  const [data, setData] = useState(line_data);
+  const [data] = useState(line_data);
+
+  const tabclassName=themestate ? "tab dark drawer" : "tab";
+  const tabStyle = { border: '1px solid transparent' };
+  const tabStyle1 = { fontWeight: 'bold', color: themestate ? "white" : "" };
+  const tabStyle2 = { color: themestate ? "rgb(245,245,245)" : "" };
+  const tabstyle3 =   {
+    position: 'sticky',
+    top: 0,
+    backgroundColor: themestate ? '#383838' : 'white', // background to ensure it's visible
+    zIndex: 1, // to ensure it stays above the content
+    color: themestate ? 'white' : 'black',
+  };
+  const tabstyle4 = themestate ? { color: 'white' } : {};
+  const tabstyle5 = themestate ? "hovereffect dark" : "hovereffect"
   
   
   const columns = [
@@ -244,78 +258,78 @@ const PurchaseOrderPage = () => {
           onTabSelect={handleTabSelect2}
           style={{ marginLeft: "0vw", marginTop: "0vh", paddingBottom:'2vh',borderBottom: "1px solid rgb(200,200,200)"}}
         >
-          <Tab value="tab1" className={themestate ? "tab dark drawer" : "tab"} style={{ border: '1px solid transparent' }}>Header</Tab>
-          <Tab value="tab2" className={themestate ? "tab dark drawer" : "tab"} style={{ border: '1px solid transparent' }}>Line Item</Tab>
-          <Tab value="tab3" className={themestate ? "tab dark drawer" : "tab"} style={{ border: '1px solid transparent' }}>PO</Tab>
-          <Tab value="tab4" className={themestate ? "tab dark drawer" : "tab"} style={{ border: '1px solid transparent' }}>Supplier</Tab>
+          <Tab value="tab1" className={tabclassName} style={tabStyle}>Header</Tab>
+          <Tab value="tab2" className={tabclassName} style={tabStyle}>Line Item</Tab>
+          <Tab value="tab3" className={tabclassName} style={tabStyle}>PO</Tab>
+          <Tab value="tab4" className={tabclassName} style={tabStyle}>Supplier</Tab>
         </TabList>
       </div>
 
       { selectedtab=== 'tab1' && <div className={styles.content1} >
         <div className={`${styles.container} ${styles.gridTemplate1}`}>
           <div className={`${styles.section} ${styles.poNumber}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>PO Number:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.poNumber}</div>
+            <div className={styles.heading} style={tabStyle1}>PO Number:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.poNumber}</div>
           </div>
 
           <div className={`${styles.section} ${styles.vendorAddress}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>Vendor Address:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.vendorAddress}</div>
+            <div className={styles.heading} style={tabStyle1}>Vendor Address:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.vendorAddress}</div>
           </div>
 
           <div className={`${styles.section} ${styles.poDate}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>PO Date:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.poDate}</div>
+            <div className={styles.heading} style={tabStyle1}>PO Date:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.poDate}</div>
           </div>
 
           <div className={`${styles.section} ${styles.customerAddress}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>Customer Address:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.customerAddress}</div>
+            <div className={styles.heading} style={tabStyle1}>Customer Address:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.customerAddress}</div>
           </div>
 
           <div className={`${styles.section} ${styles.poTotalAmount}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>PO Total Amount:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.poTotalAmount}</div>
+            <div className={styles.heading} style={tabStyle1}>PO Total Amount:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.poTotalAmount}</div>
           </div>
 
           <div className={`${styles.section} ${styles.invoiceId}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>Invoice ID:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.invoiceId}</div>
+            <div className={styles.heading} style={tabStyle1}>Invoice ID:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.invoiceId}</div>
           </div>
 
           <div className={`${styles.section} ${styles.poCurrency}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>PO Currency:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.poCurrency}</div>
+            <div className={styles.heading} style={tabStyle1}>PO Currency:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.poCurrency}</div>
           </div>
           <div className={`${styles.section} ${styles.invoiceDate}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>Invoice Date:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.invoiceDate}</div>
+            <div className={styles.heading} style={tabStyle1}>Invoice Date:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.invoiceDate}</div>
           </div>
 
           <div className={`${styles.section} ${styles.poStatus}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>PO Status:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.poStatus}</div>
+            <div className={styles.heading} style={tabStyle1}>PO Status:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.poStatus}</div>
           </div>
 
           <div className={`${styles.section} ${styles.invoiceTotal}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>Invoice Total:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.invoiceTotal}</div>
+            <div className={styles.heading} style={tabStyle1}>Invoice Total:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.invoiceTotal}</div>
           </div>
 
           <div className={`${styles.section} ${styles.lineMatching}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>Line Matching:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.lineMatching}</div>
+            <div className={styles.heading} style={tabStyle1}>Line Matching:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.lineMatching}</div>
           </div>
 
 
           <div className={`${styles.section} ${styles.invoiceCurrency}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>Invoice Currency:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.invoiceCurrency}</div>
+            <div className={styles.heading} style={tabStyle1}>Invoice Currency:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.invoiceCurrency}</div>
           </div>
 
           <div className={`${styles.section} ${styles.purchaseOrderNumber}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color: themestate ? "white" : "" }}>Purchase Order Number in Invoice:</div>
-            <div className={styles.content} style={{ color: themestate ? "rgb(245,245,245)" : "" }}>{purchaseOrder.purchaseOrderNumberInInvoice}</div>
+            <div className={styles.heading} style={tabStyle1}>Purchase Order Number in Invoice:</div>
+            <div className={styles.content} style={tabStyle2}>{purchaseOrder.purchaseOrderNumberInInvoice}</div>
           </div>
         </div>
       </div>}
@@ -324,13 +338,7 @@ const PurchaseOrderPage = () => {
         <div className={styles.content2}>
         <Table>
   <TableHeader
-    style={{
-      position: 'sticky',
-      top: 0,
-      backgroundColor: themestate ? '#383838' : 'white', // background to ensure it's visible
-      zIndex: 1, // to ensure it stays above the content
-      color: themestate ? 'white' : 'black',
-    }}
+    style={tabstyle3}
   >
     <TableRow style={themestate ? { color: 'white', borderBottomColor: '#383838' } : {}}>
       {/* Update the header labels */}
@@ -365,8 +373,8 @@ const PurchaseOrderPage = () => {
     {sortedData.map((item) => (
       <TableRow
         key={item.PO_line_id}
-        style={themestate ? { color: 'white' } : {}}
-        className={themestate ? "hovereffect dark" : "hovereffect"}
+        style={tabstyle4}
+        className={tabstyle5}
       >
         {/* Map the updated fields to the corresponding cells */}
         <TableCell>{item.PO_line_id}</TableCell>

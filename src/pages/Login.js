@@ -14,16 +14,15 @@ import {
   getIsLoadingFromAuth,
   getErrorFromAuth,
 } from "../Store/authSlice";
-// import { jwtDecode } from 'jwt-decode';
+
 
 const Login = () => {
   const navigate = useNavigate();
-  const isMountedRef = useIsMountedRef();
+  
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(getIsAuthenticatedFromAuth);
-  const isError = useSelector(getErrorFromAuth);
+  
   const LoginSchema = Yup.object({
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
@@ -45,12 +44,17 @@ const Login = () => {
           },
         );
 
-        const { role, username, useremail, empcode } = response.data;
+        const { role, username} = response.data;
         localStorage.setItem("username", username);
         localStorage.setItem("role", role);
 
         const tokens = response.data.tokens;
         localStorage.setItem("access_token", tokens.access_token);
+
+        notification.success({
+          message: "Login Successful",
+          description: "You have successfully logged in.",
+        });
 
         switch (role) {
           case "ROLE_ADMIN":
@@ -65,11 +69,7 @@ const Login = () => {
           default:
             navigate("/dashboard");
         }
-
-        notification.success({
-          message: "Login Successful",
-          description: "You have successfully logged in.",
-        });
+       
       } catch (error) {
         console.error("Login failed:", error);
         if (error.response) {

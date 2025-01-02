@@ -1,32 +1,14 @@
 import React ,{useState} from "react";
+import {ArrowLeft24Regular,Document24Regular,ArrowUpload24Regular  } from "@fluentui/react-icons";
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbDivider,
-  BreadcrumbButton,
-} from "@fluentui/react-components";
-import TagCounters from "../components/gridapprove";
-import Search from "../components/Search";
-import ASNTable from "../components/ASNTable";
-import DropDownComponent from "../components/DropDown";
-import { ArrowClockwise28Regular } from "@fluentui/react-icons";
-import {  TabList, Tab } from "@fluentui/react-components";
-import { tokens, Divider } from "@fluentui/react-components";
-import { Add28Regular,ArrowLeft24Regular,Document24Regular,ArrowUpload24Regular  } from "@fluentui/react-icons";
-import DatePickerComponent from "../components/DatePicker";
-import { MdOutlineFilterAltOff } from "react-icons/md";
-import {
-  Popover,
-  PopoverSurface,
-  PopoverTrigger,
+  
   Button,
   makeStyles,
 } from "@fluentui/react-components";
-// import DropDown from "../components/DropDown";
-import { DatePicker } from "antd";
+
+
 import {useNavigate} from "react-router-dom";
-const path = "/asn";
-const path1 = "http://localhost:3000/";
+
 
 
 
@@ -110,9 +92,9 @@ const useStyles = makeStyles({
 
   
 const ASNDrawerPage = () => {
-    const [popoverOpen, setPopoverOpen] = useState(false);
-    const togglePopover = () => setPopoverOpen(!popoverOpen);
- const styles = useStyles();
+   
+    
+ 
   const counters = [
     { label: "Generate ASN Number", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
     

@@ -6,24 +6,15 @@ import {
   BreadcrumbButton,
   Divider
 } from "@fluentui/react-components";
-import {
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-  bundleIcon,
-} from "@fluentui/react-icons";
-import TagCounters from "../components/gridapprove";
-import StoreTable from "../components/StoreTable";
-import Search from "../components/Search";
 
-// const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
+import StoreTable from "../components/StoreTable";
+
 const path = "/storeuser";
 const path1 = "/storedashboard";
 
 const containerStyle = {
   width: "100%",
   display: "flex",
-  
-  // justifyContent: "space-around",
   padding: "8px",
   marginLeft:"0em"
 };
@@ -53,22 +44,12 @@ const valueStyle = {
   marginLeft: "0px", 
 };
 
-const divstyle ={
-  display:"flex",
-  flexDirection:"column",
-  marginLeft:"20px",
-  paddingTop:"6em",
-  fontWeight:"bold",
 
-  
-}
 const StoreUser = () => {
   const [tableLength, setTableLength] = useState(0);
   const counters = [
     { label: "To Do", value: tableLength, color: "#00bfbf" }, // Cyan
-    // { label: "AI Identified", value: 2, color: "#d62727" }, // Red
-    // { label: "User Resolved", value: 9, color: "#1f497d" }, // Dark Blue
-    // { label: "Refix", value: 4, color: "#d21994" }, // Magenta
+    
   ];
   return (
     <div style={{maxHeight:"91vh",overflowY:"auto"}}>
@@ -82,7 +63,7 @@ const StoreUser = () => {
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>Generate Gate Entry</BreadcrumbButton>
             </BreadcrumbItem>
-            {/* <BreadcrumbDivider /> */}
+            
           </Breadcrumb>
         </div>
       </div>
@@ -98,10 +79,7 @@ const StoreUser = () => {
             <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>Generate Gate Entry</h3>
           </div>
 
-          {/* <div>
-           
-            <TagCounters type="approve" />
-          </div> */}
+          
 
 <div style={containerStyle}>
         {counters.map((item, index) => (

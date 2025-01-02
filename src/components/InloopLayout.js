@@ -95,7 +95,6 @@ const ExampleContent = () => {
         </Text>
         <Link
           appearance="subtle"
-          // href="http://localhost:3000/"
           onClick={() => {
             // Clear tokens from local storage
             localStorage.removeItem("accessToken");

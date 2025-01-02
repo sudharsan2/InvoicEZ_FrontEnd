@@ -74,31 +74,36 @@ import {
 
 import { jwtDecode } from "jwt-decode";
 import {toggleSecondaryDrawerPosition } from "../Store/refreshSlice";
+const colors = {
+  darkBackground: "rgb(33,33,33)",
+  hoverBackground: "#ccc",
+  fontColorLight: "#fff", // Define any colors you use frequently
+};
+
+const hoverEffect = {
+  "&:hover": {
+    backgroundColor: colors.hoverBackground,
+  },
+};
+
 const useStyles = makeStyles({
   root: {
-    // ...shorthands.border("2px", "solid", "#ccc"),
-    ...shorthands.overflow("hidden"),
-    // marginTop:"-2px",
-    // marginLeft:"-2px",
-
+    overflow: "hidden",
     position: "fixed",
     left: 0,
     width: "100%",
     height: "100%",
     display: "flex",
-
     backgroundColor: "#fff",
   },
   content: {
-    ...shorthands.flex(1),
-    ...shorthands.padding("16px"),
-
+    flex: 1,
+    padding: "16px",
     display: "grid",
     justifyContent: "flex-start",
     alignItems: "flex-start",
     gridTemplateColumns: "1fr",
     width: "100%",
-
     gridRowGap: tokens.spacingVerticalXXL,
     gridAutoRows: "max-content",
   },
@@ -106,50 +111,39 @@ const useStyles = makeStyles({
     display: "grid",
     gridRowGap: tokens.spacingVerticalS,
   },
-
   headingContent: {
     marginInlineStart: `10px`,
   },
   hamburger: {
-    // backgroundColor: navItemTokens.backgroundColor,
-    // color: tokens.colorNeutralForeground2,
     textDecorationLine: "none",
     marginLeft: "5px",
     marginTop: "10px",
-
     ":hover": {
-      //   backgroundColor: navItemTokens.backgroundColorHover,
+      // Optional hover styles
     },
     ":active": {
-      //   backgroundColor: navItemTokens.backgroundColorPressed,
+      // Optional active styles
     },
   },
   navItemlight: {
     marginTop: "10px",
     left: 0,
-
-    "&:hover": {
-      backgroundColor: "#ccc", // Change background color on hover
-    },
+    ...hoverEffect,
   },
   navItemdark: {
     marginTop: "10px",
     left: 0,
-    backgroundColor: "rgb(33,33,33)",
-
-    "&:hover": {
-      backgroundColor: "#616161", // Change background color on hover
-    },
+    backgroundColor: colors.darkBackground,
+    ...hoverEffect,
   },
   navbody: {
     backgroundColor: "black",
   },
   navfooter: {
-    "&:hover": {
-      backgroundColor: "#f0f0f0", // Change background color on hover
-    },
+    ...hoverEffect,
   },
 });
+
 
 const Person = bundleIcon(PersonFilled, PersonRegular);
 const Dashboard = bundleIcon(Board24Filled, Board24Regular);
@@ -197,38 +191,31 @@ const Settings = bundleIcon(Settings20Filled, Settings20Regular);
 
 const NavDrawerDefaultLoop = (props) => {
   const navigate = useNavigate();
-
+  const styles = useStyles();
   const dispatch = useDispatch();
 
+  // Theme selectors
   const lighttheme = useSelector((state) => state.theme.light);
-
   const darktheme = useSelector((state) => state.theme.dark);
-
   const themestate = useSelector((state) => state.theme.theme);
 
+  //State
   const [collapse, setCollapse] = useState(false);
-
-  const styles = useStyles();
-
-  
-
   const [isOpen, setIsOpen] = useState(true);
-  const [type, setType] = useState("inline");
   const [username, setUsername] = useState("");
-  // const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
   
   const drawer = useSelector((state)=>state.refresh.secondaryDrawerPosition);
-  console.log("23456",drawer);
-  const secondaryDrawerValue = localStorage.getItem("userSecondaryDrawerPosition") || "1";
-  console.log("Secondary Drawer Value from localStorage:", { secondaryDrawerValue });
+  
+ 
+  
   const setValue = (value) => {
     dispatch(toggleSecondaryDrawerPosition(value));
-    console.log("Updated secondary drawer position to:", value);
+    
   };
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
-    // const storedrole = localStorage.getItem('role')
+    const storedUsername = localStorage.getItem("username"); 
+    
     if (storedUsername) {
       setUsername(storedUsername);
     }
@@ -250,39 +237,72 @@ const NavDrawerDefaultLoop = (props) => {
       }
     }
   }, []);
+
+
+  // styles for Inlooop
+  const drawerStyle = collapse
+    ? { width: "57px", transition: "width 0.5s", borderRightStyle: "none" }
+    : { transition: "width 0.5s", borderRightStyle: "none" };
+
+  const headerStyle = themestate
+    ? { backgroundColor: darktheme.sidebarcolordark, cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+    : { cursor: "pointer", WebkitTapHighlightColor: "transparent" };
+
+  const iconStyle1 = {
+    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+  };
+
+  const Footer = themestate ? { backgroundColor: darktheme.sidebarcolordark } : {}
+
+  const footerStyle = themestate
+  ? { marginBottom: "30px", color: darktheme.fontcolordark }
+  : { marginBottom: "30px", color: lighttheme.fontcolorlight };
+  
+
+  const sidebarStyle = {
+    backgroundColor: themestate ? darktheme.sidebarcolordark : { height: "20px" },
+
+  };
+
+  const commonStyle = { marginTop: "10px", fontSize: "17px" };
+  
+  const commonTextStyle = {
+    marginTop: "2px",
+    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+  };
+
+  const iconStyle = (iconColor) => ({
+    fontSize: "24px",
+    color: iconColor,
+  });
+
+  const tooltipAppearance = themestate ? "inverted" : "normal";
+  const getNavItemClass = () => (themestate ? styles.navItemdark : styles.navItemlight);
+
+  
+  const handleNavClick = (path, value) => {
+    navigate(path);
+    setValue(value);
+  };
+
+
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
-      {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
+     
       <NavDrawer
         defaultSelectedValue={drawer}
         defaultSelectedCategoryValue="1"
         open={isOpen}
-        type={type}
+        type="inline"
         onOpenChange={(_, { open }) => setIsOpen(open)}
         size="small"
         className={useStyles.navdrawer}
-        style={
-          collapse
-            ? {
-                width: collapse ? "57px" : "250px",
-                transition: "width 0.5s",
-                borderRightStyle: "none",
-              }
-            : { transition: "width 0.5s", borderRightStyle: "none" }
-        }
+        style={drawerStyle}
       >
-        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
+        
 
         <NavDrawerHeader
-          style={
-            themestate
-              ? {
-                  backgroundColor: darktheme.sidebarcolordark,
-                  cursor: "pointer",
-                  WebkitTapHighlightColor: "transparent",
-                }
-              : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-          }
+          style={headerStyle}
         >
           <NavDrawerHeaderNav
             onClick={() => {
@@ -291,15 +311,7 @@ const NavDrawerDefaultLoop = (props) => {
           >
             <Button
               appearance="transparent"
-              icon={
-                <Navi
-                  style={
-                    themestate
-                      ? { color: darktheme.fontcolordark }
-                      : { color: lighttheme.fontcolorlight }
-                  }
-                />
-              }
+              icon={<Navi style={iconStyle1} />}
               className={styles.hamburger}
               onClick={() => {
                 setCollapse(!collapse);
@@ -308,198 +320,75 @@ const NavDrawerDefaultLoop = (props) => {
           </NavDrawerHeaderNav>
         </NavDrawerHeader>
         <div
-          style={
-            themestate
-              ? { backgroundColor: darktheme.sidebarcolordark, height: "20px" }
-              : { height: "20px" }
+          style={sidebarStyle
           }
         ></div>
 
         {collapse ? (
-          <NavDrawerBody
-            style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-            }
+    <NavDrawerBody
+      style={sidebarStyle}
+    >
+      
+      <Tooltip content="Purchase Requisition" positioning="after" withArrow appearance={tooltipAppearance}>
+        <NavItem
+          target="_blank"
+          icon={<Dashboard style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+          value="1"
+          className={getNavItemClass()}
+          style={commonStyle}
+          onClick={() => handleNavClick("/inloop", "1")}
+        >
+          <div style={commonTextStyle}>Purchase Requisition</div>
+        </NavItem>
+      </Tooltip>
+
+     
+      <Tooltip content="Purchase Order" positioning="after" withArrow appearance={tooltipAppearance}>
+        <NavItem
+          target="_blank"
+          icon={<Trolly style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+          value="2"
+          className={getNavItemClass()}
+          style={commonStyle}
+          onClick={() => handleNavClick("/po", "2")}
+        >
+          <div style={commonTextStyle}>Purchase Order</div>
+        </NavItem>
+      </Tooltip>
+
+      
+      <Tooltip content="ASN Creation" positioning="after" withArrow appearance={tooltipAppearance}>
+        <NavItem
+          target="_blank"
+          icon={<Truck style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+          value="3"
+          className={getNavItemClass()}
+          style={commonStyle}
+          onClick={() => handleNavClick("/asn", "3")}
+        >
+          <div style={commonTextStyle}>ASN Status</div>
+        </NavItem>
+      </Tooltip>
+
+      
+      <Tooltip content="AP Invoice OCR" positioning="after" withArrow appearance={tooltipAppearance}>
+        <NavCategory value="4">
+          <NavCategoryItem
+            target="_blank"
+            icon={<Apps28Regular style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+            value="4"
+            className={getNavItemClass()}
+            style={commonStyle}
+            onClick={() => setValue("4")}
           >
-            <Tooltip
-              content={"Purchase Requistion"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-               <NavItem
-                target="_blank"
-                icon={
-                  <Dashboard
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                // onClick={someClickHandler}
-                value="1"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
-                onClick={() => {
-                  navigate("/inloop");
-                  setValue("1");
-                }}
-              >
-                <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
-                >
-                  Purchase requistion
-                </div>
-              </NavItem>
-
-            </Tooltip>
-            <Tooltip
-              content={"Purchase Order"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <Trolly 
-                    style={{
-        fontSize: "24px", 
-        color: themestate
-          ? darktheme.fontcolordark
-          : lighttheme.fontcolorlight,
-      }}
-                  />
-                }
-                
-                value="2"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
-                onClick={() => {
-                  navigate("/po");
-                  setValue("2");
-                }}
-              >
-                <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
-                  
-                >
-                  Purchase Order
-                  
-                </div>
-              </NavItem>
-
-              </Tooltip>
-              <Tooltip
-              content={"ASN Creation"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-              <NavItem
-                target="_blank"
-                icon={
-                  <Truck
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
-                  />
-                }
-                // onClick={someClickHandler}
-                value="3"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
-                
-                onClick={() => {
-                  navigate("/asn");
-                  setValue("3");
-                }}
-              >
-                <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
-                >
-                  ASN Status
-                </div>
-              </NavItem>
-              </Tooltip>
-              <Tooltip
-              content={"AP Invoice OCR"}
-              positioning="after"
-              withArrow={true}
-              appearance={themestate ? "inverted" : "normal"}
-            >
-                <NavCategory value="4">
-                  <NavCategoryItem
-                    target="_blank"
-                    icon={
-                      <Apps28Regular
-                        style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
-                        }
-                      />
-                    }
-                    // onClick={someClickHandler}
-                    value="4"
-                    className={
-                      themestate ? styles.navItemdark : styles.navItemlight
-                    }
-                    style={{ marginTop: "10px", fontSize: "17px" }}
-                    onClick={() => {
-                      setValue("4");
-                    }}
-                  >
-                    AP Invoice OCR 
-                  </NavCategoryItem>
-                  </NavCategory>
-                  </Tooltip>
-
-
-
-
-
-            
-          </NavDrawerBody>
-         
-        ) : (
+            AP Invoice OCR
+          </NavCategoryItem>
+        </NavCategory>
+      </Tooltip>
+    </NavDrawerBody>
+  ) : (
           <NavDrawerBody
-            style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+            style={sidebarStyle
             }
           >
             {/* DETAILS OF USER  */}
@@ -538,30 +427,22 @@ const NavDrawerDefaultLoop = (props) => {
                 target="_blank"
                 icon={
                   <Dashboard
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                  style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
                   />
                 }
-                // onClick={someClickHandler}
+                
                 value="1"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
+                className={getNavItemClass()}
+                style={{ marginTop: "10px", fontSize: "14px" }}
                 onClick={() => {
                   navigate("/inloop");
                   setValue("1");
                 }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  
+                    style={{fontSize:"17px"}}
+                  
                 >
                   Purchase requistion
                 </div>
@@ -572,31 +453,22 @@ const NavDrawerDefaultLoop = (props) => {
                 target="_blank"
                 icon={
                   <Trolly 
-                    style={{
-        fontSize: "24px", 
-        color: themestate
-          ? darktheme.fontcolordark
-          : lighttheme.fontcolorlight,
-      }}
+                   
+                      style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
+      
                   />
                 }
                 
                 value="2"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
+                className={getNavItemClass()}
+                style={{ marginTop: "10px", fontSize: "14px" }}
                 onClick={() => {
                   navigate("/po");
                   setValue("2");
                 }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={{fontSize:"17px"}}
                   
                 >
                   Purchase Order
@@ -608,19 +480,13 @@ const NavDrawerDefaultLoop = (props) => {
                 target="_blank"
                 icon={
                   <Truck
-                    style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
-                    }
+                  style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
                   />
                 }
-                // onClick={someClickHandler}
+                
                 value="3"
-                className={
-                  themestate ? styles.navItemdark : styles.navItemlight
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
+                className={getNavItemClass()}
+                style={{ marginTop: "10px", fontSize: "14px" }}
                 
                 onClick={() => {
                   navigate("/asn");
@@ -628,11 +494,7 @@ const NavDrawerDefaultLoop = (props) => {
                 }}
               >
                 <div
-                  style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
-                  }
+                  style={{fontSize:"17px"}}
                 >
                   ASN Status
                 </div>
@@ -643,18 +505,12 @@ const NavDrawerDefaultLoop = (props) => {
                     target="_blank"
                     icon={
                       <Apps28Regular
-                        style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
-                        }
+                      style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
                       />
                     }
-                    // onClick={someClickHandler}
+                    
                     value="4"
-                    className={
-                      themestate ? styles.navItemdark : styles.navItemlight
-                    }
+                    className={getNavItemClass()}
                     style={{ marginTop: "10px", fontSize: "17px" }}
                     onClick={() => {
                       setValue("4");
@@ -698,24 +554,16 @@ const NavDrawerDefaultLoop = (props) => {
                 </NavCategory>
                 
               </div>
-            {/* </div> */}
+            
           </NavDrawerBody>
         )}
 
         <NavDrawerFooter
           style={
-            themestate ? { backgroundColor: darktheme.sidebarcolordark } : {}
+            Footer
           }
         >
           {!collapse && (
-            // <NavItem
-            //   value="21"
-            //   target="_blank"
-            // //   onClick={someClickHandler}
-            //   className={styles.navfooter}
-            // //   style={{color:"#E9E9E9"}}
-            // //   icon={<Person />}
-            // >
             <div
               style={{
                 width: "100%",
@@ -726,37 +574,26 @@ const NavDrawerDefaultLoop = (props) => {
             >
               <p
                 style={
-                  themestate
-                    ? { marginBottom: "30px", color: darktheme.fontcolordark }
-                    : { marginBottom: "30px", color: lighttheme.fontcolorlight }
+                  footerStyle
                 }
               >
                 by FocusR AI
               </p>
               <p
                 style={
-                  themestate
-                    ? { marginTop: "-20px", color: darktheme.fontcolordark }
-                    : { marginTop: "-20px", color: lighttheme.fontcolorlight }
+                  footerStyle
                 }
               >
                 V 0.0.1
               </p>
             </div>
-            // </NavItem>
+            
           )}
-          {/* <NavItem
-      icon={<Settings />}
-      target="_blank"
-      onClick={someClickHandler}
-      value="24"
-    >
-      App Settings
-    </NavItem> */}
+          
         </NavDrawerFooter>
-        {/* </div> */}
+        
       </NavDrawer>
-      {/* </div> */}
+      
 
       <div
         className={styles.content}

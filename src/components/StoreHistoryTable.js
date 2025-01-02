@@ -74,24 +74,22 @@ const StoreHistoryTable = () => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
 
   const [RefreshUpload, SetRefreshUpload] = useState(null);
 
-  const [DeleteRefresh, SetDeleteRefresh] = useState(false);
+  
 
-  // Fetch data from the API when the component mounts
+  
   const fetchData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
     }
     try {
-      // const response = await axios.get(
-      //   "https://invoicezapi.focusrtech.com:57/user/grn-history",
-      // );
+      
       const token = localStorage.getItem("access_token");
       const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
         method: "GET",
@@ -100,12 +98,12 @@ const StoreHistoryTable = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const fetchedItems = response.data; // Assuming data is in response.data
+      const fetchedItems = response.data; 
       console.log("fetchedItems", fetchedItems);
       
 
       const mappedItems = fetchedItems.map((item, index) => {
-        // Map over po_headers to get all po_numbers
+        
 
         return {
           Id: item.po_headers && item.po_headers.length > 0 ? item.po_headers[0].id : null,
@@ -125,6 +123,7 @@ const StoreHistoryTable = () => {
     }
   };
 
+  console.log("Refresh",RefreshUpload)
   useEffect(() => {
     SetRefreshUpload(isInvoiceUploadRefreshed);
   }, []);

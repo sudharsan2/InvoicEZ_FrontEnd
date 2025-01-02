@@ -5,10 +5,10 @@ import {
   BreadcrumbDivider,
   BreadcrumbButton,
 } from "@fluentui/react-components";
-import TagCounters from "../components/gridapprove";
+
 import Search from "../components/Search";
 import POTable from "../components/POTable";
-import DropDownComponent from "../components/DropDown";
+
 import { ArrowClockwise28Regular } from "@fluentui/react-icons";
 import {  TabList, Tab } from "@fluentui/react-components";
 import DatePickerComponent from "../components/DatePicker";
@@ -21,8 +21,8 @@ import {
   Button,
   makeStyles,
 } from "@fluentui/react-components";
-// import DropDown from "../components/DropDown";
-import { DatePicker } from "antd";
+
+
 import DropdownComponent from "../components/DropDown";
 
 const path = "/po";
@@ -55,44 +55,7 @@ const path1 = "http://localhost:3000/";
     );
   };
 
-const containerStyle = {
-  width: "100%",
-  display: "flex",
-  gap: "3em",
-  padding: "8px",
-  marginLeft: "0em",
-};
 
-const itemStyle = {
-  display: "flex",
-  alignItems: "flex-start",
-};
-
-const lineStyle = (color) => ({
-  width: "3px",
-  height: "50px",
-  backgroundColor: color,
-  marginRight: "12px",
-});
-
-const labelStyle = {
-  fontSize: "14px",
-  fontWeight: "normal",
-  marginBottom: "10px",
-};
-
-const valueStyle = {
-  fontSize: "28px",
-  fontWeight: "bold",
-  color: "#333",
-  marginLeft: "0px",
-};
-
-const buttonContainerStyle = {
-  display: "flex",
-  justifyContent: "flex-start",
-  padding: "16px 0",
-};
 
 const useStyles = makeStyles({
     statusBullet: {
@@ -129,10 +92,7 @@ const useStyles = makeStyles({
         marginTop: "0",
       },
     
-      popoverContent: {
-        // zIndex: 1000, 
-        // position: "fixed", 
-      },
+     
 
   });
   
@@ -143,11 +103,7 @@ const [popoverOpen, setPopoverOpen] = useState(false);
   
 const togglePopover = () => setPopoverOpen(!popoverOpen);
  const styles = useStyles();
-  const counters = [
-    { label: "To be Acknowledged", value: <span style={{ color: "#d62727" }}>2</span>, color: "#d62727" },
-    { label: "Acknowledged", value: <span style={{ color: "#004378" }}>10</span>, color: "#004378" },
-    { label: "Rejected", value: <span style={{ color: "#00a2ad" }}>5</span>, color: "#00a2ad" },
-  ];
+  
 
   return (
     <div style={{ maxHeight: "91vh", overflowY: "auto" }}>
@@ -172,18 +128,7 @@ const togglePopover = () => setPopoverOpen(!popoverOpen);
 
       <div>
         <div style={{display: "flex", flexDirection: "row", justifyContent: "flex-end",}}>
-        {/* <div style={containerStyle}>
-          {counters.map((item, index) => (
-            <div style={itemStyle} key={index}>
-              <div style={lineStyle(item.color)} />
-              <div>
-                <div style={labelStyle}>{item.label}</div>
-                <div style={valueStyle}>{item.value}</div>
-              </div>
-            </div>
-          ))}
-        </div> */}
-        {/* Filter Part */}
+        
         <div style={{ display: "flex", flexDirection: "column",paddingRight:"2em" }}>
             
             <div
@@ -253,7 +198,7 @@ const togglePopover = () => setPopoverOpen(!popoverOpen);
             <ArrowClockwise28Regular className={styles.icon} />
             <span>Refresh</span>
           </button>
-          {/* <CiFilter className={styles.icon} /> <span>Filter</span> */}
+          
         </div>
 
         <Search placeholder="Search PO or Supplier" />
@@ -264,9 +209,7 @@ const togglePopover = () => setPopoverOpen(!popoverOpen);
         <POTable />
       </div>
 
-      {/* <div style={buttonContainerStyle}>
-        <button style={{color:"#0078d5",border:"none",backgroundColor:"white"}}>Submit</button>
-      </div> */}
+     
     </div>
   );
 };
