@@ -57,7 +57,7 @@ const AiNav = ({ onPoNumberClick }) => {
       const token = localStorage.getItem("access_token");
 
   const response = await axios.get(
-    `http://172.235.21.99:5729/user/invoices-details/${invoiceNumber}/`,
+    `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
     {
       headers: {
         Authorization: `Bearer ${token}`, 

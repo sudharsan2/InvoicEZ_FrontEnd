@@ -150,7 +150,7 @@ const IssuefixDetails = () => {
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
         const response = await axios.get(
-          `http://172.235.21.99:5729/user/invoices-update/${invoiceNo}/`,
+          `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Add the authorization header
@@ -194,7 +194,7 @@ const IssuefixDetails = () => {
 
   const handleSubmit = async () => {
 
-    const apiUrl = "http://172.235.21.99:5729/user/po-number";
+    const apiUrl = "https://invoicezapi.focusrtech.com:57/user/po-number";
 
     try {
 
@@ -242,7 +242,7 @@ const IssuefixDetails = () => {
       const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
       const response = await axios.get(
-        `http://172.235.21.99:5729/user/invoices-update/${invoiceNo}/`,
+        `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -379,7 +379,7 @@ const IssuefixDetails = () => {
 
 
       const response = await fetch(
-        `http://172.235.21.99:5729/user/invoices-update/${invoiceNo}/`,
+        `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
         {
           method: "PUT",
           headers: {
@@ -454,7 +454,7 @@ const IssuefixDetails = () => {
 
       const deletePromises = selectedItemsArray.map((inv_id) =>
         axios.delete(
-          `http://172.235.21.99:5729/user/delete-invoice-item/${inv_id}/`,
+          `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`, 
@@ -495,7 +495,7 @@ const IssuefixDetails = () => {
       const token = localStorage.getItem("access_token"); 
 
       const response = await fetch(
-        `http://172.235.21.99:5729/user/invoices-file/${invoiceNo}`,
+        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceNo}`,
         {
           method: "GET", 
           headers: {

@@ -163,7 +163,7 @@ const ApprovePage = () => {
   );
 
   const approvePo = async () => {
-    const url = `http://172.235.21.99:5729/user/update-storeuser/${inv_id}`;
+    const url = `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${inv_id}`;
   
     try {
      
@@ -194,7 +194,7 @@ const ApprovePage = () => {
   };
   
   const deleteInvoice = async () => {
-    const url = `http://172.235.21.99:5729/user/delete-pos/${inv_id}`;
+    const url = `https://invoicezapi.focusrtech.com:57/user/delete-pos/${inv_id}`;
   
     try {
       
@@ -244,7 +244,7 @@ const ApprovePage = () => {
       const token = localStorage.getItem("access_token");
     
       const response = await axios.post(
-        "http://172.235.21.99:5729/user/po-number",
+        "https://invoicezapi.focusrtech.com:57/user/po-number",
         payload,
         {
           headers: {
@@ -319,7 +319,7 @@ const ApprovePage = () => {
       const token = localStorage.getItem("access_token"); 
 
         const response = await fetch(
-          `http://172.235.21.99:5729/user/invoices-file/${inv_id}`,
+          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
           {
             method: "GET", 
             headers: {
@@ -345,7 +345,7 @@ const ApprovePage = () => {
       try {
         const token = localStorage.getItem("access_token");
         const response = await axios.get(
-          `http://172.235.21.99:5729/user/po-details/${Id}`,
+          `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

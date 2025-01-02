@@ -180,7 +180,7 @@ const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, h
       const token = localStorage.getItem("access_token"); 
 
         const response = await fetch(
-          `http://172.235.21.99:5729/user/invoices-file/${inv_id}`,
+          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
           {
             method: "GET", 
             headers: {
@@ -206,7 +206,7 @@ const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, h
       try {
         const token = localStorage.getItem("access_token");
         const response = await axios.get(
-          `http://172.235.21.99:5729/user/po-details/${Id}`,
+          `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

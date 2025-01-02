@@ -130,7 +130,7 @@ const StoreUserPage = () => {
 
   
   const approvePo = async () => {
-    const url = `http://172.235.21.99:5729/user/GRNGeneration/${po_id}`;
+    const url = `https://invoicezapi.focusrtech.com:57/user/GRNGeneration/${po_id}`;
 
     try {
       const token = localStorage.getItem("access_token");
@@ -209,7 +209,7 @@ const StoreUserPage = () => {
       const token = localStorage.getItem("access_token"); 
 
         const response = await fetch(
-          `http://172.235.21.99:5729/user/invoices-file/${inv_id}`,
+          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
           {
             method: "GET", 
             headers: {
@@ -240,7 +240,7 @@ const StoreUserPage = () => {
         const token = localStorage.getItem("access_token");
   
         const response = await axios.get(
-          `http://172.235.21.99:5729/user/po-details/${Id}`,
+          `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

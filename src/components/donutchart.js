@@ -39,7 +39,7 @@ const DonutChartPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        "http://172.235.21.99:5729/user/dashboard-supplier-morethanonepo",
+        "https://invoicezapi.focusrtech.com:57/user/dashboard-supplier-morethanonepo",
       );
       const result = await response.json();
 

@@ -14,7 +14,7 @@ const InvoiceStatusPieChart = () => {
         const authToken = localStorage.getItem("access_token"); 
   
         const response = await fetch(
-          "http://172.235.21.99:5729/user/dashboard-invoice-status",
+          "https://invoicezapi.focusrtech.com:57/user/dashboard-invoice-status",
           {
             method: "GET",
             headers: {

@@ -75,7 +75,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(
-        "http://172.235.21.99:5729/user/forgot-password",
+        "https://invoicezapi.focusrtech.com:57/user/forgot-password",
         {
           email,
         },

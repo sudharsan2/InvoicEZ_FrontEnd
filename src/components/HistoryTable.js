@@ -86,7 +86,7 @@ const HistoryTable = () => {
     try {
       
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("http://172.235.21.99:5729/user/grn-history", {
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/grn-history", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

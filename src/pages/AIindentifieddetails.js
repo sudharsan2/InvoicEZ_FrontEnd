@@ -185,7 +185,7 @@ const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
       const token = localStorage.getItem("access_token");
 
       const response = await fetch(
-        `http://172.235.21.99:5729/user/invoices-file/${inv_id}`,
+        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
         {
           method: "GET",
           headers: {
@@ -264,7 +264,7 @@ const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
         const token = localStorage.getItem("access_token"); 
 
         const response = await axios.get(
-          `http://172.235.21.99:5729/user/invoices-details/${invoiceNumber}/`,
+          `https://invoicezapi.focusrtech.com:57/user/invoices-details/${invoiceNumber}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`, 
@@ -419,7 +419,7 @@ const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
       const token = localStorage.getItem("access_token");
 
       const response = await axios.post(
-        "http://172.235.21.99:5729/user/po-number",
+        "https://invoicezapi.focusrtech.com:57/user/po-number",
         payload,
         {
           headers: {

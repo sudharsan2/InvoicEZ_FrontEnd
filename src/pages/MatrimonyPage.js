@@ -236,7 +236,7 @@ const Matrimony = () => {
 
   const fetchLLMDetails = async () => {
     try {
-      const response = await fetch("http://172.235.21.99:5729/user/llm-detail", {
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/llm-detail", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -269,7 +269,7 @@ const Matrimony = () => {
     try {
       
 
-      const response = await fetch("http://172.235.21.99:5729/user/statusForApprove", {
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/statusForApprove", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -292,7 +292,7 @@ const Matrimony = () => {
   const fetchAzureDetails = async () => {
     try {
       
-      const response = await fetch("http://172.235.21.99:5729/user/azure-detail", {
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/azure-detail", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -337,7 +337,7 @@ const Matrimony = () => {
 
       console.log("Payload:", JSON.stringify(body)); // Log payload for verification
 
-      const response = await fetch("http://172.235.21.99:5729/user/llm-detail", {
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/llm-detail", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -390,7 +390,7 @@ const Matrimony = () => {
       console.log("Payload:", JSON.stringify(body));
 
       const response = await fetch(
-        "http://172.235.21.99:5729/user/azure-detail",
+        "https://invoicezapi.focusrtech.com:57/user/azure-detail",
         {
           method: "PUT",
           headers: {

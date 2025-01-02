@@ -44,7 +44,7 @@ const TagCounters = ({ type }) => {
       const authToken = localStorage.getItem("access_token"); 
 
   const response = await fetch(
-    "http://172.235.21.99:5729/user/statusForApprove",
+    "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
     {
       method: "GET",
       headers: {

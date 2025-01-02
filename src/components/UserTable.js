@@ -195,7 +195,7 @@ const togglePasswordVisibility = () => {
   
     try {
       const token = localStorage.getItem("access_token");
-      const response = await fetch("http://172.235.21.99:5729/user/usermanagement-reset-password", {
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/usermanagement-reset-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -233,7 +233,7 @@ const togglePasswordVisibility = () => {
       const token = localStorage.getItem("access_token"); 
 
       const response = await axios.get(
-        `http://172.235.21.99:5729/user/user-list`,
+        `https://invoicezapi.focusrtech.com:57/user/user-list`,
         {
           headers: {
             Authorization: `Bearer ${token}`, 
@@ -346,7 +346,7 @@ const togglePasswordVisibility = () => {
      
 
       const response = await axios.put(
-        `http://172.235.21.99:5729/user/edit-user/${selectedRow.Id}`,
+        `https://invoicezapi.focusrtech.com:57/user/edit-user/${selectedRow.Id}`,
         updatedData,
         {
           headers: {
@@ -410,7 +410,7 @@ const togglePasswordVisibility = () => {
       const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `http://172.235.21.99:5729/user/delete-user/${filteredItems[item].Id}`,
+          `https://invoicezapi.focusrtech.com:57/user/delete-user/${filteredItems[item].Id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Add the authorization header
@@ -472,7 +472,7 @@ const togglePasswordVisibility = () => {
       
         const token = localStorage.getItem("access_token"); 
 
-      const response = await fetch("http://172.235.21.99:5729/user/registration", {
+      const response = await fetch("https://invoicezapi.focusrtech.com:57/user/registration", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

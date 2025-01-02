@@ -40,7 +40,7 @@ const SankeyChart = () => {
   
   const fetchInvoices = async (authToken) => {
     const response = await axios.get(
-      "http://172.235.21.99:5729/user/invoices",
+      "https://invoicezapi.focusrtech.com:57/user/invoices",
       {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -53,7 +53,7 @@ const SankeyChart = () => {
   
   const fetchStatus = async (authToken) => {
     const response = await axios.get(
-      "http://172.235.21.99:5729/user/statusForApprove",
+      "https://invoicezapi.focusrtech.com:57/user/statusForApprove",
       {
         headers: {
           Authorization: `Bearer ${authToken}`,

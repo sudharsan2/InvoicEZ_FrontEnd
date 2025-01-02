@@ -151,7 +151,7 @@ const SummaryTable = ({
     }
     try {
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("http://172.235.21.99:5729/user/invoices", {
+      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/invoices", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -326,7 +326,7 @@ const SummaryTable = ({
       const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
-          `http://172.235.21.99:5729/user/delete-invoice/${filteredItems[item].id}`,
+          `https://invoicezapi.focusrtech.com:57/user/delete-invoice/${filteredItems[item].id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Add the authorization header
@@ -385,7 +385,7 @@ const SummaryTable = ({
              await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
-            `http://172.235.21.99:5729/user/update-storeuser/${filteredItems[item].id}`,
+            `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${filteredItems[item].id}`,
             {},
             {
               headers: {

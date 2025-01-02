@@ -65,7 +65,7 @@ const FormPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://172.235.21.99:5729/user/form-links/${token}`,
+          `https://invoicezapi.focusrtech.com:57/user/form-links/${token}`,
         );
         setResponse1(response.data); // Assuming response.data contains the necessary data
       } catch (error) {
@@ -93,7 +93,7 @@ const FormPage = () => {
       console.log("Error fetching data:", response1);
 
       const response = await axios.put(
-        `http://172.235.21.99:5729/user/handleSubmitted/${response1.tokens}`,
+        `https://invoicezapi.focusrtech.com:57/user/handleSubmitted/${response1.tokens}`,
         formData,
       );
       console.log(response)

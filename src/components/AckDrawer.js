@@ -48,7 +48,7 @@ const AckDrawer = ({data,setIsOpen,isOpen,onClose}) => {
     console.log("ACK API ")
     try{
       
-      const response = await axios.put(`http://172.235.21.99:5729/user/acknowledge-purchase-requisition/${data.id}/`);
+      const response = await axios.put(`https://invoicezapi.focusrtech.com:57/user/acknowledge-purchase-requisition/${data.id}/`);
       if (response.status === 200) {
         
         handleClose();
@@ -70,7 +70,7 @@ const AckDrawer = ({data,setIsOpen,isOpen,onClose}) => {
     console.log("REJ API ")
     try{
       
-      const response = await axios.put(`http://172.235.21.99:5729/user/update-status/${data.id}/`);
+      const response = await axios.put(`https://invoicezapi.focusrtech.com:57/user/update-status/${data.id}/`);
       if (response.status === 200) {
         
         handleClose();
