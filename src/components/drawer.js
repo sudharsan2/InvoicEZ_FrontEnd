@@ -847,15 +847,15 @@ const NavDrawerDefault = (props) => {
               }}
             >
               <p
-                style={
-                 baseStyle
-                }
+               style={{marginBottom:"20px"}}
               >
                 by FocusR AI
               </p>
               <p
-                style={
-                  baseStyle
+                style={{
+                marginTop:"-1rem"
+                }
+                  
                 }
               >
                 V 0.0.1

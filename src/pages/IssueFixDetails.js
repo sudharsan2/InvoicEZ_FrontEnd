@@ -338,6 +338,7 @@ const IssuefixDetails = () => {
   const handleformSubmit = async () => {
     
     const updatedFulldata = {
+
       ...fulldata, // Spread fulldata to retain existing properties
       VendorName: formData.vendorName,
       CustomerName: formData.customerName,
@@ -371,22 +372,25 @@ const IssuefixDetails = () => {
           Igst: item.Igst,
           Cgst: item.Cgst,
           Sgst: item.Cgst,
-          // Assign values from oldrow for fields not updated in rows
-        Date:  oldItem.Date ? oldItem.Date : null,
-        TotalTax:  oldItem.TotalTax ?oldItem.TotalTax : null,
-        Tax:  oldItem.Tax ?oldItem.Tax : null,
-        AmountDue:  oldItem.AmountDue ?oldItem.AmountDue : null,
-        ServiceStartDate:  oldItem.ServiceStartDate ?oldItem.ServiceStartDate : null,
-        ServiceEndDate:  oldItem.ServiceEndDate ?oldItem.ServiceEndDate : null,
-        ServiceAddressRecipient:  oldItem.ServiceAddressRecipient ?oldItem.ServiceAddressRecipient : null,
-        RemittanceAddressRecipient:  oldItem.RemittanceAddressRecipient ?oldItem.RemittanceAddressRecipient : null,
-        ServiceAddress:  oldItem.ServiceAddress ?oldItem.ServiceAddress : null,
-        RemittanceAddress:  oldItem.RemittanceAddress ?oldItem.RemittanceAddress : null,
-          // Add any other fields as needed
+          Date:  oldItem && oldItem.Date ? oldItem.Date : null,
+        TotalTax: oldItem && oldItem.TotalTax ?oldItem.TotalTax : null,
+        Tax: oldItem && oldItem.Tax ?oldItem.Tax : null,
+        AmountDue: oldItem && oldItem.AmountDue ?oldItem.AmountDue : null,
+        ServiceStartDate: oldItem && oldItem.ServiceStartDate ?oldItem.ServiceStartDate : null,
+        ServiceEndDate: oldItem && oldItem.ServiceEndDate ?oldItem.ServiceEndDate : null,
+        ServiceAddressRecipient: oldItem && oldItem.ServiceAddressRecipient ?oldItem.ServiceAddressRecipient : null,
+        RemittanceAddressRecipient: oldItem && oldItem.RemittanceAddressRecipient ?oldItem.RemittanceAddressRecipient : null,
+        ServiceAddress: oldItem && oldItem.ServiceAddress ?oldItem.ServiceAddress : null,
+        RemittanceAddress: oldItem && oldItem.RemittanceAddress ?oldItem.RemittanceAddress : null,
+          
+          
         };
       }),
     
     };
+
+    delete updatedFulldata.InvoiceFile 
+
     console.log("ITEMS------>", updatedFulldata);
     try {
 

@@ -447,318 +447,308 @@ const getSortIcon = (columnId) => {
   return <ArrowSortDownRegular style={style} />;
 };
   
-  return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "20px",
-          fontWeight: "bold",
-          width:"100%"
-          
-        }}
-      >
-        
-
-
-<div
- 
-    style={{
-      backgroundColor: "#F8FAFC",
-      paddingTop: "10px",
-      width: "100%", 
-      marginTop: "-8em", 
-      height: "50vh", 
-      marginLeft:"12em",
-      paddingLeft:"1em",
-      paddingRight:"1em"
-     
-    }}
-
-    
-
- 
->
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(4, 1fr)", 
-      gap: "2em",
-      padding: "1em",
-      marginTop: "4em", 
-      width: "100%", 
-      
-    }}
-  >
-    <Input
-        placeholder="PO Number"
-        value={poNumber} 
-        onChange={handlePoNumberChange} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      />
-    <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedPOStatus}
-          onChange={handlePOStatusChange}
-          name="po_status"
-          options={POStatusOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handlePOStatusChange}
-          placeholder=" PO Status"
-          isClearable
-        />
-    <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedPOType}
-          onChange={handlePOTypeChange}
-          name="po_type"
-          options={SelectedPOTypeOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handlePOTypeChange}
-          placeholder="PO Type"
-          isClearable
-        />
-     
-        <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedSupplierName}
-          onChange={handleSupplierNameChange}
-          name="supplier_name"
-          options={selectedSupplierOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handleSupplierNameChange}
-          placeholder=" Supplier Name"
-          isClearable
-        />
-      
-
-      
-       
-        <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedShipTo}
-          onChange={handleShipToChange}
-          name="ship_to"
-          options={selectedShipToOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handleShipToChange}
-          placeholder="Location"
-          isClearable
-        />
-      
-      
-        
-      
-      <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedBuyerName}
-          onChange={handleBuyerNameChange}
-          name="buyer_name"
-          options={selectedBuyerNameOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handleBuyerNameChange}
-          placeholder="Buyer Name"
-          isClearable
-        />
-    <Input
-        placeholder="Total Amount"
-        value={selectedTotalAmount} 
-        onChange={handleTotalChange} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      />
-   
-    <Input
-        placeholder="PO Header ID"
-        value={selectedPOHeaderID} 
-        onChange={handlePoHeaderChange} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      />
-    
-    <Input
-        placeholder="Vendor Site ID"
-        value={selectedVendorSiteID} 
-        onChange={handleVendorSiteChange} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      />
-    <Input
-        placeholder="Vendor Number"
-        value={selectedVendorNumber} 
-        onChange={handleVendorNumber} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      />
-  </div>
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "flex-end",
-      gap: "20px",
-      margin: "20px 0",
-    }}
-  >
-    <Button
-      style={{
-        backgroundColor: "#3570c3",
-        color: "white",
-        cursor: "pointer",
-        height: "35px",
-        width: "100px", // Consistent button width
-      }}
-      onClick={filterData}
-    >
-      Find
-    </Button>
+return (
+  <>
     <div
       style={{
         display: "flex",
         alignItems: "center",
-        gap: "4px", 
-        backgroundColor,
-        padding: "6px 12px", 
-        borderRadius: "4px", 
-        cursor: "pointer",
-        marginRight:"20px"
+        gap: "20px",
+        fontWeight: "bold",
+        width: "100%",
+        marginTop: "8rem"
       }}
-      onMouseEnter={() => setIsHovered2(true)}
-      onMouseLeave={() => setIsHovered2(false)}
-    //   onClick={handleDeleteSelectedRows}
-    onClick={handleClear}
     >
-      <DismissRegular
+
+
+
+      <div
+
         style={{
-          color: "#1281d7", 
-          fontSize: "20px",
-          marginRight:"5px"
+          backgroundColor: "#F8FAFC",
+          paddingTop: "10px",
+          width: "100%",
+          marginTop: "-8em",
+          height: "50vh",
+          marginLeft: "1em",
+          // paddingLeft:"1em",
+          paddingRight: "1em"
+
         }}
-      />
-      <span
-        style={{
-          fontSize: "14px",
-          color: "#000",
-          
-        }}
+
+
+
+
       >
-        Clear
-      </span>
-    </div>
-  </div>
-</div>
-        
-        
-<div
-  style={{
-    marginTop: "30em", 
-    width: "300px", 
-    maxWidth: "100%", 
-    minWidth: "200px",  
-    display: "flex", 
-    justifyContent: "center", 
-    marginLeft: "auto", 
-    marginRight: "auto", 
-    
-   
-  }}
->
-  <Search
-    placeholder="Search PO"
-    onSearchChange={handleSearchChange}
-  />
-</div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "2em",
+            padding: "3em",
+            marginTop: "2em",
+            width: "100%",
+
+          }}
+        >
+          <Input
+            placeholder="PO Number"
+            value={poNumber}
+            onChange={handlePoNumberChange}
+            style={{
+              width: "200px",
+              boxSizing: "border-box",
+            }}
+          />
+          <CreatableSelect
+            className="basic-single"
+            classNamePrefix="select"
+            value={selectedPOStatus}
+            onChange={handlePOStatusChange}
+            name="po_status"
+            options={POStatusOptions}
+            styles={{
+              container: (provided) => ({ ...provided, width: 200 }),
+              marginTop: "20px",
+            }}
+            onCreateOption={handlePOStatusChange}
+            placeholder=" PO Status"
+            isClearable
+          />
+          <CreatableSelect
+            className="basic-single"
+            classNamePrefix="select"
+            value={selectedPOType}
+            onChange={handlePOTypeChange}
+            name="po_type"
+            options={SelectedPOTypeOptions}
+            styles={{
+              container: (provided) => ({ ...provided, width: 200 }),
+              marginTop: "20px",
+            }}
+            onCreateOption={handlePOTypeChange}
+            placeholder="PO Type"
+            isClearable
+          />
+
+          <CreatableSelect
+            className="basic-single"
+            classNamePrefix="select"
+            value={selectedSupplierName}
+            onChange={handleSupplierNameChange}
+            name="supplier_name"
+            options={selectedSupplierOptions}
+            styles={{
+              container: (provided) => ({ ...provided, width: 200 }),
+              marginTop: "20px",
+            }}
+            onCreateOption={handleSupplierNameChange}
+            placeholder=" Supplier Name"
+            isClearable
+          />
+
+
+
+
+          <CreatableSelect
+            className="basic-single"
+            classNamePrefix="select"
+            value={selectedShipTo}
+            onChange={handleShipToChange}
+            name="ship_to"
+            options={selectedShipToOptions}
+            styles={{
+              container: (provided) => ({ ...provided, width: 200 }),
+              marginTop: "20px",
+            }}
+            onCreateOption={handleShipToChange}
+            placeholder="Location"
+            isClearable
+          />
+
+
+
+
+          <CreatableSelect
+            className="basic-single"
+            classNamePrefix="select"
+            value={selectedBuyerName}
+            onChange={handleBuyerNameChange}
+            name="buyer_name"
+            options={selectedBuyerNameOptions}
+            styles={{
+              container: (provided) => ({ ...provided, width: 200 }),
+              marginTop: "20px",
+            }}
+            onCreateOption={handleBuyerNameChange}
+            placeholder="Buyer Name"
+            isClearable
+          />
+          <Input
+            placeholder="Total Amount"
+            value={selectedTotalAmount}
+            onChange={handleTotalChange}
+            style={{
+              width: "200px",
+              boxSizing: "border-box",
+            }}
+          />
+
+          <Input
+            placeholder="PO Header ID"
+            value={selectedPOHeaderID}
+            onChange={handlePoHeaderChange}
+            style={{
+              width: "200px",
+              boxSizing: "border-box",
+            }}
+          />
+
+          <Input
+            placeholder="Vendor Site ID"
+            value={selectedVendorSiteID}
+            onChange={handleVendorSiteChange}
+            style={{
+              width: "200px",
+              boxSizing: "border-box",
+            }}
+          />
+          <Input
+            placeholder="Vendor Number"
+            value={selectedVendorNumber}
+            onChange={handleVendorNumber}
+            style={{
+              width: "200px",
+              boxSizing: "border-box",
+            }}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: "20px",
+            marginBottom: "20px",
+          }}
+        >
+          <Button
+            style={{
+              backgroundColor: "#3570c3",
+              color: "white",
+              cursor: "pointer",
+              height: "35px",
+              width: "100px", // Consistent button width
+            }}
+            onClick={filterData}
+          >
+            Find
+          </Button>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              backgroundColor,
+              padding: "6px 12px",
+              borderRadius: "4px",
+              cursor: "pointer",
+              marginRight: "20px"
+            }}
+            onMouseEnter={() => setIsHovered2(true)}
+            onMouseLeave={() => setIsHovered2(false)}
+            //   onClick={handleDeleteSelectedRows}
+            onClick={handleClear}
+          >
+            <DismissRegular
+              style={{
+                color: "#1281d7",
+                fontSize: "20px",
+                marginRight: "5px"
+              }}
+            />
+            <span
+              style={{
+                fontSize: "14px",
+                color: "#000",
+
+              }}
+            >
+              Clear
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+      <div
+
+      >
        
       </div>
-      <div
-        style={{
-          height: "60vh",
-          overflow: "scroll",
-          marginTop: "40px",
-          overflowx: "auto"
-        }}
-      >
-       <DataGrid
-      
-      items={filtered}
-      key={items.length}
-      columns={columns}
-      sortable
-      selectionMode="multiselect"
-      onSelectionChange={handleSelectionChange}
-      getRowId={(_, index) => index}
-      focusMode="composite"
-      style={{ minWidth: "600px" }}
+
+    </div>
+    <div
+      style={{
+        height: "60vh",
+        overflow: "scroll",
+        marginTop: "40px",
+        overflowx: "auto"
+      }}
     >
-      <DataGridHeader>
-        <DataGridRow>
-          {({ renderHeaderCell, columnId }) => (
-            <DataGridHeaderCell
-              onClick={() => handleSort(columnId)}
-              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-            >
-              {renderHeaderCell()}
-              {getSortIcon(columnId)}
-            </DataGridHeaderCell>
-          )}
-        </DataGridRow>
-      </DataGridHeader>
-      <DataGridBody>
-        {({ item, rowId }) => (
-          <DataGridRow
-            key={rowId}
-            onClick={(e) => handleRowClick(e, item)}
-            selected={selectedRows.has(rowId)}
-          >
-            {({ renderCell }) => (
-              <DataGridCell
-                style={{
-                  wordWrap: "break-word",
-                  whiteSpace: "normal",
-                  overflow: "hidden",
-                }}
+       <Search
+          placeholder="Search PO"
+          onSearchChange={handleSearchChange}
+        />
+      <DataGrid
+
+        items={filtered}
+        key={items.length}
+        columns={columns}
+        sortable
+        selectionMode="multiselect"
+        onSelectionChange={handleSelectionChange}
+        getRowId={(_, index) => index}
+        focusMode="composite"
+        style={{ minWidth: "600px" }}
+      >
+        <DataGridHeader>
+          <DataGridRow>
+            {({ renderHeaderCell, columnId }) => (
+              <DataGridHeaderCell
+                onClick={() => handleSort(columnId)}
+                style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
               >
-                {renderCell(item)}
-              </DataGridCell>
+                {renderHeaderCell()}
+                {getSortIcon(columnId)}
+              </DataGridHeaderCell>
             )}
           </DataGridRow>
-        )}
-      </DataGridBody>
-    </DataGrid>
-      </div>
-    </>
-  );
+        </DataGridHeader>
+        <DataGridBody>
+          {({ item, rowId }) => (
+            <DataGridRow
+              key={rowId}
+              onClick={(e) => handleRowClick(e, item)}
+              selected={selectedRows.has(rowId)}
+            >
+              {({ renderCell }) => (
+                <DataGridCell
+                  style={{
+                    wordWrap: "break-word",
+                    whiteSpace: "normal",
+                    overflow: "hidden",
+                  }}
+                >
+                  {renderCell(item)}
+                </DataGridCell>
+              )}
+            </DataGridRow>
+          )}
+        </DataGridBody>
+      </DataGrid>
+    </div>
+  </>
+);
 };
 
 export default OpenPoTable;

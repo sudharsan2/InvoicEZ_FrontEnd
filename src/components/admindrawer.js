@@ -281,7 +281,7 @@ const NavDrawerDefaultAdmin = (props) => {
                         setValue("3");
                       }}
                     >
-                     Matrimony.com
+                     Dashboard
                     </NavSubItem>
                     <NavSubItem
                       value="4"
@@ -365,7 +365,7 @@ const NavDrawerDefaultAdmin = (props) => {
                         setValue("3");
                       }}
                     >
-                     Matrimony.com
+                     Dashboard
                     </NavSubItem>
                     <NavSubItem
                       value="4"

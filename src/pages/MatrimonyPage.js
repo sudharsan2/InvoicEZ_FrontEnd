@@ -506,7 +506,7 @@ const Matrimony = () => {
               </BreadcrumbItem>
               <BreadcrumbDivider />
               <BreadcrumbItem>
-                <BreadcrumbButton href={path3}>Matrimony.com</BreadcrumbButton>
+                <BreadcrumbButton href={path3}>Dashboard</BreadcrumbButton>
               </BreadcrumbItem>
             </Breadcrumb>
           </div>
