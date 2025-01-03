@@ -227,11 +227,18 @@ const Matrimony = () => {
 
 
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(apiKey);
-    notification.success({
-      message: "Message Copied to Clibboard",
-    });
+  const handleCopy = (valueToCopy) => {
+    navigator.clipboard.writeText(valueToCopy)
+      .then(() => {
+        notification.success({
+          message: "Text copied to clipboard!",
+        });
+      })
+      .catch(() => {
+        notification.error({
+          message: "Failed to copy text!",
+        });
+      });
   };
 
   const fetchLLMDetails = async () => {
@@ -650,7 +657,7 @@ const Matrimony = () => {
                       onBlur={(e) => handleUpdate("apiKey", e.target.value)}
                       className={styles.inputWithIcon}
                     />
-                    <FaRegCopy className={styles.icon} onClick={handleCopy} />
+                    <FaRegCopy className={styles.icon} onClick={() => handleCopy(apiKey)} />
                     <Button
                       style={{
                         marginLeft: "20px",
@@ -684,7 +691,7 @@ const Matrimony = () => {
                       onBlur={(e) => handleUpdate("model", e.target.value)}
                       className={styles.inputWithIcon}
                     />
-                    <FaRegCopy className={styles.icon} onClick={handleCopy} />
+                    <FaRegCopy className={styles.icon} onClick={() => handleCopy(model)} />
                     <Button
                       style={{
                         marginLeft: "20px",
@@ -732,7 +739,7 @@ const Matrimony = () => {
                       }
                       className={styles.inputWithIcon}
                     />
-                    <FaRegCopy className={styles.icon} onClick={handleCopy} />
+                    <FaRegCopy className={styles.icon} onClick={() => handleCopy(storage)} />
                     <Button
                       style={{
                         marginLeft: "20px",
@@ -767,7 +774,7 @@ const Matrimony = () => {
                       }
                       className={styles.inputWithIcon}
                     />
-                    <FaRegCopy className={styles.icon} onClick={handleCopy} />
+                    <FaRegCopy className={styles.icon} onClick={()=>handleCopy(container)} />
                     <Button
                       style={{
                         marginLeft: "20px",
@@ -806,7 +813,7 @@ const Matrimony = () => {
                       onBlur={(e) => handleAzureUpdate("key", e.target.value)}
                       className={styles.inputWithIcon}
                     />
-                    <FaRegCopy className={styles.icon} onClick={handleCopy} />
+                    <FaRegCopy className={styles.icon} onClick={() => handleCopy(key)} />
                     <Button
                       style={{
                         marginLeft: "20px",
@@ -847,7 +854,7 @@ const Matrimony = () => {
                       }
                       className={styles.inputWithIcon}
                     />
-                    <FaRegCopy className={styles.icon} onClick={handleCopy} />
+                    <FaRegCopy className={styles.icon} onClick={() => handleCopy(connection)} />
                     <Button
                       style={{
                         marginLeft: "20px",
