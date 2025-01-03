@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { EyeOutlined } from "@ant-design/icons";
 import axios from "axios";
+import {notification} from "antd";
 import "./login.css";
 
 
@@ -88,7 +89,13 @@ const LoginPage = ({ setRoleFromChild }) => {
           default:
             navigate("/unauthorized");
         }
+        notification.success({
+          message: "Login Successfully!😄",
+        });
       } catch (error) {
+        notification.error({
+          message:"Login Failed😢"
+        })
         console.error("Login failed:", error);
         if (error.response) {
           setErrors({ auth: error.response.data.message });
@@ -232,7 +239,7 @@ const LoginPage = ({ setRoleFromChild }) => {
           style={{
             width: "100%",
             padding: "1em",
-            backgroundColor: "#e6c5e2",
+            backgroundColor: "#8e908f",
             color: "white",
             border: "none",
             borderRadius: "0.5rem",
@@ -247,7 +254,7 @@ const LoginPage = ({ setRoleFromChild }) => {
           }}
           disabled={isLoading || formik.isSubmitting}
         >
-          <span style={{color:"black"}}>{isLoading ? "Signing in..." : "Sign in"}</span>
+          <span style={{color:"white"}}>{isLoading ? "Signing in..." : "Sign in"}</span>
         </button>
       </form>
     </div>
