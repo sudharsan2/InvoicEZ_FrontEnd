@@ -6,7 +6,10 @@ import {
   BreadcrumbButton,
   Divider
 } from "@fluentui/react-components";
-
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { YearCalendar } from '@mui/x-date-pickers/YearCalendar';
 
 import HistoryTable from "../components/HistoryTable";
 
@@ -65,18 +68,19 @@ const containerStyle = {
 
 const History = () => {
     const[rows,setRows]=useState("");
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); 
     
     useEffect(() => {
         // Fetch data from the API on component mount
         const fetchData = async () => {
           try {
-            const token = localStorage.getItem("access_token"); // Retrieve the token securely
+            const token = localStorage.getItem("access_token"); 
         
             const response = await fetch("https://invoicezapi.focusrtech.com:57/user/dashboard-count-of-this-month", {
-              method: "GET", // Specify the method explicitly
+              method: "GET", 
               headers: {
-                "Content-Type": "application/json", // Optional for GET requests
-                Authorization: `Bearer ${token}`, // Add the authorization header
+                "Content-Type": "application/json", 
+                Authorization: `Bearer ${token}`, 
               },
             });
         
@@ -98,12 +102,21 @@ const History = () => {
     
     const counters = [
         { label: "Total Invoice Processed", value: rows, color: "#00bfbf" }, // Cyan
-        // { label: "Number of Invoice Processed", value: 2, color: "#d62727" }, // Red
+        
         
       ];
+
+
+      // Year selection for Graph
+
+      
+
+  const handleYearChange = (year) => {
+    setSelectedYear(year.year()); 
+  };
   return (
     <div style={{overflowY:"auto",height:"90vh"}}>
-      <div style={{ height: "5vh"}}>
+      <div style={{ height: "5vh",display:"flex",justifyContent:"space-between"}}>
         <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
@@ -116,6 +129,17 @@ const History = () => {
             {/* <BreadcrumbDivider /> */}
           </Breadcrumb>
         </div>
+        <div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={['YearCalendar']}>
+          <DemoItem label="YearCalendar">
+            <YearCalendar onChange={handleYearChange} />
+          </DemoItem>
+        </DemoContainer>
+      </LocalizationProvider>
+
+        </div>
+        
       </div>
       <div>
         <div style={{ maxHeight: "10vh" }}>
@@ -133,7 +157,7 @@ const History = () => {
           
           <div style={{marginTop:"-2em",marginLeft:"0em",width:"50%",display:"flex",flexDirection:"column",justifyContent:"center",}}>
             
-           <Example/>
+          <Example selectedYear={selectedYear} />
            <span style={{fontWeight:"bold",marginLeft:"2em",textAlign:"center"}}>Number of Invoice Processed</span>
       </div>
           <div style={containerStyle}>

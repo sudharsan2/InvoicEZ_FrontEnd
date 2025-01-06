@@ -927,9 +927,9 @@ const renderDetail = (label, value) => (
     style={{
       position: "sticky",
       top: 0,
-      backgroundColor: {backStyle} || "white",
+      backgroundColor: backStyle || "white",
       zIndex: 1,
-      color: {innerStyle} || "black",
+      color: innerStyle || "black",
     }}
   >
     <TableRow

@@ -13,7 +13,8 @@ import {
   
 } from "@fluentui/react-components";
 import { KeyMultipleRegular } from "@fluentui/react-icons";
-
+import axios from "axios";
+import {message} from "antd";
 
 
 import { FaRegCopy } from "react-icons/fa";
@@ -437,7 +438,7 @@ const Matrimony = () => {
   const [isConnection, isSetConnection] = useState(true);
 
   function getValue(isHidden, text) {
-    return isHidden ? "•".repeat(text.length) : text;
+    return isHidden ? "•••••••••••••••••••••••" : text;
   }
   
   function getToggleText(isHidden) {
@@ -452,6 +453,9 @@ const Matrimony = () => {
   
   const val5 = getValue(isStorage, storage);
   const val9 = getToggleText(isStorage);
+
+  console.log("1",val3);
+  console.log("2",val4);
   
   const val6 = getValue(isContainer, container);
   const val10 = getToggleText(isContainer);
@@ -486,7 +490,48 @@ const Matrimony = () => {
   const handleToggleKeyVisiblity = () => {
     isSetKey(!isKey);
   };
+// POST API FOR GETTING LATEST DATA
 
+const handlePostApi = async () => {
+  console.log("Button clicked!");
+
+ 
+  
+
+  const payload = {
+    connection_string: connection,
+    container_name: container,
+  };
+
+  console.log("payload", payload);
+
+  try {
+   
+
+
+    const token = localStorage.getItem("access_token");
+
+    const response = await axios.post(
+      "https://invoicezapi.focusrtech.com:57/user/azure-usage",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 201) {
+      message.success("Updated the LLM");
+      
+      
+    } else {
+      message.error("Operation Unsuccessfull. Please try again.");
+    }
+  } catch (error) {
+    message.error("Unknown error Occured");
+  }
+};
   return (
     <div style={{ height: "91vh", overflowY: "scroll" }}>
       {/* First Part */}
@@ -629,8 +674,14 @@ const Matrimony = () => {
                 marginLeft: "auto",
                 alignItems: "center",
                 cursor: "pointer",
+                marginRight:"20px"
               }}
+              onClick={handlePostApi}
             >
+              <Button
+            >
+              Show LLM Values
+            </Button>
               
             </div>
           </TabList>

@@ -18,9 +18,10 @@ import {
 import {
   
   bundleIcon,
-  
   Navigation24Filled,
-  Navigation24Regular,Apps28Regular
+  Navigation24Regular,Apps28Regular,
+  People24Regular,
+  Board24Regular
 } from "@fluentui/react-icons";
 
 import {
@@ -123,6 +124,10 @@ const NavDrawerDefaultAdmin = (props) => {
 
   const themestate = useSelector((state) => state.theme.theme);
 
+  const iconStyle = {
+    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+  };
+
   const [collapse, setCollapse] = useState(false);
 
   const styles = useStyles();
@@ -130,11 +135,10 @@ const NavDrawerDefaultAdmin = (props) => {
   
 
   const [isOpen, setIsOpen] = useState(true);
- 
   const [username, setUsername] = useState("");
-
   const [empId, setEmpId] = useState("");
   const [value,setValue] = useState("");
+
 
   console.log(value);
    
@@ -276,11 +280,13 @@ const NavDrawerDefaultAdmin = (props) => {
                     <NavSubItem
                       value="3"
                       style={{ marginTop: "10px", fontSize: "17px" }}
+                     
                       onClick={() => {
                         navigate("/matrimony");
                         setValue("3");
                       }}
                     >
+                    <Board24Regular style={iconStyle}/>
                      Dashboard
                     </NavSubItem>
                     <NavSubItem
@@ -291,6 +297,7 @@ const NavDrawerDefaultAdmin = (props) => {
                         setValue("4");
                       }}
                     >
+                      <People24Regular style={iconStyle} />
                       User Management
                     </NavSubItem>
                   </NavSubItemGroup>
@@ -365,6 +372,7 @@ const NavDrawerDefaultAdmin = (props) => {
                         setValue("3");
                       }}
                     >
+                      <Board24Regular style={iconStyle}/>
                      Dashboard
                     </NavSubItem>
                     <NavSubItem
@@ -374,7 +382,9 @@ const NavDrawerDefaultAdmin = (props) => {
                         navigate("/user");
                         setValue("4");
                       }}
+                      
                     >
+                      <People24Regular style={iconStyle} />
                       User Management
                     </NavSubItem>
                   </NavSubItemGroup>

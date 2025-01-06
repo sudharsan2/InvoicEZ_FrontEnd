@@ -9,53 +9,117 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-
-const Example = () => {
+import axios from "axios";
+const Example = ({selectedYear}) => {
   const [data, setData] = useState([]);
 
-  // Fetch data from the API
+  
+
+  // const handlePostApi = async () => {
+  //   console.log("Button clicked!");
+  
+   
+    
+  
+  //   const payload = {
+  //     connection_string: connection,
+  //     container_name: container,
+  //   };
+  
+  //   console.log("payload", payload);
+  
+  //   try {
+     
+  
+  
+  //     const token = localStorage.getItem("access_token");
+  
+  //     const response = await axios.post(
+  //       "https://invoicezapi.focusrtech.com:57/user/azure-usage",
+  //       payload,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  
+  //     if (response.status === 201) {
+  //       message.success("Updated the LLM");
+        
+        
+  //     } else {
+  //       message.error("Operation Unsuccessfull. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     message.error("Unknown error Occured");
+  //   }
+  // };
+
+
   useEffect(() => {
+    console.log("HI..");
+  
+    const payload = {
+      year: selectedYear, // Ensure `selectedYear` is defined and valid
+    };
+  
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
-    
-        const response = await fetch('https://invoicezapi.focusrtech.com:57/user/dashboard-monthwise-invoice', {
-          method: "GET", 
-          headers: {
-            "Content-Type": "application/json", 
-            Authorization: `Bearer ${token}`, 
-          },
-        });
-    
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-    
-        const result = await response.json();
-    
+  
+        // Make the API request
+        const response = await axios.post(
+          "https://invoicezapi.focusrtech.com:57/user/dashboard-monthwise-invoice",
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json", // Explicitly set content type
+              Authorization: `Bearer ${token}`,  // Include Bearer token
+            },
+          }
+        );
+  
         
-        const formattedData = Object.keys(result).map(month => ({
-          name: month, 
-          invoices: result[month], 
+        console.log("Response data:", response.data);
+  
+        
+        const formattedData = Object.keys(response.data).map((month) => ({
+          name: month,
+          invoices: response.data[month],
         }));
-    
+  
         setData(formattedData); 
       } catch (error) {
-        console.error("Error fetching data:", error);
+        
+        if (error.response) {
+         
+          console.error(
+            `Error Response: Status ${error.response.status}, Data:`,
+            error.response.data
+          );
+        } else if (error.request) {
+         
+          console.error("No response received:", error.request);
+        } else {
+         
+          console.error("Error setting up request:", error.message);
+        }
       }
     };
-    
-
+  
     fetchData();
-  }, []);
+  }, [selectedYear]); 
+  
 
+  console.log("Data",data);
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart
         data={data}
         margin={{ top: 10, right: 30, left: 40, bottom: 20 }} // Adjust margins
       >
-        {/* Add Grid Lines */}
+        
         <CartesianGrid strokeDasharray="3 3" />
 
         {/* X-Axis */}

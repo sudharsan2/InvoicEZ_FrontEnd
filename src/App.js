@@ -61,6 +61,7 @@ import React, { useState, useEffect } from "react";
 import StoreOpenPODetails from "./pages/StoreOpenPODetails";
 import OpenPODetails from "./pages/OpenPoDetails";
 
+
 function App() {
 
 
@@ -302,6 +303,9 @@ function App() {
 
           }
         />
+
+
+
         <Route
           path="/aidetail"
           element={
