@@ -193,7 +193,7 @@ const DashboardNav = () => {
   const TodoCount = [
     { label: "Dashboard",  value: <span style={{ color: "#004378" }}>To Do</span>, color: "#004392" },
     { label: "Yet To Process",  value: <span style={{ color: "#004378" }}>{gatelength}</span>, color: "#ff0000" },
-    { label: "Waiting For GRN",  value: <span style={{ color: "#004378" }}>3</span>, color: "#b80da3" }, // Cyan
+    { label: "Waiting For GRN",  value: <span style={{ color: "#004378" }}>{tableLength}</span>, color: "#b80da3" }, // Cyan
 
   ];
 
@@ -672,6 +672,7 @@ useEffect(()=>{
                     style={{
                       display: "flex",
                       justifyContent: "flex-end",
+                      marginRight:"1em",
                       marginLeft: "0vw",
                       marginTop: "0vh",
                       paddingBottom: "2vh",
@@ -1114,7 +1115,7 @@ useEffect(()=>{
         </div>
        
        
-       <div style={{width:"50%",marginTop:"-7px"}}>
+       <div style={{width:"50%",marginTop:"-5px"}}>
        <InvoiceStatusPieChart />
        </div>
        

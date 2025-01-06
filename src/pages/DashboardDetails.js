@@ -146,6 +146,8 @@ const DashboardDetails = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [invoiceData, setInvoiceData] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isHovered1, setIsHovered1] = useState(false);
+
   const location2 = useLocation();
   const [items, setItems] = useState([]);
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState(null);
@@ -320,7 +322,7 @@ useEffect(() => {
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          backgroundColor: isHovered ? "#e1e1e2" : "transparent",
+                          backgroundColor: isHovered1? "#e1e1e2" : "transparent",
                           border: "1px solid #fff",
                           padding: "6px 12px",
                           cursor: "pointer",
@@ -330,6 +332,8 @@ useEffect(() => {
                           transition: "background-color 0.2s ease",
                         }}
                         onClick={()=>{navigate('/summary')}}
+                        onMouseEnter={() => setIsHovered1(true)}
+                        onMouseLeave={() => setIsHovered1(false)}
                        
                       >
                         <FaArrowUpRightFromSquare style={{ color: "#1281d7" }} />
