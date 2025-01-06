@@ -199,10 +199,6 @@ const OpenPoTable = () => {
       console.log("fetchedItemsOPen", fetchedItems);
       setData(fetchedItems);
     
-    
-    
-
-      
       const mappedItems = fetchedItems.map((item) => ({
         // Id: item.po_headers[0].id,
         InvoiceId: item.id,

@@ -60,6 +60,7 @@ import StoreOpenPO from "./pages/StoreOpenPo";
 import React, { useState, useEffect } from "react";
 import StoreOpenPODetails from "./pages/StoreOpenPODetails";
 import OpenPODetails from "./pages/OpenPoDetails";
+import DashboardDetails from "./pages/DashboardDetails";
 
 
 function App() {
@@ -297,6 +298,21 @@ function App() {
               <CustomLayout>
                 <NavDrawerDefault>
                   <AIDetailPage />
+                </NavDrawerDefault>
+              </CustomLayout>
+              </ProtectedRoute>
+
+          }
+        />
+
+
+<Route
+          path="/dashboard-detail"
+          element={
+            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+              <CustomLayout>
+                <NavDrawerDefault>
+                  <DashboardDetails />
                 </NavDrawerDefault>
               </CustomLayout>
               </ProtectedRoute>

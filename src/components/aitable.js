@@ -3,10 +3,10 @@ import axios from "axios";
 import {
   ArrowClockwise24Regular,
   Delete24Regular,
-  ArrowSortUpFilled, ArrowSortDownRegular
+ 
 } from "@fluentui/react-icons";
-import {useNavigate } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
   DataGridBody,
@@ -18,11 +18,12 @@ import {
   createTableColumn,
 } from "@fluentui/react-components";
 import Search from "./Search";
-import { message, notification } from "antd";
+import { notification } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
-
+import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+import {message} from "antd";
 const columns = [
   createTableColumn({
     columnId: "InvoiceId",
@@ -61,21 +62,20 @@ const columns = [
 ];
 
 const AITable = ({ setTableLength }) => {
-
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const [isHovered, setIsHovered] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]);
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [invoiceId, setInvoiceId] = useState(null);
+  const navigate = useNavigate();
   
- 
+  const location2 = useLocation();
+  const { invoiceNumber } = location2.state || {};
+  console.log("inn", invoiceNumber);
 
-  
+  const dispatch = useDispatch();
   const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
@@ -124,10 +124,10 @@ const AITable = ({ setTableLength }) => {
   
 
   const handleRefreshClick = () => {
-    fetchData(true); 
+    fetchData(true); // Pass `true` to show the message when button is clicked
   };
 
-  
+
 
 
 
@@ -144,7 +144,6 @@ const AITable = ({ setTableLength }) => {
           item.city?.toLowerCase().includes(searchLower) ||
           item.InvoiceDate?.toLowerCase().includes(searchLower) ||
           item.InvoiceTotal?.toLowerCase().includes(searchLower) 
-          
         );
       });
   
@@ -162,7 +161,7 @@ const AITable = ({ setTableLength }) => {
         item.city?.toLowerCase().includes(searchLower) ||
         item.InvoiceDate?.toLowerCase().includes(searchLower) ||
         item.InvoiceTotal?.toLowerCase().includes(searchLower) 
-        
+        // item.ship_to?.toLowerCase().includes(searchLower)
       );
     });
     
@@ -172,7 +171,7 @@ const AITable = ({ setTableLength }) => {
     }
   };
 
-  const handleSelectionChange = ( data) => {
+  const handleSelectionChange = (event, data) => {
     console.log("handleSelectionChange", data.selectedItems);
     setSelectedRows(data.selectedItems);
   };
@@ -220,7 +219,7 @@ const AITable = ({ setTableLength }) => {
         description: `You have successfully deleted: ${supplierNames}`,
       });
 
-     
+      console.log("ITEMS LENGTH",items.length);
 
       dispatch(refreshActions.toggleInvoiceUploadRefresh());
     } catch (error) {
@@ -234,7 +233,41 @@ const AITable = ({ setTableLength }) => {
     }
   };
 
-  
+  const handleApproveSelectedRows = async () => {
+    const selectedItemsArray = Array.from(selectedRows);
+    if (selectedItemsArray.length === 0) {
+      notification.warning({
+        message: "No PO Selected",
+        description: "Please select at least one PO to approve.",
+      });
+      return;
+    }
+
+    try {
+      const poNumbers = selectedItemsArray
+        .map((item) => item.po_number)
+        .join(", ");
+
+      await Promise.all(
+        selectedItemsArray.map((item) =>
+          axios.post(
+            `https://invoicezapi.focusrtech.com:57/user/approve-status/${filteredItems[item].po_number}`,
+          ),
+        ),
+      );
+
+      notification.success({
+        message: "Successfully approved",
+      });
+    } catch (error) {
+      const poNumbers = selectedItemsArray
+        .map((item) => item.po_number)
+        .join(", ");
+      notification.error({
+        message: "Approval Failed",
+      });
+    }
+  };
 
   const [filtered, setFilteredItems] = useState([]);
   useEffect(() => {
@@ -310,7 +343,7 @@ const AITable = ({ setTableLength }) => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          
+          // onClick={fetchData}
           onMouseEnter={() => setIsHovered2(true)} 
           onMouseLeave={() => setIsHovered2(false)} 
           onClick={handleRefreshClick}

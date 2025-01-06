@@ -10,6 +10,10 @@ const initialState = {
   conformedSupplier:null,
   freightterm:null,
   messageNotify:false,
+  tableLength: 0,
+  MatchCount: 0,
+  multiple_MatchCount: 0,
+  fixCount: 0,
 };
 
 const refreshSlice = createSlice({
@@ -50,11 +54,23 @@ const refreshSlice = createSlice({
     state.secondaryDrawerPosition = action.payload;
     localStorage.setItem("userSecondaryDrawerPosition", action.payload); // Store second drawer position
   },
+  updateTableMetrics(state, action) {
+    console.log("Payload in Reducer:", action.payload);
+    
+    state.tableLength = action.payload.tableLength;
+    state.MatchCount = action.payload.MatchCount;
+    state.multiple_MatchCount = action.payload.multiple_MatchCount;
+    state.fixCount = action.payload.fixCount;
+  },
 
+  
+  
+  
+   
   },
 });
 
-export const { toggleInvoiceUploadRefresh, toggleDrawerPosition,dropDownSubmit,dropDownValue, conformedSupplierValue,handleFreightTerm,handleMessageNotify,toggleSecondaryDrawerPosition } =
+export const { toggleInvoiceUploadRefresh, toggleDrawerPosition,dropDownSubmit,dropDownValue, conformedSupplierValue,handleFreightTerm,handleMessageNotify,toggleSecondaryDrawerPosition, updateTableMetrics  } =
   refreshSlice.actions;
 export const refreshReducer = refreshSlice.reducer; // Export as refreshReducer
 

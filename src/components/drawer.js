@@ -351,7 +351,7 @@ const NavDrawerDefault = (props) => {
                   />
                 }
                 onClick={() => {
-                  navigate("/dashboard");
+                  navigate("/dashboard-detail");
                   setValue("1");
                 }}
                 value="1"
@@ -600,7 +600,7 @@ const NavDrawerDefault = (props) => {
                 }
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
-                  navigate("/dashboard");
+                  navigate("/dashboard-detail");
                   setValue("1");
                 }}
               >

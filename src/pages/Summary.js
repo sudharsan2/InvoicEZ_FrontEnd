@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,7 +6,8 @@ import {
   BreadcrumbButton,Divider
 
 } from "@fluentui/react-components";
-
+import { useDispatch } from "react-redux";
+import { updateTableMetrics } from "../Store/refreshSlice";
 
 
 import SummaryTable from "../components/approvetable";
@@ -65,6 +66,26 @@ const SummaryPage = () => {
         
       ];
       
+
+      const dispatch = useDispatch();
+
+  const updateMetrics = () => {
+    const metrics = {
+      tableLength: tableLength,
+      MatchCount: MatchCount,
+      multiple_MatchCount: multiple_MatchCount,
+      fixCount: fixCount,
+    };
+    dispatch(updateTableMetrics(metrics));
+     // Log state after dispatch
+  console.log("Metrics updated:", metrics);
+  };
+
+
+  useEffect(() => {
+    console.log("useEffect called");
+    updateMetrics();
+  }, [tableLength, MatchCount, multiple_MatchCount, fixCount]);
 
   return (
     <div style={{maxHeight:"91vh",overflowY:"auto"}}>

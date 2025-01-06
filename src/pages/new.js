@@ -78,7 +78,7 @@ const LoginPage = ({ setRoleFromChild }) => {
             navigate("/matrimony");
             break;
           case "invoice manager":
-            navigate("/dashboard");
+            navigate("/dashboard-detail");
             break;
           case "supplier":
             navigate("/supplier");
