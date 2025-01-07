@@ -1,6 +1,3 @@
-
-
-
 import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -19,47 +16,12 @@ import {
 import {
   Board24Filled,
   Board24Regular,
-  BoxMultiple20Filled,
-  BoxMultiple20Regular,
-  DataArea20Filled,
-  DataArea20Regular,
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-  HeartPulse20Filled,
-  HeartPulse20Regular,
-  MegaphoneLoud20Filled,
-  MegaphoneLoud20Regular,
-  NotePin20Filled,
-  NotePin20Regular,
-  People20Filled,
-  People20Regular,
-  PeopleStar20Filled,
-  PeopleStar20Regular,
-  PersonFilled,
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-  PersonRegular,
-  PersonSearch20Filled,
-  PersonSearch20Regular,
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-  Settings20Filled,
-  Settings20Regular,
   bundleIcon,
-  LayerDiagonalPerson24Filled,
-  LayerDiagonalPerson24Regular,
-  PersonStar24Filled,
-  PersonStar24Regular,
-  PremiumPerson24Filled,
-  PremiumPerson24Regular,
-  DocumentTableSearch24Filled,
-  DocumentTableSearch24Regular,
   VehicleTruckProfile24Regular  ,
   VehicleTruckProfile24Filled ,
-  Gavel24Filled,
   Navigation24Filled,
   Navigation24Regular,
-  Gavel24Regular,
+ 
   Apps28Regular
 } from "@fluentui/react-icons";
 import { PiTrolleyBold ,PiTrolleyFill} from "react-icons/pi";
@@ -88,7 +50,10 @@ const hoverEffect = {
 
 const useStyles = makeStyles({
   root: {
+    
     overflow: "hidden",
+    
+
     position: "fixed",
     left: 0,
     width: "100%",
@@ -97,8 +62,9 @@ const useStyles = makeStyles({
     backgroundColor: "#fff",
   },
   content: {
-    flex: 1,
-    padding: "16px",
+    flex:1,
+    ...shorthands.padding("16px"),
+
     display: "grid",
     justifyContent: "flex-start",
     alignItems: "flex-start",
@@ -115,15 +81,11 @@ const useStyles = makeStyles({
     marginInlineStart: `10px`,
   },
   hamburger: {
+
     textDecorationLine: "none",
     marginLeft: "5px",
     marginTop: "10px",
-    ":hover": {
-      // Optional hover styles
-    },
-    ":active": {
-      // Optional active styles
-    },
+
   },
   navItemlight: {
     marginTop: "10px",
@@ -145,49 +107,16 @@ const useStyles = makeStyles({
 });
 
 
-const Person = bundleIcon(PersonFilled, PersonRegular);
 const Dashboard = bundleIcon(Board24Filled, Board24Regular);
 const Truck = bundleIcon(VehicleTruckProfile24Filled ,VehicleTruckProfile24Regular )
-const Asn = bundleIcon (Gavel24Filled,Gavel24Regular)
-const Trolly = bundleIcon(PiTrolleyFill,PiTrolleyBold);
-const Announcements = bundleIcon(MegaphoneLoud20Filled, MegaphoneLoud20Regular);
-const EmployeeSpotlight = bundleIcon(
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-);
 
-const LayerDiagonalPersonRegular = bundleIcon(
-  LayerDiagonalPerson24Filled,
-  LayerDiagonalPerson24Regular,
-);
-const PersonStarRegular = bundleIcon(PersonStar24Filled, PersonStar24Regular);
-const PremiumPersonRegular = bundleIcon(
-  PremiumPerson24Filled,
-  PremiumPerson24Regular,
-);
-const TableSearchRegular = bundleIcon(
-  DocumentTableSearch24Filled,
-  DocumentTableSearch24Regular,
-);
+const Trolly = bundleIcon(PiTrolleyFill,PiTrolleyBold);
+
+
+
 const Navi = bundleIcon(Navigation24Filled, Navigation24Regular);
 
-const Search = bundleIcon(PersonSearch20Filled, PersonSearch20Regular);
-const PerformanceReviews = bundleIcon(
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-);
-const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular);
-const Interviews = bundleIcon(People20Filled, People20Regular);
-const HealthPlans = bundleIcon(HeartPulse20Filled, HeartPulse20Regular);
-const TrainingPrograms = bundleIcon(BoxMultiple20Filled, BoxMultiple20Regular);
-const CareerDevelopment = bundleIcon(PeopleStar20Filled, PeopleStar20Regular);
-const Analytics = bundleIcon(DataArea20Filled, DataArea20Regular);
 
-const Reports = bundleIcon(
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-);
-const Settings = bundleIcon(Settings20Filled, Settings20Regular);
 
 const NavDrawerDefaultLoop = (props) => {
   const navigate = useNavigate();
@@ -240,44 +169,106 @@ const NavDrawerDefaultLoop = (props) => {
 
 
   // styles for Inlooop
-  const drawerStyle = collapse
-    ? { width: "57px", transition: "width 0.5s", borderRightStyle: "none" }
-    : { transition: "width 0.5s", borderRightStyle: "none" };
+  // Function to get drawer style based on collapse state
 
-  const headerStyle = themestate
-    ? { backgroundColor: darktheme.sidebarcolordark, cursor: "pointer", WebkitTapHighlightColor: "transparent" }
-    : { cursor: "pointer", WebkitTapHighlightColor: "transparent" };
+const getDrawerStyle = (collapse) => ({
+  transition: "width 0.5s",
+  borderRightStyle: "none",
+  width: collapse ? "57px" : "auto",
+});
 
-  const iconStyle1 = {
-    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
-  };
 
-  const Footer = themestate ? { backgroundColor: darktheme.sidebarcolordark } : {}
+const getHeaderStyle = (themestate, darktheme) => ({
+  cursor: "pointer",
+  WebkitTapHighlightColor: "transparent",
+  backgroundColor: themestate ? darktheme.sidebarcolordark : "transparent",
+});
 
-  const footerStyle = themestate
-  ? { marginBottom: "30px", color: darktheme.fontcolordark }
-  : { marginBottom: "30px", color: lighttheme.fontcolorlight };
+const getIconStyle = (themestate, darktheme, lighttheme) => ({
+  color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+});
+
+
+const drawerStyle = getDrawerStyle(collapse);
+const headerStyle = getHeaderStyle(themestate, darktheme);
+const iconStyle1 = getIconStyle(themestate, darktheme, lighttheme);
+
+    
+
+  let Footer = {};
+
+if (themestate) {
+  Footer = { backgroundColor: darktheme.sidebarcolordark };
+}
+
+
+  const footerStyle = { marginBottom: "30px" };
+
+  if (themestate) {
+    footerStyle.color = darktheme.fontcolordark;
+  } else {
+    footerStyle.color = lighttheme.fontcolorlight;
+  }
   
 
-  const sidebarStyle = {
-    backgroundColor: themestate ? darktheme.sidebarcolordark : { height: "20px" },
+  const sidebarStyle = {};
 
-  };
+if (themestate) {
+  sidebarStyle.backgroundColor = darktheme.sidebarcolordark;
+} else {
+  sidebarStyle.height = "20px";
+}
 
   const commonStyle = { marginTop: "10px", fontSize: "17px" };
   
   const commonTextStyle = {
     marginTop: "2px",
-    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+    color: null,
   };
+  
+  if (themestate) {
+    commonTextStyle.color = darktheme.fontcolordark;
+  } else {
+    commonTextStyle.color = lighttheme.fontcolorlight;
+  }
+  
+  let style = {};
+
+if (themestate) {
+  style = { background: darktheme.contentpagedark };
+}
+
+
+
 
   const iconStyle = (iconColor) => ({
     fontSize: "24px",
     color: iconColor,
   });
 
-  const tooltipAppearance = themestate ? "inverted" : "normal";
-  const getNavItemClass = () => (themestate ? styles.navItemdark : styles.navItemlight);
+  const tooltipAppearance = themestate && "inverted" || "normal";
+
+  const getNavItemClass = () => {
+    let navItemClass;
+    
+    if (themestate) {
+      navItemClass = styles.navItemdark;
+    } else {
+      navItemClass = styles.navItemlight;
+    }
+  
+    return navItemClass;
+  };
+
+  let iconColor;
+
+if (themestate) {
+  iconColor = darktheme.fontcolordark;
+} else {
+  iconColor = lighttheme.fontcolorlight;
+}
+
+  
 
   
   const handleNavClick = (path, value) => {
@@ -332,7 +323,7 @@ const NavDrawerDefaultLoop = (props) => {
       <Tooltip content="Purchase Requisition" positioning="after" withArrow appearance={tooltipAppearance}>
         <NavItem
           target="_blank"
-          icon={<Dashboard style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+          icon={<Dashboard style={iconStyle(iconColor)} />}
           value="1"
           className={getNavItemClass()}
           style={commonStyle}
@@ -346,7 +337,7 @@ const NavDrawerDefaultLoop = (props) => {
       <Tooltip content="Purchase Order" positioning="after" withArrow appearance={tooltipAppearance}>
         <NavItem
           target="_blank"
-          icon={<Trolly style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+          icon={<Trolly style={iconStyle(iconColor)}/>}
           value="2"
           className={getNavItemClass()}
           style={commonStyle}
@@ -360,7 +351,7 @@ const NavDrawerDefaultLoop = (props) => {
       <Tooltip content="ASN Creation" positioning="after" withArrow appearance={tooltipAppearance}>
         <NavItem
           target="_blank"
-          icon={<Truck style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+          icon={<Truck style={iconStyle(iconColor)} />}
           value="3"
           className={getNavItemClass()}
           style={commonStyle}
@@ -375,7 +366,7 @@ const NavDrawerDefaultLoop = (props) => {
         <NavCategory value="4">
           <NavCategoryItem
             target="_blank"
-            icon={<Apps28Regular style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)} />}
+            icon={<Apps28Regular style={iconStyle(iconColor)} />}
             value="4"
             className={getNavItemClass()}
             style={commonStyle}
@@ -427,7 +418,7 @@ const NavDrawerDefaultLoop = (props) => {
                 target="_blank"
                 icon={
                   <Dashboard
-                  style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
+                  style={iconStyle(iconColor)}
                   />
                 }
                 
@@ -454,7 +445,7 @@ const NavDrawerDefaultLoop = (props) => {
                 icon={
                   <Trolly 
                    
-                      style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
+                  style={iconStyle(iconColor)}
       
                   />
                 }
@@ -480,7 +471,7 @@ const NavDrawerDefaultLoop = (props) => {
                 target="_blank"
                 icon={
                   <Truck
-                  style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
+                  style={iconStyle(iconColor)}
                   />
                 }
                 
@@ -505,7 +496,7 @@ const NavDrawerDefaultLoop = (props) => {
                     target="_blank"
                     icon={
                       <Apps28Regular
-                      style={iconStyle(themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight)}
+                      style={iconStyle(iconColor)}
                       />
                     }
                     
@@ -597,7 +588,7 @@ const NavDrawerDefaultLoop = (props) => {
 
       <div
         className={styles.content}
-        style={themestate ? { background: darktheme.contentpagedark } : {}}
+        style={style}
       >
 
         {props.children}

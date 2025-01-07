@@ -4,18 +4,11 @@ import {
   BreadcrumbItem,
   BreadcrumbDivider,
   BreadcrumbButton,
+  makeStyles, Button
 } from "@fluentui/react-components";
 
 
 
-
-import { makeStyles, Button } from "@fluentui/react-components";
-import {
-  bundleIcon,
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-} from "@fluentui/react-icons";
-const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const path = "/blob";
 const path1 = "http://localhost:3000/";
 // Grid
@@ -29,8 +22,7 @@ const counters = [
     width: "100%",
     display: "flex",
     
-    // justifyContent: "space-around",
-    padding: "8px",
+       padding: "8px",
     marginLeft:"0em"
   };
 

@@ -13,7 +13,7 @@ import {
   DataGridHeaderCell,
   DataGridCell,
   TableCellLayout,
-  createTableColumn,makeStyles, Input,
+  createTableColumn, Input,
 } from "@fluentui/react-components";
 
 import Search from "./Search"; 
@@ -351,55 +351,43 @@ if (Hovered2) {
   });
   
   const handleSort = (columnId) => {
-    const getNewSortDirection = (currentState, column) => {
-      if (currentState.columnId !== column) {
-        return "ascending";
-      }
+    const getNewSortDirection = (currentState, column) =>
+      currentState.columnId === column && currentState.sortDirection === "ascending"
+        ? "descending"
+        : "ascending";
   
-      if (currentState.sortDirection === "ascending") {
-        return "descending";
-      } else {
-        return "ascending";
-      }
-    };
+    const isNumeric = (val) => !isNaN(parseFloat(val));
+    const toComparable = (value) =>
+      isNumeric(value) ? parseFloat(value) : String(value || "").toLowerCase();
+  
+    const compareNumeric = (a, b, direction) =>
+      direction === "ascending" ? a - b : b - a;
+  
+    const compareString = (a, b, direction) =>
+      direction === "ascending" ? a.localeCompare(b) : b.localeCompare(a);
   
     const compareValues = (aValue, bValue, direction) => {
-      const isNumeric = (val) => !isNaN(parseFloat(val));
-      const aNumeric = isNumeric(aValue) ? parseFloat(aValue) : null;
-      const bNumeric = isNumeric(bValue) ? parseFloat(bValue) : null;
+      const aComparable = toComparable(aValue);
+      const bComparable = toComparable(bValue);
   
-      if (aNumeric !== null || bNumeric !== null) {
-        if (direction === "ascending") {
-          return (aNumeric || 0) - (bNumeric || 0);
-        } else {
-          return (bNumeric || 0) - (aNumeric || 0);
-        }
+      if (isNumeric(aComparable) || isNumeric(bComparable)) {
+        return compareNumeric(aComparable || 0, bComparable || 0, direction);
       }
   
-      const aString = String(aValue || "").toLowerCase();
-      const bString = String(bValue || "").toLowerCase();
-  
-      if (direction === "ascending") {
-        return aString.localeCompare(bString);
-      } else {
-        return bString.localeCompare(aString);
-      }
+      return compareString(aComparable, bComparable, direction);
     };
   
-    // Calculate the new sort direction
     const newSortDirection = getNewSortDirection(sortState, columnId);
-  
-    // Update the sort state
     setSortState({ columnId, sortDirection: newSortDirection });
   
-    // Sort items based on the new direction
-    const sortedItems = filteredItems.slice().sort((a, b) => 
+    const sortedItems = [...filteredItems].sort((a, b) =>
       compareValues(a[columnId], b[columnId], newSortDirection)
     );
   
-    // Update the filtered items
     setFilteredItems(sortedItems);
   };
+  
+  
 
 
   const filterData = () => {
@@ -450,308 +438,297 @@ if (Hovered2) {
           alignItems: "center",
           gap: "20px",
           fontWeight: "bold",
-          width:"100%"
-          
+          width: "100%",
+          marginTop: "8rem"
         }}
       >
-        
+
 
 
         <div
- 
- style={{
-   backgroundColor: "#F8FAFC",
-   
-   paddingTop: "10px",
-   width: "100%", 
-   marginTop: "-8em", 
-   height: "50vh", 
-   marginLeft:"12em",
-   paddingLeft:"1em",
-   paddingRight:"1em"
-  
- }}
 
- 
+          style={{
+            backgroundColor: "#F8FAFC",
+            paddingTop: "10px",
+            width: "100%",
+            marginTop: "-8em",
+            height: "50vh",
+            marginLeft: "1em",
+            // paddingLeft:"1em",
+            paddingRight: "1em"
+
+          }}
 
 
->
-<div
- style={{
-   display: "grid",
-   gridTemplateColumns: "repeat(4, 1fr)", 
-   gap: "2em",
-   padding: "1em",
-   marginTop: "4em", 
-   width: "100%", 
-   
- }}
->
-    <Input
-        placeholder="PO Number"
-        value={poNumber} 
-        onChange={handlePoNumberChange} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      />
-    <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedPOStatus}
-          onChange={handlePOStatusChange}
-          name="po_status"
-          options={POStatusOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handlePOStatusChange}
-          placeholder=" PO Status"
-          isClearable
-        />
-    <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedPOType}
-          onChange={handlePOTypeChange}
-          name="po_type"
-          options={SelectedPOTypeOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handlePOTypeChange}
-          placeholder="PO Type"
-          isClearable
-        />
-     
-        <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedSupplierName}
-          onChange={handleSupplierNameChange}
-          name="supplier_name"
-          options={selectedSupplierOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handleSupplierNameChange}
-          placeholder=" Supplier Name"
-          isClearable
-        />
-      
 
-      
-       
-        <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedShipTo}
-          onChange={handleShipToChange}
-          name="ship_to"
-          options={selectedShipToOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handleShipToChange}
-          placeholder="Location"
-          isClearable
-        />
-      
-      
-        
-      
-      <CreatableSelect
-          className="basic-single"
-          classNamePrefix="select"
-          value={selectedBuyerName}
-          onChange={handleBuyerNameChange}
-          name="buyer_name"
-          options={selectedBuyerNameOptions}
-          styles={{
-            container: (provided) => ({ ...provided, width: 200 }),
-            marginTop: "20px",
-          }}
-          onCreateOption={handleBuyerNameChange}
-          placeholder="Buyer Name"
-          isClearable
-        />
-    <Input
-        placeholder="Total Amount"
-        value={selectedTotalAmount} 
-        onChange={handleTotalChange} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      />
-   
-    <Input
-        placeholder="PO Header ID"
-        value={selectedPOHeaderID} 
-        onChange={handlePoHeaderChange} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      />
-    
-    <Input
-        placeholder="Vendor Site ID"
-        value={selectedVendorSiteID} 
-        onChange={handleVendorSiteChange} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      />
-    <Input
-        placeholder="Vendor Number"
-        value={selectedVendorNumber} 
-        onChange={handleVendorNumber} 
-        style={{
-          width: "200px", 
-          boxSizing: "border-box", 
-        }}
-      />
-  </div>
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "flex-end",
-      gap: "20px",
-      margin: "20px 0",
-    }}
-  >
-    <Button
-      style={{
-        backgroundColor: "#3570c3",
-        color: "white",
-        cursor: "pointer",
-        height: "35px",
-        width: "100px", // Consistent button width
-      }}
-      onClick={filterData}
-    >
-      Find
-    </Button>
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "4px", 
-        backgroundColor,
-        padding: "6px 12px", 
-        borderRadius: "4px", 
-        cursor: "pointer",
-        marginRight:"20px"
-      }}
-      onMouseEnter={() => setIsHovered2(true)}
-      onMouseLeave={() => setIsHovered2(false)}
-    
-    onClick={handleClear}
-    >
-      <DismissRegular
-        style={{
-          color: "#1281d7", 
-          fontSize: "20px",
-          marginRight:"5px"
-        }}
-      />
-      <span
-        style={{
-          fontSize: "14px",
-          color: "#000",
-          
-        }}
-      >
-        Clear
-      </span>
-    </div>
-  </div>
-</div>
-        
-        
-<div
-  style={{
-    marginTop: "30em", 
-    width: "300px", 
-    maxWidth: "100%", 
-    minWidth: "200px",  
-    display: "flex", 
-    justifyContent: "center", 
-    marginLeft: "auto", 
-    marginRight: "auto", 
-    
-   
-  }}
->
-  <Search
-    placeholder="Search PO"
-    onSearchChange={handleSearchChange}
-  />
-</div>
 
-       
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "2em",
+              padding: "1em",
+              marginTop: "4em",
+              width: "100%",
+
+            }}
+          >
+            <Input
+              placeholder="PO Number"
+              value={poNumber}
+              onChange={handlePoNumberChange}
+              style={{
+                width: "200px",
+                boxSizing: "border-box",
+              }}
+            />
+            <CreatableSelect
+              className="basic-single"
+              classNamePrefix="select"
+              value={selectedPOStatus}
+              onChange={handlePOStatusChange}
+              name="po_status"
+              options={POStatusOptions}
+              styles={{
+                container: (provided) => ({ ...provided, width: 200 }),
+                marginTop: "20px",
+              }}
+              onCreateOption={handlePOStatusChange}
+              placeholder=" PO Status"
+              isClearable
+            />
+            <CreatableSelect
+              className="basic-single"
+              classNamePrefix="select"
+              value={selectedPOType}
+              onChange={handlePOTypeChange}
+              name="po_type"
+              options={SelectedPOTypeOptions}
+              styles={{
+                container: (provided) => ({ ...provided, width: 200 }),
+                marginTop: "20px",
+              }}
+              onCreateOption={handlePOTypeChange}
+              placeholder="PO Type"
+              isClearable
+            />
+
+            <CreatableSelect
+              className="basic-single"
+              classNamePrefix="select"
+              value={selectedSupplierName}
+              onChange={handleSupplierNameChange}
+              name="supplier_name"
+              options={selectedSupplierOptions}
+              styles={{
+                container: (provided) => ({ ...provided, width: 200 }),
+                marginTop: "20px",
+              }}
+              onCreateOption={handleSupplierNameChange}
+              placeholder=" Supplier Name"
+              isClearable
+            />
+
+
+
+
+            <CreatableSelect
+              className="basic-single"
+              classNamePrefix="select"
+              value={selectedShipTo}
+              onChange={handleShipToChange}
+              name="ship_to"
+              options={selectedShipToOptions}
+              styles={{
+                container: (provided) => ({ ...provided, width: 200 }),
+                marginTop: "20px",
+              }}
+              onCreateOption={handleShipToChange}
+              placeholder="Location"
+              isClearable
+            />
+
+
+
+
+            <CreatableSelect
+              className="basic-single"
+              classNamePrefix="select"
+              value={selectedBuyerName}
+              onChange={handleBuyerNameChange}
+              name="buyer_name"
+              options={selectedBuyerNameOptions}
+              styles={{
+                container: (provided) => ({ ...provided, width: 200 }),
+                marginTop: "20px",
+              }}
+              onCreateOption={handleBuyerNameChange}
+              placeholder="Buyer Name"
+              isClearable
+            />
+            <Input
+              placeholder="Total Amount"
+              value={selectedTotalAmount}
+              onChange={handleTotalChange}
+              style={{
+                width: "200px",
+                boxSizing: "border-box",
+              }}
+            />
+
+            <Input
+              placeholder="PO Header ID"
+              value={selectedPOHeaderID}
+              onChange={handlePoHeaderChange}
+              style={{
+                width: "200px",
+                boxSizing: "border-box",
+              }}
+            />
+
+            <Input
+              placeholder="Vendor Site ID"
+              value={selectedVendorSiteID}
+              onChange={handleVendorSiteChange}
+              style={{
+                width: "200px",
+                boxSizing: "border-box",
+              }}
+            />
+            <Input
+              placeholder="Vendor Number"
+              value={selectedVendorNumber}
+              onChange={handleVendorNumber}
+              style={{
+                width: "200px",
+                boxSizing: "border-box",
+              }}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: "20px",
+              margin: "20px 0",
+            }}
+          >
+            <Button
+              style={{
+                backgroundColor: "#3570c3",
+                color: "white",
+                cursor: "pointer",
+                height: "35px",
+                width: "100px", // Consistent button width
+              }}
+              onClick={filterData}
+            >
+              Find
+            </Button>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                backgroundColor,
+                padding: "6px 12px",
+                borderRadius: "4px",
+                cursor: "pointer",
+                marginRight: "20px"
+              }}
+              onMouseEnter={() => setIsHovered2(true)}
+              onMouseLeave={() => setIsHovered2(false)}
+              //   onClick={handleDeleteSelectedRows}
+              onClick={handleClear}
+            >
+              <DismissRegular
+                style={{
+                  color: "#1281d7",
+                  fontSize: "20px",
+                  marginRight: "5px"
+                }}
+              />
+              <span
+                style={{
+                  fontSize: "14px",
+                  color: "#000",
+
+                }}
+              >
+                Clear
+              </span>
+            </div>
+          </div>
+        </div>
+
+
+        <div
+
+        >
+         
+        </div>
+
       </div>
       <div
         style={{
           height: "60vh",
           overflow: "scroll",
           marginTop: "40px",
+          overflowx: "auto"
         }}
       >
-       <DataGrid
-      
-      items={filtered}
-      key={items.length}
-      columns={columns}
-      sortable
-      selectionMode="multiselect"
-      onSelectionChange={handleSelectionChange}
-      getRowId={(_, index) => index}
-      focusMode="composite"
-      style={{ minWidth: "600px" }}
-    >
-      <DataGridHeader>
-        <DataGridRow>
-          {({ renderHeaderCell, columnId }) => (
-            <DataGridHeaderCell
-              onClick={() => handleSort(columnId)}
-              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-            >
-              {renderHeaderCell()}
-              {getSortIcon(columnId)}
-            </DataGridHeaderCell>
-          )}
-        </DataGridRow>
-      </DataGridHeader>
-      <DataGridBody>
-        {({ item, rowId }) => (
-          <DataGridRow
-            key={rowId}
-            onClick={(e) => handleRowClick(e, item)}
-            selected={selectedRows.has(rowId)}
-          >
-            {({ renderCell }) => (
-              <DataGridCell
-                style={{
-                  wordWrap: "break-word",
-                  whiteSpace: "normal",
-                  overflow: "hidden",
-                }}
+         <Search
+            placeholder="Search PO"
+            onSearchChange={handleSearchChange}
+          />
+        <DataGrid
+
+          items={filtered}
+          key={items.length}
+          columns={columns}
+          sortable
+          selectionMode="multiselect"
+          onSelectionChange={handleSelectionChange}
+          getRowId={(_, index) => index}
+          focusMode="composite"
+          style={{ minWidth: "600px" }}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell, columnId }) => (
+                <DataGridHeaderCell
+                  onClick={() => handleSort(columnId)}
+                  style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+                >
+                  {renderHeaderCell()}
+                  {getSortIcon(columnId)}
+                </DataGridHeaderCell>
+              )}
+            </DataGridRow>
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow
+                key={rowId}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(rowId)}
               >
-                {renderCell(item)}
-              </DataGridCell>
+                {({ renderCell }) => (
+                  <DataGridCell
+                    style={{
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {renderCell(item)}
+                  </DataGridCell>
+                )}
+              </DataGridRow>
             )}
-          </DataGridRow>
-        )}
-      </DataGridBody>
-    </DataGrid>
+          </DataGridBody>
+        </DataGrid>
       </div>
     </>
   );

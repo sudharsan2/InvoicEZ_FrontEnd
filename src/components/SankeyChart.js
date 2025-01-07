@@ -78,43 +78,8 @@ const SankeyChart = () => {
     return { fixCount, matchCount, multipleMatchCount };
   };
   
-  // const updateChartData = (invoiceData, statusData) => {
-  //   const { fixCount, matchCount, multipleMatchCount } =
-  //     calculateInvoiceCounts(invoiceData);
   
-  //   setChartData((prevState) => ({
-  //     ...prevState,
-  //     nodes: prevState.nodes.map((node, index) => {
-  //       if (index === 0)
-  //         return {
-  //           ...node,
-  //           value: fixCount + matchCount + multipleMatchCount,
-  //         };
-  //       if (index === 1) return { ...node, value: matchCount };
-  //       if (index === 2) return { ...node, value: multipleMatchCount };
-  //       if (index === 3) return { ...node, value: fixCount };
-  //       if (index === 4)
-  //         return { ...node, value: statusData.LineItemsMatchingCount || 0.1 };
-  //       if (index === 5)
-  //         return { ...node, value: statusData.SupplierMatchingCount || 0.1 };
-  //       if (index === 6)
-  //         return { ...node, value: statusData.PONumberMatchingCount || 0.1 };
-  //       return node;
-  //     }),
-  //     links: prevState.links.map((link) => {
-  //       if (link.target === 1) return { ...link, value: matchCount };
-  //       if (link.target === 2) return { ...link, value: multipleMatchCount };
-  //       if (link.target === 3) return { ...link, value: fixCount };
-  //       if (link.target === 4)
-  //         return { ...link, value: statusData.LineItemsMatchingCount || 0.1 };
-  //       if (link.target === 5)
-  //         return { ...link, value: statusData.SupplierMatchingCount || 0.1 };
-  //       if (link.target === 6)
-  //         return { ...link, value: statusData.PONumberMatchingCount || 0.1 };
-  //       return link;
-  //     }),
-  //   }));
-  // };
+  
   
 
   const updateChartData = (invoiceData, statusData) => {

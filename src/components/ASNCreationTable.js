@@ -42,7 +42,6 @@ const ASNCreateTable = () => {
           lineType: lineItem.line_type,
           rev: distribution.distribution_number, // Extract distribution number from the first distribution
           documentNumber: item.document_number,
-          // description: item.description,
           status: item.status,
           lineNumber: lineItem.line_number,
           itemNumber: lineItem.item_number,

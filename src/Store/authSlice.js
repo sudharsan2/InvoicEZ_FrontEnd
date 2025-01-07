@@ -1,4 +1,4 @@
-// // import { map, filter } from 'lodash';
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
 import api from "../services/api";
@@ -19,10 +19,7 @@ const handleTokenExpired = (exp) => {
   const currentTime = Date.now();
   const timeLeft = exp * 1000 - currentTime;
   console.log(timeLeft);
-  expiredTimer = window.setTimeout(() => {
-    console.log("Session expired");
-    // 
-  }, timeLeft);
+  
 };  
 
 const setSession = (accessToken) => {

@@ -6,6 +6,7 @@ import {
   ArrowClockwise24Regular,
   Delete24Regular,
   TasksApp24Regular,
+  ArrowSortUpFilled, ArrowSortDownRegular,ShareIos24Filled
 } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,14 +20,13 @@ import {
   createTableColumn,
 } from "@fluentui/react-components";
 import Search from "./Search"; 
-import {  notification,message } from "antd"; 
+import {  notification,message, Modal } from "antd"; 
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
 
 
-import { Modal } from "antd";
 import WalkInCandidate from "./WalkinCandidate";
-import { ArrowSortUpFilled, ArrowSortDownRegular,ShareIos24Filled } from "@fluentui/react-icons";
+
 // Define columns for the DataGrid
 const columns = [
   createTableColumn({
@@ -119,21 +119,23 @@ const SummaryTable = ({
   setMultiple_MatchCount,
   
 }) => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); 
   const [selectedRows, setSelectedRows] = useState(new Set());
-  
   const [isWalkinUpload, setIsWalkinUpload] = useState(false);
-
   const [newCandidate, setNewCandidate] = useState(false);
   const [filtered, setFilteredItems] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [isrefresh, setIsRefresh] = useState(false);
   const [isupload, setIsUpload] = useState(false);
-  const navigate = useNavigate();
+  
   console.log("Walkin",isWalkinUpload);
-  const dispatch = useDispatch();
+ 
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
@@ -201,7 +203,7 @@ const SummaryTable = ({
           lines: item.items.length,
           buyer: item.CustomerName,
           Status: Status, 
-          // Store:item.storeuser
+          
         };
       });
       
@@ -218,7 +220,7 @@ const SummaryTable = ({
     }
   };
 
-  console.log("Fiiiii", items);
+  
 
   useEffect(() => {
     SetRefreshUpload(isInvoiceUploadRefreshed);
@@ -255,7 +257,7 @@ const SummaryTable = ({
   
     setFilteredItems(filteredItems); 
   };
-  // setFilteredItems(filteredItems)
+  
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || ""; // Use state value for searchQuery
   
@@ -547,7 +549,7 @@ const SummaryTable = ({
           onClick={handleNewCandidateBtn}
         >
           <ShareIos24Filled style={{ color: "#1281d7" }} />
-          {/* <TasksApp28Regular style={{ color: "#1281d7" }} /> */}
+          
           <span>Upload-Invoice</span>
         </button>
 

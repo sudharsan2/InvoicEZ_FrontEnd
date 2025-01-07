@@ -3,11 +3,8 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbDivider,
-  BreadcrumbButton,
+  BreadcrumbButton,Divider
 } from "@fluentui/react-components";
-import {Divider} from "@fluentui/react-components"
-
-
 import GateEntryTable from "../components/GateEntryTable";
 
 

@@ -125,26 +125,7 @@ const items = [
 
 
 
-const StatusCell = ({ statusLabel }) => {
-  const styles = useStyles();
 
-  let statusStyle;
-
-  if (statusLabel === "Acknowledged") {
-    statusStyle = styles.statusAck;
-  } else if (statusLabel === "To be Acknowledged") {
-    statusStyle = styles.statusTobe;
-  } else {
-    statusStyle = styles.statusReject;
-  }
-
-  return (
-    <TableCellLayout>
-      <span className={`${styles.statusBullet} ${statusStyle}`} />
-      {statusLabel}
-    </TableCellLayout>
-  );
-};
 
 
 const columns = [

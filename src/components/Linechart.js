@@ -113,6 +113,7 @@ const LineChartPage = () => {
             <LineChart
               data={data}
               margin={{ top: 20, right: 30, left: 40, bottom: 105 }}
+              height="10"
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis

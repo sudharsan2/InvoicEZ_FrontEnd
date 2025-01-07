@@ -5,8 +5,7 @@ import {
   BreadcrumbDivider,
   BreadcrumbButton,
 } from "@fluentui/react-components";
-import TagCounters from "../components/gridapprove";
-import Search from "../components/Search";
+
 import RFQTable from "../components/RFQTable";
 
 const path = "/inloop";

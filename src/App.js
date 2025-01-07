@@ -2,7 +2,7 @@ import "./App.css";
 import CustomLayout from "./components/layout";
 import NavDrawerDefault from "./components/drawer";
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes,Navigate} from "react-router-dom";
 import Dashboard from "./pages/dashboard";
 import Employee from "./pages/Employee";
 import EmployeeForm from "./pages/employeeform";
@@ -53,13 +53,15 @@ import StoreHistory from "./pages/StoreHistory";
 import StoreTagCounters from "./pages/StoreDashboard";
 import UserPage from "./pages/UserPage";
 import GateEntryDetails from "./pages/GateEntryDetails";
-import { Navigate } from 'react-router-dom';
+
 import { jwtDecode } from "jwt-decode";
 import OpenPo from "./pages/OpenPo";
 import StoreOpenPO from "./pages/StoreOpenPo";
 import React, { useState, useEffect } from "react";
 import StoreOpenPODetails from "./pages/StoreOpenPODetails";
 import OpenPODetails from "./pages/OpenPoDetails";
+import DashboardDetails from "./pages/DashboardDetails";
+
 
 function App() {
 
@@ -171,6 +173,19 @@ function App() {
               </ProtectedRoute>
           }
         />
+                <Route
+          path="/DashboardDetails"
+          element={
+            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+              <CustomLayout>
+                <NavDrawerDefault>
+                  <DashboardDetails />
+                </NavDrawerDefault>
+              </CustomLayout>
+              </ProtectedRoute>
+
+          }
+        />
 
 
         <Route
@@ -199,6 +214,7 @@ function App() {
 
           }
         />
+        <Route path="/openpodet/:po_number" element={<OpenPODetails />} />
         <Route path="form/:token" element={<EmployeeForm />} />
         <Route
           path="/approvepage"

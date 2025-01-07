@@ -1,40 +1,18 @@
 import React ,{useEffect, useState}  from "react";
 
 import {
-  
   Hamburger,
- 
   NavDrawer,
   NavDrawerBody,
   NavDrawerHeader,
- 
   NavItem,
   
 } from "@fluentui/react-nav-preview";
 import {
-  
   Tooltip,
   makeStyles,
   tokens,
-  
 } from "@fluentui/react-components";
-import {
-  Board20Filled,
-  Board20Regular,
-  
-  MegaphoneLoud20Filled,
-  MegaphoneLoud20Regular,
-  NotePin20Filled,
-  NotePin20Regular,
-  
-  Person20Filled,
-  
-  Person20Regular,
-  
-  bundleIcon,
-  
-} from "@fluentui/react-icons";
-
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 const useStyles = makeStyles({
@@ -60,10 +38,7 @@ const useStyles = makeStyles({
 });
 
 // Icons for navigation items
-const Person = bundleIcon(Person20Filled, Person20Regular);
-const Dashboard = bundleIcon(Board20Filled, Board20Regular);
-const Announcements = bundleIcon(MegaphoneLoud20Filled, MegaphoneLoud20Regular);
-const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular);
+
 
 const AiNav = ({ onPoNumberClick }) => {
   const styles = useStyles();

@@ -1,30 +1,16 @@
-import React ,{useState} from "react";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbDivider,
-  BreadcrumbButton,
-} from "@fluentui/react-components";
-import TagCounters from "../components/gridapprove";
-import Search from "../components/Search";
-import ASNTable from "../components/ASNTable";
-import DropDownComponent from "../components/DropDown";
-import { ArrowClockwise28Regular } from "@fluentui/react-icons";
-import {  TabList, Tab ,Input} from "@fluentui/react-components";
-import { tokens, Divider } from "@fluentui/react-components";
-import { Add28Regular,ArrowLeft24Regular,Document24Regular,ArrowUpload24Regular,  } from "@fluentui/react-icons";
+import React  from "react";
+
+import {ArrowLeft24Regular,ArrowUpload24Regular,  } from "@fluentui/react-icons";
 import DatePickerComponent from "../components/DatePicker";
-import { MdOutlineFilterAltOff } from "react-icons/md";
+
 import {
  
   Button,
-  makeStyles,
+  Input
 } from "@fluentui/react-components";
 
 
 import {useNavigate} from "react-router-dom";
-const path = "/asn";
-const path1 = "http://localhost:3000/";
 
 
 
@@ -37,48 +23,14 @@ const path1 = "http://localhost:3000/";
 
 
 
-const useStyles = makeStyles({
-    statusBullet: {
-      display: "inline-block",
-      width: "8px",
-      height: "8px",
-      borderRadius: "50%",
-      marginRight: "8px",
-    },
-    statusRFQ: { backgroundColor: "yellow" },
-    statusTodo: { backgroundColor: "red" },
-    statusCompare: { backgroundColor: "green" },
-    iconButtonContainer: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent:"flex-end",
-      gap: "8px",
-      marginTop: "2em",
-      marginLeft: "65%",
-    },
-    iconButton: {
-      display: "flex",
-      alignItems: "center",
-      backgroundColor: "transparent",
-      border: "1px solid #fff",
-      padding: "6px 12px",
-      cursor: "pointer",
-      gap: "8px",
-    },
-    icon: {
-      color: "#1281d7",
-      fontSize: "24px", 
-    },
-    popoverContent: {
-      zIndex: 1500,
-    },
-  });
+
+
   
 
   
 const ASNShipmentDrawerPage = () => {
-    const [popoverOpen, setPopoverOpen] = useState(false);
-    const togglePopover = () => setPopoverOpen(!popoverOpen);
+   
+    
  
   
   const navigate = useNavigate();

@@ -8,32 +8,42 @@ import { Add24Regular, Delete24Regular } from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
+  Link,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
   BreadcrumbDivider,
+  Textarea,
   Input,
+  Dropdown,
+  Tab,
   Table,
   TableCell,
   TableHeader,
+  TableSelectionCell,
   TableRow,
   TableBody,
   TableHeaderCell,
   Checkbox,
+  createTableColumn,
+  useTableFeatures,
+  useTableSort,
 } from "@fluentui/react-components";
 import { refreshActions } from "../Store/Store";
 import { useDispatch, useSelector } from "react-redux";
+import { TextField } from "@fluentui/react/lib/TextField";
+import line_data from "./data_approve";
 import "./dashboard.css";
 import { message } from "antd";
 import { ArrowDownload28Regular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
-
+// import { refreshActions } from "../Store/Store";
 const path = "/issuefix";
 const path1 = "/dashboard";
 
 const useStyles = makeStyles({
   root: {
-
+    // width: "80vw",
     height: "88vh",
     overflowY: "auto",
     display: "flex",
@@ -113,13 +123,23 @@ const useStyles = makeStyles({
 
 const IssuefixDetails = () => {
   const navigate = useNavigate();
-
+  const [height, setHeight] = useState(0);
   const divRef = useRef(null);
 
-
+  useEffect(() => {
+    if (divRef.current) {
+      setHeight(divRef.current.offsetHeight); // Calculate the height of the div based on its content
+    }
+  }, []);
+  // const dispatch = useDispatch();
   const styles = useStyles();
-
-
+  const themestate = false;
+  const [selectedtab, setSelectedTab] = React.useState("tab1");
+  const [selectedOption, setSelectedOption] = React.useState("");
+  const [vendorName, setVendorName] = useState("super");
+  // const [rows, setRows] = useState([
+  //   { no: 1, type: '', amount: '', description: '', poLine: '', unitPrice: '', quantity: '', unitOfMeasurement: '', taxAmount: '', hsnCode: '' }
+  // ]);
 
   const [formData, setFormData] = useState({
     vendorName: "",
@@ -138,7 +158,7 @@ const IssuefixDetails = () => {
   });
 
   const location = useLocation();
-  const { invoiceNo } = location.state;
+  const { invoiceNo } = location.state || {};
 
   const [rows, setRows] = useState([]);
 
@@ -146,7 +166,9 @@ const IssuefixDetails = () => {
     // Fetch data from the API
     const fetchData = async () => {
       try {
-
+        // const response = await axios.get(
+        //   `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+        // );
         const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
         const response = await axios.get(
@@ -170,15 +192,18 @@ const IssuefixDetails = () => {
             Quantity: item.items.Quantity || "",
             Unit: item.items.Unit || "",
             UnitPrice: item.items.UnitPrice || "",
-
+            // ProductCode: item.ProductCode || "",
             Amount: item.items.Amount || "",
             SubTotal: item.items.SubTotal || "",
-
+            // TotalTax: item.TotalTax || "",
+            // Date: item.Date || "",
+            // Tax: item.Tax || "",
             PreviousUnpaidBalance: item.items.PreviousUnpaidBalance || "",
             Igst: item.items.Igst || "",
             Cgst: item.items.Cgst || "",
             Sgst: item.items.Sgst || "",
-
+            // AmountDue: item.AmountDue || "",
+            // Add any other fields here as needed
           })),
         );
       } catch (error) {
@@ -188,7 +213,12 @@ const IssuefixDetails = () => {
 
     fetchData();
   }, []);
-
+  // 2
+  // const handleInputChange = (index, key, value) => {
+  //   setRows((prevRows) =>
+  //     prevRows.map((row, i) => (i === index ? { ...row, [key]: value } : row)),
+  //   );
+  // };
 
   const [poNumber, setPoNumber] = useState("");
 
@@ -224,39 +254,23 @@ const IssuefixDetails = () => {
       const data = await response.json();
       console.log("API response:", data);
     } catch (error) {
-      message.error(error.message || "An unexpected error occurred");
+      message.error(error);
       console.error("Error submitting PO:", error);
     }
   };
 
   const [fulldata, setFulldata] = useState({}); // Add state for full data
+  const [completedata, setCompletedata] = useState({});
   const [oldrow, setOldrow] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
 
-  const tabstyle = {
-    display: "flex",
-    alignItems: "center",
-    gap: "4px",
-    backgroundColor: isHovered2 ? "#e1e1e2" : "transparent",
-    padding: "6px 12px",
-    borderRadius: "4px",
-    cursor: "pointer",
-  };
-
-  const TableHeaderWithSort = ({ columnKey, label }) => (
-    <TableHeaderCell {...headerSortProps(columnKey)}>
-      {label}
-      {sortedColumn === columnKey && (
-        sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-      )}
-    </TableHeaderCell>
-  );
-
-
+  // Fetch data from the API when the component mounts
   const fetchData = async () => {
     try {
-
+      // const response = await axios.get(
+      //   `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
+      // );
       const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
       const response = await axios.get(
@@ -283,8 +297,8 @@ const IssuefixDetails = () => {
         purchaseOrder: data.PurchaseOrder,
         entrytime: data.created_at,
       });
-
-
+      setCompletedata(data);
+      // Update the full data in state
       setFulldata(response.data.invoice_info);
 
       setOldrow(
@@ -315,7 +329,8 @@ const IssuefixDetails = () => {
 
       setRows(
         data.items.map((item, index) => ({
-
+          // id: index+1,
+          // inv_id:data.id,
           id: item.id,
           Description: item.Description,
           Quantity: item.Quantity,
@@ -343,7 +358,7 @@ const IssuefixDetails = () => {
 
 
   const handleformSubmit = async () => {
-
+    // Update the full data state based on formData and rows
     const updatedFulldata = {
       ...fulldata, // Spread fulldata to retain existing properties
       VendorName: formData.vendorName,
@@ -356,7 +371,7 @@ const IssuefixDetails = () => {
       CustomerId: formData.customerId,
       BillingAddressRecipient: formData.billingAddressRecipient,
       ShippingAddressRecipient: formData.shippingAddressRecipient,
-      DueDate: formData.dueDate,
+      DueDate: formData.dueDate, 
       PurchaseOrder: formData.purchaseOrder,
       created_at: formData.entrytime,
       items: rows.map((item, index) => {
@@ -375,7 +390,7 @@ const IssuefixDetails = () => {
           Cgst: item.Cgst,
           Sgst: item.Cgst,
           // Assign values from oldrow for fields not updated in rows
-          Date: oldItem ? oldItem.Date : null,
+          Date: oldItem ? oldItem?.Date : null,
           TotalTax: oldItem ? oldItem.TotalTax : null,
           Tax: oldItem ? oldItem.Tax : null,
           AmountDue: oldItem ? oldItem.AmountDue : null,
@@ -429,6 +444,29 @@ const IssuefixDetails = () => {
     }
   };
 
+  // const handleInputChange = (index, field, value) => {
+  //   const newRows = [...rows];
+  //   newRows[index][field] = value;
+  //   setRows(newRows);
+  // };
+
+  // const addLine = () => {
+  //   setRows([
+  //     ...rows,
+  //     {
+  //       no: rows.length + 1,
+  //       type: "",
+  //       amount: "",
+  //       description: "",
+  //       poLine: "",
+  //       unitPrice: "",
+  //       quantity: "",
+  //       unitOfMeasurement: "",
+  //       taxAmount: "",
+  //       hsnCode: "",
+  //     },
+  //   ]);
+  // };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -450,19 +488,66 @@ const IssuefixDetails = () => {
   }, [isInvoiceUploadRefreshed]);
 
 
-
+  // const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState(new Set());
 
 
-
+  const [tableData, setTableData] = useState(rows);
+  // Toggle selection of a single row
+  // const toggleRowSelection = (rowId) => {
+  //   console.log("Row ID",rowId);
+  //   setSelectedRows((prevSelectedRows) =>
+  //     prevSelectedRows.includes(rowId)
+  //       ? prevSelectedRows.filter((id) => id !== rowId) // Deselect row
+  //       : [...prevSelectedRows, rowId] // Select row
+  //   );
+  //   console.log("Selected Rows",selectedRows);
+  // };
   console.log("ROWS", rows)
 
 
+  // const handleDeleteSelectedRows = async () => {
 
+  //   if (selectedRows.length === 0) {
+  //     notification.warning({
+  //       message: "No PO Selected",
+  //       description: "Please select at least one PO to delete.",
+  //     });
+  //     return;
+  //   }
+
+  //   try {
+
+
+  //     const deletePromises = selectedRows.map((inv_id) =>
+  //       axios.delete(
+  //         `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
+  //       ),
+  //     );
+
+  //     await Promise.all(deletePromises);
+
+
+
+
+  //     notification.success({
+  //       message: "Successfully deleted",
+
+  //     });
+
+  //     // dispatch(refreshActions.toggleInvoiceUploadRefresh());
+  //   } catch (error) {
+
+  //     notification.error({
+  //       message: "Deletion Failed",
+
+  //     });
+  //   }
+  // };
 
 
   const handleDeleteSelectedRows = async () => {
-    const selectedItemsArray = Array.from(selectedRows);
+    const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
     if (selectedItemsArray.length === 0) {
       notification.warning({
         message: "No PO Selected",
@@ -472,14 +557,14 @@ const IssuefixDetails = () => {
     }
 
     try {
-      const token = localStorage.getItem("access_token");
+      const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
       const deletePromises = selectedItemsArray.map((inv_id) =>
         axios.delete(
           `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`, // Add the authorization header
             },
           }
         )
@@ -499,7 +584,7 @@ const IssuefixDetails = () => {
         description: `Deleted items: ${selectedItemsArray.join(", ")}`,
       });
 
-      dispatch(refreshActions.toggleInvoiceUploadRefresh());
+      dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Trigger refresh action if necessary
     } catch (error) {
       notification.error({
         message: "Deletion Failed",
@@ -514,14 +599,14 @@ const IssuefixDetails = () => {
 
   const handleViewInvoice = async () => {
     try {
-      const token = localStorage.getItem("access_token");
+      const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
       const response = await fetch(
         `https://invoicezapi.focusrtech.com:57/user/invoices-file/${invoiceNo}`,
         {
-          method: "GET",
+          method: "GET", // Specify the HTTP method explicitly
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Add the authorization header
           },
         }
       );
@@ -538,11 +623,33 @@ const IssuefixDetails = () => {
     }
   };
 
+  const handlePOChange = (event) => { };
 
+  // Adding new row
 
+  const [rows1, setRows1] = useState([
+    {
+      id: 1,
+      description: "",
+      quantity: "",
+      unit: "",
+      unitPrice: "",
+      amount: "",
+      subtotal: "",
+      previousUnpaidBalance: "",
+      Igst: "",
+      Cgst: "",
+      Sgst: "",
+    },
+  ]);
 
-
-
+  // const handleInputChange = (index, key, value) => {
+  //   setRows1((prevRows) =>
+  //     prevRows.map((row, i) =>
+  //       i === index ? { ...row, [key]: value } : row
+  //     )
+  //   );
+  // };
 
 
   const handleInputChange = (index, key, value) => {
@@ -553,7 +660,7 @@ const IssuefixDetails = () => {
 
   const handleAddRow = () => {
     const newRow = {
-
+      // id: rows.length + 1, // increment the id based on the current rows
       Description: "",
       Quantity: "",
       Unit: "",
@@ -572,7 +679,22 @@ const IssuefixDetails = () => {
 
 
 
+  // checkbox
 
+
+
+
+  // const toggleRowSelection = (rowid) => {
+  //   console.log("Invoice ID:", rowid);
+
+  //   setSelectedRows((prevSelectedRows) =>
+  //     prevSelectedRows.includes(rowid)
+  //       ? prevSelectedRows.filter((id) => id !== rowid) // Deselect row
+  //       : [...prevSelectedRows, rowid] // Select row
+  //   );
+
+  //   console.log("Selected Rows:", selectedRows);
+  // };
 
   const toggleRowSelection = (rowid) => {
     console.log("Invoice ID:", rowid);
@@ -589,16 +711,25 @@ const IssuefixDetails = () => {
 
     console.log("Selected Rows:", Array.from(selectedRows));
   };
-
+  // const toggleSelectAll = () => {
+  //   if (selectedRows.length === rows.length) {
+  //     setSelectedRows([]); // Deselect all
+  //     console.log("Deselect All");
+  //   } else {
+  //     const allSelectedRows = rows.map((row) => row.id);
+  //     setSelectedRows(allSelectedRows); // Select all rows by their `id`
+  //     console.log("Selected Rows:", allSelectedRows); // Log selected rows
+  //   }
+  // };
 
   const toggleSelectAll = () => {
     if (selectedRows.size === rows.length) {
-      setSelectedRows(new Set());
+      setSelectedRows(new Set()); // Deselect all rows
       console.log("Deselect All");
     } else {
-      const allSelectedRows = new Set(rows.map((row) => row.id));
-      setSelectedRows(allSelectedRows);
-      console.log("Selected Rows:", Array.from(allSelectedRows));
+      const allSelectedRows = new Set(rows.map((row) => row.id)); // Map `row.id` for consistency
+      setSelectedRows(allSelectedRows); // Select all rows
+      console.log("Selected Rows:", Array.from(allSelectedRows)); // Log selected rows
     }
   };
 
@@ -671,7 +802,10 @@ const IssuefixDetails = () => {
                 <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
               </BreadcrumbItem>
               <BreadcrumbDivider />
-
+              <BreadcrumbItem>
+                <BreadcrumbButton href={path}>Issues</BreadcrumbButton>
+              </BreadcrumbItem>
+              <BreadcrumbDivider />
               <BreadcrumbItem>
                 <BreadcrumbButton href={path}>
                   {formData.vendorName}
@@ -766,17 +900,14 @@ const IssuefixDetails = () => {
                   <ArrowDownload28Regular
                     style={{
                       color: "#1281d7",
-                      marginTop: "13px",
-                      marginRight: "100px"
+                      marginTop: "10px",
                       // marginRight: "00px"
                     }}
                     onClick={handleViewInvoice}
                   />{" "}
                   <span style={{
-                    marginTop: "12px",
-                    marginRight: "10px",
-                    marginLeft: "-100px",
-                    width: "40%"
+                    marginTop: "10px",
+                    marginRight: "20px"
 
                   }} onClick={handleViewInvoice}> View Invoice</span>
                   <Button
@@ -954,58 +1085,75 @@ const IssuefixDetails = () => {
 
                 </div>
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1.5em", marginBottom: "2em", gap: "20px" }}>
-                  <div
-                    style={tabstyle}
-                    onMouseEnter={() => setIsHovered2(true)}
-                    onMouseLeave={() => setIsHovered2(false)}
-                    onClick={handleAddRow}
-                  >
-                    <Add24Regular
-                      style={{
-                        color: "#1281d7",
-                        fontSize: "20px",
-                        marginRight: "5px"
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontSize: "14px",
-                        color: "#000",
-
-                      }}
-                    >
-                      Add
-                    </span>
-                  </div>
-
-
-
-                  <div
-                    style={tabstyle}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                    onClick={handleDeleteSelectedRows}
-                  >
-                    <Delete24Regular
-                      style={{
-                        color: "#1281d7",
-                        fontSize: "20px",
-                        marginRight: "5px"
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontSize: "14px",
-                        color: "#000",
-
-                      }}
-                    >
-                      Delete
-                    </span>
-                  </div>
+                <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "4px", 
+    backgroundColor: isHovered2 ? "#e1e1e2" : "transparent",
+    padding: "6px 12px", 
+    borderRadius: "4px", 
+    cursor: "pointer",
+  }}
+  onMouseEnter={() => setIsHovered2(true)}
+  onMouseLeave={() => setIsHovered2(false)}
+  onClick={handleAddRow}
+>
+  <Add24Regular
+    style={{
+      color: "#1281d7", 
+      fontSize: "20px",
+      marginRight:"5px"
+    }}
+  />
+  <span
+    style={{
+      fontSize: "14px",
+      color: "#000",
+      
+    }}
+  >
+    Add
+  </span>
+</div>
 
 
 
+<div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "4px", 
+    backgroundColor: isHovered ? "#e1e1e2" : "transparent",
+    padding: "6px 12px", 
+    borderRadius: "4px", 
+    cursor: "pointer",
+  }}
+  onMouseEnter={() => setIsHovered(true)}
+  onMouseLeave={() => setIsHovered(false)}
+  onClick={handleDeleteSelectedRows}
+>
+  <Delete24Regular
+    style={{
+      color: "#1281d7", 
+      fontSize: "20px",
+      marginRight:"5px"
+    }}
+  />
+  <span
+    style={{
+      fontSize: "14px",
+      color: "#000",
+      
+    }}
+  >
+    Delete
+  </span>
+</div>
+
+                  
+                  {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button> */}
+                  {/* <Delete24Regular style={{ cursor: "pointer", padding: "2px", height: "35px", color: "#1281d7" }} onClick={handleDeleteSelectedRows}></Delete24Regular><span style={{ fontSize: "14px", color: "#000", marginTop: "6px", marginLeft: "-6px",cursor:"pointer" }}>Delete</span> */}
                 </div>
 
               </div>
@@ -1016,7 +1164,7 @@ const IssuefixDetails = () => {
                   marginTop: "-20px",
                 }}
               >
-                <Table style={{ tableLayout: "auto" }}>
+                <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHeaderCell>
@@ -1026,21 +1174,61 @@ const IssuefixDetails = () => {
                           title="Select All"
                         />
                       </TableHeaderCell>
-                      {[
-                        { key: "id", label: "No" },
-                        { key: "Description", label: "Description" },
-                        { key: "Quantity", label: "Quantity" },
-                        { key: "Unit", label: "Unit" },
-                        { key: "UnitPrice", label: "Unit Price" },
-                        { key: "Amount", label: "Amount" },
-                        { key: "SubTotal", label: "Subtotal" },
-                        { key: "PreviousUnpaidBalance", label: "Previous Unpaid Balance" },
-                        { key: "Igst", label: "Igst" },
-                        { key: "Cgst", label: "Cgst" },
-                        { key: "Sgst", label: "Sgst" },
-                      ].map(({ key, label }) => (
-                        <TableHeaderWithSort key={key} columnKey={key} label={label} />
-                      ))}
+                      <TableHeaderCell {...headerSortProps("id")}>No
+                        {sortedColumn === "id" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Description")}>Description
+                        {sortedColumn === "Description" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Quantity")}>Quantity
+                        {sortedColumn === "Quantity" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Unit")}>Unit
+                        {sortedColumn === "Unit" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("UnitPrice")}>Unit Price
+                        {sortedColumn === "UnitPrice" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Amount")}>Amount
+                        {sortedColumn === "Amount" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("SubTotal")}>Subtotal
+                        {sortedColumn === "SubTotal" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("PreviousUnpaidBalance")}>Previous Unpaid Balance
+                        {sortedColumn === "PreviousUnpaidBalance" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Igst")}>Igst
+                        {sortedColumn === "Igst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Cgst")}>Cgst
+                        {sortedColumn === "Cgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
+                      <TableHeaderCell {...headerSortProps("Sgst")}>Sgst
+                        {sortedColumn === "Sgst" && (
+                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+                        )}
+                      </TableHeaderCell>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1070,7 +1258,7 @@ const IssuefixDetails = () => {
                 </Table>
 
 
-
+                {/* <Button onClick={addLine} style={{ marginTop: "10px" }}>+ Add Line</Button> */}
               </div>
             </div>
           </div>

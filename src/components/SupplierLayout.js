@@ -2,7 +2,7 @@
 
 import React, { useState,useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import {
   NavCategory,
   NavCategoryItem,
@@ -16,44 +16,7 @@ import {
   NavSubItemGroup,
 } from "@fluentui/react-nav-preview";
 import {
-  Board24Filled,
-  Board24Regular,
-  BoxMultiple20Filled,
-  BoxMultiple20Regular,
-  DataArea20Filled,
-  DataArea20Regular,
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-  HeartPulse20Filled,
-  HeartPulse20Regular,
-  MegaphoneLoud20Filled,
-  MegaphoneLoud20Regular,
-  
-  NotePin20Filled,
-  NotePin20Regular,
-  People20Filled,
-  People20Regular,
-  PeopleStar20Filled,
-  PeopleStar20Regular,
-  PersonFilled,
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-  PersonRegular,
-  PersonSearch20Filled,
-  PersonSearch20Regular,
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-  Settings20Filled,
-  Settings20Regular,
   bundleIcon,
-  LayerDiagonalPerson24Filled,
-  LayerDiagonalPerson24Regular,
-  PersonStar24Filled,
-  PersonStar24Regular,
-  PremiumPerson24Filled,
-  PremiumPerson24Regular,
-  DocumentTableSearch24Filled,
-  DocumentTableSearch24Regular,
   Navigation24Filled,
   Navigation24Regular,
   Gavel24Filled ,
@@ -64,24 +27,20 @@ import {
 
 import {
   Button,
-  
   makeStyles,
   shorthands,
   tokens,
-  useId,
+  
  
 } from "@fluentui/react-components";
 
-
 import { jwtDecode } from "jwt-decode";
+
 
 const useStyles = makeStyles({
   root: {
-    // ...shorthands.border("2px", "solid", "#ccc"),
-    ...shorthands.overflow("hidden"),
-    // marginTop:"-2px",
-    // marginLeft:"-2px",
-
+    
+    overflow: "hidden",
     position: "fixed",
     left: 0,
     width: "100%",
@@ -91,7 +50,7 @@ const useStyles = makeStyles({
     backgroundColor: "#fff",
   },
   content: {
-    ...shorthands.flex(1),
+    flex:1,
     ...shorthands.padding("16px"),
 
     display: "grid",
@@ -112,18 +71,10 @@ const useStyles = makeStyles({
     marginInlineStart: `10px`,
   },
   hamburger: {
-    // backgroundColor: navItemTokens.backgroundColor,
-    // color: tokens.colorNeutralForeground2,
+    
     textDecorationLine: "none",
     marginLeft: "5px",
     marginTop: "10px",
-
-    ":hover": {
-      //   backgroundColor: navItemTokens.backgroundColorHover,
-    },
-    ":active": {
-      //   backgroundColor: navItemTokens.backgroundColorPressed,
-    },
   },
   navItemlight: {
     marginTop: "10px",
@@ -188,7 +139,60 @@ const NavDrawerQuotationLoop = (props) => {
   
   const [empId, setEmpId] = useState("");
   const [value,setValue] = useState("");
- 
+
+  console.lpg(value);
+
+  // Style 
+  const headerStyle = collapse
+  ? {
+      width: `59px`,
+      transition: "width 0.5s",
+      borderRightStyle: "none",
+    }
+  : { transition: "width 0.5s", borderRightStyle: "none" }
+
+  const themeStyle = themestate
+  ? {
+      backgroundColor: darktheme.sidebarcolordark,
+      cursor: "pointer",
+      WebkitTapHighlightColor: "transparent",
+    }
+  : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+
+  const iconStyle = themestate
+  ? { color: darktheme.fontcolordark }
+  : { color: lighttheme.fontcolorlight };
+
+  const bodyStyle = themestate
+  ? { backgroundColor: darktheme.sidebarcolordark, height: "20px" }
+  : { height: "20px" };
+
+  const divStyle = themestate
+                ? {
+                    backgroundColor: darktheme.sidebarcolordark,
+                    cursor: "pointer",
+                    WebkitTapHighlightColor: "transparent",
+                  }
+                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+
+
+  const newStyle = themestate
+  ? { marginTop: "2px", color: darktheme.fontcolordark }
+  : { marginTop: "2px", color: lighttheme.fontcolorlight }
+
+  const classStyle = themestate ? styles.navItemdark : styles.navItemlight
+
+  const backStyle = themestate ? { backgroundColor: darktheme.sidebarcolordark } : {}
+
+  const footerStyle1 = themestate
+  ? { marginBottom: "30px", color: darktheme.fontcolordark }
+  : { marginBottom: "30px", color: lighttheme.fontcolorlight }
+
+  const footerStyle2 = themestate
+  ? { marginTop: "-20px", color: darktheme.fontcolordark }
+  : { marginTop: "-20px", color: lighttheme.fontcolorlight }
+
+ const footerStyle3 = themestate ? { background: darktheme.contentpagedark } : {}
   useEffect(() => {
     const storedUsername = localStorage.getItem("username"); 
    
@@ -226,25 +230,13 @@ const NavDrawerQuotationLoop = (props) => {
         size="small"
         className={useStyles.navdrawer}
         style={
-          collapse
-            ? {
-                width: `59px`,
-                transition: "width 0.5s",
-                borderRightStyle: "none",
-              }
-            : { transition: "width 0.5s", borderRightStyle: "none" }
+          headerStyle
         }
       >
         
         <NavDrawerHeader
           style={
-            themestate
-              ? {
-                  backgroundColor: darktheme.sidebarcolordark,
-                  cursor: "pointer",
-                  WebkitTapHighlightColor: "transparent",
-                }
-              : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+            themeStyle
           }
         >
           <NavDrawerHeaderNav
@@ -257,9 +249,7 @@ const NavDrawerQuotationLoop = (props) => {
               icon={
                 <Navi
                   style={
-                    themestate
-                      ? { color: darktheme.fontcolordark }
-                      : { color: lighttheme.fontcolorlight }
+                   iconStyle
                   }
                 />
               }
@@ -272,22 +262,14 @@ const NavDrawerQuotationLoop = (props) => {
         </NavDrawerHeader>
         <div
           style={
-            themestate
-              ? { backgroundColor: darktheme.sidebarcolordark, height: "20px" }
-              : { height: "20px" }
+            bodyStyle
           }
         ></div>
 
         {collapse ? (
           <NavDrawerBody
             style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+              divStyle
             }
           >
                         <NavCategory value="1">
@@ -296,16 +278,14 @@ const NavDrawerQuotationLoop = (props) => {
                     icon={
                       <Apps28Regular
                         style={
-                          themestate
-                            ? { color: darktheme.fontcolordark }
-                            : { color: lighttheme.fontcolorlight }
+                        iconStyle
                         }
                       />
                     }
                     
                     value="2"
                     className={
-                      themestate ? styles.navItemdark : styles.navItemlight
+                      classStyle
                     }
                     style={{ marginTop: "10px", fontSize: "17px" }}
                     onClick={() => {
@@ -351,13 +331,7 @@ const NavDrawerQuotationLoop = (props) => {
         ) : (
           <NavDrawerBody
             style={
-              themestate
-                ? {
-                    backgroundColor: darktheme.sidebarcolordark,
-                    cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent",
-                  }
-                : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+              divStyle
             }
           >
             {/* DETAILS OF USER  */}
@@ -396,16 +370,14 @@ const NavDrawerQuotationLoop = (props) => {
                 icon={
                   <Asn
                     style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
+                      iconStyle
                     }
                   />
                 }
                 
                 value="1"
                 className={
-                  themestate ? styles.navItemdark : styles.navItemlight
+                 classStyle
                 }
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
@@ -415,9 +387,7 @@ const NavDrawerQuotationLoop = (props) => {
               >
                 <div
                   style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                   newStyle
                   }
                 >
                   Quotation
@@ -429,16 +399,14 @@ const NavDrawerQuotationLoop = (props) => {
                 icon={
                   <Truck
                     style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
+                      iconStyle
                     }
                   />
                 }
                 
                 value="2"
                 className={
-                  themestate ? styles.navItemdark : styles.navItemlight
+                 classStyle
                 }
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
@@ -448,9 +416,7 @@ const NavDrawerQuotationLoop = (props) => {
               >
                 <div
                   style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                    newStyle
                   }
                 >
                   ASN Creation
@@ -461,16 +427,14 @@ const NavDrawerQuotationLoop = (props) => {
                 icon={
                   <Status
                     style={
-                      themestate
-                        ? { color: darktheme.fontcolordark }
-                        : { color: lighttheme.fontcolorlight }
+                      iconStyle
                     }
                   />
                 }
                 
                 value="3"
                 className={
-                  themestate ? styles.navItemdark : styles.navItemlight
+                 classStyle
                 }
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
@@ -480,9 +444,7 @@ const NavDrawerQuotationLoop = (props) => {
               >
                 <div
                   style={
-                    themestate
-                      ? { marginTop: "2px", color: darktheme.fontcolordark }
-                      : { marginTop: "2px", color: lighttheme.fontcolorlight }
+                    newStyle
                   }
                 >
                   ASN Shipment Status
@@ -495,7 +457,7 @@ const NavDrawerQuotationLoop = (props) => {
 
         <NavDrawerFooter
           style={
-            themestate ? { backgroundColor: darktheme.sidebarcolordark } : {}
+           backStyle
           }
         >
           {!collapse && (
@@ -510,18 +472,14 @@ const NavDrawerQuotationLoop = (props) => {
             >
               <p
                 style={
-                  themestate
-                    ? { marginBottom: "30px", color: darktheme.fontcolordark }
-                    : { marginBottom: "30px", color: lighttheme.fontcolorlight }
+                  footerStyle1
                 }
               >
                 by FocusR AI
               </p>
               <p
                 style={
-                  themestate
-                    ? { marginTop: "-20px", color: darktheme.fontcolordark }
-                    : { marginTop: "-20px", color: lighttheme.fontcolorlight }
+                  footerStyle2
                 }
               >
                 V 0.0.1
@@ -537,7 +495,7 @@ const NavDrawerQuotationLoop = (props) => {
 
       <div
         className={styles.content}
-        style={themestate ? { background: darktheme.contentpagedark } : {}}
+        style={footerStyle3}
       >
         
 

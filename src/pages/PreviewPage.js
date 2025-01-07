@@ -3,20 +3,25 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbDivider,
-  BreadcrumbButton,
+  BreadcrumbButton, Button,Divider,Label ,
+  
+  DataGrid,
+  DataGridBody,
+  DataGridCell,
+  DataGridHeader,
+  DataGridHeaderCell,
+  DataGridRow,
+  TableCellLayout,
+  createTableColumn,
 } from "@fluentui/react-components";
 
-import {Divider } from "@fluentui/react-components";
+
 
 import DatePickerComponent from "../components/DatePicker";
 
-import { makeStyles, useId,  Label } from "@fluentui/react-components";
 
-import {
- 
-  Button,
-  
-} from "@fluentui/react-components";
+
+
 import DropDown from "../components/DropDown";
 
 import {
@@ -29,18 +34,7 @@ import {
   } from "@fluentui/react-icons";
   import { useNavigate } from "react-router-dom";
   import ASNDrawer from "../components/ASNDrawer";
-  import {
-    
-    DataGrid,
-    DataGridBody,
-    DataGridCell,
-    DataGridHeader,
-    DataGridHeaderCell,
-    DataGridRow,
-    TableCellLayout,
-    createTableColumn,
-    
-  } from "@fluentui/react-components";
+
   import { GrSubtractCircle } from "react-icons/gr";
 
 
@@ -164,7 +158,7 @@ const PreviewPage = () => {
   ];
   const [isDrawerOpen,setIsDrawerOpen]=useState(false);
   const navigate = useNavigate();
-  const largeId = useId("input-large");
+  
   const handleASN = () => {
     setIsDrawerOpen(true);
     console.log("Status",isDrawerOpen)

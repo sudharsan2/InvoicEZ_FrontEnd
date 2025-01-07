@@ -5,7 +5,7 @@ import {
   Delete24Regular,
   ArrowSortUpFilled, ArrowSortDownRegular
 } from "@fluentui/react-icons";
-import { useLocation,useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 
 import {
   DataGrid,
@@ -61,20 +61,21 @@ const columns = [
 ];
 
 const AITable = ({ setTableLength }) => {
+
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [isHovered, setIsHovered] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]);
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [invoiceId, setInvoiceId] = useState(null);
-  const navigate = useNavigate();
   
-  const location2 = useLocation();
-  const { invoiceNumber } = location2.state || {};
-  console.log("inn", invoiceNumber);
+ 
 
-  const dispatch = useDispatch();
+  
   const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
@@ -143,7 +144,7 @@ const AITable = ({ setTableLength }) => {
           item.city?.toLowerCase().includes(searchLower) ||
           item.InvoiceDate?.toLowerCase().includes(searchLower) ||
           item.InvoiceTotal?.toLowerCase().includes(searchLower) 
-          // item.ship_to?.toLowerCase().includes(searchLower)
+          
         );
       });
   
@@ -161,7 +162,7 @@ const AITable = ({ setTableLength }) => {
         item.city?.toLowerCase().includes(searchLower) ||
         item.InvoiceDate?.toLowerCase().includes(searchLower) ||
         item.InvoiceTotal?.toLowerCase().includes(searchLower) 
-        // item.ship_to?.toLowerCase().includes(searchLower)
+        
       );
     });
     
@@ -171,7 +172,7 @@ const AITable = ({ setTableLength }) => {
     }
   };
 
-  const handleSelectionChange = (event, data) => {
+  const handleSelectionChange = ( data) => {
     console.log("handleSelectionChange", data.selectedItems);
     setSelectedRows(data.selectedItems);
   };
@@ -219,7 +220,7 @@ const AITable = ({ setTableLength }) => {
         description: `You have successfully deleted: ${supplierNames}`,
       });
 
-      console.log("ITEMS LENGTH",items.length);
+     
 
       dispatch(refreshActions.toggleInvoiceUploadRefresh());
     } catch (error) {
@@ -309,7 +310,7 @@ const AITable = ({ setTableLength }) => {
             gap: "8px",
             marginLeft: "2em",
           }}
-          // onClick={fetchData}
+          
           onMouseEnter={() => setIsHovered2(true)} 
           onMouseLeave={() => setIsHovered2(false)} 
           onClick={handleRefreshClick}

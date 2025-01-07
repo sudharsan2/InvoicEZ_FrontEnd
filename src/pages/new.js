@@ -1,39 +1,28 @@
 import React, { useState, useEffect } from "react";
-// import { Mail, Lock, ArrowRight } from "lucide-react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
-import { Button, notification } from "antd";
+import { useNavigate } from "react-router-dom";
 import { EyeOutlined } from "@ant-design/icons";
 import axios from "axios";
-import useIsMountedRef from "../hooks/useIsMountedRef";
 import "./login.css";
-import App from '../App';
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchLoginDetailsAsync,
-  getIsAuthenticatedFromAuth,
-  getIsLoadingFromAuth,
-  getErrorFromAuth,
-} from "../Store/authSlice";
+import { notification } from "antd";
+
+
 import { jwtDecode } from "jwt-decode";
 import logo from "../media/logo1000.png";
 
 
 const LoginPage = ({ setRoleFromChild }) => {
   const navigate = useNavigate();
-  const isMountedRef = useIsMountedRef();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector(getIsAuthenticatedFromAuth);
-  const isError = useSelector(getErrorFromAuth);
   const LoginSchema = Yup.object({
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
   });
   const [role, setRole] = useState("");
 
+  console.log(role)
   useEffect(() => {
     const token = localStorage.getItem("access_token");
    
@@ -50,84 +39,7 @@ const LoginPage = ({ setRoleFromChild }) => {
       }
     }
   }, []);
-  // const formik = useFormik({
-  //   initialValues: {
-  //     username: "",
-  //     password: "",
-  //   },
-  //   validationSchema: LoginSchema,
-  //   onSubmit: async (values, { setErrors, setSubmitting }) => {
-
-  //     setIsLoading(true);
-  //     try {
-  //       const response = await axios.post(
-  //         "https://invoicezapi.focusrtech.com:57/user/signin",
-  //         {
-  //           username: values.username,
-  //           password: values.password,
-  //         },
-  //       );
-
-  //       const tokens = response.data.tokens;
-  //       const { access_token } = tokens;
-  //       localStorage.setItem("access_token", access_token);
-  //       localStorage.setItem("username", response.data.username);
-                          
-  //   // Decode the role directly from the access token
-  //   const decodedToken = jwtDecode(access_token);
-  //   const roleFromToken = decodedToken.role;
   
-  //   console.log("ROLE:", roleFromToken);
-    
-   
-  //       console.log("ROLE", role);
-  //       switch (roleFromToken) {
-  //         case "admin":
-  //           navigate("/matrimony");
-  //           break;
-  //         case "invoice manager":
-  //           navigate("/dashboard");
-  //           break;
-  //         case "supplier":
-  //           navigate("/supplier");
-  //           break;
-  //           case "storeuser":
-  //             navigate("/storeuser");
-  //             break;
-  //         default:
-  //       }
-
-  //       notification.success({
-  //         message: "Login Successful",
-  //         description: "You have successfully logged in.",
-  //       });
-  //     } catch (error) {
-  //       console.error("Login failed:", error);
-  //       if (error.response) {
-  //         console.error("Error data:", error.response.data);
-  //         console.error("Error status:", error.response.status);
-  //       } else if (error.request) {
-  //         console.error("No response received:", error.request);
-  //       } else {
-  //         console.error("Error setting up request:", error.message);
-  //       }
-
-  //       notification.error({
-  //         message: "Login Failed",
-  //         description:
-  //           error.response?.data?.message || "An error occurred during login.",
-  //       });
-
-  //       setErrors({
-  //         auth:
-  //           error.response?.data?.message || "An error occurred during login.",
-  //       });
-  //     } finally {
-  //       setIsLoading(false);
-  //       setSubmitting(false);
-  //     }
-  //   },
-  // });
 
 
   const formik = useFormik({
@@ -206,17 +118,7 @@ const LoginPage = ({ setRoleFromChild }) => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      // console.log("Login attempted with:", formData);
-    }, 1500);
-  };
+  
 
   return (
     <div className="Login"
@@ -342,7 +244,6 @@ const LoginPage = ({ setRoleFromChild }) => {
           style={{
             width: "100%",
             padding: "1em",
-            // backgroundColor: "#9333EA",
             backgroundColor: "#e6c5e2",
             color: "white",
             border: "none",

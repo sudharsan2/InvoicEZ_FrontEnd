@@ -13,7 +13,7 @@ import {
   
 } from "@fluentui/react-icons";
 
-import { useNavigate } from "react-router-dom";
+
 import {
   DataGrid,
   DataGridBody,
@@ -23,17 +23,15 @@ import {
   DataGridCell,
   TableCellLayout,
   createTableColumn,
+  Dropdown,
+  Option,
+  useId,
 } from "@fluentui/react-components";
 
 import { Button, notification } from "antd"; 
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
 
-import {
-  Dropdown,
-  Option,
-  useId,
-} from "@fluentui/react-components";
 
 const path = "/UserManagement";
 
@@ -786,7 +784,7 @@ const togglePasswordVisibility = () => {
         {({ item, rowId }) => (
           <DataGridRow
             key={rowId}
-            // onClick={(e) => handleRowClick(e, item)}
+            
             selected={selectedRows.has(rowId)}
           >
             {({ renderCell }) => (
@@ -982,7 +980,7 @@ const togglePasswordVisibility = () => {
       }}
       onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
     >
-      {/* <h3 style={{ marginBottom: "15px" }}>Reset Password</h3> */}
+     
       <form onSubmit={handleResetSubmit}>
         <label style={{ display: "block", marginBottom: "10px" }}>
           Email:

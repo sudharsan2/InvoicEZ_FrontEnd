@@ -77,12 +77,6 @@ const DropdownComponent = () => {
         getOptionLabel={(e) => <div>{e.label}</div>}
         styles={customStyles} // Apply the custom styles
       />
-      {/* <p>Selected values:</p>
-      <ul>
-        {selectedValues.map(option => (
-          <li key={option.value}>{option.label}</li>
-        ))}
-      </ul> */}
     </div>
   );
 };

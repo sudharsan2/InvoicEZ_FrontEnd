@@ -13,9 +13,11 @@ import {
 import {
   Board24Filled,
   Board24Regular,
+ 
   bundleIcon,
   BoxMultipleCheckmark24Regular,
   BoxMultipleCheckmark24Filled,
+ 
   Navigation24Filled,
   Navigation24Regular,
   History24Regular,
@@ -35,9 +37,13 @@ import {
 } from "@fluentui/react-components";
 
 import { jwtDecode } from "jwt-decode";
+
 const useStyles = makeStyles({
   root: {
-    overflow: "hidden",  // Replace shorthand with the full property
+    
+    overflow: "hidden",
+    
+
     position: "fixed",
     left: 0,
     width: "100%",
@@ -46,8 +52,8 @@ const useStyles = makeStyles({
     backgroundColor: "#fff",
   },
   content: {
-    flex: 1,  // Replace shorthand with the full property
-    padding: "16px",  // Replace shorthand with the full property
+    flex:1,
+    ...shorthands.padding("16px"),
 
     display: "grid",
     justifyContent: "flex-start",
@@ -200,6 +206,39 @@ const NavDrawerDefaultStore = (props) => {
     }
   }, []);
 
+  // style
+
+  const headerStyle = collapse
+  ? {
+      width: `59px`,
+      transition: "width 0.5s",
+      borderRightStyle: "none",
+    }
+  : { transition: "width 0.5s", borderRightStyle: "none" }
+  
+  const navStyle = themestate
+  ? {
+      backgroundColor: darktheme.sidebarcolordark,
+      cursor: "pointer",
+      WebkitTapHighlightColor: "transparent",
+    }
+  : { cursor: "pointer", WebkitTapHighlightColor: "transparent" }
+
+
+  const iconStyle = themestate
+  ? { color: darktheme.fontcolordark }
+  : { color: lighttheme.fontcolorlight }
+
+
+  const divStyle = themestate
+  ? { marginTop: "2px", color: darktheme.fontcolordark }
+  : { marginTop: "2px", color: lighttheme.fontcolorlight }
+
+
+  const appearanceStyle = themestate ? "inverted" : "normal";
+
+  const classStyle = themestate ? styles.navItemdark : styles.navItemlight;
+
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
 
@@ -212,22 +251,16 @@ const NavDrawerDefaultStore = (props) => {
         onOpenChange={(_, { open }) => setIsOpen(open)}
         size="small"
         className={useStyles.navdrawer}
-        style={{
-          width: { true: "59px", false: undefined }[collapse],
-          transition: "width 0.5s",
-          borderRightStyle: "none"
-        }}
-
+        style={
+          headerStyle
+        }
       >
 
 
         <NavDrawerHeader
-          style={{
-            backgroundColor: { true: darktheme.sidebarcolordark, false: undefined }[themestate],
-            cursor: "pointer",
-            WebkitTapHighlightColor: "transparent"
-          }}
-
+          style={
+            navStyle
+          }
         >
           <NavDrawerHeaderNav
             onClick={() => {
@@ -238,10 +271,9 @@ const NavDrawerDefaultStore = (props) => {
               appearance="transparent"
               icon={
                 <Navi
-                  style={{
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-
+                  style={
+                    iconStyle
+                  }
                 />
               }
               className={styles.hamburger}
@@ -261,27 +293,24 @@ const NavDrawerDefaultStore = (props) => {
 
         {collapse ? (
           <NavDrawerBody
-          style={{
-            backgroundColor: { true: darktheme.sidebarcolordark, false: undefined }[themestate],
-            cursor: "pointer",
-            WebkitTapHighlightColor: "transparent"
-          }}
-          
+            style={
+              navStyle
+            }
           >
             <Tooltip
               content={"Dashboard"}
               positioning="after"
               withArrow={true}
-              appearance={ { true: "inverted", false: "normal" }[themestate] }
-              >
+              appearance={appearanceStyle}
+            >
+              
               <NavItem
                 target="_blank"
                 icon={
                   <Dashboard
-                  style={{
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-                  
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -289,8 +318,9 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("1");
                 }}
                 value="1"
-                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
-
+                className={
+                  classStyle
+                }
               ></NavItem>
             </Tooltip>
 
@@ -298,16 +328,15 @@ const NavDrawerDefaultStore = (props) => {
               content={"Generate Gate Entry"}
               positioning="after"
               withArrow={true}
-              appearance={ { true: "inverted", false: "normal" }[themestate] }
-              >
+              appearance={appearanceStyle}
+            >
               <NavItem
                 target="_blank"
                 icon={
                   <LayerDiagonalPersonRegular
-                  style={{
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-                  
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -315,7 +344,9 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("2");
                 }}
                 value="2"
-                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
+                className={
+                  classStyle
+                }
               ></NavItem>
             </Tooltip>
 
@@ -323,16 +354,15 @@ const NavDrawerDefaultStore = (props) => {
               content={"Open PO"}
               positioning="after"
               withArrow={true}
-              appearance={ { true: "inverted", false: "normal" }[themestate] }
-              >
+              appearance={appearanceStyle}
+            >
               <NavItem
                 target="_blank"
                 icon={
                   <OpenPo
-                  style={{
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-                  
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -340,8 +370,9 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("4");
                 }}
                 value="4"
-                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
-
+                className={
+                  classStyle
+                }
               ></NavItem>
             </Tooltip>
 
@@ -349,16 +380,15 @@ const NavDrawerDefaultStore = (props) => {
               content={"History"}
               positioning="after"
               withArrow={true}
-              appearance={ { true: "inverted", false: "normal" }[themestate] }
-              >
+              appearance={appearanceStyle}
+            >
               <NavItem
                 target="_blank"
                 icon={
                   <History
-                  style={{
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-                  
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -366,8 +396,9 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("3");
                 }}
                 value="3"
-                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
-
+                className={
+                  classStyle
+                }
               ></NavItem>
             </Tooltip>
 
@@ -375,12 +406,9 @@ const NavDrawerDefaultStore = (props) => {
           </NavDrawerBody>
         ) : (
           <NavDrawerBody
-          style={{
-            backgroundColor: { true: darktheme.sidebarcolordark, false: undefined }[themestate],
-            cursor: "pointer",
-            WebkitTapHighlightColor: "transparent"
-          }}
-          
+            style={
+              navStyle
+            }
           >
             {/* DETAILS OF USER  */}
             <div
@@ -418,15 +446,16 @@ const NavDrawerDefaultStore = (props) => {
                 target="_blank"
                 icon={
                   <Dashboard
-                  style={{
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-                  
+                    style={
+                      iconStyle
+                    }
                   />
                 }
 
                 value="1"
-                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
+                className={
+                  classStyle
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
                   navigate("/storedashboard");
@@ -434,11 +463,9 @@ const NavDrawerDefaultStore = (props) => {
                 }}
               >
                 <div
-                  style={{
-                    marginTop: "2px",
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-                  
+                  style={
+                    divStyle
+                  }
                 >
                   Dashboard
                 </div>
@@ -449,10 +476,9 @@ const NavDrawerDefaultStore = (props) => {
                 target="_blank"
                 icon={
                   <LayerDiagonalPersonRegular
-                  style={{
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-                  
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -460,15 +486,15 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("2");
                 }}
                 value="2"
-                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
+                className={
+                  classStyle
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={{
-                    marginTop: "2px",
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-                  
+                  style={
+                    divStyle
+                  }
                 >
                   Generate Gate Entry
                 </div>
@@ -480,10 +506,9 @@ const NavDrawerDefaultStore = (props) => {
                 target="_blank"
                 icon={
                   <OpenPo
-                  style={{
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-                  
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -491,15 +516,15 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("4");
                 }}
                 value="4"
-                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
+                className={
+                  classStyle
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                style={{
-                  marginTop: "2px",
-                  color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                }}
-                
+                  style={
+                   divStyle
+                  }
                 >
                   Open PO
                 </div>
@@ -510,10 +535,9 @@ const NavDrawerDefaultStore = (props) => {
                 target="_blank"
                 icon={
                   <History
-                  style={{
-                    color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                  }}
-                  
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -521,15 +545,15 @@ const NavDrawerDefaultStore = (props) => {
                   setValue("3");
                 }}
                 value="3"
-                className={styles[{ true: "navItemdark", false: "navItemlight" }[themestate]]}
+                className={
+                  classStyle
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                style={{
-                  marginTop: "2px",
-                  color: { true: darktheme.fontcolordark, false: lighttheme.fontcolorlight }[themestate]
-                }}
-                
+                  style={
+                    divStyle
+                  }
                 >
                   History
                 </div>

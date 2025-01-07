@@ -6,7 +6,7 @@ import frLogo from "../media/frlogo.png";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import React, { useState, useEffect,useRef } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -17,7 +17,6 @@ import {
   makeStyles,
   Popover,
   Text,
-  shorthands,
   Link,
   
 } from "@fluentui/react-components";
@@ -26,7 +25,7 @@ import {
   QuestionRegular,
   ShareIos24Filled
 } from "@fluentui/react-icons";
-import { themeActions, refreshActions } from "../Store/Store";
+
 
 import { jwtDecode } from "jwt-decode";
 
@@ -34,9 +33,9 @@ import axios from "axios";
 
 
 
-import { Modal, Upload, notification, message, Layout } from "antd";
+import { Modal, Upload, message, Layout } from "antd";
 import WalkInCandidate from "./WalkinCandidate.jsx";
-import { DarkMode } from "@mui/icons-material";
+
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Dragger } = Upload;
@@ -45,7 +44,7 @@ const useStyles = makeStyles({
     marginTop: "0",
   },
   text: {
-    ...shorthands.overflow("hidden"),
+    overflow: "hidden",
     width: "240px",
     display: "block",
     color: "#424242",
@@ -236,7 +235,7 @@ const CustomLayout = ({ children }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   console.log(windowWidth)
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+ 
   const lighttheme = useSelector((state) => state.theme.light);
   const darktheme = useSelector((state) => state.theme.dark);
   console.log(lighttheme,darktheme)
@@ -392,10 +391,7 @@ const CustomLayout = ({ children }) => {
 
   
 
-  const handleToggle = () => {
-    dispatch(refreshActions.toggleInvoiceUploadRefresh()); // Dispatch the action to toggle the state
-  };
-
+  
   
 
   

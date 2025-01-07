@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+import React,{ useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { ArrowSortUpFilled, ArrowSortDownRegular, ArrowDownload28Regular } from "@fluentui/react-icons";
 import {
 
   makeStyles,
@@ -21,25 +20,15 @@ import {
   Input,
   Divider
 } from "@fluentui/react-components";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { ArrowDownload28Regular } from "@fluentui/react-icons";
-import { message } from "antd";
-import { notification } from "antd";
+import { message ,notification} from "antd";
+
 
 const path = "/storedetails";
 const path2 = "/approvepage";
 const path1 = "/storedashboard";
 
 const useStyles = makeStyles({
-  root: {
-    // width: "77vw",
-    // height: "88vh",
-    // overflowY: "auto",
-    // display: "flex",
-    // flexDirection: "column",
-  },
-
   header: {
     padding: "20px",
   },
@@ -123,6 +112,7 @@ const StoreUserPage = () => {
   const [closedcode, setClosedCode] = useState();
   const [po_id, set_Po_id] = useState("");
   const [inv_id, setInv_id] = useState();
+  
 
 // Theme State
    const themestate = false;
@@ -153,10 +143,7 @@ const StoreUserPage = () => {
 
     });
    
-
-      
-
-      if (response.status === 200) {
+    if (response.status === 200) {
         message.success("GRN successfully Updated");
         navigate(`/storeuser`);
       }

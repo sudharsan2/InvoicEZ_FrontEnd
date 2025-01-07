@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import React from "react";
-import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
-import { useNavigate } from "react-router-dom";
+import React,{ useEffect, useState } from "react";
+
+import { ArrowSortUpFilled, ArrowSortDownRegular,ArrowDownload28Regular } from "@fluentui/react-icons";
+
 import {
   makeStyles,
- 
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
@@ -14,19 +13,16 @@ import {
   Table,
   TableCell,
   TableHeader,
- 
   TableRow,
   TableBody,
   TableHeaderCell,
-  createTableColumn,
+  
   
   Divider,
 } from "@fluentui/react-components";
-
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
-import { ArrowDownload28Regular } from "@fluentui/react-icons";
 
 
 const path = "/storehistorydetails";
@@ -34,13 +30,7 @@ const path2 = "/storehistory";
 const path1 = "/storedashboard";
 
 const useStyles = makeStyles({
-  root: {
-    // width: "77vw",
-    // height: "88vh",
-    // overflowY: "auto",
-    // display: "flex",
-    // flexDirection: "column",
-  },
+
 
   header: {
     padding: "20px",
@@ -108,7 +98,7 @@ const useStyles = makeStyles({
 
 const StoreHistoryDetails = () => {
   
-  const navigate = useNavigate();
+  
   const styles = useStyles();
   const themestate = false;
   const location = useLocation();
@@ -118,8 +108,7 @@ const StoreHistoryDetails = () => {
 
 
   const [entrytime, setEntrytime] = useState();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  
   const [poDate, setPoDate] = useState();
   const [postatus, setPoStatus] = useState();
   const [total, setTotal] = useState();
@@ -233,10 +222,8 @@ const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, h
         setPoLineItems(fetchedItems);
         
       } catch (error) {
-        setError("Error fetching data. Please try again.");
+       
         console.error("Error fetching data:", error.response ? error.response.data : error.message);
-      } finally {
-        setLoading(false);
       }
     };
   

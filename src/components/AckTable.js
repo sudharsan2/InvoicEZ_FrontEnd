@@ -10,21 +10,12 @@ import {
   createTableColumn,
 } from "@fluentui/react-components";
 
-const items = [
-  {
-    file: { label: "10" },
-    author: { label: "Rice" },
-    lastUpdated: { label: "test" },
-    lastUpdate: { label: "KG" },
-    Quantity: { label: "1000" },
-    NeedByDate: { label: "18 May 2023" },
-  },
-];
+
 
 const columns = [
   createTableColumn({
     columnId: "line",
-    // compare: (a, b) => a.file.label.localeCompare(b.file.label),
+    
     renderHeaderCell: () => "Line",
     renderCell: (item) => (
       <TableCellLayout style={{ maxWidth: "100px" }}>
@@ -34,7 +25,7 @@ const columns = [
   }),
   createTableColumn({
     columnId: "items",
-    // compare: (a, b) => a.author.label.localeCompare(b.author.label),
+    
     renderHeaderCell: () => "Item",
     renderCell: (item) => (
       <TableCellLayout style={{ maxWidth: "150px" }}>

@@ -11,7 +11,7 @@ import {
   Link, makeStyles, Text
  
 } from "@fluentui/react-components";
-import { shorthands } from '@griffel/react';
+
 import { AlertBadgeRegular } from "@fluentui/react-icons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +25,7 @@ const useStyles2 = makeStyles({
     marginTop: "0",
   },
   text: {
-    ...shorthands.overflow("hidden"),
+    overflow: "hidden",
     width: "240px",
     display: "block",
     color: "#424242",

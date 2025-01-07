@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import React from "react";
-
+import React,{ useEffect, useState } from "react";
+import { message } from "antd";
 import {
   makeStyles,
   Breadcrumb,
@@ -16,27 +15,23 @@ import {
   TableRow,
   TableBody,
   TableHeaderCell,
-  createTableColumn,
+  
  
   Divider,
 } from "@fluentui/react-components";
+import axios from "axios";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
+
 
 const path = "/openpo";
 const path2 = "/openpodet";
 const path1 = "/dashboard";
 
 const useStyles = makeStyles({
-  root: {
-    // width: "77vw",
-    // height: "88vh",
-    // overflowY: "auto",
-    // display: "flex",
-    // flexDirection: "column",
-  },
+
 
   header: {
     padding: "20px",
@@ -105,51 +100,136 @@ const OpenPODetails = () => {
   
 
   
-
+const params = useParams();
+console.log("params", params.po_number);
   const styles = useStyles();
   const themestate = false;
-  
-  
   const location = useLocation();
-  const { poNumber, Id ,po_type ,locations,totals,Status,po_items,Supplier,Buyer} = location.state || {};
   
- 
-
-  
-
-
-
-
-  
-
-  
-  
-
-  
-  
-  
-
+  const { poNumber,po_type ,locations,totals,Status,po_items,Supplier,Buyer} = location.state || {};
   const [data, setData] = useState("");
+  const [selectedtab, setSelectedTab] = React.useState("tab1");
+  const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState('asc');
+   const [purchaseOrder,setPurchaseOrder] = useState
+   ({
+    poNumber: poNumber,
+    
+    poTotalAmount: "95090",
+    poCurrency: "INR",
+    poStatus: "Open",
+    lineMatching: "FULL / Partial Line Items",
+    customerAddress: "CustomerAddress",
+    invoiceDate: "InvoiceDate",
+    invoiceTotal: "InvoiceTotal",
+    invoiceCurrency: "Invoice Currency",
+    purchaseOrderNumberInInvoice: "PurchaseOrder Number in Invoice",
+  });
+  const [loading, setLoading] = useState(false);
+
+  const [supplierName, setSupplierName] = useState("");
+  const[BuyerName,setBuyerName]=useState("");
+  const[Potype,setPotype]=useState("");
+  const[Tamt,setTotal]=useState("");
+  const[L,setL]=useState("");
+  const[Poitem,setPoitem]=useState({
+    needbydate:""
+
+  }
+
+  )
+
  
+  
+
+
+
+  // ------Style----------
+
+  const tabStyle = themestate ? "tab dark drawer" : "tab";
+  const colorStyle = themestate ? "white" : "";
+  const divStyle = {color: themestate ? "rgb(245,245,245)" : ""};
+  const backStyle =  themestate ? "#383838" : "white";
+  const themeStyle = themestate ? "white" : "black";
+  const tableRowStyle =  themestate ? { color: "white", borderBottomColor: "#383838" } : {};
+  const bodyStyle = themestate ? { color: "white" } : {};
+  const divStyles = themestate ? "hovereffect dark" : "hovereffect"
+
+  const fetchData = async () => {
+   
+ 
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await axios.get(
+        "https://invoicezapi.focusrtech.com:57/user/allOpenPos/",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+ 
+      const fetchedItems = response.data || [];
+      // Filter the specific purchase order based on po_number
+      const filteredOrder = fetchedItems.find((item) => item.po_number === params.po_number);
+      console.log("34", filteredOrder)
+
+      setSupplierName(filteredOrder.supplier_name);
+      setBuyerName(filteredOrder.buyer_name);
+      setPotype(filteredOrder.po_type);
+      setTotal(filteredOrder.total_amount);
+      setL(filteredOrder.location);
+      setPoitem(filteredOrder?.po_items[0]?.need_by_date);
+
+      
+ 
+      if (filteredOrder) {
+        const formattedOrder = {
+          poNumber: filteredOrder.po_number,
+          poTotalAmount: filteredOrder.total_amount,
+          poCurrency: "INR", // Add from API if available
+          poStatus: filteredOrder.po_status || "Open",
+          poItems: filteredOrder.po_items || [],
+          supplierName: filteredOrder.supplier_name,
+          buyerName: filteredOrder.buyer_name,
+          shipTo: filteredOrder.ship_to,
+          needByDate: filteredOrder.po_items?.[0]?.need_by_date || "N/A",
+        };
+ 
+        setPurchaseOrder(formattedOrder);
+      } else {
+        message.error("Purchase order not found for the given PO Number.");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      
+    } finally {
+      setLoading(false);
+    }
+  };
+ 
+  useEffect(() => {
+    fetchData();
+  }, [poNumber]);
+ 
+ 
+  if (!purchaseOrder) {
+    return <div>No Purchase Order details available.</div>;
+  }
 
   const handleTabSelect2 = (event, data) => {
     
     setSelectedTab(data.value);
   };
 
-  
-
-  
-
-  
-
-
   const handleSort = (column) => {
     if (sortedColumn === column) {
      
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
-      // Set sorting direction to ascending if a new column is clicked
       setSortedColumn(column);
       setSortDirection("asc");
     }
@@ -164,68 +244,80 @@ const OpenPODetails = () => {
     },
   });
 
+  const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, headerSortProps }) => (
+    <TableHeaderCell {...headerSortProps(column)}>
+      {label}
+      {sortedColumn === column && (
+        sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
+      )}
+    </TableHeaderCell>
+  );
+
   
-   useEffect(()=>{
-     setData(po_items);
-   },[])
+   
 
    const needByDate = data?.[0]?.need_by_date;
    console.log("needByDate",needByDate);
    
    
-   const [selectedtab, setSelectedTab] = React.useState("tab1");
-  const purchaseOrder = {
-    poNumber: poNumber,
-    
-    poTotalAmount: "95090",
-    poCurrency: "INR",
-    poStatus: "Open",
-    lineMatching: "FULL / Partial Line Items",
    
-    customerAddress: "CustomerAddress",
-    
-    invoiceDate: "InvoiceDate",
-    invoiceTotal: "InvoiceTotal",
-    invoiceCurrency: "Invoice Currency",
-    purchaseOrderNumberInInvoice: "PurchaseOrder Number in Invoice",
-  };
+ 
   
   
  
 
-  const [sortedColumn, setSortedColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState('asc');
 
-  const sortedData = [...data].sort((a, b) => {
-    if (!sortedColumn) return 0;
+  
 
-    const aValue = a[sortedColumn] || "";  
-    const bValue = b[sortedColumn] || "";
-
-    
-    const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
-    const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
-
-   
+  const compareNumeric = (aValue, bValue, direction) => {
+    const aNumeric = parseFloat(aValue);
+    const bNumeric = parseFloat(bValue);
+    return direction === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+  };
+  
+  const compareString = (aValue, bValue, direction) => {
+    const aString = String(aValue).toLowerCase();
+    const bString = String(bValue).toLowerCase();
+    return direction === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+  };
+  
+  const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
+  
+  const getValueForSorting = (row, column) => row[column] || "";
+  
+  const sortByType = (aValue, bValue, sortDirection, type) => {
+    if (type === "numeric") {
+      return compareNumeric(aValue, bValue, sortDirection);
+    }
+    return compareString(aValue, bValue, sortDirection);
+  };
+  
+  const compareValues = (aValue, bValue, isANumeric, isBNumeric, sortDirection) => {
     if (isANumeric && isBNumeric) {
-      const aNumeric = parseFloat(aValue);
-      const bNumeric = parseFloat(bValue);
-      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+      return sortByType(aValue, bValue, sortDirection, "numeric");
     }
-
-   
     if (!isANumeric && !isBNumeric) {
-      const aString = String(aValue).toLowerCase(); // Normalize for case-insensitive comparison
-      const bString = String(bValue).toLowerCase();
-      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+      return sortByType(aValue, bValue, sortDirection, "string");
     }
-
-    
-    if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
-    if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
-
-    return 0; 
-  });
+  
+    const directionMultiplier = sortDirection === "asc" ? -1 : 1;
+    return isANumeric ? directionMultiplier : -directionMultiplier;
+  };
+  
+  
+  const sortedData = Array.isArray(data)
+    ? [...data].sort((a, b) => {
+        if (!sortedColumn) return 0;
+  
+        const aValue = getValueForSorting(a, sortedColumn);
+        const bValue = getValueForSorting(b, sortedColumn);
+  
+        const isANumeric = isNumeric(aValue);
+        const isBNumeric = isNumeric(bValue);
+  
+        return compareValues(aValue, bValue, isANumeric, isBNumeric, sortDirection);
+      })
+    : [];
 
   
 
@@ -264,7 +356,7 @@ const OpenPODetails = () => {
                   }}
                 >
                   <p>Supplier</p>
-                  <h2>{Supplier}</h2>
+                  <h2>{supplierName}</h2><h2>{Supplier}</h2>
                   
                 </div>
                 <div
@@ -285,7 +377,7 @@ const OpenPODetails = () => {
                   }}
                 >
                   <p>Buyer</p>
-                  <h2>{Buyer}</h2>
+                  <h2>{BuyerName}</h2><h2>{Buyer}</h2>
                 </div>
                 <div
                   style={{
@@ -295,7 +387,7 @@ const OpenPODetails = () => {
                   }}
                 >
                   <p>Need By Date</p>
-                  <h2>{needByDate}</h2>
+                  <h2>{needByDate}</h2><h2>{Poitem.needbydate}</h2>
                 </div>
               </div>
             </div>
@@ -313,14 +405,14 @@ const OpenPODetails = () => {
             >
               <Tab
                 value="tab1"
-                className={themestate ? "tab dark drawer" : "tab"}
+                className={tabStyle}
                 style={{ border: "1px solid transparent" }}
               >
                 Header
               </Tab>
               <Tab
                 value="tab2"
-                className={themestate ? "tab dark drawer" : "tab"}
+                className={tabStyle}
                 style={{ border: "1px solid transparent" }}
               >
                 Line Item
@@ -343,16 +435,17 @@ const OpenPODetails = () => {
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {colorStyle}
                       }}
                     >
                       PO Number:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={divStyle}
                     >
                       
+                      {purchaseOrder.poNumber}
                       {poNumber}
                     </div>
                   </div>
@@ -362,14 +455,14 @@ const OpenPODetails = () => {
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color:{colorStyle}
                       }}
                     >
                       Vendor Address:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={divStyle}
                     >
                       
                     </div>
@@ -380,14 +473,14 @@ const OpenPODetails = () => {
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {colorStyle},
                       }}
                     >
                       PO Date:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={divStyle}
                     >
                       
                       {needByDate}
@@ -399,17 +492,17 @@ const OpenPODetails = () => {
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {colorStyle},
                       }}
                     >
                       PO Type:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={divStyle}
                     >
                       
-                      {po_type}
+                      {Potype}
                     </div>
                   </div>
 
@@ -418,16 +511,16 @@ const OpenPODetails = () => {
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {colorStyle},
                       }}
                     >
                       PO Total Amount:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={divStyle}
                     >
-                      {totals}
+                      {Tamt}
                     </div>
                   </div>
 
@@ -436,17 +529,17 @@ const OpenPODetails = () => {
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {colorStyle},
                       }}
                     >
                       Location:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={divStyle}
                     >
                      
-                      {locations}
+                      <div>{locations}</div> <>{L}</> 
                     </div>
                   </div>
 
@@ -455,14 +548,14 @@ const OpenPODetails = () => {
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {colorStyle},
                       }}
                     >
                       PO Currency:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={divStyle}
                     >
                       {purchaseOrder.poCurrency}
                     </div>
@@ -473,14 +566,14 @@ const OpenPODetails = () => {
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: themestate ? "white" : "",
+                        color: {colorStyle},
                       }}
                     >
                       PO Status:
                     </div>
                     <div
                       className={styles.content}
-                      style={{ color: themestate ? "rgb(245,245,245)" : "" }}
+                      style={divStyle}
                     >
                       {Status}
                     </div>
@@ -517,214 +610,46 @@ const OpenPODetails = () => {
  style={{
   position: "sticky",
                       top: 0,
-                      backgroundColor: themestate ? "#383838" : "white",
+                      backgroundColor: {backStyle},
                       zIndex: 1,
-                      color: themestate ? "white" : "black",
+                      color: {themeStyle},
                      
 }}
 >
 
                     <TableRow
                       style={
-                        themestate ? { color: "white", borderBottomColor: "#383838" } : {}
+                        tableRowStyle
                       }
                     >
-                      <TableHeaderCell {...headerSortProps("item_name")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        minWidth: "150px", 
-                        display: "flex", 
-                        alignItems: "center", 
-                        justifyContent: "space-between", 
-                      }}>
-                      Item Name
-                        {sortedColumn === "item_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular style={{ width: "16px", height: "26px" }}/> : <ArrowSortUpFilled style={{ width: "16px", height: "16px" }}/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("line_num")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        minWidth: "150px",
-                      }}>
-                      Line Number
-                        {sortedColumn === "line_num" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular style={{ width: "16px", height: "16px" }}/> : <ArrowSortUpFilled style={{ width: "16px", height: "16px" }}/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("quantity")}style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                      Quantity
-                        {sortedColumn === "quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("unit_price")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                      Unit Price
-                        {sortedColumn === "unit_price" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("amount_billed")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                      Amount Billed
-                        {sortedColumn === "amount_billed" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("order_type_lookup_code")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        minWidth: "150px", 
-                        display: "flex", 
-                        alignItems: "center", 
-                        justifyContent: "space-between", 
-                      }}>
-                      Order Type
-                        {sortedColumn === "order_type_lookup_code" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("purchase_basis")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                      Purchase Basis
-                        {sortedColumn === "purchase_basis" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("category_name")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                        Category Name
-                        {sortedColumn === "category_name" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("closed_code")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                        Closed Code
-                        {sortedColumn === "closed_code" && (
-                          sortDirection === "asc" ?<ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("item_description")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                        Item Description
-                        {sortedColumn === "item_description" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("need_by_date")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                        Need By Date
-                        {sortedColumn === "need_by_date" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("promised_date")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                        Promised Date
-                        {sortedColumn === "promised_date" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("po_line_id")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                       PO Line_Id
-                        {sortedColumn === "po_line_id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("po_distribution_id")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                        PO Distribution Id
-                        {sortedColumn === "po_distribution_id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("line_location_id")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                        Line Location Id
-                        {sortedColumn === "line_location_id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("inventory_item_id")}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}>
-                        Inventory Item Id
-                        {sortedColumn === "inventory_item_id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular/> : <ArrowSortUpFilled/>
-                        )}
-                      </TableHeaderCell>
+                       <TableHeaderCellWithSort column="item_name" label="Item Name" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="line_num" label="Line Number" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="quantity" label="Quantity" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="unit_price" label="Unit Price" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="amount_billed" label="Amount Billed" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="order_type_lookup_code" label=" Order Type" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="purchase_basis" label="Purchase Basis" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="category_name" label="Category Name" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="category_name" label="Category Name" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="item_description" label="Item Description" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="need_by_date" label="Need By Date" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="promised_date" label="Promised Date" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="po_line_id" label="PO Line_Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="po_distribution_id" label="PO Distribution Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="line_location_id" label="Line Location Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                       <TableHeaderCellWithSort column="inventory_item_id" label="Inventory Item Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
                     </TableRow>
                   </TableHeader>
 
 
 
-                  <TableBody style={themestate ? { color: "white" } : {}}>
+                  <TableBody style={bodyStyle}>
                     {sortedData.map((item) => (
                       <TableRow
                         key={item.id}
-                        style={themestate ? { color: "white" } : {}}
+                        style={bodyStyle}
                         className={
-                          themestate ? "hovereffect dark" : "hovereffect"
+                          divStyles
                         }
                       >
                         <TableCell

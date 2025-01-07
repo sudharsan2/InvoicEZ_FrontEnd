@@ -24,7 +24,6 @@ const items = [
 const columns = [
   createTableColumn({
     columnId: "line",
-    // compare: (a, b) => a.file.label.localeCompare(b.file.label),
     renderHeaderCell: () => "Line",
     renderCell: (item) => (
       <TableCellLayout style={{ maxWidth: "100px" }}>
@@ -34,7 +33,6 @@ const columns = [
   }),
   createTableColumn({
     columnId: "items",
-    // compare: (a, b) => a.author.label.localeCompare(b.author.label),
     renderHeaderCell: () => "Item",
     renderCell: (item) => (
       <TableCellLayout style={{ maxWidth: "150px" }}>

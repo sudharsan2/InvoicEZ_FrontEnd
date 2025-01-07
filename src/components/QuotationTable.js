@@ -174,6 +174,7 @@ const QuotationTable = ({setStatusCounts}) => {
   const styles = useStyles();
   const [selectedRowData, setSelectedRowData] = useState({});
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  
   useEffect(() => {
     if (selectedRowData && selectedRowData.status === "To be Acknowledged") {
       setIsDrawerOpen(true);
@@ -187,86 +188,71 @@ const QuotationTable = ({setStatusCounts}) => {
 
   
   const fetchData = async () => {
-    let userId = null;
     const token = localStorage.getItem("access_token");
-    console.log(typeof token);
+    let userId = null;
+  
     if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
-        userId = decodedToken.user_id;
-        setUserID(userId);
-        console.log("ID", userId);
-        
-      } catch (error) {
-        console.error("Invalid token:", error);
-      }
+      userId = getUserIdFromToken(token);
+      if (!userId) return;
+      setUserID(userId) 
     }
+  
     try {
-      const response = await axios.get(
-        `https://invoicezapi.focusrtech.com:57/user/pr-details/supplier/${userId}/`,
-      );
-
-      const data = response.data;
-      console.log("Status", data[0]?.status);
-      
-      const data1 = data.map((item) => {
-        let status = ""; // Default status
-      
-        // Check if "quotations" exists in the item
-        if ("quotations" in item) {
-          let quotationTruth = false; // Declare the variable properly
-      
-          // Check if any quotation matches the userId
-          item.quotations.forEach((quotation) => {
-            if (quotation.supplier === userId) {
-              quotationTruth = true;
-            }
-          });
-      
-          // Determine the status based on conditions
-          if (item.status === "YetAcknowledged" ) {
-            if(quotationTruth)
-            {
-              status = "To be Acknowledged";
-            }
-            else
-            {
-              status = "quotation";
-            }
-            
-           
-          }
-          else{
-            status = "quotation";  //changes
-
-          }
-          //  else if (item.quotations.length === 0 ||  item.quotations.length>1) {
-          //   status = "quotation";
-          // }
-          
-        }
-        else{
-          status="quotation";
-        }
-      
-        // Set the determined status
-        item.status = status;
-        return item; // Return the modified item
-      });
-      
-
-      setItems(data1); // Set the processed items in state
-      // console.log("Mapped Items:", mappedItems);
-
-      const quotationCount = data1.filter((item) => item.status === "quotation").length;
-      const ackCount = data1.filter((item) => item.status === "To be Acknowledged").length;
-      
+      const data = await fetchUserData(userId);
+      const processedData = processData(data, userId);
+      setItems(processedData);
+  
+      const { quotationCount, ackCount } = calculateStatusCounts(processedData);
       setStatusCounts({ quotationCount, ackCount });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+  
+  const getUserIdFromToken = (token) => {
+    try {
+      const decodedToken = jwtDecode(token);
+      return decodedToken.user_id;
+    } catch (error) {
+      console.error("Invalid token:", error);
+      return null;
+    }
+  };
+  
+  const fetchUserData = async (userId) => {
+    const response = await axios.get(
+      `https://invoicezapi.focusrtech.com:57/user/pr-details/supplier/${userId}/`
+    );
+    return response.data;
+  };
+  
+  const processData = (data, userId) => {
+    return data.map((item) => {
+      item.status = determineStatus(item, userId);
+      return item;
+    });
+  };
+  
+  const determineStatus = (item, userId) => {
+    if (!item.quotations) return "quotation";
+  
+    const hasUserQuotation = item.quotations.some(
+      (quotation) => quotation.supplier === userId
+    );
+  
+    if (item.status === "YetAcknowledged") {
+      return hasUserQuotation ? "To be Acknowledged" : "quotation";
+    }
+  
+    return "quotation";
+  };
+  
+  const calculateStatusCounts = (data) => {
+    const quotationCount = data.filter((item) => item.status === "quotation").length;
+    const ackCount = data.filter((item) => item.status === "To be Acknowledged").length;
+    return { quotationCount, ackCount };
+  };
+  
 
   useEffect(() => {
     fetchData();
@@ -400,7 +386,7 @@ const QuotationTable = ({setStatusCounts}) => {
       </div>
       {selectedRowData && selectedRowData.status === "quotation" && <QuotationDrawer data={selectedRowData} userId={userId} onClose={() => fetchData()}/>}
       {selectedRowData && selectedRowData.status === "To be Acknowledged" && <AckDrawer data={selectedRowData} isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} onClose={() => fetchData()}/>}
-      {/* <QuotationDrawer isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} /> */}
+      
     </div>
   );
 };

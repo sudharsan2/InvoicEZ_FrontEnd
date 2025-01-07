@@ -4,10 +4,6 @@ import {
   BreadcrumbItem,
   BreadcrumbDivider,
   BreadcrumbButton,
-} from "@fluentui/react-components";
-import { KeyMultipleRegular } from "@fluentui/react-icons";
-
-import {
   Input,
   makeStyles,
   Button,
@@ -16,14 +12,16 @@ import {
   Tab,
   
 } from "@fluentui/react-components";
+import { KeyMultipleRegular } from "@fluentui/react-icons";
+
+
 
 import { FaRegCopy } from "react-icons/fa";
 
 import { Calendar, DateRangeType } from "@fluentui/react";
 import { notification } from "antd";
 
-const path = "/admin";
-const path1 = "/dashboard";
+
 const path3 = "/matrimony";
 
 const containerStyle = {
@@ -60,10 +58,6 @@ const labelStyle = {
   marginBottom: "10px",
 };
 
-const calendar = {
-  color: "black !imporatant",
-};
-
 const valueStyle = {
   fontSize: "28px",
   fontWeight: "bold",
@@ -72,12 +66,7 @@ const valueStyle = {
 };
 
 const useStyles = makeStyles({
-  root: {
-    // width: "77vw",
-    // height: "100vh",
-    // display: "flex",
-    // flexDirection: "column",
-  },
+  
   control: {
     maxWidth: "300px",
   },
@@ -126,10 +115,10 @@ const useStyles = makeStyles({
   content2: {
     width: "77vw",
     overflowY: "auto",
-    // paddingTop: "3vh",
+   
     padding: "0 20px",
 
-    // maxHeight: "48vh",
+    
   },
   controls: {
     display: "flex",
@@ -437,8 +426,15 @@ const Matrimony = () => {
   const [isConnection, isSetConnection] = useState(true);
 
   function getValue(isHidden, text) {
-    return isHidden ? "•".repeat(text.length) : text;
+    const safeText = text || ""; 
+  
+    if (isHidden) {
+      return "•".repeat(safeText.length);
+    } else {
+      return safeText;
+    }
   }
+  
   
   function getToggleText(isHidden) {
     return isHidden ? "Show" : "Hide";
@@ -517,7 +513,7 @@ const Matrimony = () => {
               highlightSelectedMonth
               isDayPickerVisible={false}
               onSelectDate={onSelectDate}
-              value={selectedDate}
+              value={selectedDate}            
             />
             {/* </Field> */}
             <Button
@@ -686,7 +682,7 @@ const Matrimony = () => {
                     <Input
                       id={inputId}
                       value={val3}
-                      // value={model}
+                      
                       onChange={(e) => setModel(e.target.value)}
                       onBlur={(e) => handleUpdate("model", e.target.value)}
                       className={styles.inputWithIcon}
@@ -767,7 +763,6 @@ const Matrimony = () => {
                   <div className={styles.input}>
                     <Input
                       id={inputId}
-                      // value={container}
                       value={val6}
                       onChange={(e) => setContainer(e.target.value)}
                       onBlur={(e) =>

@@ -1,6 +1,5 @@
-import React, { useState,useEffect } from "react";
+import React, {useEffect } from "react";
 import {
-  
   Drawer,
   makeStyles,
   useRestoreFocusSource,
@@ -94,7 +93,7 @@ const AckDrawer = ({data,setIsOpen,isOpen,onClose}) => {
         position="end"
         separator
         open={isOpen}
-        // onOpenChange={(_, { open }) => setIsOpen(open)}
+        
         onOpenChange={(_, { open }) => {
           setIsOpen(open)
           if (!open) handleClose(); // Trigger close logic when the drawer closes

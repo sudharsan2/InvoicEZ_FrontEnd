@@ -5,15 +5,10 @@ import {
   BreadcrumbDivider,
   BreadcrumbButton,
 } from "@fluentui/react-components";
-import {
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-  bundleIcon,
-} from "@fluentui/react-icons";
 
 
 const path = "/admin";
-const path1 = "http://localhost:3000/";
+
 // Grid
 const counters = [
     { label: "Page Processed", value: 1556, color: "#00bfbf" }, // Cyan

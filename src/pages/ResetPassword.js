@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import axios from "axios"; // Import axios
-import { makeStyles, tokens, Input, Button } from "@fluentui/react-components";
+import { makeStyles, tokens, Button } from "@fluentui/react-components";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Forget.css";
 

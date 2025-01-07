@@ -96,6 +96,7 @@ const FormPage = () => {
         `https://invoicezapi.focusrtech.com:57/user/handleSubmitted/${response1.tokens}`,
         formData,
       );
+      console.log(response)
       setChange(true);
     } catch (error) {
       console.error("Error:", error);
@@ -117,7 +118,6 @@ const FormPage = () => {
         style={{
           backgroundColor: "#b09280",
           marginTop: "3vh",
-          // marginBottom: "3vh",
           width: "fit-content",
           marginBottom: "3vh",
           borderRadius: "10px",

@@ -6,22 +6,13 @@ import {
   BreadcrumbButton,
   Divider
 } from "@fluentui/react-components";
-import {
-  CalendarMonthFilled,
-  CalendarMonthRegular,
-  bundleIcon,
-} from "@fluentui/react-icons";
-import TagCounters from "../components/gridapprove";
-import ApproveTable from "../components/approvetable";
-import Search from "../components/Search";
-import UserTable from "../components/UserTable";
-import { Button, makeStyles } from "@fluentui/react-components";
-import { FilterRegular, DismissCircleRegular } from "@fluentui/react-icons"; // Import icons
-// import { User } from "lucide-react";
 
-const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
-const path = "/approve";
-const path1 = "http://localhost:3000/";
+
+import UserTable from "../components/UserTable";
+
+
+
+
 const path2 = "/user";
 
 const containerStyle = {
@@ -58,19 +49,11 @@ const valueStyle = {
   marginLeft: "0px", 
 };
 
-const divstyle ={
-  display:"flex",
-  flexDirection:"column",
-  marginLeft:"20px",
-  paddingTop:"6em",
-  fontWeight:"bold",
 
-  
-}
 const UserPage = () => {
   const [height, setHeight] = useState(0);
   const divRef1 = useRef(null);
-  const [tableLength, setTableLength] = useState(0);
+ 
 
   useEffect(() => {
     const updateHeight = () => {
@@ -109,10 +92,7 @@ const UserPage = () => {
               <BreadcrumbButton>Control Center</BreadcrumbButton>
             </BreadcrumbItem>
             <BreadcrumbDivider />
-            {/* <BreadcrumbItem>
-              <BreadcrumbButton href={path}>Issue</BreadcrumbButton>
-            </BreadcrumbItem>
-            <BreadcrumbDivider /> */}
+          
             <BreadcrumbItem>
               <BreadcrumbButton href={path2}>User Management</BreadcrumbButton>
             </BreadcrumbItem>
@@ -163,7 +143,7 @@ const UserPage = () => {
       <Divider style={{ marginTop:"2em"}} />
     </div>
       <div style={{marginLeft:"3em"}}>
-        {height > 0 ? <UserTable height={height} setTableLength={setTableLength} setStoreCount={setStoreCount}  setGateCount={setGateCount}/> : <p>Loading...</p>}
+        {height > 0 ? <UserTable height={height}  setStoreCount={setStoreCount}  setGateCount={setGateCount}/> : <p>Loading...</p>}
       </div>
     </div>
   );

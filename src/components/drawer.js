@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { useNavigate,} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDrawerPosition } from "../Store/refreshSlice";
@@ -16,46 +16,13 @@ import {
 import {
   Board24Filled,
   Board24Regular,
-  BoxMultiple20Filled,
-  BoxMultiple20Regular,
-  DataArea20Filled,
-  DataArea20Regular,
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-  HeartPulse20Filled,
-  HeartPulse20Regular,
-  MegaphoneLoud20Filled,
-  MegaphoneLoud20Regular,
   
-  NotePin20Filled,
-  NotePin20Regular,
-  People20Filled,
-  People20Regular,
-  PeopleStar20Filled,
-  PeopleStar20Regular,
-  PersonFilled,
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-  PersonRegular,
-  PersonSearch20Filled,
-  PersonSearch20Regular,
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-  Settings24Filled,
-  Settings24Regular,
+  
   bundleIcon,
-  BoxMultipleCheckmark24Regular,
-  BoxMultipleCheckmark24Filled,
-  ClockBill24Regular,
-  ClockBill24Filled,
-  BeakerEdit24Filled,
-  BeakerEdit24Regular,
-  Cart24Filled,
-  Cart24Regular,
+  
   Navigation24Filled,
   Navigation24Regular,
-  DocumentCatchUp24Filled,
-  DocumentCatchUp24Regular,
+
   
   TargetArrow24Filled,
   TargetArrow24Regular,
@@ -85,13 +52,13 @@ import {
 
 } from "@fluentui/react-components";
 
-import { useEffect } from "react";
+
 import { jwtDecode } from "jwt-decode";
 
 const useStyles = makeStyles({
   root: {
-    // Replaced shorthands.overflow("hidden") with overflow: "hidden"
     overflow: "hidden",
+   
 
     position: "fixed",
     left: 0,
@@ -102,10 +69,8 @@ const useStyles = makeStyles({
     backgroundColor: "#fff",
   },
   content: {
-    // Replaced shorthands.flex(1) with flex: 1
-    flex: 1,
-    // Replaced shorthands.padding("16px") with padding: "16px"
-    padding: "16px",
+    flex:1,
+    ...shorthands.padding("16px"),
 
     display: "grid",
     justifyContent: "flex-start",
@@ -125,6 +90,7 @@ const useStyles = makeStyles({
     marginInlineStart: "10px",
   },
   hamburger: {
+    
     textDecorationLine: "none",
     marginLeft: "5px",
     marginTop: "10px",
@@ -186,49 +152,22 @@ const useStyles = makeStyles({
 });
 
 
-const Person = bundleIcon(PersonFilled, PersonRegular);
 const Dashboard = bundleIcon(Board24Filled, Board24Regular);
 const History = bundleIcon(History24Filled,History24Regular);
-const Announcements = bundleIcon(MegaphoneLoud20Filled, MegaphoneLoud20Regular);
-const OpenPO = bundleIcon(DatabaseSearch24Filled,DatabaseSearch24Regular)
-const EmployeeSpotlight = bundleIcon(
-  PersonLightbulb20Filled,
-  PersonLightbulb20Regular,
-);
 
-const LayerDiagonalPersonRegular = bundleIcon(
-  BoxMultipleCheckmark24Filled,
-  BoxMultipleCheckmark24Regular,
-);
-const PersonStarRegular = bundleIcon(ClockBill24Filled, ClockBill24Regular);
-const PremiumPersonRegular = bundleIcon(
-  BeakerEdit24Filled,
-  BeakerEdit24Regular,
-);
-const TableSearchRegular = bundleIcon(Cart24Filled, Cart24Regular);
-const Usage = bundleIcon(DocumentCatchUp24Filled, DocumentCatchUp24Regular);
+const OpenPO = bundleIcon(DatabaseSearch24Filled,DatabaseSearch24Regular)
+
+
+
+
 const Navi = bundleIcon(Navigation24Filled, Navigation24Regular);
 const Match = bundleIcon(TargetArrow24Filled,TargetArrow24Regular);
 const Multiple = bundleIcon(DocumentBulletListMultiple24Filled,DocumentBulletListMultiple24Regular)
 const Fix = bundleIcon(TargetDismiss24Filled, TargetDismiss24Regular);
 const Summary = bundleIcon(Form28Filled,Form28Regular);
-const Search = bundleIcon(PersonSearch20Filled, PersonSearch20Regular);
-const PerformanceReviews = bundleIcon(
-  PreviewLink20Filled,
-  PreviewLink20Regular,
-);
+
 const Truck = bundleIcon(VehicleTruckProfile24Filled,VehicleTruckProfile24Regular);
-const JobPostings = bundleIcon(NotePin20Filled, NotePin20Regular);
-const Interviews = bundleIcon(People20Filled, People20Regular);
-const HealthPlans = bundleIcon(HeartPulse20Filled, HeartPulse20Regular);
-const TrainingPrograms = bundleIcon(BoxMultiple20Filled, BoxMultiple20Regular);
-const CareerDevelopment = bundleIcon(PeopleStar20Filled, PeopleStar20Regular);
-const Analytics = bundleIcon(DataArea20Filled, DataArea20Regular);
-const Reports = bundleIcon(
-  DocumentBulletListMultiple20Filled,
-  DocumentBulletListMultiple20Regular,
-);
-const Settings = bundleIcon(Settings24Filled, Settings24Regular);
+
 
 const NavDrawerDefault = (props) => {
   const navigate = useNavigate();
@@ -344,24 +283,79 @@ const NavDrawerDefault = (props) => {
     }
   }, []);
 
+
+  // Styles 
+
+  const getDrawerStyles = () => ({
+    transition: "width 0.5s",
+    borderRightStyle: "none",
+    ...(collapse && { width: "75px" }),  // Only apply width if collapse is true
+  });
+  
+  // ---- NavDrawerHeader ----
+  const getNavDrawerHeaderStyle = () => ({
+    cursor: "pointer",
+    WebkitTapHighlightColor: "transparent",
+    ...(themestate && { backgroundColor: darktheme.sidebarcolordark }),
+  });
+  
+  // ---- Navi Icon Style ----
+  const iconStyle = {
+    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+  };
+  
+  // ---- divStyle ----
+  const divStyle = {
+    height: "20px",
+    ...(themestate && { backgroundColor: darktheme.sidebarcolordark }),
+  };
+  
+  // ---- NavDrawerBody Style ----
+  const navDrawerBodyStyle = {
+    cursor: "pointer",
+    WebkitTapHighlightColor: "transparent",
+    ...(themestate && { backgroundColor: darktheme.sidebarcolordark }),
+  };
+  
+  // ---- Appearance ----
+  const appearanceValue = themestate ? "inverted" : "normal";
+  
+  // ---- Nav Item Class ----
+  const navItemClass = themestate ? styles.navItemdark : styles.navItemlight;
+  
+  // ---- Footer Style ----
+  const footerStyle = themestate ? { backgroundColor: darktheme.sidebarcolordark } : {};
+  
+  // ---- Body Style ----
+  const bodyStyle = {
+    marginTop: "0px",
+    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+  };
+  
+  // ---- Base Style ----
+  const baseStyle = {
+    // marginTop: "-20px",
+    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+  };
+  
+
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
-      {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
+      
       <NavDrawer
         defaultSelectedValue={drawerPosition}
-        // defaultSelectedCategoryValue="3"
-
+       
         open={isOpen}
         type="inline"
         onOpenChange={(_, { open }) => setIsOpen(open)}
         size="small"
         className={useStyles.navdrawer}
-        style={tabstyl}
+        style={getDrawerStyles()}
       >
-        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
+        
 
         <NavDrawerHeader
-          style={tabstyl2}
+          style={getNavDrawerHeaderStyle()}
         >
           <NavDrawerHeaderNav
             onClick={() => {
@@ -372,8 +366,9 @@ const NavDrawerDefault = (props) => {
               appearance="transparent"
               icon={
                 <Navi
-                  style={tabstyl3}
-
+                  
+                    style={iconStyle}
+                  
                 />
               }
               className={styles.hamburger}
@@ -384,23 +379,29 @@ const NavDrawerDefault = (props) => {
           </NavDrawerHeaderNav>
         </NavDrawerHeader>
         <div
-          style={tabstyl4}
+          style={
+            divStyle
+          }
         ></div>
         {collapse ? (
           <NavDrawerBody
-            style={tabstyl2}
+            
+              style={navDrawerBodyStyle}
+            
           >
             <Tooltip
               content={"Home"}
               positioning="after"
               withArrow={true}
-              appearance={appear}
+              appearance={appearanceValue}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Dashboard
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -408,7 +409,9 @@ const NavDrawerDefault = (props) => {
                   setValue("1");
                 }}
                 value="1"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
               ></NavItem>
             </Tooltip>
 
@@ -416,14 +419,15 @@ const NavDrawerDefault = (props) => {
               content={"Gate Entry"}
               positioning="after"
               withArrow={true}
-              appearance={appear}
-
+              appearance={appearanceValue}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Truck
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -431,7 +435,9 @@ const NavDrawerDefault = (props) => {
                   setValue("2");
                 }}
                 value="2"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
               ></NavItem>
             </Tooltip>
 
@@ -439,13 +445,15 @@ const NavDrawerDefault = (props) => {
               content={"Summary"}
               positioning="after"
               withArrow={true}
-              appearance={appear}
+              appearance={appearanceValue}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Summary
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -453,7 +461,9 @@ const NavDrawerDefault = (props) => {
                   setValue("6");
                 }}
                 value="6"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
               ></NavItem>
             </Tooltip>
 
@@ -461,13 +471,15 @@ const NavDrawerDefault = (props) => {
               content={"Match Found"}
               positioning="after"
               withArrow={true}
-              appearance={appear}
+              appearance={appearanceValue}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Match
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -475,8 +487,9 @@ const NavDrawerDefault = (props) => {
                   setValue("3");
                 }}
                 value="3"
-                className={tabstyl5}
-                
+                className={
+                  navItemClass
+                }
               ></NavItem>
             </Tooltip>
 
@@ -484,13 +497,15 @@ const NavDrawerDefault = (props) => {
               content={"Multiple Match Found"}
               positioning="after"
               withArrow={true}
-              appearance={appear}
+              appearance={appearanceValue}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Multiple
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -498,7 +513,9 @@ const NavDrawerDefault = (props) => {
                   setValue("4");
                 }}
                 value="4"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
               ></NavItem>
             </Tooltip>
 
@@ -506,14 +523,15 @@ const NavDrawerDefault = (props) => {
               content={"No Match Found"}
               positioning="after"
               withArrow={true}
-              appearance={appear}
+              appearance={appearanceValue}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <Fix
-                    style={tabstyl3}
-                  
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -521,21 +539,24 @@ const NavDrawerDefault = (props) => {
                   setValue("5");
                 }}
                 value="5"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
               ></NavItem>
             </Tooltip>
             <Tooltip
               content={"Open PO"}
               positioning="after"
               withArrow={true}
-              appearance={appear}
+              appearance={appearanceValue}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <OpenPO
-                    style={tabstyl3}
-               
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -543,8 +564,9 @@ const NavDrawerDefault = (props) => {
                   setValue("8");
                 }}
                 value="8"
-                className={tabstyl5}
-                
+                className={
+                  navItemClass
+                }
               ></NavItem>
             </Tooltip>
 
@@ -552,13 +574,15 @@ const NavDrawerDefault = (props) => {
               content={"History"}
               positioning="after"
               withArrow={true}
-              appearance={appear}
+              appearance={appearanceValue}
             >
               <NavItem
                 target="_blank"
                 icon={
                   <History
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -566,7 +590,9 @@ const NavDrawerDefault = (props) => {
                   setValue("7");
                 }}
                 value="7"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
               ></NavItem>
             </Tooltip>
 
@@ -576,7 +602,9 @@ const NavDrawerDefault = (props) => {
           </NavDrawerBody>
         ) : (
           <NavDrawerBody
-            style={tabstyl2}
+            style={
+              navDrawerBodyStyle
+            }
           >
             {/* DETAILS OF USER  */}
             <div
@@ -614,12 +642,16 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Dashboard
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
-                // onClick={someClickHandler}
+                
                 value="1"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
                   navigate("/dashboard");
@@ -627,8 +659,10 @@ const NavDrawerDefault = (props) => {
                 }}
               >
                 <div
-                  style={tabstyl10}
-                 
+                  style={
+                    
+                      bodyStyle
+                  }
                 >
                   Home
                 </div>
@@ -639,7 +673,9 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Truck
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -647,12 +683,15 @@ const NavDrawerDefault = (props) => {
                   setValue("2");
                 }}
                 value="2"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={tabstyl10}
-                  
+                  style={
+                   bodyStyle
+                  }
                 >
                   Gate Entry
                 </div>
@@ -663,7 +702,9 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Summary
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -671,11 +712,15 @@ const NavDrawerDefault = (props) => {
                   setValue("6");
                 }}
                 value="6"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={tabstyl10}
+                  style={
+                   bodyStyle
+                  }
                 >
                   Summary
                 </div>
@@ -687,8 +732,9 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Match
-                    style={tabstyl3}
-
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -696,11 +742,16 @@ const NavDrawerDefault = (props) => {
                   setValue("3");
                 }}
                 value="3"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={tabstyl10}
+                  style={
+                    
+                     bodyStyle
+                  }
                 >
                   Match Found
                 </div>
@@ -711,7 +762,9 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Multiple
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -719,11 +772,15 @@ const NavDrawerDefault = (props) => {
                   setValue("4");
                 }}
                 value="4"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={tabstyl10}
+                  style={
+                   bodyStyle
+                  }
                 >
                   Multiple Match Found
                 </div>
@@ -734,8 +791,9 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <Fix
-                    style={tabstyl3}
-
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -743,11 +801,15 @@ const NavDrawerDefault = (props) => {
                   setValue("5");
                 }}
                 value="5"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={tabstyl10}
+                  style={
+                   bodyStyle
+                  }
                 >
                   No Match Found
                 </div>
@@ -760,7 +822,9 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <OpenPO
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -768,11 +832,15 @@ const NavDrawerDefault = (props) => {
                   setValue("8");
                 }}
                 value="8"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={tabstyl10}
+                  style={
+                   bodyStyle
+                  }
                 >
                   Open PO
                 </div>
@@ -786,7 +854,9 @@ const NavDrawerDefault = (props) => {
                 target="_blank"
                 icon={
                   <History
-                    style={tabstyl3}
+                    style={
+                      iconStyle
+                    }
                   />
                 }
                 onClick={() => {
@@ -794,11 +864,15 @@ const NavDrawerDefault = (props) => {
                   setValue("7");
                 }}
                 value="7"
-                className={tabstyl5}
+                className={
+                  navItemClass
+                }
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
                 <div
-                  style={tabstyl10}
+                  style={
+                   bodyStyle
+                  }
                 >
                   History
                 </div>
@@ -812,18 +886,12 @@ const NavDrawerDefault = (props) => {
         )}
 
         <NavDrawerFooter
-          style={tabstyl9}
-          
+          style={
+            footerStyle
+          }
         >
           {!collapse && (
-            // <NavItem
-            //   value="21"
-            //   target="_blank"
-            // //   onClick={someClickHandler}
-            //   className={styles.navfooter}
-            // //   style={{color:"#E9E9E9"}}
-            // //   icon={<Person />}
-            // >
+            
             <div
               style={{
                 width: "100%",
@@ -833,30 +901,25 @@ const NavDrawerDefault = (props) => {
               }}
             >
               <p
-                style={tabstyl8}
+              
               >
                 by FocusR AI
               </p>
               <p
-                style={tabstyl7}
+                 style={
+                  {marginTop: "-1rem"}
+                 }
               >
                 V 0.0.1
               </p>
             </div>
-            // </NavItem>
+           
           )}
-          {/* <NavItem
-      icon={<Settings />}
-      target="_blank"
-      onClick={someClickHandler}
-      value="24"
-    >
-      App Settings
-    </NavItem> */}
+          
         </NavDrawerFooter>
-        {/* </div> */}
+       
       </NavDrawer>
-      {/* </div> */}
+      
 
       <div
         className={styles.content}
