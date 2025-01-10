@@ -56,7 +56,7 @@ const InvoiceStatusPieChart = () => {
 
       {/* Pie Chart */}
       {invoiceData.length > 0 ? (
-        <PieChart width={500} height={400}>
+        <PieChart width={350} height={350}>
           <Pie
             data={invoiceData}
             cx="50%"

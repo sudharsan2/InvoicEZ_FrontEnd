@@ -727,9 +727,9 @@ const HistoryDetails = () => {
                     style={{
                       position: "sticky",
                       top: 0,
-                      backgroundColor: {backStyle},
+                      backgroundColor: backStyle || "white", // Ensure backStyle is defined correctly
                       zIndex: 1,
-                      color:{colorStyle},
+                      color: colorStyle || "black",
                     }}
                   >
                     <TableRow

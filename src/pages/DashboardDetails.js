@@ -1,4 +1,3 @@
-
 import { message } from "antd";
 import { ArrowSortUpFilled, ArrowSortDownRegular ,ArrowDownload28Regular} from "@fluentui/react-icons";
 import {
@@ -16,11 +15,11 @@ import {
   TableRow,
   TableBody,
   TableHeaderCell,
-
+ 
   tokens,
 } from "@fluentui/react-components";
 import{useLocation } from "react-router-dom";
-import {ArrowClockwise24Regular, } from "@fluentui/react-icons";
+import {ArrowClockwise24Regular} from "@fluentui/react-icons";
 import DashboardNav from "../components/DashboardNav";
 import CreatableSelect from "react-select/creatable";
 import React, { useState ,useEffect} from "react";
@@ -29,7 +28,7 @@ import axios from "axios";
 import { Popover } from "@mui/material";
 import { toggleDrawerPosition } from "../Store/refreshSlice";
 import { useDispatch } from "react-redux";
-
+import { useNavigate } from "react-router-dom";
 const path = "/aidetail";
 const path1 = "/Dashboard";
 const Checkbox = ({ children, ...props }) => (
@@ -38,7 +37,7 @@ const Checkbox = ({ children, ...props }) => (
     {children}
   </label>
 );
-
+ 
 const useStyles = makeStyles({
   contentHeader: {
     marginTop: "0",
@@ -50,7 +49,7 @@ const useStyles = makeStyles({
     textOverflow: "ellipsis",
   },
   root: {
-
+ 
     height: "88vh",
     overflowY: "auto",
     display: "flex",
@@ -69,8 +68,8 @@ const useStyles = makeStyles({
     padding: "20px",
   },
   content1: {
-    display: "flex", 
-    flexWrap: "wrap", 
+    display: "flex",
+    flexWrap: "wrap",
     overflowY: "auto",
     paddingTop: "3vh",
     padding: "0 20px",
@@ -127,16 +126,16 @@ const useStyles = makeStyles({
     marginLeft: "10px",
   },
 });
-
+ 
 // pop up message for table cell see more
-
+ 
 const DashboardDetails = () => {
  
   const dispatch = useDispatch();
   const styles = useStyles();
   const themestate = false;
-
-
+ 
+ 
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortedColumn2, setSortedColumn2] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
@@ -147,20 +146,22 @@ const DashboardDetails = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [invoiceData, setInvoiceData] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isHovered1, setIsHovered1] = useState(false);
+
   const location2 = useLocation();
   const [items, setItems] = useState([]);
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState(null);
   const [dataitem, setDataItem] = useState();
   const [poheader, setPoHeader] = useState();
-  const [invoiceId, setInvoiceId] = useState(null); 
+  const [invoiceId, setInvoiceId] = useState(null);
   const [load, setLoad] = useState(false);
-  
+  const navigate = useNavigate();
   console.log(invoiceId);
-  // Styles 
-  
+  // Styles
+ 
 const getThemeStyle = (themeState, lightStyle, darkStyle) => (themeState ? darkStyle : lightStyle);
-
-
+ 
+ 
 const cursorStyle = load ? "not-allowed" : "pointer";
 const loadStyle = load ? 0.6 : 1;
 const classStyle = getThemeStyle(themestate, "tab", "tab dark drawer");
@@ -169,32 +170,40 @@ const backStyle = getThemeStyle(themestate, "white", "#383838");
 const innerStyle = getThemeStyle(themestate, "black", "white");
 const bodyStyle = getThemeStyle(themestate, {}, { color: "white", borderBottomColor: "#383838" });
 const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
  const fetchData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
     }
 }
-
+ 
 const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
   };
-
-
+ 
+ 
 const renderDetail = (label, value) => (
   <div>
     <b>{label}:</b> {value}
   </div>
 );
-
-
-
+ 
+ const [username, setUsername] = useState("");
+useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    console.log(storedUsername);
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+ 
+ 
   return (
-    <div>
+    <div style={{height:"100%",overflowY:"auto"}}>
       {/* <div className="Approvebreadcrump">
         <Breadcrumb aria-label="Breadcrumb default example">
           <BreadcrumbItem>
@@ -205,10 +214,10 @@ const renderDetail = (label, value) => (
             <BreadcrumbButton href={path1}>Multiple Match Found</BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
-          
+         
         </Breadcrumb>
       </div> */}
-
+ 
       <div className={styles.root}>
         <div className={styles.header}>
         <div
@@ -221,7 +230,7 @@ const renderDetail = (label, value) => (
                 fontSize:"20px"
               }}
             >
-              <p>Hi priya!</p>
+              <p>Hi {username} !</p>
             </div>
           <div
             style={{
@@ -242,7 +251,7 @@ const renderDetail = (label, value) => (
                 flexDirection: "column",
               }}
             >
-                
+               
               {/* <CreatableSelect
                 className="basic-single"
                 classNamePrefix="select"
@@ -257,26 +266,26 @@ const renderDetail = (label, value) => (
                 placeholder="Select or Enter PO..."
                 isClearable
               /> */}
-
-              
-
-              
-
+ 
+             
+ 
+             
+ 
                       <button
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
+                          backgroundColor: isHovered ? "#e1e1e2" : "transparent",
                           border: "1px solid #fff",
                           padding: "6px 12px",
                           cursor: "pointer",
                           gap: "5px",
                           marginTop:"5px",
                           marginLeft: "2em",
-                          transition: "background-color 0.2s ease", 
+                          transition: "background-color 0.2s ease",
                         }}
-                        onMouseEnter={() => setIsHovered(true)} 
-                        onMouseLeave={() => setIsHovered(false)} 
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
                         // onClick={fetchData}
                         onClick={handleRefreshClick}
                       >
@@ -306,45 +315,45 @@ const renderDetail = (label, value) => (
                 placeholder="Select or Enter PO..."
                 isClearable
               /> */}
-
-              
-
-<button
+ 
+             
+ 
+                        <button
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
+                          backgroundColor: isHovered1? "#e1e1e2" : "transparent",
                           border: "1px solid #fff",
                           padding: "6px 12px",
                           cursor: "pointer",
                           gap: "8px",
                           marginLeft: "2em",
                           marginTop:"5px",
-                          transition: "background-color 0.2s ease", 
+                          transition: "background-color 0.2s ease",
                         }}
-                        // onMouseEnter={() => setIsHovered(true)} 
-                        // onMouseLeave={() => setIsHovered(false)} 
-                        // // onClick={fetchData}
-                        // onClick={handleRefreshClick}
+                        onClick={()=>{navigate('/summary')}}
+                        onMouseEnter={() => setIsHovered1(true)}
+                        onMouseLeave={() => setIsHovered1(false)}
+                       
                       >
-                        <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
+                        <FaArrowUpRightFromSquare style={{ color: "#1281d7" }} />
                         <span>Summary</span>
                       </button>
             </div>
           </div>
-
+ 
           {/* <h2 style={{ margin: "20px 0 20px 0" }}> */}
             {/* Invoice No : {invoiceData.invoice_info.InvoiceId} */}
           {/* </h2> */}
-
+ 
           <div style={{ display: "flex", marginBottom: "20px" }}>
             <div
-            style={{ fontWeight: "bold",marginTop:"-50px" }}
+            style={{ fontWeight: "bold",marginTop:"-30px" }}
             >
               <p>Dashboard</p>
               {/* <h2>{invoiceData.invoice_info.VendorName}</h2> */}
             </div>
-
+ 
             {/* <div
               style={{
                 marginLeft: "3vw",
@@ -366,7 +375,7 @@ const renderDetail = (label, value) => (
               {/* <h2>{invoiceData.invoice_info.created_at}</h2> */}
             {/* </div>  */}
           </div>
-
+ 
           <TabList
             defaultSelectedValue="tab3"
             appearance="subtle"
@@ -398,15 +407,20 @@ const renderDetail = (label, value) => (
             >
               PO
             </Tab> */}
-            
+           
           </TabList>
         </div>
         {selectedtab === "tab3" && (
-          <div>
+          <div style={{display:"flex",flexDirection:"row"}}>
+            <div>
             <DashboardNav/>
+            </div>
+            
+            
+
           </div>
                      )}
-
+ 
         {selectedtab === "tab4" && (
           <div>
           </div>
@@ -415,5 +429,5 @@ const renderDetail = (label, value) => (
      </div>
   );
 };
-
+ 
 export default DashboardDetails;

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate,useLocation } from "react-router-dom";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -62,7 +63,8 @@ const IssuefixPage = () => {
   const [height, setHeight] = useState(0);
   const divRef1 = useRef(null);
   const [tableLength, setTableLength] = useState(0);
-
+ const navigate =useNavigate();
+ const location=useLocation();
   useEffect(() => {
     const updateHeight = () => {
       if (divRef1.current) {
@@ -88,6 +90,8 @@ const IssuefixPage = () => {
     { label: "To Do", value: tableLength, color: "#00bfbf" }, // Cyan
     
   ];
+  const cnt={state:{tableLength}}
+  console.log("snaa",cnt);
   return (
     <div style={{maxHeight:"88vh",overflowY:"auto"}}>
       <div ref={divRef1}>

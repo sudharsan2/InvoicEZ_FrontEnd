@@ -943,9 +943,9 @@ const ApprovePage = () => {
                     style={{
                       position: "sticky",
                       top: 0,
-                      backgroundColor: {backStyle},
+                      backgroundColor: backStyle || "white", // Ensure backStyle is defined correctly
                       zIndex: 1,
-                      color: {colorStlyes},
+                      color: innerStyle || "black",
                     }}
                   >
                     <TableRow

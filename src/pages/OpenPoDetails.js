@@ -1,5 +1,7 @@
-import React,{ useEffect, useState } from "react";
-import { message } from "antd";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
+
 import {
   makeStyles,
   Breadcrumb,
@@ -11,20 +13,18 @@ import {
   Table,
   TableCell,
   TableHeader,
-  
+
   TableRow,
   TableBody,
   TableHeaderCell,
-  
- 
+
+
   Divider,
 } from "@fluentui/react-components";
-import axios from "axios";
 
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { ArrowSortUpFilled, ArrowSortDownRegular } from "@fluentui/react-icons";
-
 
 const path = "/openpo";
 const path2 = "/openpodet";
@@ -49,7 +49,7 @@ const useStyles = makeStyles({
     overflowY: "auto",
     padding: "0 20px",
 
-   
+
   },
   controls: {
     display: "flex",
@@ -96,138 +96,50 @@ const useStyles = makeStyles({
 });
 
 const OpenPODetails = () => {
-  
-  
+  const location = useLocation();
 
-  
-const params = useParams();
-console.log("params", params.po_number);
+  const { poNumber, po_type, locations, totals, Status, po_items, Supplier, Buyer, pono } = location.state || {};
+
+  const [purchaseOrder, setPurchaseOrder] = useState({});
+  const [purchaseOrderCalender, setPurchaseOrderCalender] = useState();
+
+
+
   const styles = useStyles();
   const themestate = false;
-  const location = useLocation();
-  
-  const { poNumber,po_type ,locations,totals,Status,po_items,Supplier,Buyer} = location.state || {};
+
+  const navigate = useNavigate();
+
+
+
+
   const [data, setData] = useState("");
   const [selectedtab, setSelectedTab] = React.useState("tab1");
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
-   const [purchaseOrder,setPurchaseOrder] = useState
-   ({
-    poNumber: poNumber,
-    
-    poTotalAmount: "95090",
-    poCurrency: "INR",
-    poStatus: "Open",
-    lineMatching: "FULL / Partial Line Items",
-    customerAddress: "CustomerAddress",
-    invoiceDate: "InvoiceDate",
-    invoiceTotal: "InvoiceTotal",
-    invoiceCurrency: "Invoice Currency",
-    purchaseOrderNumberInInvoice: "PurchaseOrder Number in Invoice",
-  });
-  const [loading, setLoading] = useState(false);
-
-  const [supplierName, setSupplierName] = useState("");
-  const[BuyerName,setBuyerName]=useState("");
-  const[Potype,setPotype]=useState("");
-  const[Tamt,setTotal]=useState("");
-  const[L,setL]=useState("");
-  const[Poitem,setPoitem]=useState({
-    needbydate:""
-
-  }
-
-  )
-
- 
-  
-
-
 
   // ------Style----------
 
   const tabStyle = themestate ? "tab dark drawer" : "tab";
   const colorStyle = themestate ? "white" : "";
-  const divStyle = {color: themestate ? "rgb(245,245,245)" : ""};
-  const backStyle =  themestate ? "#383838" : "white";
+  const divStyle = { color: themestate ? "rgb(245,245,245)" : "" };
+  const backStyle = themestate ? "#383838" : "white";
   const themeStyle = themestate ? "white" : "black";
-  const tableRowStyle =  themestate ? { color: "white", borderBottomColor: "#383838" } : {};
+  const tableRowStyle = themestate ? { color: "white", borderBottomColor: "#383838" } : {};
   const bodyStyle = themestate ? { color: "white" } : {};
   const divStyles = themestate ? "hovereffect dark" : "hovereffect"
 
-  const fetchData = async () => {
-   
- 
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("access_token");
-      const response = await axios.get(
-        "https://invoicezapi.focusrtech.com:57/user/allOpenPos/",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
- 
-      const fetchedItems = response.data || [];
-      // Filter the specific purchase order based on po_number
-      const filteredOrder = fetchedItems.find((item) => item.po_number === params.po_number);
-      console.log("34", filteredOrder)
 
-      setSupplierName(filteredOrder.supplier_name);
-      setBuyerName(filteredOrder.buyer_name);
-      setPotype(filteredOrder.po_type);
-      setTotal(filteredOrder.total_amount);
-      setL(filteredOrder.location);
-      setPoitem(filteredOrder?.po_items[0]?.need_by_date);
-
-      
- 
-      if (filteredOrder) {
-        const formattedOrder = {
-          poNumber: filteredOrder.po_number,
-          poTotalAmount: filteredOrder.total_amount,
-          poCurrency: "INR", // Add from API if available
-          poStatus: filteredOrder.po_status || "Open",
-          poItems: filteredOrder.po_items || [],
-          supplierName: filteredOrder.supplier_name,
-          buyerName: filteredOrder.buyer_name,
-          shipTo: filteredOrder.ship_to,
-          needByDate: filteredOrder.po_items?.[0]?.need_by_date || "N/A",
-        };
- 
-        setPurchaseOrder(formattedOrder);
-      } else {
-        message.error("Purchase order not found for the given PO Number.");
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      
-    } finally {
-      setLoading(false);
-    }
-  };
- 
-  useEffect(() => {
-    fetchData();
-  }, [poNumber]);
- 
- 
-  if (!purchaseOrder) {
-    return <div>No Purchase Order details available.</div>;
-  }
 
   const handleTabSelect2 = (event, data) => {
-    
+    console.log("876", data.value);
     setSelectedTab(data.value);
   };
 
+
   const handleSort = (column) => {
     if (sortedColumn === column) {
-     
+
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortedColumn(column);
@@ -253,45 +165,76 @@ console.log("params", params.po_number);
     </TableHeaderCell>
   );
 
-  
-   
 
-   const needByDate = data?.[0]?.need_by_date;
-   console.log("needByDate",needByDate);
-   
-   
-   
- 
-  
-  
- 
+  useEffect(() => {
+    setData(po_items);
+  }, [])
 
+  useEffect(() => {
+    // If location.state is undefined, fallback to fetching data
 
-  
+    console.log("purchaseOrder", purchaseOrder)
+    if (pono) {
+      const fetchPODetails = async () => {
+        try {
+          const response = await fetch(`https://invoicezapi.focusrtech.com:57/user/OpenPos/${pono}`);
+          const data = await response.json();
+          console.log("data", data)
+          setPurchaseOrder(data);
+          setPurchaseOrderCalender(data);
+          setData(data.po_items);
+        } catch (error) {
+        }
+      };
+
+      fetchPODetails();
+    } else {
+      // If state exists, set the purchase order directly
+      setPurchaseOrder({
+        poNumber,
+        poTotalAmount: "95090",
+        poCurrency: "INR",
+        poStatus: "Open",
+        lineMatching: "FULL / Partial Line Items",
+        customerAddress: "CustomerAddress",
+        invoiceDate: "InvoiceDate",
+        invoiceTotal: "InvoiceTotal",
+        invoiceCurrency: "Invoice Currency",
+        purchaseOrderNumberInInvoice: "PurchaseOrder Number in Invoice",
+      });
+    }
+  }, [poNumber, navigate, pono,po_items]);
+
+  if (!purchaseOrder) {
+    return <div>Loading...</div>;
+  }
+  const needByDate = data?.[0]?.need_by_date;
+  console.log("needByDate", needByDate);
+
 
   const compareNumeric = (aValue, bValue, direction) => {
     const aNumeric = parseFloat(aValue);
     const bNumeric = parseFloat(bValue);
     return direction === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
   };
-  
+
   const compareString = (aValue, bValue, direction) => {
     const aString = String(aValue).toLowerCase();
     const bString = String(bValue).toLowerCase();
     return direction === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
   };
-  
+
   const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
-  
+
   const getValueForSorting = (row, column) => row[column] || "";
-  
+
   const sortByType = (aValue, bValue, sortDirection, type) => {
     if (type === "numeric") {
       return compareNumeric(aValue, bValue, sortDirection);
     }
     return compareString(aValue, bValue, sortDirection);
   };
-  
+
   const compareValues = (aValue, bValue, isANumeric, isBNumeric, sortDirection) => {
     if (isANumeric && isBNumeric) {
       return sortByType(aValue, bValue, sortDirection, "numeric");
@@ -299,27 +242,27 @@ console.log("params", params.po_number);
     if (!isANumeric && !isBNumeric) {
       return sortByType(aValue, bValue, sortDirection, "string");
     }
-  
+
     const directionMultiplier = sortDirection === "asc" ? -1 : 1;
     return isANumeric ? directionMultiplier : -directionMultiplier;
   };
-  
-  
+
+
   const sortedData = Array.isArray(data)
     ? [...data].sort((a, b) => {
-        if (!sortedColumn) return 0;
-  
-        const aValue = getValueForSorting(a, sortedColumn);
-        const bValue = getValueForSorting(b, sortedColumn);
-  
-        const isANumeric = isNumeric(aValue);
-        const isBNumeric = isNumeric(bValue);
-  
-        return compareValues(aValue, bValue, isANumeric, isBNumeric, sortDirection);
-      })
+      if (!sortedColumn) return 0;
+
+      const aValue = getValueForSorting(a, sortedColumn);
+      const bValue = getValueForSorting(b, sortedColumn);
+
+      const isANumeric = isNumeric(aValue);
+      const isBNumeric = isNumeric(bValue);
+
+      return compareValues(aValue, bValue, isANumeric, isBNumeric, sortDirection);
+    })
     : [];
 
-  
+
 
   return (
     <div style={{ height: "88vh", overflowY: "auto" }}>
@@ -329,23 +272,24 @@ console.log("params", params.po_number);
             <BreadcrumbItem>
               <BreadcrumbButton href={path1}>Home</BreadcrumbButton>
             </BreadcrumbItem>
+
             <BreadcrumbDivider />
             <BreadcrumbItem>
               <BreadcrumbButton href={path}>Open PO</BreadcrumbButton>
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path2}>PO:{poNumber}</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>PO:{poNumber || purchaseOrderCalender?.po_number}</BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
         <div style={{ maxHeight: "20vh" }}>
           <div className={styles.root}>
             <div className={styles.header}>
-              
+
 
               <h2 style={{ margin: "20px 0 20px 0" }}>
-                PO:{purchaseOrder.poNumber}
+                PO:{`${purchaseOrder?.poNumber || purchaseOrderCalender?.po_number}`}
               </h2>
 
               <div style={{ display: "flex", marginBottom: "20px" }}>
@@ -356,8 +300,8 @@ console.log("params", params.po_number);
                   }}
                 >
                   <p>Supplier</p>
-                  <h2>{supplierName}</h2><h2>{Supplier}</h2>
-                  
+                  <h2>{`${Supplier || purchaseOrderCalender?.supplier_name}`}</h2>
+
                 </div>
                 <div
                   style={{
@@ -377,7 +321,7 @@ console.log("params", params.po_number);
                   }}
                 >
                   <p>Buyer</p>
-                  <h2>{BuyerName}</h2><h2>{Buyer}</h2>
+                  <h2>{`${Buyer || purchaseOrderCalender?.buyer_name}`}</h2>
                 </div>
                 <div
                   style={{
@@ -387,7 +331,7 @@ console.log("params", params.po_number);
                   }}
                 >
                   <p>Need By Date</p>
-                  <h2>{needByDate}</h2><h2>{Poitem.needbydate}</h2>
+                  <h2>{needByDate || purchaseOrderCalender?.po_items[0].need_by_date}</h2>
                 </div>
               </div>
             </div>
@@ -417,7 +361,7 @@ console.log("params", params.po_number);
               >
                 Line Item
               </Tab>
-              
+
             </TabList>
           </div>
           {selectedtab === "tab1" && (
@@ -435,7 +379,7 @@ console.log("params", params.po_number);
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {colorStyle}
+                        color: { colorStyle }
                       }}
                     >
                       PO Number:
@@ -444,9 +388,8 @@ console.log("params", params.po_number);
                       className={styles.content}
                       style={divStyle}
                     >
-                      
-                      {purchaseOrder.poNumber}
-                      {poNumber}
+
+                      {`${poNumber || purchaseOrderCalender?.po_number}`}
                     </div>
                   </div>
 
@@ -455,7 +398,7 @@ console.log("params", params.po_number);
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color:{colorStyle}
+                        color: { colorStyle }
                       }}
                     >
                       Vendor Address:
@@ -464,7 +407,7 @@ console.log("params", params.po_number);
                       className={styles.content}
                       style={divStyle}
                     >
-                      
+
                     </div>
                   </div>
 
@@ -473,7 +416,7 @@ console.log("params", params.po_number);
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {colorStyle},
+                        color: { colorStyle },
                       }}
                     >
                       PO Date:
@@ -482,8 +425,8 @@ console.log("params", params.po_number);
                       className={styles.content}
                       style={divStyle}
                     >
-                      
-                      {needByDate}
+
+                      {`${needByDate || purchaseOrderCalender?.po_items[0].need_by_date}`}
                     </div>
                   </div>
 
@@ -492,7 +435,7 @@ console.log("params", params.po_number);
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {colorStyle},
+                        color: { colorStyle },
                       }}
                     >
                       PO Type:
@@ -501,8 +444,8 @@ console.log("params", params.po_number);
                       className={styles.content}
                       style={divStyle}
                     >
-                      
-                      {Potype}
+
+                      {`${po_type || purchaseOrderCalender?.po_type}`}
                     </div>
                   </div>
 
@@ -511,7 +454,7 @@ console.log("params", params.po_number);
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {colorStyle},
+                        color: { colorStyle },
                       }}
                     >
                       PO Total Amount:
@@ -520,7 +463,7 @@ console.log("params", params.po_number);
                       className={styles.content}
                       style={divStyle}
                     >
-                      {Tamt}
+                      {`${totals || purchaseOrderCalender?.total_amount}`}
                     </div>
                   </div>
 
@@ -529,7 +472,7 @@ console.log("params", params.po_number);
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {colorStyle},
+                        color: { colorStyle },
                       }}
                     >
                       Location:
@@ -538,8 +481,8 @@ console.log("params", params.po_number);
                       className={styles.content}
                       style={divStyle}
                     >
-                     
-                      <div>{locations}</div> <>{L}</> 
+
+                      {`${locations || purchaseOrderCalender?.location}`}
                     </div>
                   </div>
 
@@ -548,7 +491,7 @@ console.log("params", params.po_number);
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {colorStyle},
+                        color: { colorStyle },
                       }}
                     >
                       PO Currency:
@@ -557,16 +500,16 @@ console.log("params", params.po_number);
                       className={styles.content}
                       style={divStyle}
                     >
-                      {purchaseOrder.poCurrency}
+                      {`${purchaseOrder?.poCurrency || "INR"}`}
                     </div>
                   </div>
-                  
+
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {colorStyle},
+                        color: { colorStyle },
                       }}
                     >
                       PO Status:
@@ -575,16 +518,16 @@ console.log("params", params.po_number);
                       className={styles.content}
                       style={divStyle}
                     >
-                      {Status}
+                      {`${Status || purchaseOrderCalender?.po_status}`}
                     </div>
                   </div>
 
-                  
 
-                  
 
-                  
-                  
+
+
+
+
                 </div>
               </div>
               <Divider style={{ marginTop: "3em" }} />
@@ -597,47 +540,47 @@ console.log("params", params.po_number);
                 width: "90vw",
                 display: "flex",
                 overflowY: "auto",
-                overflowX:"auto",
+                overflowX: "auto",
                 height: "40vh",
                 marginTop: "10px",
               }}
             >
               <div style={{ flex: 1 }}>
                 <Table>
-                  
 
-<TableHeader
- style={{
-  position: "sticky",
+
+                  <TableHeader
+                    style={{
+                      position: "sticky",
                       top: 0,
-                      backgroundColor: {backStyle},
+                      backgroundColor: { backStyle },
                       zIndex: 1,
-                      color: {themeStyle},
-                     
-}}
->
+                      color: { themeStyle },
+
+                    }}
+                  >
 
                     <TableRow
                       style={
                         tableRowStyle
                       }
                     >
-                       <TableHeaderCellWithSort column="item_name" label="Item Name" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="line_num" label="Line Number" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="quantity" label="Quantity" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="unit_price" label="Unit Price" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="amount_billed" label="Amount Billed" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="order_type_lookup_code" label=" Order Type" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="purchase_basis" label="Purchase Basis" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="category_name" label="Category Name" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="category_name" label="Category Name" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="item_description" label="Item Description" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="need_by_date" label="Need By Date" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="promised_date" label="Promised Date" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="po_line_id" label="PO Line_Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="po_distribution_id" label="PO Distribution Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="line_location_id" label="Line Location Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                       <TableHeaderCellWithSort column="inventory_item_id" label="Inventory Item Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="item_name" label="Item Name" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="line_num" label="Line Number" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="quantity" label="Quantity" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="unit_price" label="Unit Price" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="amount_billed" label="Amount Billed" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="order_type_lookup_code" label=" Order Type" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="purchase_basis" label="Purchase Basis" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="category_name" label="Category Name" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="category_name" label="Category Name" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="item_description" label="Item Description" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="need_by_date" label="Need By Date" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="promised_date" label="Promised Date" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="po_line_id" label="PO Line_Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="po_distribution_id" label="PO Distribution Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="line_location_id" label="Line Location Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+                      <TableHeaderCellWithSort column="inventory_item_id" label="Inventory Item Id" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
                     </TableRow>
                   </TableHeader>
 
@@ -654,13 +597,13 @@ console.log("params", params.po_number);
                       >
                         <TableCell
                           style={{
-                            maxWidth: "150px", 
-                            
-                            whiteSpace: "wrap", 
-                            overflow: "hidden", 
-                            textOverflow: "ellipsis", 
+                            maxWidth: "150px",
+
+                            whiteSpace: "wrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
                             padding: "8px 16px",
-                            boxSizing: "border-box", 
+                            boxSizing: "border-box",
                           }}
                         >
                           {item.item_name}

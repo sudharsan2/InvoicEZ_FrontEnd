@@ -352,29 +352,42 @@ if (Hovered2) {
   
   const handleSort = (columnId) => {
     const getNewSortDirection = (currentState, column) =>
-      currentState.columnId === column && currentState.sortDirection === "ascending"
-        ? "descending"
+      currentState.columnId === column
+        ? currentState.sortDirection === "ascending"
+          ? "descending"
+          : "ascending"
         : "ascending";
   
     const isNumeric = (val) => !isNaN(parseFloat(val));
     const toComparable = (value) =>
-      isNumeric(value) ? parseFloat(value) : String(value || "").toLowerCase();
+      value == null || value === ""
+        ? ""
+        : isNumeric(value)
+        ? parseFloat(value)
+        : String(value).toLowerCase();
   
     const compareNumeric = (a, b, direction) =>
       direction === "ascending" ? a - b : b - a;
   
-    const compareString = (a, b, direction) =>
-      direction === "ascending" ? a.localeCompare(b) : b.localeCompare(a);
+    const compareString = (a, b, direction) => {
+      const result = a.localeCompare(b, undefined, { sensitivity: "base" });
+      return direction === "ascending" ? result : -result;
+    };
   
     const compareValues = (aValue, bValue, direction) => {
       const aComparable = toComparable(aValue);
       const bComparable = toComparable(bValue);
   
-      if (isNumeric(aComparable) || isNumeric(bComparable)) {
-        return compareNumeric(aComparable || 0, bComparable || 0, direction);
-      }
+      const aIsNumeric = isNumeric(aComparable);
+      const bIsNumeric = isNumeric(bComparable);
   
-      return compareString(aComparable, bComparable, direction);
+      if (aIsNumeric && bIsNumeric) {
+        return compareNumeric(aComparable, bComparable, direction);
+      } else if (!aIsNumeric && !bIsNumeric) {
+        return compareString(aComparable, bComparable, direction);
+      } else {
+        return aIsNumeric ? -1 : 1;
+      }
     };
   
     const newSortDirection = getNewSortDirection(sortState, columnId);
@@ -383,6 +396,8 @@ if (Hovered2) {
     const sortedItems = [...filteredItems].sort((a, b) =>
       compareValues(a[columnId], b[columnId], newSortDirection)
     );
+  
+    console.log("Sorted Items:", sortedItems);
   
     setFilteredItems(sortedItems);
   };
@@ -442,11 +457,11 @@ if (Hovered2) {
           marginTop: "8rem"
         }}
       >
-
-
-
+  
+  
+  
         <div
-
+  
           style={{
             backgroundColor: "#F8FAFC",
             paddingTop: "10px",
@@ -456,22 +471,22 @@ if (Hovered2) {
             marginLeft: "1em",
             // paddingLeft:"1em",
             paddingRight: "1em"
-
+  
           }}
-
-
-
-
+  
+  
+  
+  
         >
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(4, 1fr)",
               gap: "2em",
-              padding: "1em",
-              marginTop: "4em",
+              padding: "3em",
+              marginTop: "2em",
               width: "100%",
-
+  
             }}
           >
             <Input
@@ -513,7 +528,7 @@ if (Hovered2) {
               placeholder="PO Type"
               isClearable
             />
-
+  
             <CreatableSelect
               className="basic-single"
               classNamePrefix="select"
@@ -529,10 +544,10 @@ if (Hovered2) {
               placeholder=" Supplier Name"
               isClearable
             />
-
-
-
-
+  
+  
+  
+  
             <CreatableSelect
               className="basic-single"
               classNamePrefix="select"
@@ -548,10 +563,10 @@ if (Hovered2) {
               placeholder="Location"
               isClearable
             />
-
-
-
-
+  
+  
+  
+  
             <CreatableSelect
               className="basic-single"
               classNamePrefix="select"
@@ -576,7 +591,7 @@ if (Hovered2) {
                 boxSizing: "border-box",
               }}
             />
-
+  
             <Input
               placeholder="PO Header ID"
               value={selectedPOHeaderID}
@@ -586,7 +601,7 @@ if (Hovered2) {
                 boxSizing: "border-box",
               }}
             />
-
+  
             <Input
               placeholder="Vendor Site ID"
               value={selectedVendorSiteID}
@@ -611,7 +626,7 @@ if (Hovered2) {
               display: "flex",
               justifyContent: "flex-end",
               gap: "20px",
-              margin: "20px 0",
+              marginBottom: "20px",
             }}
           >
             <Button
@@ -653,7 +668,7 @@ if (Hovered2) {
                 style={{
                   fontSize: "14px",
                   color: "#000",
-
+  
                 }}
               >
                 Clear
@@ -661,14 +676,14 @@ if (Hovered2) {
             </div>
           </div>
         </div>
-
-
+  
+  
         <div
-
+  
         >
          
         </div>
-
+  
       </div>
       <div
         style={{
@@ -683,7 +698,7 @@ if (Hovered2) {
             onSearchChange={handleSearchChange}
           />
         <DataGrid
-
+  
           items={filtered}
           key={items.length}
           columns={columns}

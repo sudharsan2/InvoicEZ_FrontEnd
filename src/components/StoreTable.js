@@ -120,7 +120,6 @@ const StoreTable = ({ setTableLength }) => {
       
       
       
-      
       const mappedItems = fetchedItems.map((item, index) => {
 
 
@@ -153,7 +152,8 @@ const StoreTable = ({ setTableLength }) => {
           customer:item.CustomerName,
           invoice:item.InvoiceFile,
           Gate:item.gate_entry_no,
-          Igst_val:val.Igst
+          Igst_val:val.Igst,
+          
           
           
 

@@ -825,31 +825,31 @@ const AIDetailPage = () => {
             >
               <div style={{ flex: 2 }}>
 
-                <Table>
-                  <TableHeader
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      backgroundColor: backStyle || "white", // Ensure backStyle is defined correctly
-                      zIndex: 1,
-                      color: innerStyle || "black", // Ensure innerStyle is defined correctly
-                    }}
-                  >
-                    <TableRow
-                      style={
-                        bodyStyle
-                      }
-                    >
-                      <TableHeaderCellWithSort column="Description" label="Description" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="Quantity" label="Quantity" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="UnitPrice" label="Unit Price" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="Discount" label="Discount" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="ProductCode" label="Product Code" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="Igst" label="Igst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="Cgst" label="Cgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="Sgst" label="Sgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                    </TableRow>
-                  </TableHeader>
+<Table>
+      <TableHeader
+        style={{
+          position: "sticky",
+          top: 0,
+          backgroundColor: backStyle || "white",
+          zIndex: 1,
+          color: innerStyle || "black",
+        }}
+      >
+        <TableRow
+          style={
+            bodyStyle
+          }
+        >
+          <TableHeaderCellWithSort column="Description" label="Description" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+          <TableHeaderCellWithSort column="Quantity" label="Quantity" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+          <TableHeaderCellWithSort column="UnitPrice" label="Unit Price" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+          <TableHeaderCellWithSort column="Discount" label="Discount" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+          <TableHeaderCellWithSort column="ProductCode" label="Product Code" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+          <TableHeaderCellWithSort column="Igst" label="Igst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+          <TableHeaderCellWithSort column="Cgst" label="Cgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+          <TableHeaderCellWithSort column="Sgst" label="Sgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
+        </TableRow>
+      </TableHeader>
 
                   <TableBody>
                     {sortedLineItems.map((item, index) => (
@@ -923,30 +923,30 @@ const AIDetailPage = () => {
                 >
                   <div style={{ flex: 1 }}>
                     <Table>
-                    <TableHeader
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      backgroundColor: backStyle || "white", // Ensure backStyle is defined correctly
-                      zIndex: 1,
-                      color: innerStyle || "black", // Ensure innerStyle is defined correctly
-                    }}
-                  >
-                        <TableRow
-                          style={
-                            bodyStyle
-                          }
-                        >
-                          <TableHeaderCellWithSort2 column="Line Number" label="Line Number" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
-                          <TableHeaderCellWithSort2 column="Item Name" label="Item Name" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
-                          <TableHeaderCellWithSort2 column="Quantity" label="Quantity" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
-                          <TableHeaderCellWithSort2 column="Unit Price" label="Unit Price" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
-                          <TableHeaderCellWithSort2 column="Amount Billed" label="Amount Billed" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
-                          <TableHeaderCell style={{ fontWeight: "bold" }}>
-                            Actions
-                          </TableHeaderCell>
-                        </TableRow>
-                      </TableHeader>
+   <TableHeader
+    style={{
+      position: "sticky",
+      top: 0,
+      backgroundColor: backStyle || "white",
+      zIndex: 1,
+      color: innerStyle || "black",
+    }}
+  >
+    <TableRow
+      style={
+        bodyStyle
+      }
+    >
+      <TableHeaderCellWithSort2 column="Line Number" label="Line Number" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
+      <TableHeaderCellWithSort2 column="Item Name" label="Item Name" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
+      <TableHeaderCellWithSort2 column="Quantity" label="Quantity" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
+      <TableHeaderCellWithSort2 column="Unit Price" label="Unit Price" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
+      <TableHeaderCellWithSort2 column="Amount Billed" label="Amount Billed" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
+      <TableHeaderCell style={{ fontWeight: "bold" }}>
+        Actions
+      </TableHeaderCell>
+    </TableRow>
+  </TableHeader>
 
 
                       <TableBody style={tableBodyStyle}>

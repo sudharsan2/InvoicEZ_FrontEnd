@@ -528,9 +528,9 @@ const StoreOpenPODetails = () => {
                     style={{
                       position: "sticky",
                       top: 0,
-                      backgroundColor: {backStyle},
+                      backgroundColor: backStyle || "white", // Ensure backStyle is defined correctly
                       zIndex: 1,
-                      color: {tabstyle2},
+                      color: tabstyle2 || "black",
 
                     }}
                   >

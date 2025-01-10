@@ -112,7 +112,7 @@ const StoreUserPage = () => {
   const [closedcode, setClosedCode] = useState();
   const [po_id, set_Po_id] = useState("");
   const [inv_id, setInv_id] = useState();
-  
+  const [showButton, setShowButton] = useState(true);
 
 // Theme State
    const themestate = false;
@@ -132,7 +132,7 @@ const StoreUserPage = () => {
   
   const approvePo = async () => {
     const url = `https://invoicezapi.focusrtech.com:57/user/GRNGeneration/${po_id}`;
-
+    
     try {
       const token = localStorage.getItem("access_token");
 
@@ -142,12 +142,29 @@ const StoreUserPage = () => {
       }
 
     });
-   
-    if (response.status === 200) {
+
+    
+
+      
+    
+      if (response.status === 200) {
+        console.log("STATUS",response.data.status);
+       
         message.success("GRN successfully Updated");
         navigate(`/storeuser`);
       }
-      console.log("Success:", response.data); 
+      const res = response.data.status;
+      if( res === "ERROR")
+        {
+          setShowButton(false);
+          console.log("Y")
+        }
+        else
+        {
+          setShowButton(true);
+          console.log("F")
+        }
+      
     } catch (error) {
       notification.error({
         message: "Approved Failed",
@@ -155,8 +172,14 @@ const StoreUserPage = () => {
       });
       console.error("Error:", error);
     }
+
+    
   };
 
+ // This will show any leading/trailing spaces or characters.
+  console.log("T/F",showButton);
+
+ 
  
 
  
@@ -507,13 +530,15 @@ const renderInputCell = (onChangeHandler) => (
               >
                 <div style={{ right: "5%", display: "flex", gap: "10px" }}>
                   
-                  <Button
-                    className=" buttoncolor"
-                    style={{ backgroundColor: "#3570c3", color: "white" }}
-                    onClick={() => approvePo()}
-                  >
-                    Generate GRN
-                  </Button>
+                {showButton &&
+        <Button
+          className="buttoncolor"
+          style={{ backgroundColor: "#3570c3", color: "white" }}
+          onClick={() => approvePo()}
+        >
+          Generate GRN
+        </Button>
+      }
                 </div>
               </div>
 

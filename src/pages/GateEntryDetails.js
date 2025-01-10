@@ -20,7 +20,7 @@ import {
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { ArrowSortUpFilled, ArrowSortDownRegular, ArrowDownload28Regular } from "@fluentui/react-icons";
-const path = "/storeuser";
+const path = "/gate-entry-det";
 const path2 = "/approvepage";
 const path1 = "/dashboard";
 
@@ -731,9 +731,9 @@ const styles = useStyles();
                     style={{
                       position: "sticky",
                       top: 0,
-                      backgroundColor:{backStyle},
+                      backgroundColor: backStyle || "white", // Ensure backStyle is defined correctly
                       zIndex: 1,
-                      color:{colorStyle},
+                      color: colorStyle || "black",
                     }}
                   >
                     <TableRow

@@ -200,7 +200,7 @@ function App() {
              </ProtectedRoute>
           }
         />
-
+<Route path="/openpodet/:po_number" element={<OpenPODetails />} />
         <Route
           path="/openpodet"
           element={
@@ -318,6 +318,24 @@ function App() {
 
           }
         />
+
+
+<Route
+          path="/dashboard-detail"
+          element={
+            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+              <CustomLayout>
+                <NavDrawerDefault>
+                  <DashboardDetails />
+                </NavDrawerDefault>
+              </CustomLayout>
+              </ProtectedRoute>
+
+          }
+        />
+
+
+
         <Route
           path="/aidetail"
           element={

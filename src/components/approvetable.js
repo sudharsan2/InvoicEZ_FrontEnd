@@ -6,7 +6,7 @@ import {
   ArrowClockwise24Regular,
   Delete24Regular,
   TasksApp24Regular,
-  ArrowSortUpFilled, ArrowSortDownRegular,ShareIos24Filled
+  ArrowSortUpFilled, ArrowSortDownRegular, ShareIos24Filled
 } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,11 +19,12 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import Search from "./Search"; 
-import {  notification,message, Modal } from "antd"; 
+import Search from "./Search";
+import { notification, message, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { refreshActions } from "../Store/Store";
 
+import { toggleDrawerPosition } from "../Store/refreshSlice";
 
 import WalkInCandidate from "./WalkinCandidate";
 
@@ -39,7 +40,7 @@ const columns = [
     renderHeaderCell: () => "Supplier name ",
     renderCell: (item) => <TableCellLayout>{item.supplier}</TableCellLayout>,
   }),
-  
+
 
   createTableColumn({
     columnId: "Status",
@@ -56,15 +57,15 @@ const columns = [
               padding: "4px 8px",
               textAlign: "center",
             };
-            case "Gate Entry":
-              return {
-                backgroundColor: "#074799",
-                color: "#fff",
-                borderRadius: "8px",
-                textShadow: "0 1px 3px rgba(0,0,0,0.2)",
-                padding: "4px 8px",
-                textAlign: "center",
-              };
+          case "Gate Entry":
+            return {
+              backgroundColor: "#074799",
+              color: "#fff",
+              borderRadius: "8px",
+              textShadow: "0 1px 3px rgba(0,0,0,0.2)",
+              padding: "4px 8px",
+              textAlign: "center",
+            };
 
           case "Multiple Match Found":
             return {
@@ -82,7 +83,7 @@ const columns = [
               padding: "4px 8px",
               textAlign: "center",
             };
-          
+
         }
       };
 
@@ -109,7 +110,7 @@ const columns = [
     renderHeaderCell: () => "Buyer Name",
     renderCell: (item) => <TableCellLayout>{item.buyer}</TableCellLayout>,
   }),
- 
+
 ];
 
 const SummaryTable = ({
@@ -117,14 +118,14 @@ const SummaryTable = ({
   setMatchCount,
   setTableLength,
   setMultiple_MatchCount,
-  
+
 }) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [items, setItems] = useState([]); 
+  const [items, setItems] = useState([]);
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [isWalkinUpload, setIsWalkinUpload] = useState(false);
   const [newCandidate, setNewCandidate] = useState(false);
@@ -133,18 +134,18 @@ const SummaryTable = ({
   const [isDelete, setIsDelete] = useState(false);
   const [isrefresh, setIsRefresh] = useState(false);
   const [isupload, setIsUpload] = useState(false);
-  
-  console.log("Walkin",isWalkinUpload);
- 
+
+  console.log("Walkin", isWalkinUpload);
+
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
 
   const [RefreshUpload, SetRefreshUpload] = useState(null);
   console.log(RefreshUpload);
- 
 
-  
+
+
   const fetchData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
@@ -162,7 +163,7 @@ const SummaryTable = ({
       console.log("fetchedItems Summary", fetchedItems);
       const tablelength = fetchedItems.length;
       console.log("Table length", tablelength);
-     
+
       let MatchCount = 0;
       let multiple_MatchCount = 0;
       let fixCount = 0;
@@ -174,27 +175,27 @@ const SummaryTable = ({
         if (item.po_headers.length === 0) {
           Status = "No Match Found";
           fixCount += 1;
-        } 
+        }
         else if (item.po_headers.length === 1) {
           console.log("wertyuio");
           if (item.storeuser === true) {
             console.log("wertyuio123");
             Status = "Gate Entry";
-            gatelength+=1;
+            gatelength += 1;
           } else if (item.storeuser === false) {
             MatchCount += 1;
             Status = "Match Found";
-            
+
           }
         }
 
-         else if (item.po_headers.length > 1) {
+        else if (item.po_headers.length > 1) {
           Status = "Multiple Match Found";
           multiple_MatchCount += 1;
         }
-        
 
-       
+
+
 
         return {
           id: item.id,
@@ -202,32 +203,32 @@ const SummaryTable = ({
           amount: item.InvoiceTotal,
           lines: item.items.length,
           buyer: item.CustomerName,
-          Status: Status, 
-          
+          Status: Status,
+
         };
       });
-      
+
       setFixCount(fixCount);
       setMatchCount(MatchCount);
       setMultiple_MatchCount(multiple_MatchCount);
       setTableLength(tablelength);
-      
+
       setItems(mappedItems);
 
-      console.log("MAP IN SUMMARY",mappedItems);
+      console.log("MAP IN SUMMARY", mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  
+
 
   useEffect(() => {
     SetRefreshUpload(isInvoiceUploadRefreshed);
   }, []);
 
   useEffect(() => {
-    setFilteredItems(items); 
+    setFilteredItems(items);
   }, [items])
 
   useEffect(() => {
@@ -237,14 +238,14 @@ const SummaryTable = ({
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
   };
-  
+
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
-  
+
     const filteredItems = items.filter((item) => {
       const searchLower = value?.trim().toLowerCase() || ""; // Use the input value directly
-  
+
       return (
         item.id?.toString().toLowerCase().includes(searchLower) ||
         item.supplier?.toString().toLowerCase().includes(searchLower) ||
@@ -254,13 +255,13 @@ const SummaryTable = ({
         item.Store?.toLowerCase().includes(searchLower)
       );
     });
-  
-    setFilteredItems(filteredItems); 
+
+    setFilteredItems(filteredItems);
   };
-  
+
   const filteredItems = items.filter((item) => {
     const searchLower = searchQuery?.trim().toLowerCase() || ""; // Use state value for searchQuery
-  
+
     return (
       item.id?.toString().toLowerCase().includes(searchLower) ||
       item.supplier?.toString().toLowerCase().includes(searchLower) ||
@@ -273,8 +274,6 @@ const SummaryTable = ({
 
 
 
-  
- 
 
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
@@ -285,13 +284,15 @@ const SummaryTable = ({
         navigate("/approve", {
           state: { poNumber: item.po_number, Id: item.Id },
         });
-      
-      } 
+
+      }
       else if (status === "Gate Entry") {
         navigate("/gateentry", {
           state: { poNumber: item.po_number, Id: item.Id },
         });
-      }else if (status === "No Match Found") {
+      } else if (status === "No Match Found") {
+        dispatch(toggleDrawerPosition("5")); // Set the drawer position to "5"
+
         navigate("/issuefix", {
           state: { poNumber: item.po_number, Id: item.Id },
         });
@@ -322,7 +323,7 @@ const SummaryTable = ({
         .map((item) => item.supplier_name)
         .join(", ");
 
-      
+
       const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
@@ -341,7 +342,7 @@ const SummaryTable = ({
         (item) =>
           !selectedItemsArray.some(
             (selectedItem) => selectedItem.InvoiceId === item.InvoiceId,
-          ), 
+          ),
       );
 
       setItems(newItems);
@@ -381,8 +382,8 @@ const SummaryTable = ({
         .map((item) => item.supplier_name)
         .join(", ");
 
-        const token = localStorage.getItem("access_token");
-             await Promise.all(
+      const token = localStorage.getItem("access_token");
+      await Promise.all(
         selectedItemsArray.map((item) =>
           axios.post(
             `https://invoicezapi.focusrtech.com:57/user/update-storeuser/${filteredItems[item].id}`,
@@ -395,7 +396,7 @@ const SummaryTable = ({
           )
         )
       );
-  
+
 
       // Remove deleted items from the state
       setItems(items.filter((item) => !selectedItemsArray.includes(item)));
@@ -435,7 +436,7 @@ const SummaryTable = ({
     columnId: "",
     sortDirection: "ascending",
   });
-  
+
   const handleSort = (columnId) => {
     let newSortDirection = "ascending";
 
@@ -445,7 +446,7 @@ const SummaryTable = ({
     }
 
     setSortState({ columnId, sortDirection: newSortDirection });
-    
+
 
     const sortedItems = [...filtered].sort((a, b) => {
       const aValue = a[columnId];
@@ -455,9 +456,9 @@ const SummaryTable = ({
       if (aValue > bValue) return newSortDirection === "ascending" ? 1 : -1;
       return 0;
     });
-    console.log("SORTED",sortedItems);
-    
-    setFilteredItems(sortedItems); 
+    console.log("SORTED", sortedItems);
+
+    setFilteredItems(sortedItems);
   };
   return (
     <>
@@ -474,17 +475,17 @@ const SummaryTable = ({
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: isDelete ? "#e1e1e2" : "transparent", 
+            backgroundColor: isDelete ? "#e1e1e2" : "transparent",
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
-            transition: "background-color 0.2s ease", 
+            transition: "background-color 0.2s ease",
           }}
-          onMouseEnter={() => setIsDelete(true)} 
-          onMouseLeave={() => setIsDelete(false)} 
-          onClick={handleDeleteSelectedRows} 
+          onMouseEnter={() => setIsDelete(true)}
+          onMouseLeave={() => setIsDelete(false)}
+          onClick={handleDeleteSelectedRows}
         >
           <Delete24Regular style={{ color: "#1281d7" }} />
           <span>Delete</span>
@@ -494,16 +495,16 @@ const SummaryTable = ({
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent",
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
-            transition: "background-color 0.2s ease", 
+            transition: "background-color 0.2s ease",
           }}
-          onMouseEnter={() => setIsHovered(true)} 
-          onMouseLeave={() => setIsHovered(false)} 
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           onClick={handleApproveSelectedRows}
         >
           <TasksApp24Regular style={{ color: "#1281d7" }} />
@@ -514,16 +515,16 @@ const SummaryTable = ({
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: isrefresh ? "#e1e1e2" : "transparent", 
+            backgroundColor: isrefresh ? "#e1e1e2" : "transparent",
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
-            transition: "background-color 0.2s ease", 
+            transition: "background-color 0.2s ease",
           }}
-          onMouseEnter={() => setIsRefresh(true)} 
-          onMouseLeave={() => setIsRefresh(false)} 
+          onMouseEnter={() => setIsRefresh(true)}
+          onMouseLeave={() => setIsRefresh(false)}
           // onClick={fetchData}
           onClick={handleRefreshClick}
         >
@@ -536,7 +537,7 @@ const SummaryTable = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "center", // Ensures alignment in case of larger button dimensions
-            backgroundColor: isupload ? "#e1e1e2" : "transparent", 
+            backgroundColor: isupload ? "#e1e1e2" : "transparent",
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
@@ -544,12 +545,12 @@ const SummaryTable = ({
             marginLeft: "2em",
             whiteSpace: "nowrap", // Prevents wrapping of content
           }}
-          onMouseEnter={() => setIsUpload(true)} 
-          onMouseLeave={() => setIsUpload(false)} 
+          onMouseEnter={() => setIsUpload(true)}
+          onMouseLeave={() => setIsUpload(false)}
           onClick={handleNewCandidateBtn}
         >
           <ShareIos24Filled style={{ color: "#1281d7" }} />
-          
+
           <span>Upload-Invoice</span>
         </button>
 
@@ -566,56 +567,56 @@ const SummaryTable = ({
         }}
       >
         <DataGrid
-      items={filtered}
-      key={items.length}
-      columns={columns}
-      sortable
-      selectionMode="multiselect"
-      onSelectionChange={handleSelectionChange}
-      getRowId={(_, index) => index}
-      focusMode="composite"
-      style={{ minWidth: "600px" }}
-    >
-      <DataGridHeader>
-        <DataGridRow>
-          {({ renderHeaderCell, columnId }) => (
-            <DataGridHeaderCell
-              onClick={() => handleSort(columnId)}
-              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-            >
-              {renderHeaderCell()}
-              {sortState.columnId === columnId &&
-                (sortState.sortDirection === "ascending" ? (
-                  <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
-                ) : (
-                  <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
-                ))}
-            </DataGridHeaderCell>
-          )}
-        </DataGridRow>
-      </DataGridHeader>
-      <DataGridBody>
-        {({ item, rowId }) => (
-          <DataGridRow
-            key={rowId}
-            onClick={(e) => handleRowClick(e, item)}
-            selected={selectedRows.has(rowId)}
-          >
-            {({ renderCell }) => (
-              <DataGridCell
-                style={{
-                  wordWrap: "break-word",
-                  whiteSpace: "normal",
-                  overflow: "hidden",
-                }}
+          items={filtered}
+          key={items.length}
+          columns={columns}
+          sortable
+          selectionMode="multiselect"
+          onSelectionChange={handleSelectionChange}
+          getRowId={(_, index) => index}
+          focusMode="composite"
+          style={{ minWidth: "600px" }}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell, columnId }) => (
+                <DataGridHeaderCell
+                  onClick={() => handleSort(columnId)}
+                  style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+                >
+                  {renderHeaderCell()}
+                  {sortState.columnId === columnId &&
+                    (sortState.sortDirection === "ascending" ? (
+                      <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
+                    ) : (
+                      <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
+                    ))}
+                </DataGridHeaderCell>
+              )}
+            </DataGridRow>
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow
+                key={rowId}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(rowId)}
               >
-                {renderCell(item)}
-              </DataGridCell>
+                {({ renderCell }) => (
+                  <DataGridCell
+                    style={{
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {renderCell(item)}
+                  </DataGridCell>
+                )}
+              </DataGridRow>
             )}
-          </DataGridRow>
-        )}
-      </DataGridBody>
-    </DataGrid>
+          </DataGridBody>
+        </DataGrid>
       </div>
 
       <Modal

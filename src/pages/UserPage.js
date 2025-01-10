@@ -86,7 +86,7 @@ const UserPage = () => {
   return (
     <div style={{maxHeight:"88vh",overflowY:"auto"}}>
       <div ref={divRef1}>
-        <div className="Approvebreadcrump" style={{marginLeft:"3em"}}>
+        <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
               <BreadcrumbButton>Control Center</BreadcrumbButton>
@@ -103,7 +103,7 @@ const UserPage = () => {
             display: "flex",
             justifyContent: "flexStart",
             padding: "1px",
-            marginLeft:"3em"
+           
           }}
         >
           <h3 style={{ fontSize: "1.5em", marginLeft: "5px" }}>User Management</h3>
@@ -118,7 +118,7 @@ const UserPage = () => {
                 flexDirection: "column",
                 gap: "10px",
                 justifyContent: "flex-start",
-                marginLeft:"3em"
+               
               }}
             >
               <div style={containerStyle}>
@@ -139,10 +139,10 @@ const UserPage = () => {
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center",marginLeft:"3em"}}>
+      <div style={{ display: 'flex', justifyContent: 'center' ,width: '90%',alignItems:"center"}}>
       <Divider style={{ marginTop:"2em"}} />
     </div>
-      <div style={{marginLeft:"3em"}}>
+      <div>
         {height > 0 ? <UserTable height={height}  setStoreCount={setStoreCount}  setGateCount={setGateCount}/> : <p>Loading...</p>}
       </div>
     </div>

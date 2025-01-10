@@ -63,22 +63,22 @@ const TagCounters = ({ type }) => {
         { label: "To Do", value: jsonData["TodoCount"], color: "#00bfbf" },
         {
           label: "Crossed PO Date",
-          value: jsonData["PONumberMatchingCount"],
+          value: jsonData["CrossedPODate"],
           color: "#d62727",
         },
         {
           label: "PO Number Matching",
-          value: jsonData["SupplierMatchingCount"],
+          value: jsonData["po_number_matching_count"],
           color: "#1f497d",
         },
         {
           label: "Supplier Matching",
-          value: jsonData["LineItemsMatchingCount"],
+          value: jsonData["supplier_matching_count"],
           color: "#d21994",
         },
         {
           label: "Supplier Line Matching",
-          value: jsonData["CrossedPODate"],
+          value: jsonData["line_items_matching_count"],
           color: "#000000",
         },
       ];

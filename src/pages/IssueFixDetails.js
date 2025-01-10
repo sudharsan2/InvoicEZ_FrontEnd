@@ -148,6 +148,9 @@ const IssuefixDetails = () => {
     invoiceTotal: "",
     vendorAddressRecipient: "",
     customerAddressRecipient: "",
+    VendorAddress:"",
+    ShippingAddress:"",
+    CustomerAddress:"",
     invoiceId: "",
     customerId: "",
     billingAddressRecipient: "",
@@ -213,12 +216,9 @@ const IssuefixDetails = () => {
 
     fetchData();
   }, []);
-  // 2
-  // const handleInputChange = (index, key, value) => {
-  //   setRows((prevRows) =>
-  //     prevRows.map((row, i) => (i === index ? { ...row, [key]: value } : row)),
-  //   );
-  // };
+ 
+
+  console.log("ROWS",rows);
 
   const [poNumber, setPoNumber] = useState("");
 
@@ -254,9 +254,10 @@ const IssuefixDetails = () => {
       const data = await response.json();
       console.log("API response:", data);
     } catch (error) {
-      message.error(error);
+      message.error("An unexpected error occurred"); 
       console.error("Error submitting PO:", error);
     }
+    
   };
 
   const [fulldata, setFulldata] = useState({}); // Add state for full data
@@ -278,16 +279,22 @@ const IssuefixDetails = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            
           },
         }
       );
       const data = response.data.invoice_info;
+      console.log("data",data)
       setFormData({
         vendorName: data.VendorName,
         customerName: data.CustomerName,
         invoiceDate: data.InvoiceDate,
         invoiceTotal: data.InvoiceTotal,
         vendorAddressRecipient: data.VendorAddressRecipient,
+        BillingAddress:data.BillingAddress && data.BillingAddress.id ? data.BillingAddress.id : null,
+        VendorAddress:data.VendorAddress.id,
+        ShippingAddress:data.ShippingAddress.id,
+        CustomerAddress: data.CustomerAddress && data.CustomerAddress.id ? data.CustomerAddress.id : null,
         customerAddressRecipient: data.CustomerAddressRecipient,
         invoiceId: data.InvoiceId,
         customerId: data.CustomerId,
@@ -356,10 +363,10 @@ const IssuefixDetails = () => {
   }, []);
 
 
-
   const handleformSubmit = async () => {
     // Update the full data state based on formData and rows
     const updatedFulldata = {
+
       ...fulldata, // Spread fulldata to retain existing properties
       VendorName: formData.vendorName,
       CustomerName: formData.customerName,
@@ -367,6 +374,10 @@ const IssuefixDetails = () => {
       InvoiceTotal: formData.invoiceTotal,
       VendorAddressRecipient: formData.vendorAddressRecipient,
       CustomerAddressRecipient: formData.customerAddressRecipient,
+      VendorAddress:formData.VendorAddress,
+      ShippingAddress:formData.ShippingAddress,
+      CustomerAddress: formData.CustomerAddress,
+      BillingAddress:formData.BillingAddress,
       InvoiceId: formData.invoiceId,
       CustomerId: formData.customerId,
       BillingAddressRecipient: formData.billingAddressRecipient,
@@ -375,7 +386,7 @@ const IssuefixDetails = () => {
       PurchaseOrder: formData.purchaseOrder,
       created_at: formData.entrytime,
       items: rows.map((item, index) => {
-        const oldItem = oldrow[index]; // Match the index of rows with oldrow
+        const oldItem = oldrow[index]; 
 
         return {
           id: item.id,
@@ -389,27 +400,26 @@ const IssuefixDetails = () => {
           Igst: item.Igst,
           Cgst: item.Cgst,
           Sgst: item.Cgst,
-          // Assign values from oldrow for fields not updated in rows
-          Date: oldItem ? oldItem?.Date : null,
-          TotalTax: oldItem ? oldItem.TotalTax : null,
-          Tax: oldItem ? oldItem.Tax : null,
-          AmountDue: oldItem ? oldItem.AmountDue : null,
-          ServiceStartDate: oldItem ? oldItem.ServiceStartDate : null,
-          ServiceEndDate: oldItem ? oldItem.ServiceEndDate : null,
-          ServiceAddressRecipient: oldItem
-            ? oldItem.ServiceAddressRecipient
-            : null,
-          RemittanceAddressRecipient: oldItem
-            ? oldItem.RemittanceAddressRecipient
-            : null,
-          ServiceAddress: oldItem ? oldItem.ServiceAddress : null,
-          RemittanceAddress: oldItem ? oldItem.RemittanceAddress : null,
-          // Add any other fields as needed
+          Date:  oldItem && oldItem.Date ? oldItem.Date : null,
+        TotalTax: oldItem && oldItem.TotalTax ?oldItem.TotalTax : null,
+        Tax: oldItem && oldItem.Tax ?oldItem.Tax : null,
+        AmountDue: oldItem && oldItem.AmountDue ?oldItem.AmountDue : null,
+        ServiceStartDate: oldItem && oldItem.ServiceStartDate ?oldItem.ServiceStartDate : null,
+        ServiceEndDate: oldItem && oldItem.ServiceEndDate ?oldItem.ServiceEndDate : null,
+        ServiceAddressRecipient: oldItem && oldItem.ServiceAddressRecipient ?oldItem.ServiceAddressRecipient : null,
+        RemittanceAddressRecipient: oldItem && oldItem.RemittanceAddressRecipient ?oldItem.RemittanceAddressRecipient : null,
+        ServiceAddress: oldItem && oldItem.ServiceAddress ?oldItem.ServiceAddress : null,
+        RemittanceAddress: oldItem && oldItem.RemittanceAddress ?oldItem.RemittanceAddress : null,
+          
+          
         };
       }),
       // Add any other properties like po_headers, if needed
     };
-    console.log("ITEMS", updatedFulldata);
+
+    delete updatedFulldata.InvoiceFile 
+
+    console.log("ITEMS------>", updatedFulldata);
     try {
 
       const token = localStorage.getItem("access_token");
@@ -437,8 +447,10 @@ const IssuefixDetails = () => {
 
       } else {
         console.error("Error updating form data");
+        message.error("Update failed");
       }
-    } catch (error) {
+    } catch (error) 
+    {
       console.error("Network error:", error);
       message.error("Update failed");
     }

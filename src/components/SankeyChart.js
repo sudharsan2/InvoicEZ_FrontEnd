@@ -11,16 +11,22 @@ import { Sankey, Tooltip } from "recharts";
 const SankeyChart = () => {
   const [chartData, setChartData] = useState({
     nodes: [
-      { name: "Invoice Processed", value: 0 }, 
-      { name: "Match Found", value: 0 },
-      { name: "Multiple Match Found", value: 0 },
-      { name: "No Match Found", value: 0 },
+      { name: "Invoice Processed", value: 20 }, 
+      { name: "Match Found", value: 10 },
+      { name: "Multiple Match Found", value: 15 },
+      { name: "No Match Found", value: 17 },
+      { name: "Line Items Matching", value: 0 },
+      { name: "Supplier Matching", value: 0 },
+      { name: "PO Number Matching", value: 0 },
       
     ],
     links: [
       { source: 0, target: 1, value: 10 },
       { source: 0, target: 2, value: 15 },
       { source: 0, target: 3, value: 20 },
+       { source: 1, target: 4, value: 10 },
+      { source: 1, target: 5, value: 15 },
+      { source: 1, target: 6, value: 20 },
       
     ],
   });
@@ -157,7 +163,7 @@ const SankeyChart = () => {
   return (
     <div>
       <Sankey
-        width={1000}
+        width={900}
         height={500}
         data={chartData}
         nodePadding={40}

@@ -7,7 +7,10 @@ import {
   Divider
 } from "@fluentui/react-components";
 
-
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { YearCalendar } from '@mui/x-date-pickers/YearCalendar';
 import StoreHistoryTable from "../components/StoreHistoryTable";
 
 import Example from "./ExampleLineChart";
@@ -57,6 +60,11 @@ const containerStyle = {
 
 const StoreHistory = () => {
     const[rows,setRows]=useState("");
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); 
+
+    const handleYearChange = (year) => {
+      setSelectedYear(year.year()); 
+    };
     useEffect(() => {
       
       const fetchData = async () => {
@@ -95,7 +103,7 @@ const StoreHistory = () => {
       ];
   return (
     <div style={{overflowY:"auto",height:"90vh"}}>
-      <div style={{ height: "5vh" }}>
+      <div style={{ height: "5vh",display:"flex",justifyContent:"space-between"}}>
         <div className="Approvebreadcrump">
           <Breadcrumb aria-label="Breadcrumb default example">
             <BreadcrumbItem>
@@ -107,6 +115,15 @@ const StoreHistory = () => {
             </BreadcrumbItem>
             
           </Breadcrumb>
+        </div>
+        <div>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['YearCalendar']}>
+                    <DemoItem label="YearCalendar">
+                      <YearCalendar onChange={handleYearChange} />
+                    </DemoItem>
+                  </DemoContainer>
+                </LocalizationProvider>
         </div>
       </div>
       <div>
@@ -125,7 +142,7 @@ const StoreHistory = () => {
           
           <div style={{marginTop:"-2em",marginLeft:"0em",width:"50%",display:"flex",flexDirection:"column",justifyContent:"center",}}>
             
-           <Example/>
+          <Example selectedYear={selectedYear} />
            <span style={{fontWeight:"bold",marginLeft:"2em",textAlign:"center"}}>Number of Invoice Processed</span>
       </div>
           <div style={containerStyle}>

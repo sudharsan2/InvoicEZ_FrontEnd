@@ -4,8 +4,8 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { EyeOutlined } from "@ant-design/icons";
 import axios from "axios";
+import {notification} from "antd";
 import "./login.css";
-import { notification } from "antd";
 
 
 import { jwtDecode } from "jwt-decode";
@@ -82,7 +82,7 @@ const LoginPage = ({ setRoleFromChild }) => {
             navigate("/matrimony");
             break;
           case "invoice manager":
-            navigate("/dashboard");
+            navigate("/dashboard-detail");
             break;
           case "supplier":
             navigate("/supplier");
@@ -93,7 +93,13 @@ const LoginPage = ({ setRoleFromChild }) => {
           default:
             navigate("/unauthorized");
         }
+        notification.success({
+          message: "Login Successfully!😄",
+        });
       } catch (error) {
+        notification.error({
+          message:"Login Failed😢"
+        })
         console.error("Login failed:", error);
 
         notification.error({
@@ -124,6 +130,41 @@ const LoginPage = ({ setRoleFromChild }) => {
     <div className="Login"
 >
   
+    {/* <div
+  style={{
+    position: "fixed",
+    top: "480px",
+    left: "1150px",
+    height: "500px",
+    width: "200px",
+  }}>
+        <img src={logo} alt="Description" style={{ display:"flex",width: "9vw", height: "50px", position:"absolute" }} />
+        </div>
+         */}
+         <div
+  style={{
+    position: "fixed", // Fixes the position relative to the viewport
+    bottom: "20px", // Anchors the div to the bottom of the viewport
+    right: "20px", // Anchors the div to the right of the viewport
+    height: "50px", // Height of the container
+    width: "auto", // Allow the width to adjust based on content
+    display: "flex", // Align items properly if needed
+    alignItems: "center", // Center items vertically
+    justifyContent: "center", // Center items horizontally
+  }}
+>
+  <img
+    src={logo}
+    alt="Description"
+    style={{
+      width: "9vw", // Responsive width
+      height: "auto", // Maintain aspect ratio
+      objectFit: "contain", // Ensures the image scales properly
+    }}
+  />
+</div>
+
+
 
   {/* Right Side - Login Section */}
   <div
@@ -147,10 +188,10 @@ const LoginPage = ({ setRoleFromChild }) => {
       }}
     >
       <div style={{ marginBottom: "1rem",display:"flex"}}>
-        <div>
+        {/* <div>
         <img src={logo} alt="Description" style={{ width: "9vw", height: "50px" }} />
-        </div>
-        <div style={{display:"flex",justifyContent:"center",marginLeft:"4em"}}>
+        </div> */}
+        <div style={{display:"flex",justifyContent:"center",marginLeft:"13em"}}>
           <h2>InvoiceEZ</h2>
         </div>
       </div>
@@ -244,7 +285,7 @@ const LoginPage = ({ setRoleFromChild }) => {
           style={{
             width: "100%",
             padding: "1em",
-            backgroundColor: "#e6c5e2",
+            backgroundColor: "#8e908f",
             color: "white",
             border: "none",
             borderRadius: "0.5rem",
@@ -259,7 +300,7 @@ const LoginPage = ({ setRoleFromChild }) => {
           }}
           disabled={isLoading || formik.isSubmitting}
         >
-          <span style={{color:"black"}}>{isLoading ? "Signing in..." : "Sign in"}</span>
+          <span style={{color:"white"}}>{isLoading ? "Signing in..." : "Sign in"}</span>
         </button>
       </form>
     </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import CalendarComponent from "../components/calendar";
+import CalendarDashboardComponent from "../components/CalenderDashboard";
 
 import InvoiceStatusPieChart from "../components/piechart";
 import LineChartPage from "../components/Linechart";
@@ -17,7 +17,7 @@ const StoreTagCounters = () => {
   return (
     <div style={{ maxHeight: "86vh", overflowY: "auto", padding: "20px",backgroundColor:"#c9c9c9" }}>
       <div style={{ marginBottom: "20px" ,backgroundColor:"white",height:"100vh",padding:"2em",borderRadius:"10px"}}>
-        <CalendarComponent />
+      <CalendarDashboardComponent/>
       </div>
       <div
   style={{

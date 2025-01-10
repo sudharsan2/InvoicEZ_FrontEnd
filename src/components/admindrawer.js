@@ -1,6 +1,4 @@
-
-
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -11,38 +9,36 @@ import {
   NavDrawerFooter,
   NavDrawerHeader,
   NavDrawerHeaderNav,
-
+  
   NavSubItem,
   NavSubItemGroup,
 } from "@fluentui/react-nav-preview";
 import {
-
+  
   bundleIcon,
-
   Navigation24Filled,
-  Board24Filled,
-  Board24Regular,
+  Navigation24Regular,Apps28Regular,
   People24Regular,
-  Navigation24Regular, Apps28Regular
+  Board24Regular
 } from "@fluentui/react-icons";
 
 import {
   Button,
-
+  
   makeStyles,
   shorthands,
   tokens,
-
-
+  
+ 
 } from "@fluentui/react-components";
 
 
 import { jwtDecode } from "jwt-decode";
 const useStyles = makeStyles({
   root: {
-
+   
     overflow: "hidden",
-
+    
 
     position: "fixed",
     left: 0,
@@ -53,7 +49,7 @@ const useStyles = makeStyles({
     backgroundColor: "#fff",
   },
   content: {
-    flex: 1,
+    flex:1,
     ...shorthands.padding("16px"),
 
     display: "grid",
@@ -74,12 +70,12 @@ const useStyles = makeStyles({
     marginInlineStart: `10px`,
   },
   hamburger: {
-
+    
     textDecorationLine: "none",
     marginLeft: "5px",
     marginTop: "10px",
 
-
+    
   },
   navItemlight: {
     marginTop: "10px",
@@ -118,7 +114,7 @@ const Navi = bundleIcon(Navigation24Filled, Navigation24Regular);
 const NavDrawerDefaultAdmin = (props) => {
   const navigate = useNavigate();
 
-
+  
 
   const lighttheme = useSelector((state) => state.theme.light);
 
@@ -126,31 +122,27 @@ const NavDrawerDefaultAdmin = (props) => {
 
   const themestate = useSelector((state) => state.theme.theme);
 
+  const iconStyle = {
+    color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
+  };
+
   const [collapse, setCollapse] = useState(false);
-
-  const Dashboard = bundleIcon(Board24Filled, Board24Regular);
-
-  const iconStyle = themestate
-    ? { color: darktheme.fontcolordark }
-    : { color: lighttheme.fontcolorlight }
-
 
   const styles = useStyles();
 
-
+  
 
   const [isOpen, setIsOpen] = useState(true);
-
   const [username, setUsername] = useState("");
-
   const [empId, setEmpId] = useState("");
-  const [value, setValue] = useState("");
+  const [value,setValue] = useState("");
+
 
   console.log(value);
-
+   
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-
+    const storedUsername = localStorage.getItem("username"); 
+   
     if (storedUsername) {
       setUsername(storedUsername);
     }
@@ -163,10 +155,10 @@ const NavDrawerDefaultAdmin = (props) => {
       try {
         const decodedToken = jwtDecode(token);
         console.log(decodedToken);
-
+     
         const empIdFromToken = decodedToken.empId;
 
-
+       
         setEmpId(empIdFromToken);
       } catch (error) {
         console.error("Invalid token:", error);
@@ -178,9 +170,8 @@ const NavDrawerDefaultAdmin = (props) => {
   // Stytles
 
   const footerStyle = themestate
-    ? { marginBottom: "20px", color: darktheme.fontcolordark }
-    : { marginBottom: "20px", color: lighttheme.fontcolorlight }
-
+  ? { marginBottom: "20px", color: darktheme.fontcolordark }
+  : { marginBottom: "20px", color: lighttheme.fontcolorlight }
 
 
   const classStyle = themestate ? styles.navItemdark : styles.navItemlight
@@ -191,25 +182,21 @@ const NavDrawerDefaultAdmin = (props) => {
     ...(themestate && { backgroundColor: darktheme.sidebarcolordark })
   };
 
-  const divStyle1 = themestate
-    ? { marginTop: "2px", color: darktheme.fontcolordark }
-    : { marginTop: "2px", color: lighttheme.fontcolorlight }
-
   const newStyle = themestate
-    ? { color: darktheme.fontcolordark }
-    : { color: lighttheme.fontcolorlight }
-
+  ? { color: darktheme.fontcolordark }
+  : { color: lighttheme.fontcolorlight }
+  
   const divStyle = collapse
-    ? {
+  ? {
       width: `56px`,
       transition: "width 0.5s",
       borderRightStyle: "none",
     }
-    : { transition: "width 0.5s", borderRightStyle: "none" }
+  : { transition: "width 0.5s", borderRightStyle: "none" }
 
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
-
+    
       <NavDrawer
         defaultSelectedValue="1"
         defaultSelectedCategoryValue="1"
@@ -222,7 +209,7 @@ const NavDrawerDefaultAdmin = (props) => {
           divStyle
         }
       >
-
+       
 
         <NavDrawerHeader
           style={
@@ -261,153 +248,146 @@ const NavDrawerDefaultAdmin = (props) => {
         {collapse ? (
           <NavDrawerBody
             style={
-              headerStyle
+             headerStyle
             }
           >
+            
             <NavCategory value="1">
-              <NavCategoryItem
-                target="_blank"
-                icon={
-                  <Apps28Regular
-                    style={
-                      newStyle
-                    }
-                  />
-                }
-
-                value="2"
-                className={
-                  classStyle
-                }
-                style={{ marginTop: "10px", fontSize: "17px" }}
-                onClick={() => {
-                  setValue("2");
-                }}
-              >
-                Control Center
-              </NavCategoryItem>
-              <NavSubItemGroup>
-                <NavSubItem
-                  value="3"
-                  style={{ marginTop: "10px", fontSize: "17px" }}
-                  onClick={() => {
-                    navigate("/matrimony");
-                    setValue("3");
-                  }}
-                >
-                  Dashboard
-                </NavSubItem>
-                <NavSubItem
-                  value="4"
-                  style={{ marginTop: "10px", fontSize: "17px" }}
-                  onClick={() => {
-                    navigate("/user");
-                    setValue("4");
-                  }}
-                >
-                  User Management
-                </NavSubItem>
-              </NavSubItemGroup>
-            </NavCategory>
-          </NavDrawerBody>
-        ) : (
-          <NavDrawerBody
-            style={
-              headerStyle
-            }
-          >
-            {/* DETAILS OF USER  */}
-            <div style={{ width: "100%" }}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  padding: "0",
-                  marginLeft: "-2em",
-                }}
-              >
-                <h3>{username}</h3>
-                <h4
-                  style={{
-                    marginTop: "-1em",
-                    padding: "5px",
-                    fontWeight: "normal",
-                  }}
-                >
-                  {empId}
-                </h4>
-                <h4
-                  style={{
-                    marginTop: "-1.5em",
-                    padding: "5px",
-                    fontWeight: "normal",
-                  }}
-                >
-                  Admin Page
-                </h4>
-              </div>
-
-              <NavCategory value="1">
-                <NavCategoryItem
-                  target="_blank"
-                  icon={
-                    <Apps28Regular
-                      style={
-                        newStyle
-                      }
-                    />
-                  }
-
-                  value="2"
-                  className={
-                    classStyle
-                  }
-                  style={{ marginTop: "10px", fontSize: "17px" }}
-                  onClick={() => {
-                    setValue("2");
-                  }}
-                >
-                  Control Center
-                </NavCategoryItem>
-                <NavSubItemGroup>
-                  <NavSubItem
+                  <NavCategoryItem
                     target="_blank"
-                    value="3"
+                    icon={
+                      <Apps28Regular
+                        style={
+                          newStyle
+                        }
+                      />
+                    }
+                   
+                    value="2"
                     className={
                       classStyle
                     }
                     style={{ marginTop: "10px", fontSize: "17px" }}
                     onClick={() => {
-                      navigate("/matrimony");
-                      setValue("3");
+                      setValue("2");
                     }}
                   >
-                    <Dashboard style={iconStyle} />
-                    <div
-                      style={
-                        divStyle1
-                      }
+                    Control Center
+                  </NavCategoryItem>
+                  <NavSubItemGroup>
+                    <NavSubItem
+                      value="3"
+                      style={{ marginTop: "10px", fontSize: "17px" }}
+                     
+                      onClick={() => {
+                        navigate("/matrimony");
+                        setValue("3");
+                      }}
                     >
-                      Dashboard
-                    </div>
-                  </NavSubItem>
-                  <NavSubItem
+                    <Board24Regular style={iconStyle}/>
+                     Dashboard
+                    </NavSubItem>
+                    <NavSubItem
+                      value="4"
+                      style={{ marginTop: "10px", fontSize: "17px" }}
+                      onClick={() => {
+                        navigate("/user");
+                        setValue("4");
+                      }}
+                    >
+                      <People24Regular style={iconStyle} />
+                      User Management
+                    </NavSubItem>
+                  </NavSubItemGroup>
+                </NavCategory>
+          </NavDrawerBody>
+        ) : (
+          <NavDrawerBody
+            style={
+             headerStyle
+            }
+          >
+            {/* DETAILS OF USER  */}
+            <div style={{ width: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "0",
+                marginLeft: "-2em",
+              }}
+            >
+              <h3>{username}</h3>
+              <h4
+                style={{
+                  marginTop: "-1em",
+                  padding: "5px",
+                  fontWeight: "normal",
+                }}
+              >
+                {empId}
+              </h4>
+              <h4
+                style={{
+                  marginTop: "-1.5em",
+                  padding: "5px",
+                  fontWeight: "normal",
+                }}
+              >
+                Admin Page
+              </h4>
+            </div>
+            
+                <NavCategory value="1">
+                  <NavCategoryItem
                     target="_blank"
-                    value="4"
-                    className={classStyle}
-                    style={{ marginTop: "10px", fontSize: "17px", display: "flex", alignItems: "center", gap: "8px" }}
+                    icon={
+                      <Apps28Regular
+                        style={
+                          newStyle
+                        }
+                      />
+                    }
+                    
+                    value="2"
+                    className={
+                      classStyle
+                    }
+                    style={{ marginTop: "10px", fontSize: "17px" }}
                     onClick={() => {
-                      navigate("/user");
-                      setValue("4");
+                      setValue("2");
                     }}
                   >
-                    <People24Regular style={newStyle} />
-                    User Management
-                  </NavSubItem>
-                </NavSubItemGroup>
-              </NavCategory>
-            </div>
+                    Control Center
+                  </NavCategoryItem>
+                  <NavSubItemGroup>
+                    <NavSubItem
+                      value="3"
+                      style={{ marginTop: "10px", fontSize: "17px" }}
+                      onClick={() => {
+                        navigate("/matrimony");
+                        setValue("3");
+                      }}
+                    >
+                      <Board24Regular style={iconStyle}/>
+                     Dashboard
+                    </NavSubItem>
+                    <NavSubItem
+                      value="4"
+                      style={{ marginTop: "10px", fontSize: "17px" }}
+                      onClick={() => {
+                        navigate("/user");
+                        setValue("4");
+                      }}
+                      
+                    >
+                      <People24Regular style={iconStyle} />
+                      User Management
+                    </NavSubItem>
+                  </NavSubItemGroup>
+                </NavCategory>
+              </div>
             {/* </div> */}
           </NavDrawerBody>
         )}
@@ -418,7 +398,7 @@ const NavDrawerDefaultAdmin = (props) => {
           }
         >
           {!collapse && (
-
+            
             <div
               style={{
                 width: "100%",
@@ -442,19 +422,19 @@ const NavDrawerDefaultAdmin = (props) => {
                 V 0.0.1
               </p>
             </div>
-
+            
           )}
-
+          
         </NavDrawerFooter>
-
+       
       </NavDrawer>
-
+      
 
       <div
         className={styles.content}
         style={themestate ? { background: darktheme.contentpagedark } : {}}
       >
-
+        
 
         {props.children}
       </div>

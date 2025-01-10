@@ -1,15 +1,15 @@
 
 import { jwtDecode } from "jwt-decode";
-import React, { useState, useEffect ,useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import {
-  
+
   PopoverTrigger,
   PopoverSurface,
   Popover,
   Avatar,
   Link, makeStyles, Text
- 
+
 } from "@fluentui/react-components";
 
 import { AlertBadgeRegular } from "@fluentui/react-icons";
@@ -38,13 +38,14 @@ const useStyles2 = makeStyles({
 });
 const ExampleContent = () => {
   const styles = useStyles2();
-  
+
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
+
   // Define the table columns and data  
 
   useEffect(() => {
@@ -54,6 +55,7 @@ const ExampleContent = () => {
       setUsername(storedUsername);
     }
   }, []);
+
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     console.log(typeof token);
@@ -202,34 +204,41 @@ const ExampleContent = () => {
 
 
 const CustomLayoutLoop = ({ children }) => {
-  
-  
+
+
   const [username, setUsername] = useState("");
   const [notificationsVisible, setNotificationsVisible] = useState(false);
-  
+
   const themestate = useSelector((state) => state.theme.theme);
   const [data, setData] = useState([]);
-  const notificationRef = useRef(null); 
+  const [lengt, setLengt] = useState('');
+
+  const notificationRef = useRef(null);
 
 
   const handleNotificationClick = () => {
-    setNotificationsVisible((prevState) => !prevState); 
+    setNotificationsVisible((prevState) => !prevState);
   };
 
   useEffect(() => {
+    GetData();
+
+  }, [lengt])
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
-      
+
       if (
         notificationRef.current &&
         !notificationRef.current.contains(event.target)
       ) {
-        setNotificationsVisible(false); 
+        setNotificationsVisible(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -244,8 +253,9 @@ const CustomLayoutLoop = ({ children }) => {
         },
       });
       const fetchedItems = response.data;
+      setLengt(fetchedItems.length)
       console.log("fetchedItems...", fetchedItems);
-      
+
 
 
 
@@ -265,9 +275,7 @@ const CustomLayoutLoop = ({ children }) => {
       console.error("Error fetching data:", error);
     }
   };
-  useEffect(() => {
-    GetData()
-  }, [])
+
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -277,13 +285,15 @@ const CustomLayoutLoop = ({ children }) => {
   }, []);
 
 
-  
 
-  
+
+
 
   return (
     <div>
       {/* Navbar */}
+
+
 
 
       <div className={themestate ? "navbardark" : "navbarlight"}>
@@ -304,6 +314,8 @@ const CustomLayoutLoop = ({ children }) => {
             onClick={handleNotificationClick}
             style={{
               position: "relative",
+              display:"flex", 
+              justifyContent:"space-between",
               cursor: "pointer",
               marginRight: "20px",
               marginBottom: "10px"// Add spacing between elements
@@ -313,10 +325,12 @@ const CustomLayoutLoop = ({ children }) => {
               style={{
                 color: "#fff",
                 height: "30px",
-                width: "50px",
-                marginTop: "-4px"
+                width: "55px",
+                marginTop: "-2px"
               }}
             />
+            <span style={{ color: "#fff", margintop: "-5px" }}>{lengt}</span>
+
             {notificationsVisible && (
               <div
                 style={{
@@ -463,31 +477,31 @@ const CustomLayoutLoop = ({ children }) => {
                       ))}
                     </tbody>
                     <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "left", // Centers the button horizontally
+                        marginTop: "20px", // Adds spacing between table and button
+                        marginBottom: "20px", // Ensures some spacing at the bottom
+                      }}
+                    >
+                      <button
                         style={{
-                          display: "flex",
-                          justifyContent: "left", // Centers the button horizontally
-                          marginTop: "20px", // Adds spacing between table and button
-                          marginBottom: "20px", // Ensures some spacing at the bottom
+                          padding: "10px 20px",
+                          // backgroundColor: "#007bff",
+                          // color: "#fff",
+                          border: "none",
+                          // borderRadius: "5px",
+                          cursor: "pointer",
+                          fontSize: "1em",
+                        }}
+                        onClick={() => {
+                          setData([]); // Closes the notification container
+                          setNotificationsVisible(false); // Clears notifications
                         }}
                       >
-                        <button
-                          style={{
-                            padding: "10px 20px",
-                            // backgroundColor: "#007bff",
-                            // color: "#fff",
-                            border: "none",
-                            // borderRadius: "5px",
-                            cursor: "pointer",
-                            fontSize: "1em",
-                          }}
-                          onClick={() => {
-                            setData([]); // Closes the notification container
-                            setNotificationsVisible(false); // Clears notifications
-                          }}
-                        >
-                          Clear
-                        </button> 
-                      </div>
+                        Clear
+                      </button>
+                    </div>
                   </table>
                 </div>
               </div>
