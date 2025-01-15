@@ -1,6 +1,9 @@
-
 import { message } from "antd";
-import { ArrowSortUpFilled, ArrowSortDownRegular, ArrowDownload28Regular } from "@fluentui/react-icons";
+import {
+  ArrowSortUpFilled,
+  ArrowSortDownRegular,
+  ArrowDownload28Regular,
+} from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
@@ -16,7 +19,6 @@ import {
   TableRow,
   TableBody,
   TableHeaderCell,
-
   tokens,
 } from "@fluentui/react-components";
 import { useLocation } from "react-router-dom";
@@ -49,7 +51,6 @@ const useStyles = makeStyles({
     textOverflow: "ellipsis",
   },
   root: {
-
     height: "88vh",
     overflowY: "auto",
     display: "flex",
@@ -130,15 +131,13 @@ const useStyles = makeStyles({
 // pop up message for table cell see more
 
 const AIDetailPage = () => {
-
   const dispatch = useDispatch();
   const styles = useStyles();
   const themestate = false;
 
-
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortedColumn2, setSortedColumn2] = useState(null);
-  const [sortDirection, setSortDirection] = useState('asc');
+  const [sortDirection, setSortDirection] = useState("asc");
   const [PONumberOPtions, setPONumberOPtions] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedtab, setSelectedTab] = React.useState("tab3");
@@ -154,10 +153,10 @@ const AIDetailPage = () => {
   const [load, setLoad] = useState(false);
 
   console.log(invoiceId);
-  // Styles 
+  // Styles
 
-  const getThemeStyle = (themeState, lightStyle, darkStyle) => (themeState ? darkStyle : lightStyle);
-
+  const getThemeStyle = (themeState, lightStyle, darkStyle) =>
+    themeState ? darkStyle : lightStyle;
 
   const cursorStyle = load ? "not-allowed" : "pointer";
   const loadStyle = load ? 0.6 : 1;
@@ -165,20 +164,16 @@ const AIDetailPage = () => {
   const tabStyle = getThemeStyle(themestate, "", "rgb(245,245,245)");
   const backStyle = getThemeStyle(themestate, "white", "#383838");
   const innerStyle = getThemeStyle(themestate, "black", "white");
-  const bodyStyle = getThemeStyle(themestate, {}, { color: "white", borderBottomColor: "#383838" });
+  const bodyStyle = getThemeStyle(
+    themestate,
+    {},
+    { color: "white", borderBottomColor: "#383838" },
+  );
   const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
 
-
-
-
   const handleTabSelect2 = (event, data) => {
-
     setSelectedTab(data.value);
   };
-
-
-
-
 
   const handleViewInvoice = async () => {
     try {
@@ -191,7 +186,7 @@ const AIDetailPage = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -206,25 +201,16 @@ const AIDetailPage = () => {
     }
   };
 
-
-
-
-
-
-
-
   const handlePoNumberClick = async (poNumber) => {
     console.log("Test function called");
     setSelectedInvoiceNumber(poNumber);
 
     try {
-
       if (poheader && Array.isArray(poheader)) {
         const selectedPoDetails = poheader.find(
-          (po) => po.po_number === poNumber
+          (po) => po.po_number === poNumber,
         );
         console.log("SELECTED PO", selectedPoDetails);
-
 
         setDataItem(selectedPoDetails || {});
         setItems(selectedPoDetails?.po_items || []);
@@ -254,13 +240,15 @@ const AIDetailPage = () => {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
-  const { invoiceNumber } = location2.state || {};
+  // const location2 = useLocation();
+  const query = new URLSearchParams(useLocation().search);
+  const invoiceNumber = query.get("invoiceNumber");
+  // const { invoiceNumber } = location2.state || {};
   console.log("inn", invoiceNumber);
 
   const fetchInvoiceDetails = async () => {
     if (invoiceNumber) {
       try {
-
         const token = localStorage.getItem("access_token");
 
         const response = await axios.get(
@@ -269,7 +257,7 @@ const AIDetailPage = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const fetchedItem = response.data;
         setInvoiceId(fetchedItem.invoice_info.id);
@@ -285,8 +273,6 @@ const AIDetailPage = () => {
         setPONumberOPtions(poOptions);
 
         setDataItem(fetchedItem.po_headers[0]);
-
-
       } catch (error) {
         console.error("Error fetching invoice data", error);
       }
@@ -302,18 +288,27 @@ const AIDetailPage = () => {
   }
 
   const invoiceInfo = [
-    { label: "Invoice Number", value: invoiceData?.invoice_info?.InvoiceId || "N/A" },
-    { label: "Invoice Date", value: invoiceData?.invoice_info?.InvoiceDate || "N/A" },
-    { label: "Invoice Due Date", value: invoiceData?.invoice_info?.DueDate || "Null" },
-    { label: "Invoice Total Amount", value: invoiceData?.invoice_info?.InvoiceTotal || "N/A" },
+    {
+      label: "Invoice Number",
+      value: invoiceData?.invoice_info?.InvoiceId || "N/A",
+    },
+    {
+      label: "Invoice Date",
+      value: invoiceData?.invoice_info?.InvoiceDate || "N/A",
+    },
+    {
+      label: "Invoice Due Date",
+      value: invoiceData?.invoice_info?.DueDate || "Null",
+    },
+    {
+      label: "Invoice Total Amount",
+      value: invoiceData?.invoice_info?.InvoiceTotal || "N/A",
+    },
     { label: "Tax Amount", value: invoiceData?.Tax || "N/A" },
     { label: "Currency", value: invoiceData?.Currency || "N/A" },
   ];
 
-
-
   const inv_id = invoiceData.invoice_info.id;
-
 
   const formatAddress = (address) => {
     if (!address) return "N/A";
@@ -341,28 +336,47 @@ const AIDetailPage = () => {
 
   const vendorInfo = [
     { label: "Vendor Name", value: invoiceData?.invoice_info?.VendorName },
-    { label: "Vendor Address", value: formatAddress(invoiceData?.invoice_info?.VendorAddress) },
+    {
+      label: "Vendor Address",
+      value: formatAddress(invoiceData?.invoice_info?.VendorAddress),
+    },
     { label: "Vendor Contact Information", value: invoiceData?.VendorContact },
     { label: "Vendor Tax ID", value: invoiceData?.VendorTaxId },
   ];
 
-
-
-  const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, headerSortProps }) => (
+  const TableHeaderCellWithSort = ({
+    column,
+    label,
+    sortedColumn,
+    sortDirection,
+    headerSortProps,
+  }) => (
     <TableHeaderCell {...headerSortProps(column)}>
       {label}
-      {sortedColumn === column && (
-        sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-      )}
+      {sortedColumn === column &&
+        (sortDirection === "asc" ? (
+          <ArrowSortDownRegular />
+        ) : (
+          <ArrowSortUpFilled />
+        ))}
     </TableHeaderCell>
   );
 
-  const TableHeaderCellWithSort2 = ({ column, label, sortedColumn2, sortDirection, headerSortProps2 }) => (
+  const TableHeaderCellWithSort2 = ({
+    column,
+    label,
+    sortedColumn2,
+    sortDirection,
+    headerSortProps2,
+  }) => (
     <TableHeaderCell {...headerSortProps2(column)}>
       {label}
-      {sortedColumn2 === column && (
-        sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-      )}
+      {sortedColumn2 === column &&
+        (sortDirection === "asc" ? (
+          <ArrowSortDownRegular />
+        ) : (
+          <ArrowSortUpFilled />
+        ))}
     </TableHeaderCell>
   );
 
@@ -376,24 +390,19 @@ const AIDetailPage = () => {
     Igst: item.Igst || "Null",
     Sgst: item.Sgst || "Null",
     Cgst: item.Cgst || "Null",
-
   }));
 
-  console.log("Line Items", lineItems)
+  console.log("Line Items", lineItems);
 
   const handleCreate = (inputValue) => {
     const newOption = { value: inputValue, label: inputValue };
 
-
     setPONumberOPtions((prevOptions) => [...prevOptions, newOption]);
     setSelectedOption(newOption);
-
-
   };
 
   const handlePostApi = async () => {
     console.log("Button clicked!");
-
 
     if (!selectedOption || !selectedOption.value) {
       message.warning("PO number not selected or entered.");
@@ -415,7 +424,6 @@ const AIDetailPage = () => {
     try {
       setLoad(true);
 
-
       const token = localStorage.getItem("access_token");
 
       const response = await axios.post(
@@ -425,7 +433,7 @@ const AIDetailPage = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.status === 201) {
@@ -443,26 +451,20 @@ const AIDetailPage = () => {
 
   const handleChange = (option) => {
     setSelectedOption(option);
-
   };
-
 
   const handleSort = (column) => {
     if (sortedColumn === column) {
-
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
-
       setSortedColumn(column);
       setSortDirection("asc");
     }
   };
   const handleSort2 = (column) => {
     if (sortedColumn2 === column) {
-
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
-
       setSortedColumn2(column);
       setSortDirection("asc");
     }
@@ -485,14 +487,11 @@ const AIDetailPage = () => {
     },
   });
 
-
   const sortedLineItems = [...invoiceData.invoice_info.items].sort((a, b) => {
     if (!sortedColumn) return 0;
 
-
     const aValue = a[sortedColumn] || "";
     const bValue = b[sortedColumn] || "";
-
 
     const aNumericValue = isNaN(aValue) ? aValue : parseFloat(aValue);
     const bNumericValue = isNaN(bValue) ? bValue : parseFloat(bValue);
@@ -502,29 +501,26 @@ const AIDetailPage = () => {
     return 0;
   });
 
-
-
   const columnKeyMap = {
     "Line Number": "line_num",
     "Item Name": "item_name",
-    "Quantity": "quantity",
+    Quantity: "quantity",
     "Unit Price": "unit_price",
     "Amount Billed": "amount_billed",
   };
 
-
-
-
-
   const sortedPoItems = (() => {
-    if (!dataitem || !Array.isArray(dataitem.po_items) || !sortedColumn2) return [...(dataitem?.po_items || [])];
+    if (!dataitem || !Array.isArray(dataitem.po_items) || !sortedColumn2)
+      return [...(dataitem?.po_items || [])];
 
     const dataKey = columnKeyMap[sortedColumn2];
     if (!dataKey) return [...dataitem.po_items];
 
     const getComparableValue = (item) => {
       const value = item[dataKey] || "";
-      return !isNaN(parseFloat(value)) && isFinite(value) ? parseFloat(value) : value.toString();
+      return !isNaN(parseFloat(value)) && isFinite(value)
+        ? parseFloat(value)
+        : value.toString();
     };
 
     return [...dataitem.po_items].sort((a, b) => {
@@ -538,16 +534,11 @@ const AIDetailPage = () => {
     });
   })();
 
-
-
-
   const renderDetail = (label, value) => (
     <div>
       <b>{label}:</b> {value}
     </div>
   );
-
-
 
   return (
     <div>
@@ -558,11 +549,15 @@ const AIDetailPage = () => {
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>
-            <BreadcrumbButton href={path1}>Multiple Match Found</BreadcrumbButton>
+            <BreadcrumbButton href={path1}>
+              Multiple Match Found
+            </BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
           <BreadcrumbItem>
-            <BreadcrumbButton href={path}>{invoiceData.invoice_info.InvoiceId}</BreadcrumbButton>
+            <BreadcrumbButton href={path}>
+              {invoiceData.invoice_info.InvoiceId}
+            </BreadcrumbButton>
           </BreadcrumbItem>
         </Breadcrumb>
       </div>
@@ -744,7 +739,7 @@ const AIDetailPage = () => {
                 display: "grid",
                 gridTemplateColumns: "repeat(6, 3fr)",
                 gap: "20px",
-                fontSize: "16px"
+                fontSize: "16px",
               }}
             >
               {invoiceInfo.map((info, index) => (
@@ -753,7 +748,6 @@ const AIDetailPage = () => {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-
                   }}
                 >
                   <div
@@ -775,16 +769,13 @@ const AIDetailPage = () => {
             <div
               className={styles.content}
               style={{
-
                 color: { tabStyle },
                 display: "grid",
                 gridTemplateColumns: "repeat(6, 3fr)",
                 gap: "20px",
-                fontSize: "15px"
-
+                fontSize: "15px",
               }}
             >
-
               {vendorInfo.map((info, index) => (
                 <div
                   key={index}
@@ -792,8 +783,7 @@ const AIDetailPage = () => {
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-between",
-                    marginTop: "3em"
-
+                    marginTop: "3em",
                   }}
                 >
                   <div
@@ -812,7 +802,6 @@ const AIDetailPage = () => {
               {/* </div> */}
             </div>
 
-
             <h2 style={{ marginTop: "3em" }}>Line Information</h2>
             <div
               style={{
@@ -824,32 +813,75 @@ const AIDetailPage = () => {
               }}
             >
               <div style={{ flex: 2 }}>
-
-<Table>
-      <TableHeader
-        style={{
-          position: "sticky",
-          top: 0,
-          backgroundColor: backStyle || "white",
-          zIndex: 1,
-          color: innerStyle || "black",
-        }}
-      >
-        <TableRow
-          style={
-            bodyStyle
-          }
-        >
-          <TableHeaderCellWithSort column="Description" label="Description" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-          <TableHeaderCellWithSort column="Quantity" label="Quantity" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-          <TableHeaderCellWithSort column="UnitPrice" label="Unit Price" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-          <TableHeaderCellWithSort column="Discount" label="Discount" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-          <TableHeaderCellWithSort column="ProductCode" label="Product Code" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-          <TableHeaderCellWithSort column="Igst" label="Igst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-          <TableHeaderCellWithSort column="Cgst" label="Cgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-          <TableHeaderCellWithSort column="Sgst" label="Sgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-        </TableRow>
-      </TableHeader>
+                <Table>
+                  <TableHeader
+                    style={{
+                      position: "sticky",
+                      top: 0,
+                      backgroundColor: backStyle || "white",
+                      zIndex: 1,
+                      color: innerStyle || "black",
+                    }}
+                  >
+                    <TableRow style={bodyStyle}>
+                      <TableHeaderCellWithSort
+                        column="Description"
+                        label="Description"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="Quantity"
+                        label="Quantity"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="UnitPrice"
+                        label="Unit Price"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="Discount"
+                        label="Discount"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="ProductCode"
+                        label="Product Code"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="Igst"
+                        label="Igst"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="Cgst"
+                        label="Cgst"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="Sgst"
+                        label="Sgst"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                    </TableRow>
+                  </TableHeader>
 
                   <TableBody>
                     {sortedLineItems.map((item, index) => (
@@ -865,7 +897,6 @@ const AIDetailPage = () => {
                       </TableRow>
                     ))}
                   </TableBody>
-
                 </Table>
               </div>
             </div>
@@ -900,7 +931,10 @@ const AIDetailPage = () => {
                     <>
                       {renderDetail("PO Number", selectedInvoiceNumber)}
                       {renderDetail("PO Type", dataitem?.po_type)}
-                      {renderDetail("Supplier Name", invoiceData.invoice_info.VendorName)}
+                      {renderDetail(
+                        "Supplier Name",
+                        invoiceData.invoice_info.VendorName,
+                      )}
                       {renderDetail("Site", dataitem?.location)}
                       {renderDetail("Status", dataitem?.po_status)}
                       {renderDetail("Total Amount", dataitem?.total_amount)}
@@ -923,38 +957,65 @@ const AIDetailPage = () => {
                 >
                   <div style={{ flex: 1 }}>
                     <Table>
-   <TableHeader
-    style={{
-      position: "sticky",
-      top: 0,
-      backgroundColor: backStyle || "white",
-      zIndex: 1,
-      color: innerStyle || "black",
-    }}
-  >
-    <TableRow
-      style={
-        bodyStyle
-      }
-    >
-      <TableHeaderCellWithSort2 column="Line Number" label="Line Number" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
-      <TableHeaderCellWithSort2 column="Item Name" label="Item Name" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
-      <TableHeaderCellWithSort2 column="Quantity" label="Quantity" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
-      <TableHeaderCellWithSort2 column="Unit Price" label="Unit Price" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
-      <TableHeaderCellWithSort2 column="Amount Billed" label="Amount Billed" sortedColumn2={sortedColumn2} sortDirection={sortDirection} headerSortProps2={headerSortProps2} />
-      <TableHeaderCell style={{ fontWeight: "bold" }}>
-        Actions
-      </TableHeaderCell>
-    </TableRow>
-  </TableHeader>
-
+                      <TableHeader
+                        style={{
+                          position: "sticky",
+                          top: 0,
+                          backgroundColor: backStyle || "white",
+                          zIndex: 1,
+                          color: innerStyle || "black",
+                        }}
+                      >
+                        <TableRow style={bodyStyle}>
+                          <TableHeaderCellWithSort2
+                            column="Line Number"
+                            label="Line Number"
+                            sortedColumn2={sortedColumn2}
+                            sortDirection={sortDirection}
+                            headerSortProps2={headerSortProps2}
+                          />
+                          <TableHeaderCellWithSort2
+                            column="Item Name"
+                            label="Item Name"
+                            sortedColumn2={sortedColumn2}
+                            sortDirection={sortDirection}
+                            headerSortProps2={headerSortProps2}
+                          />
+                          <TableHeaderCellWithSort2
+                            column="Quantity"
+                            label="Quantity"
+                            sortedColumn2={sortedColumn2}
+                            sortDirection={sortDirection}
+                            headerSortProps2={headerSortProps2}
+                          />
+                          <TableHeaderCellWithSort2
+                            column="Unit Price"
+                            label="Unit Price"
+                            sortedColumn2={sortedColumn2}
+                            sortDirection={sortDirection}
+                            headerSortProps2={headerSortProps2}
+                          />
+                          <TableHeaderCellWithSort2
+                            column="Amount Billed"
+                            label="Amount Billed"
+                            sortedColumn2={sortedColumn2}
+                            sortDirection={sortDirection}
+                            headerSortProps2={headerSortProps2}
+                          />
+                          <TableHeaderCell style={{ fontWeight: "bold" }}>
+                            Actions
+                          </TableHeaderCell>
+                        </TableRow>
+                      </TableHeader>
 
                       <TableBody style={tableBodyStyle}>
                         {sortedPoItems.map((item) => (
                           <TableRow
                             key={item.id}
                             style={tableBodyStyle}
-                            className={themestate ? "hovereffect dark" : "hovereffect"}
+                            className={
+                              themestate ? "hovereffect dark" : "hovereffect"
+                            }
                           >
                             <TableCell
                               style={{
@@ -1043,7 +1104,6 @@ const AIDetailPage = () => {
                                     backgroundColor: "#fff",
                                     borderRadius: "8px",
                                     // boxShadow: "0px 4px 8px rgba(225, 225, 226, 0.8)",
-
                                   }}
                                 >
                                   {selectedItem ? (
@@ -1056,9 +1116,7 @@ const AIDetailPage = () => {
                                         </li>
                                         <li>
                                           <b>Order Type:</b>{" "}
-                                          {
-                                            selectedItem.order_type_lookup_code
-                                          }
+                                          {selectedItem.order_type_lookup_code}
                                         </li>
                                         <li>
                                           <b>Purchase Basis:</b>{" "}
@@ -1082,8 +1140,7 @@ const AIDetailPage = () => {
                                         </li>
                                         <li>
                                           <b>Promised Date:</b>{" "}
-                                          {selectedItem.promised_date ||
-                                            "N/A"}
+                                          {selectedItem.promised_date || "N/A"}
                                         </li>
                                       </ul>
                                     </ul>
@@ -1096,10 +1153,8 @@ const AIDetailPage = () => {
                           </TableRow>
                         ))}
                       </TableBody>
-
                     </Table>
                   </div>
-
                 </div>
               </div>
             </div>

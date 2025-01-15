@@ -148,20 +148,24 @@ const IssuefixDetails = () => {
     invoiceTotal: "",
     vendorAddressRecipient: "",
     customerAddressRecipient: "",
-    VendorAddress:"",
-    ShippingAddress:"",
-    CustomerAddress:"",
+    VendorAddress: "",
+    ShippingAddress: "",
+    CustomerAddress: "",
     invoiceId: "",
     customerId: "",
     billingAddressRecipient: "",
     shippingAddressRecipient: "",
     dueDate: "",
     purchaseOrder: "",
-    entrytime: ""
+    entrytime: "",
   });
 
+  // const location = useLocation();
+  // const { invoiceNo } = location.state || {};
+
   const location = useLocation();
-  const { invoiceNo } = location.state || {};
+  const query = new URLSearchParams(useLocation().search);
+  const invoiceNo = query.get("invoiceNo");
 
   const [rows, setRows] = useState([]);
 
@@ -180,7 +184,7 @@ const IssuefixDetails = () => {
             headers: {
               Authorization: `Bearer ${token}`, // Add the authorization header
             },
-          }
+          },
         );
         const data = response.data.invoice_info;
         console.log("New ", data);
@@ -216,25 +220,22 @@ const IssuefixDetails = () => {
 
     fetchData();
   }, []);
- 
 
-  console.log("ROWS",rows);
+  console.log("ROWS", rows);
 
   const [poNumber, setPoNumber] = useState("");
 
   const handleSubmit = async () => {
-
     const apiUrl = "https://invoicezapi.focusrtech.com:57/user/po-number";
 
     try {
-
       const token = localStorage.getItem("access_token");
 
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           po_number: poNumber,
@@ -254,10 +255,9 @@ const IssuefixDetails = () => {
       const data = await response.json();
       console.log("API response:", data);
     } catch (error) {
-      message.error("An unexpected error occurred"); 
+      message.error("An unexpected error occurred");
       console.error("Error submitting PO:", error);
     }
-    
   };
 
   const [fulldata, setFulldata] = useState({}); // Add state for full data
@@ -279,22 +279,27 @@ const IssuefixDetails = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            
           },
-        }
+        },
       );
       const data = response.data.invoice_info;
-      console.log("data",data)
+      console.log("data", data);
       setFormData({
         vendorName: data.VendorName,
         customerName: data.CustomerName,
         invoiceDate: data.InvoiceDate,
         invoiceTotal: data.InvoiceTotal,
         vendorAddressRecipient: data.VendorAddressRecipient,
-        BillingAddress:data.BillingAddress && data.BillingAddress.id ? data.BillingAddress.id : null,
-        VendorAddress:data.VendorAddress.id,
-        ShippingAddress:data.ShippingAddress.id,
-        CustomerAddress: data.CustomerAddress && data.CustomerAddress.id ? data.CustomerAddress.id : null,
+        BillingAddress:
+          data.BillingAddress && data.BillingAddress.id
+            ? data.BillingAddress.id
+            : null,
+        VendorAddress: data.VendorAddress.id,
+        ShippingAddress: data.ShippingAddress.id,
+        CustomerAddress:
+          data.CustomerAddress && data.CustomerAddress.id
+            ? data.CustomerAddress.id
+            : null,
         customerAddressRecipient: data.CustomerAddressRecipient,
         invoiceId: data.InvoiceId,
         customerId: data.CustomerId,
@@ -348,9 +353,7 @@ const IssuefixDetails = () => {
           PreviousUnpaidBalance: item.PreviousUnpaidBalance,
           Igst: item.Igst,
           Cgst: item.Cgst,
-          Sgst: item.Sgst
-
-
+          Sgst: item.Sgst,
         })),
       );
     } catch (error) {
@@ -358,15 +361,12 @@ const IssuefixDetails = () => {
     }
   };
   useEffect(() => {
-
     fetchData();
   }, []);
-
 
   const handleformSubmit = async () => {
     // Update the full data state based on formData and rows
     const updatedFulldata = {
-
       ...fulldata, // Spread fulldata to retain existing properties
       VendorName: formData.vendorName,
       CustomerName: formData.customerName,
@@ -374,19 +374,19 @@ const IssuefixDetails = () => {
       InvoiceTotal: formData.invoiceTotal,
       VendorAddressRecipient: formData.vendorAddressRecipient,
       CustomerAddressRecipient: formData.customerAddressRecipient,
-      VendorAddress:formData.VendorAddress,
-      ShippingAddress:formData.ShippingAddress,
+      VendorAddress: formData.VendorAddress,
+      ShippingAddress: formData.ShippingAddress,
       CustomerAddress: formData.CustomerAddress,
-      BillingAddress:formData.BillingAddress,
+      BillingAddress: formData.BillingAddress,
       InvoiceId: formData.invoiceId,
       CustomerId: formData.customerId,
       BillingAddressRecipient: formData.billingAddressRecipient,
       ShippingAddressRecipient: formData.shippingAddressRecipient,
-      DueDate: formData.dueDate, 
+      DueDate: formData.dueDate,
       PurchaseOrder: formData.purchaseOrder,
       created_at: formData.entrytime,
       items: rows.map((item, index) => {
-        const oldItem = oldrow[index]; 
+        const oldItem = oldrow[index];
 
         return {
           id: item.id,
@@ -400,30 +400,40 @@ const IssuefixDetails = () => {
           Igst: item.Igst,
           Cgst: item.Cgst,
           Sgst: item.Cgst,
-          Date:  oldItem && oldItem.Date ? oldItem.Date : null,
-        TotalTax: oldItem && oldItem.TotalTax ?oldItem.TotalTax : null,
-        Tax: oldItem && oldItem.Tax ?oldItem.Tax : null,
-        AmountDue: oldItem && oldItem.AmountDue ?oldItem.AmountDue : null,
-        ServiceStartDate: oldItem && oldItem.ServiceStartDate ?oldItem.ServiceStartDate : null,
-        ServiceEndDate: oldItem && oldItem.ServiceEndDate ?oldItem.ServiceEndDate : null,
-        ServiceAddressRecipient: oldItem && oldItem.ServiceAddressRecipient ?oldItem.ServiceAddressRecipient : null,
-        RemittanceAddressRecipient: oldItem && oldItem.RemittanceAddressRecipient ?oldItem.RemittanceAddressRecipient : null,
-        ServiceAddress: oldItem && oldItem.ServiceAddress ?oldItem.ServiceAddress : null,
-        RemittanceAddress: oldItem && oldItem.RemittanceAddress ?oldItem.RemittanceAddress : null,
-          
-          
+          Date: oldItem && oldItem.Date ? oldItem.Date : null,
+          TotalTax: oldItem && oldItem.TotalTax ? oldItem.TotalTax : null,
+          Tax: oldItem && oldItem.Tax ? oldItem.Tax : null,
+          AmountDue: oldItem && oldItem.AmountDue ? oldItem.AmountDue : null,
+          ServiceStartDate:
+            oldItem && oldItem.ServiceStartDate
+              ? oldItem.ServiceStartDate
+              : null,
+          ServiceEndDate:
+            oldItem && oldItem.ServiceEndDate ? oldItem.ServiceEndDate : null,
+          ServiceAddressRecipient:
+            oldItem && oldItem.ServiceAddressRecipient
+              ? oldItem.ServiceAddressRecipient
+              : null,
+          RemittanceAddressRecipient:
+            oldItem && oldItem.RemittanceAddressRecipient
+              ? oldItem.RemittanceAddressRecipient
+              : null,
+          ServiceAddress:
+            oldItem && oldItem.ServiceAddress ? oldItem.ServiceAddress : null,
+          RemittanceAddress:
+            oldItem && oldItem.RemittanceAddress
+              ? oldItem.RemittanceAddress
+              : null,
         };
       }),
       // Add any other properties like po_headers, if needed
     };
 
-    delete updatedFulldata.InvoiceFile 
+    delete updatedFulldata.InvoiceFile;
 
     console.log("ITEMS------>", updatedFulldata);
     try {
-
       const token = localStorage.getItem("access_token");
-
 
       const response = await fetch(
         `https://invoicezapi.focusrtech.com:57/user/invoices-update/${invoiceNo}/`,
@@ -431,7 +441,7 @@ const IssuefixDetails = () => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             invoice_info: updatedFulldata,
@@ -444,13 +454,11 @@ const IssuefixDetails = () => {
         console.log("Form data updated successfully");
         message.success("Updated Successfully!!!");
         dispatch(refreshActions.toggleInvoiceUploadRefresh());
-
       } else {
         console.error("Error updating form data");
         message.error("Update failed");
       }
-    } catch (error) 
-    {
+    } catch (error) {
       console.error("Network error:", error);
       message.error("Update failed");
     }
@@ -489,7 +497,9 @@ const IssuefixDetails = () => {
   };
 
   const dispatch = useDispatch();
-  const InvoiceUploadRefresh = useSelector((state) => state.refresh.InvoiceUploadRefresh);
+  const InvoiceUploadRefresh = useSelector(
+    (state) => state.refresh.InvoiceUploadRefresh,
+  );
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
@@ -499,10 +509,8 @@ const IssuefixDetails = () => {
     fetchData();
   }, [isInvoiceUploadRefreshed]);
 
-
   // const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState(new Set());
-
 
   const [tableData, setTableData] = useState(rows);
   // Toggle selection of a single row
@@ -515,8 +523,7 @@ const IssuefixDetails = () => {
   //   );
   //   console.log("Selected Rows",selectedRows);
   // };
-  console.log("ROWS", rows)
-
+  console.log("ROWS", rows);
 
   // const handleDeleteSelectedRows = async () => {
 
@@ -530,7 +537,6 @@ const IssuefixDetails = () => {
 
   //   try {
 
-
   //     const deletePromises = selectedRows.map((inv_id) =>
   //       axios.delete(
   //         `https://invoicezapi.focusrtech.com:57/user/delete-invoice-item/${inv_id}/`,
@@ -538,9 +544,6 @@ const IssuefixDetails = () => {
   //     );
 
   //     await Promise.all(deletePromises);
-
-
-
 
   //     notification.success({
   //       message: "Successfully deleted",
@@ -556,7 +559,6 @@ const IssuefixDetails = () => {
   //     });
   //   }
   // };
-
 
   const handleDeleteSelectedRows = async () => {
     const selectedItemsArray = Array.from(selectedRows); // Convert Set to Array
@@ -578,8 +580,8 @@ const IssuefixDetails = () => {
             headers: {
               Authorization: `Bearer ${token}`, // Add the authorization header
             },
-          }
-        )
+          },
+        ),
       );
 
       await Promise.all(deletePromises);
@@ -600,14 +602,12 @@ const IssuefixDetails = () => {
     } catch (error) {
       notification.error({
         message: "Deletion Failed",
-        description: `Deletion failed. ${error.response?.data?.message || "An error occurred."
-          }`,
+        description: `Deletion failed. ${
+          error.response?.data?.message || "An error occurred."
+        }`,
       });
     }
   };
-
-
-
 
   const handleViewInvoice = async () => {
     try {
@@ -620,7 +620,7 @@ const IssuefixDetails = () => {
           headers: {
             Authorization: `Bearer ${token}`, // Add the authorization header
           },
-        }
+        },
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -635,7 +635,7 @@ const IssuefixDetails = () => {
     }
   };
 
-  const handlePOChange = (event) => { };
+  const handlePOChange = (event) => {};
 
   // Adding new row
 
@@ -663,7 +663,6 @@ const IssuefixDetails = () => {
   //   );
   // };
 
-
   const handleInputChange = (index, key, value) => {
     const updatedRows = [...rows];
     updatedRows[index][key] = value;
@@ -687,14 +686,9 @@ const IssuefixDetails = () => {
     setRows((prevRows) => [...prevRows, newRow]);
   };
 
-  console.log("Update Row", rows)
-
-
+  console.log("Update Row", rows);
 
   // checkbox
-
-
-
 
   // const toggleRowSelection = (rowid) => {
   //   console.log("Invoice ID:", rowid);
@@ -748,15 +742,12 @@ const IssuefixDetails = () => {
   // sorting
   const handleSort = (column) => {
     if (sortedColumn === column) {
-
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
-
       setSortedColumn(column);
       setSortDirection("asc");
     }
   };
-
 
   const headerSortProps = (column) => ({
     onClick: () => handleSort(column),
@@ -768,7 +759,7 @@ const IssuefixDetails = () => {
   });
 
   const [sortedColumn, setSortedColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState('asc');
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const sortedData = [...rows].sort((a, b) => {
     if (!sortedColumn) return 0;
@@ -776,32 +767,30 @@ const IssuefixDetails = () => {
     const aValue = a[sortedColumn] || "";
     const bValue = b[sortedColumn] || "";
 
-
     const isANumeric = !isNaN(parseFloat(aValue)) && isFinite(aValue);
     const isBNumeric = !isNaN(parseFloat(bValue)) && isFinite(bValue);
-
 
     if (isANumeric && isBNumeric) {
       const aNumeric = parseFloat(aValue);
       const bNumeric = parseFloat(bValue);
-      return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
+      return sortDirection === "asc"
+        ? aNumeric - bNumeric
+        : bNumeric - aNumeric;
     }
-
 
     if (!isANumeric && !isBNumeric) {
       const aString = String(aValue).toLowerCase();
       const bString = String(bValue).toLowerCase();
-      return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+      return sortDirection === "asc"
+        ? aString.localeCompare(bString)
+        : bString.localeCompare(aString);
     }
-
 
     if (isANumeric && !isBNumeric) return sortDirection === "asc" ? -1 : 1;
     if (!isANumeric && isBNumeric) return sortDirection === "asc" ? 1 : -1;
 
     return 0;
   });
-
-
 
   const areAllSelected = selectedRows.length === rows.length;
   return (
@@ -908,7 +897,6 @@ const IssuefixDetails = () => {
                 </div>
 
                 <div style={{ marginTop: "120px", display: "flex" }}>
-
                   <ArrowDownload28Regular
                     style={{
                       color: "#1281d7",
@@ -917,11 +905,16 @@ const IssuefixDetails = () => {
                     }}
                     onClick={handleViewInvoice}
                   />{" "}
-                  <span style={{
-                    marginTop: "10px",
-                    marginRight: "20px"
-
-                  }} onClick={handleViewInvoice}> View Invoice</span>
+                  <span
+                    style={{
+                      marginTop: "10px",
+                      marginRight: "20px",
+                    }}
+                    onClick={handleViewInvoice}
+                  >
+                    {" "}
+                    View Invoice
+                  </span>
                   <Button
                     className="buttoncolor"
                     style={{ backgroundColor: "#3570c3", color: "white" }}
@@ -1092,84 +1085,90 @@ const IssuefixDetails = () => {
               </div>
 
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", marginTop: "1.5em", marginBottom: "2em" }}>
-                  <h2 >Lines</h2>
-
-                </div>
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1.5em", marginBottom: "2em", gap: "20px" }}>
                 <div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: "4px", 
-    backgroundColor: isHovered2 ? "#e1e1e2" : "transparent",
-    padding: "6px 12px", 
-    borderRadius: "4px", 
-    cursor: "pointer",
-  }}
-  onMouseEnter={() => setIsHovered2(true)}
-  onMouseLeave={() => setIsHovered2(false)}
-  onClick={handleAddRow}
->
-  <Add24Regular
-    style={{
-      color: "#1281d7", 
-      fontSize: "20px",
-      marginRight:"5px"
-    }}
-  />
-  <span
-    style={{
-      fontSize: "14px",
-      color: "#000",
-      
-    }}
-  >
-    Add
-  </span>
-</div>
+                  style={{
+                    display: "flex",
+                    marginTop: "1.5em",
+                    marginBottom: "2em",
+                  }}
+                >
+                  <h2>Lines</h2>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "1.5em",
+                    marginBottom: "2em",
+                    gap: "20px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      backgroundColor: isHovered2 ? "#e1e1e2" : "transparent",
+                      padding: "6px 12px",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                    onMouseEnter={() => setIsHovered2(true)}
+                    onMouseLeave={() => setIsHovered2(false)}
+                    onClick={handleAddRow}
+                  >
+                    <Add24Regular
+                      style={{
+                        color: "#1281d7",
+                        fontSize: "20px",
+                        marginRight: "5px",
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        color: "#000",
+                      }}
+                    >
+                      Add
+                    </span>
+                  </div>
 
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      backgroundColor: isHovered ? "#e1e1e2" : "transparent",
+                      padding: "6px 12px",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    onClick={handleDeleteSelectedRows}
+                  >
+                    <Delete24Regular
+                      style={{
+                        color: "#1281d7",
+                        fontSize: "20px",
+                        marginRight: "5px",
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        color: "#000",
+                      }}
+                    >
+                      Delete
+                    </span>
+                  </div>
 
-
-<div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: "4px", 
-    backgroundColor: isHovered ? "#e1e1e2" : "transparent",
-    padding: "6px 12px", 
-    borderRadius: "4px", 
-    cursor: "pointer",
-  }}
-  onMouseEnter={() => setIsHovered(true)}
-  onMouseLeave={() => setIsHovered(false)}
-  onClick={handleDeleteSelectedRows}
->
-  <Delete24Regular
-    style={{
-      color: "#1281d7", 
-      fontSize: "20px",
-      marginRight:"5px"
-    }}
-  />
-  <span
-    style={{
-      fontSize: "14px",
-      color: "#000",
-      
-    }}
-  >
-    Delete
-  </span>
-</div>
-
-                  
                   {/* <Button style={{backgroundColor:"#3570c3",color:"white",cursor:"pointer",padding:"2px",height:"35px"}} onClick={handleDeleteSelectedRows}>Delete</Button> */}
                   {/* <Delete24Regular style={{ cursor: "pointer", padding: "2px", height: "35px", color: "#1281d7" }} onClick={handleDeleteSelectedRows}></Delete24Regular><span style={{ fontSize: "14px", color: "#000", marginTop: "6px", marginLeft: "-6px",cursor:"pointer" }}>Delete</span> */}
                 </div>
-
               </div>
-
 
               <div
                 style={{
@@ -1186,60 +1185,106 @@ const IssuefixDetails = () => {
                           title="Select All"
                         />
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("id")}>No
-                        {sortedColumn === "id" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell {...headerSortProps("id")}>
+                        No
+                        {sortedColumn === "id" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Description")}>Description
-                        {sortedColumn === "Description" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell {...headerSortProps("Description")}>
+                        Description
+                        {sortedColumn === "Description" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Quantity")}>Quantity
-                        {sortedColumn === "Quantity" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell {...headerSortProps("Quantity")}>
+                        Quantity
+                        {sortedColumn === "Quantity" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Unit")}>Unit
-                        {sortedColumn === "Unit" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell {...headerSortProps("Unit")}>
+                        Unit
+                        {sortedColumn === "Unit" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("UnitPrice")}>Unit Price
-                        {sortedColumn === "UnitPrice" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell {...headerSortProps("UnitPrice")}>
+                        Unit Price
+                        {sortedColumn === "UnitPrice" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Amount")}>Amount
-                        {sortedColumn === "Amount" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell {...headerSortProps("Amount")}>
+                        Amount
+                        {sortedColumn === "Amount" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("SubTotal")}>Subtotal
-                        {sortedColumn === "SubTotal" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell {...headerSortProps("SubTotal")}>
+                        Subtotal
+                        {sortedColumn === "SubTotal" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("PreviousUnpaidBalance")}>Previous Unpaid Balance
-                        {sortedColumn === "PreviousUnpaidBalance" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell
+                        {...headerSortProps("PreviousUnpaidBalance")}
+                      >
+                        Previous Unpaid Balance
+                        {sortedColumn === "PreviousUnpaidBalance" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Igst")}>Igst
-                        {sortedColumn === "Igst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell {...headerSortProps("Igst")}>
+                        Igst
+                        {sortedColumn === "Igst" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Cgst")}>Cgst
-                        {sortedColumn === "Cgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell {...headerSortProps("Cgst")}>
+                        Cgst
+                        {sortedColumn === "Cgst" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
-                      <TableHeaderCell {...headerSortProps("Sgst")}>Sgst
-                        {sortedColumn === "Sgst" && (
-                          sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-                        )}
+                      <TableHeaderCell {...headerSortProps("Sgst")}>
+                        Sgst
+                        {sortedColumn === "Sgst" &&
+                          (sortDirection === "asc" ? (
+                            <ArrowSortDownRegular />
+                          ) : (
+                            <ArrowSortUpFilled />
+                          ))}
                       </TableHeaderCell>
                     </TableRow>
                   </TableHeader>
@@ -1252,15 +1297,22 @@ const IssuefixDetails = () => {
                             onChange={() => toggleRowSelection(row.id)}
                           />
                         </TableCell>
-                        <TableCell>{index + 1}</TableCell> {/* Dynamic numbering */}
+                        <TableCell>{index + 1}</TableCell>{" "}
+                        {/* Dynamic numbering */}
                         {Object.keys(row)
                           .filter((key) => key !== "id")
                           .map((key) => (
                             <TableCell key={key}>
                               <input
                                 value={row[key] || ""} // Fallback to empty string for null values
-                                onChange={(e) => handleInputChange(index, key, e.target.value)}
-                                style={{ width: "100%", border: "none", marginLeft: "-15px" }}
+                                onChange={(e) =>
+                                  handleInputChange(index, key, e.target.value)
+                                }
+                                style={{
+                                  width: "100%",
+                                  border: "none",
+                                  marginLeft: "-15px",
+                                }}
                               />
                             </TableCell>
                           ))}
@@ -1268,7 +1320,6 @@ const IssuefixDetails = () => {
                     ))}
                   </TableBody>
                 </Table>
-
 
                 {/* <Button onClick={addLine} style={{ marginTop: "10px" }}>+ Add Line</Button> */}
               </div>

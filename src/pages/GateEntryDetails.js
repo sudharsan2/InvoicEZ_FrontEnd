@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-
 import {
   makeStyles,
   Breadcrumb,
@@ -15,17 +14,20 @@ import {
   TableRow,
   TableBody,
   TableHeaderCell,
-  Divider
+  Divider,
 } from "@fluentui/react-components";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { ArrowSortUpFilled, ArrowSortDownRegular, ArrowDownload28Regular } from "@fluentui/react-icons";
-const path = "/gate-entry-det";
+import {
+  ArrowSortUpFilled,
+  ArrowSortDownRegular,
+  ArrowDownload28Regular,
+} from "@fluentui/react-icons";
+const path = "/gateentrydet";
 const path2 = "/approvepage";
 const path1 = "/dashboard";
 
 const useStyles = makeStyles({
-  
   header: {
     padding: "20px",
   },
@@ -86,14 +88,16 @@ const useStyles = makeStyles({
 });
 
 const GateEntryDetails = () => {
-  
-const styles = useStyles();
+  const styles = useStyles();
   const themestate = false;
-  
-  const location = useLocation();
-  const { poNumber, Id } = location.state || {};
 
-//  <----States------>
+  const location = useLocation();
+  const query = new URLSearchParams(useLocation().search);
+  const poNumber = query.get("poNumber");
+  const Id = query.get("Id");
+  // const { poNumber, Id } = location.state || {};
+
+  //  <----States------>
   const [poDate, setPoDate] = useState();
   const [postatus, setPoStatus] = useState();
   const [total, setTotal] = useState();
@@ -107,23 +111,18 @@ const styles = useStyles();
   const [inv_id, setInv_id] = useState();
   const [entrytime, setEntrytime] = useState();
   const [data, setData] = useState([]);
-  
 
-
-  // ----Style 
-  const tabStyle = themestate ? { color: "white" } : {}
-  const classStyle = themestate ? "hovereffect dark" : "hovereffect"
+  // ----Style
+  const tabStyle = themestate ? { color: "white" } : {};
+  const classStyle = themestate ? "hovereffect dark" : "hovereffect";
   const rowStyle = {
-    color: themestate ? "white" : "black", 
-    borderBottomColor: themestate ? "#383838" : "#ccc", 
+    color: themestate ? "white" : "black",
+    borderBottomColor: themestate ? "#383838" : "#ccc",
   };
   const colorStyle = themestate ? "white" : "black";
   const backStyle = themestate ? "#383838" : "white";
-  const bodyStyle = {color: themestate ? "rgb(245,245,245)" : ""}
+  const bodyStyle = { color: themestate ? "rgb(245,245,245)" : "" };
   const divStyle = themestate ? "white" : "";
-
-  
- 
 
   const [selectedtab, setSelectedTab] = React.useState("tab1");
   const purchaseOrder = {
@@ -139,34 +138,23 @@ const styles = useStyles();
     purchaseOrderNumberInInvoice: "PurchaseOrder Number in Invoice",
   };
 
-  
-  
-
   const handleTabSelect2 = (event, data) => {
-    
     setSelectedTab(data.value);
   };
-  
 
-  
-  
- 
-
- 
- 
   const handleViewInvoice = async () => {
     try {
-        const token = localStorage.getItem("access_token"); // Retrieve the token securely
+      const token = localStorage.getItem("access_token"); // Retrieve the token securely
 
-        const response = await fetch(
-          `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`, 
-            },
-          }
-        );
+      const response = await fetch(
+        `https://invoicezapi.focusrtech.com:57/user/invoices-file/${inv_id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -179,7 +167,7 @@ const styles = useStyles();
       console.error("There was a problem with the fetch operation:", error);
     }
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -188,42 +176,44 @@ const styles = useStyles();
           `https://invoicezapi.focusrtech.com:57/user/po-details/${Id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
-  
+
         const fetchedItems = response.data;
         console.log("FETCHED ITEMS", fetchedItems);
-  
-       
+
         setHeaderDetails(fetchedItems);
-  
-        
-        const invoiceItems = normalizeInvoiceItems(fetchedItems.invoice_info.items);
+
+        const invoiceItems = normalizeInvoiceItems(
+          fetchedItems.invoice_info.items,
+        );
         const poLineItems = normalizePoLineItems(
           fetchedItems.po_lineitems,
           invoiceItems,
-          fetchedItems.po_header.po_number
+          fetchedItems.po_header.po_number,
         );
-  
+
         setData(poLineItems);
-  
-       
-        const vendorAddress = formatAddress(fetchedItems.invoice_info.VendorAddress);
-        const customerAddress = formatAddress(fetchedItems.invoice_info.ShippingAddress);
-  
+
+        const vendorAddress = formatAddress(
+          fetchedItems.invoice_info.VendorAddress,
+        );
+        const customerAddress = formatAddress(
+          fetchedItems.invoice_info.ShippingAddress,
+        );
+
         setVendor(vendorAddress || "NULL");
         setCustomer(customerAddress || "NULL");
       } catch (error) {
         handleFetchError(error);
-      } 
+      }
     };
-  
+
     if (poNumber) {
       fetchData();
     }
   }, [poNumber]);
-  
-  
+
   const setHeaderDetails = (fetchedItems) => {
     setInv_id(fetchedItems.invoice_info.id);
     setTotal(fetchedItems.po_header.total_amount);
@@ -234,9 +224,11 @@ const styles = useStyles();
     setInvoicetot(fetchedItems.invoice_info.InvoiceTotal);
     setSupplier(fetchedItems.po_header.supplier_name);
     setEntrytime(fetchedItems.invoice_info.created_at);
-    fetchedItems.po_lineitems.forEach((item) => setClosedCode(item.closed_code));
+    fetchedItems.po_lineitems.forEach((item) =>
+      setClosedCode(item.closed_code),
+    );
   };
-  
+
   const normalizeInvoiceItems = (items) =>
     items.map((item, index) => ({
       Igst: item.Igst,
@@ -244,7 +236,7 @@ const styles = useStyles();
       Sgst: item.Sgst,
       index,
     }));
-  
+
   const normalizePoLineItems = (poItems, invoiceItems, poNumber) =>
     poItems.map((poItem, index) => {
       const matchingInvoiceItem = invoiceItems[index] || {};
@@ -262,7 +254,7 @@ const styles = useStyles();
         Sgst: matchingInvoiceItem.Sgst || null,
       };
     });
-  
+
   const formatAddress = (address) => {
     if (!address) {
       console.error("Address is missing");
@@ -278,53 +270,52 @@ const styles = useStyles();
       .replace(/\s+/g, " ")
       .replace(/,$/, "");
   };
-  
+
   const handleFetchError = (error) => {
-    
     console.error(
       "Error fetching data:",
-      error.response ? error.response.data : error.message
+      error.response ? error.response.data : error.message,
     );
   };
-  
- 
-  const TableHeaderCellWithSort = ({ column, label, sortedColumn, sortDirection, headerSortProps }) => (
+
+  const TableHeaderCellWithSort = ({
+    column,
+    label,
+    sortedColumn,
+    sortDirection,
+    headerSortProps,
+  }) => (
     <TableHeaderCell {...headerSortProps(column)}>
       {label}
-      {sortedColumn === column && (
-        sortDirection === "asc" ? <ArrowSortDownRegular /> : <ArrowSortUpFilled />
-      )}
+      {sortedColumn === column &&
+        (sortDirection === "asc" ? (
+          <ArrowSortDownRegular />
+        ) : (
+          <ArrowSortUpFilled />
+        ))}
     </TableHeaderCell>
   );
 
-
   const [sortedColumn, setSortedColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState('asc');
+  const [sortDirection, setSortDirection] = useState("asc");
 
-
-   
-   const handleSort = (column) => {
+  const handleSort = (column) => {
     if (sortedColumn === column) {
-     
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
-      
       setSortedColumn(column);
       setSortDirection("asc");
     }
   };
 
-  
   const headerSortProps = (column) => ({
     onClick: () => handleSort(column),
     style: {
       fontWeight: "bold",
       cursor: "pointer",
-      maxWidth: column === "Description" ? "150px" : "200px", 
+      maxWidth: column === "Description" ? "150px" : "200px",
     },
   });
-
-  
 
   const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
   const compareNumeric = (aValue, bValue) => {
@@ -332,35 +323,34 @@ const styles = useStyles();
     const bNumeric = parseFloat(bValue);
     return sortDirection === "asc" ? aNumeric - bNumeric : bNumeric - aNumeric;
   };
-  
-  
+
   const compareStrings = (aValue, bValue) => {
     const aString = String(aValue).toLowerCase();
     const bString = String(bValue).toLowerCase();
-    return sortDirection === "asc" ? aString.localeCompare(bString) : bString.localeCompare(aString);
+    return sortDirection === "asc"
+      ? aString.localeCompare(bString)
+      : bString.localeCompare(aString);
   };
 
   const sortedData = [...data].sort((a, b) => {
     if (!sortedColumn) return 0;
-  
+
     const aValue = a[sortedColumn] || "";
     const bValue = b[sortedColumn] || "";
-  
+
     const isANumeric = isNumeric(aValue);
     const isBNumeric = isNumeric(bValue);
-  
+
     if (isANumeric && isBNumeric) {
       return compareNumeric(aValue, bValue);
     }
-  
+
     if (!isANumeric && !isBNumeric) {
       return compareStrings(aValue, bValue);
     }
-  
+
     return isANumeric ? -1 : 1;
   });
-  
-
 
   return (
     <div style={{ height: "88vh", overflowY: "auto" }}>
@@ -376,7 +366,9 @@ const styles = useStyles();
             </BreadcrumbItem>
             <BreadcrumbDivider />
             <BreadcrumbItem>
-              <BreadcrumbButton href={path2}>PO:{purchaseOrder.poNumber}</BreadcrumbButton>
+              <BreadcrumbButton href={path2}>
+                PO:{purchaseOrder.poNumber}
+              </BreadcrumbButton>
             </BreadcrumbItem>
           </Breadcrumb>
         </div>
@@ -391,11 +383,7 @@ const styles = useStyles();
                   width: "100%",
                   marginTop: "0px",
                 }}
-              >
-                
-              </div>
-
-              
+              ></div>
 
               <h2 style={{ margin: "20px 0 20px 0" }}>
                 PO:{purchaseOrder.poNumber}
@@ -410,7 +398,6 @@ const styles = useStyles();
                 >
                   <p>Supplier</p>
                   <h2>{supplier}</h2>
-                 
                 </div>
                 <div
                   style={{
@@ -470,7 +457,7 @@ const styles = useStyles();
               >
                 Line Item
               </Tab>
-              
+
               <div
                 style={{
                   display: "flex",
@@ -493,224 +480,184 @@ const styles = useStyles();
           {selectedtab === "tab1" && (
             <div style={{ marginTop: "20px" }}>
               <div className={styles.content1}>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 3fr)", gap: "15px"}}>
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(6, 3fr)",
+                    gap: "15px",
+                  }}
+                >
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
+                        color: { divStyle },
                       }}
                     >
                       PO Number:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle}
-                    >
-                      
+                    <div className={styles.content} style={bodyStyle}>
                       {poNumber}
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
-                        whiteSpace: "noWrap"
+                        color: { divStyle },
+                        whiteSpace: "noWrap",
                       }}
                     >
                       Vendor Address:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle}
-                    >
+                    <div className={styles.content} style={bodyStyle}>
                       {vendor}
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
+                        color: { divStyle },
                       }}
                     >
                       PO Date:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle}
-                    >
-                    
+                    <div className={styles.content} style={bodyStyle}>
                       {poDate}
                     </div>
                   </div>
 
-                  <div
-                    style={{display:"flex",flexDirection:"row"}}
-                  >
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
-                        whiteSpace: "noWrap"
+                        color: { divStyle },
+                        whiteSpace: "noWrap",
                       }}
                     >
                       Customer Address:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle}
-                    >
-                      
+                    <div className={styles.content} style={bodyStyle}>
                       {customer}
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
+                        color: { divStyle },
                       }}
                     >
                       PO Total Amount:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle
-                      }
-                    >
+                    <div className={styles.content} style={bodyStyle}>
                       {total}
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
+                        color: { divStyle },
                       }}
                     >
                       Invoice ID:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle}
-                    >
-                      
+                    <div className={styles.content} style={bodyStyle}>
                       {invoiceid}
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
+                        color: { divStyle },
                       }}
                     >
                       PO Currency:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle}
-                    >
+                    <div className={styles.content} style={bodyStyle}>
                       {purchaseOrder.poCurrency}
                     </div>
                   </div>
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
+                        color: { divStyle },
                       }}
                     >
                       Invoice Date:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle}
-                    >
-                     
+                    <div className={styles.content} style={bodyStyle}>
                       {invoicedate}
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
+                        color: { divStyle },
                       }}
                     >
                       PO Status:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle}
-                    >
+                    <div className={styles.content} style={bodyStyle}>
                       {postatus}
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
+                        color: { divStyle },
                       }}
                     >
                       Invoice Total:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle}
-                    >
-                      
+                    <div className={styles.content} style={bodyStyle}>
                       {invoicetot}
                     </div>
                   </div>
 
-                  <div style={{display:"flex",flexDirection:"row"}}>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
                     <div
                       className={styles.heading}
                       style={{
                         fontWeight: "bold",
-                        color: {divStyle},
+                        color: { divStyle },
                       }}
                     >
                       Line Matching:
                     </div>
-                    <div
-                      className={styles.content}
-                      style={bodyStyle}
-                    >
+                    <div className={styles.content} style={bodyStyle}>
                       {closedcode || "NULL"}
                     </div>
                   </div>
 
                   <div
                     className={`${styles.section} ${styles.invoiceCurrency}`}
-                  >
-                
-                  </div>
-
-                  
+                  ></div>
                 </div>
-                <Divider style={{marginTop:"3em",width:"100%"}}/>
+                <Divider style={{ marginTop: "3em", width: "100%" }} />
               </div>
             </div>
           )}
@@ -726,7 +673,7 @@ const styles = useStyles();
               }}
             >
               <div style={{ flex: 1 }}>
-                <Table style={{tableLayout:"auto"}}>
+                <Table style={{ tableLayout: "auto" }}>
                   <TableHeader
                     style={{
                       position: "sticky",
@@ -736,22 +683,77 @@ const styles = useStyles();
                       color: colorStyle || "black",
                     }}
                   >
-                    <TableRow
-                      style={
-                       rowStyle
-                      }
-                    >
-                      <TableHeaderCellWithSort column="id" label="Line Number" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="po_number" label="PO Number in Supplier Invoice" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="item_description" label="Description" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="item_name" label="Item " sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="unit_price" label="Unit Price" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="quantity" label="Quantity" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="line_value" label="Line Value" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="Igst" label="Igst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="Cgst" label="Cgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                      <TableHeaderCellWithSort column="Sgst" label="Sgst" sortedColumn={sortedColumn} sortDirection={sortDirection} headerSortProps={headerSortProps} />
-                     
+                    <TableRow style={rowStyle}>
+                      <TableHeaderCellWithSort
+                        column="id"
+                        label="Line Number"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="po_number"
+                        label="PO Number in Supplier Invoice"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="item_description"
+                        label="Description"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="item_name"
+                        label="Item "
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="unit_price"
+                        label="Unit Price"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="quantity"
+                        label="Quantity"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="line_value"
+                        label="Line Value"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="Igst"
+                        label="Igst"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="Cgst"
+                        label="Cgst"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
+                      <TableHeaderCellWithSort
+                        column="Sgst"
+                        label="Sgst"
+                        sortedColumn={sortedColumn}
+                        sortDirection={sortDirection}
+                        headerSortProps={headerSortProps}
+                      />
                     </TableRow>
                   </TableHeader>
 
@@ -760,9 +762,7 @@ const styles = useStyles();
                       <TableRow
                         key={item.id}
                         style={tabStyle}
-                        className={
-                          classStyle
-                        }
+                        className={classStyle}
                       >
                         <TableCell
                           style={{
@@ -824,8 +824,7 @@ const styles = useStyles();
                         >
                           {item.quantity}
                         </TableCell>
-                        
-                        
+
                         <TableCell
                           style={{
                             maxWidth: "300px",
@@ -845,7 +844,8 @@ const styles = useStyles();
                           }}
                         >
                           {item.Igst}
-                        </TableCell><TableCell
+                        </TableCell>
+                        <TableCell
                           style={{
                             maxWidth: "300px",
                             whiteSpace: "nowrap",
@@ -854,7 +854,8 @@ const styles = useStyles();
                           }}
                         >
                           {item.Cgst}
-                        </TableCell><TableCell
+                        </TableCell>
+                        <TableCell
                           style={{
                             maxWidth: "300px",
                             whiteSpace: "nowrap",
@@ -864,10 +865,6 @@ const styles = useStyles();
                         >
                           {item.Sgst}
                         </TableCell>
-
-                        
-                        
-
                       </TableRow>
                     ))}
                   </TableBody>

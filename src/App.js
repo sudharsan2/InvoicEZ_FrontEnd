@@ -2,7 +2,12 @@ import "./App.css";
 import CustomLayout from "./components/layout";
 import NavDrawerDefault from "./components/drawer";
 
-import { BrowserRouter as Router, Route, Routes,Navigate} from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Dashboard from "./pages/dashboard";
 import Employee from "./pages/Employee";
 import EmployeeForm from "./pages/employeeform";
@@ -17,7 +22,7 @@ import DocumentPage from "./pages/Document";
 import BlobPage from "./pages/BlobPage";
 import AIPage from "./pages/AIindentified";
 import AIDetailPage from "./pages/AIindentifieddetails";
-import IssueFixPage from "./pages/IssueFixPage"
+import IssueFixPage from "./pages/IssueFixPage";
 import IssuefixDetails from "./pages/IssueFixDetails";
 import Matrimony from "./pages/MatrimonyPage";
 import LoginPage from "./pages/new";
@@ -31,7 +36,7 @@ import RFQDrawer from "./components/RFQDrawer";
 import CompareDrawer from "./components/CompareDrawer";
 import PurchaseOrderPage from "./pages/PurchaseOrder";
 import ASNPage from "./pages/ASNPage";
-import CustomLayoutLoop from "./components/InloopLayout"
+import CustomLayoutLoop from "./components/InloopLayout";
 import SupplierPage from "./pages/SupplierPage";
 import NavDrawerQuotationLoop from "./components/SupplierLayout";
 import QuotationDrawerPage from "./pages/QuotationDrawerPage";
@@ -62,10 +67,7 @@ import StoreOpenPODetails from "./pages/StoreOpenPODetails";
 import OpenPODetails from "./pages/OpenPoDetails";
 import DashboardDetails from "./pages/DashboardDetails";
 
-
 function App() {
-
-
   const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -97,7 +99,6 @@ function App() {
       <Navigate to="/unauthorized" />
     );
   };
-  
 
   // Function to update role dynamically (for child components like Login)
   const setRoleFromChild = (role) => {
@@ -109,22 +110,26 @@ function App() {
   }
 
   return (
-
     <Router basename="">
-
       <Routes>
-        <Route path="" element={<LoginPage setRoleFromChild={setRoleFromChild} />} />
+        <Route
+          path=""
+          element={<LoginPage setRoleFromChild={setRoleFromChild} />}
+        />
         {/* <Route path='dashboard'  element={<CustomLayout><Dashboard/></CustomLayout>}/> */}
         <Route
           path="dashboard"
           element={
-            <ProtectedRoute allowedRoles={['invoice manager']} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <Dashboard />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
+            </ProtectedRoute>
           }
         />
         <Route
@@ -164,54 +169,63 @@ function App() {
         <Route
           path="/approve"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <UserApprove />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
+            </ProtectedRoute>
           }
         />
-                <Route
+        <Route
           path="/DashboardDetails"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <DashboardDetails />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
-
 
         <Route
           path="/openpo"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <OpenPo />
                 </NavDrawerDefault>
               </CustomLayout>
-             </ProtectedRoute>
+            </ProtectedRoute>
           }
         />
-<Route path="/openpodet/:po_number" element={<OpenPODetails />} />
+        <Route path="/openpodet/:po_number" element={<OpenPODetails />} />
         <Route
           path="/openpodet"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <OpenPODetails />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
         <Route path="/openpodet/:po_number" element={<OpenPODetails />} />
@@ -219,54 +233,62 @@ function App() {
         <Route
           path="/approvepage"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <ApprovePage />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
 
         <Route
-          path="/gate-entry-det"
+          path="/gateentrydet"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <GateEntryDetails />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
         <Route
           path="/admin"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefaultAdmin>
                   <Admin />
                 </NavDrawerDefaultAdmin>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
         <Route
           path="/llm"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefaultAdmin>
                   <LLMPage />
                 </NavDrawerDefaultAdmin>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
         <Route
@@ -282,71 +304,78 @@ function App() {
         <Route
           path="/blob"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefaultAdmin>
                   <BlobPage />
                 </NavDrawerDefaultAdmin>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
         <Route
           path="/ai"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <AIPage />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
         <Route
           path="/aidetail"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <AIDetailPage />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
 
-
-<Route
+        <Route
           path="/dashboard-detail"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <DashboardDetails />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
-
-
 
         <Route
           path="/aidetail"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <AIDetailPage />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
 
@@ -359,8 +388,7 @@ function App() {
                   <Matrimony />
                 </NavDrawerDefaultAdmin>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
 
@@ -373,36 +401,39 @@ function App() {
                   <UserPage />
                 </NavDrawerDefaultAdmin>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
         <Route
           path="/issuefixdetails"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <IssuefixDetails />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/issuefix"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <IssueFixPage />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
+            </ProtectedRoute>
           }
-
         />
 
         <Route
@@ -440,7 +471,7 @@ function App() {
           element={
             <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
-                < TodoDrawer />
+                <TodoDrawer />
               </NavDrawerDefaultLoop>
             </CustomLayoutLoop>
           }
@@ -450,7 +481,7 @@ function App() {
           element={
             <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
-                < RFQDrawer />
+                <RFQDrawer />
               </NavDrawerDefaultLoop>
             </CustomLayoutLoop>
           }
@@ -460,7 +491,7 @@ function App() {
           element={
             <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
-                < CompareDrawer />
+                <CompareDrawer />
               </NavDrawerDefaultLoop>
             </CustomLayoutLoop>
           }
@@ -471,7 +502,7 @@ function App() {
           element={
             <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
-                < PurchaseOrderPage />
+                <PurchaseOrderPage />
               </NavDrawerDefaultLoop>
             </CustomLayoutLoop>
           }
@@ -482,7 +513,7 @@ function App() {
           element={
             <CustomLayoutLoop>
               <NavDrawerDefaultLoop>
-                < ASNPage />
+                <ASNPage />
               </NavDrawerDefaultLoop>
             </CustomLayoutLoop>
           }
@@ -493,7 +524,7 @@ function App() {
           element={
             <CustomLayoutLoop>
               <NavDrawerQuotationLoop>
-                < SupplierPage />
+                <SupplierPage />
               </NavDrawerQuotationLoop>
             </CustomLayoutLoop>
           }
@@ -593,7 +624,7 @@ function App() {
                   <StoreUser />
                 </NavDrawerDefaultStore>
               </CustomLayoutLoop>
-              </ProtectedRoute>
+            </ProtectedRoute>
           }
         />
 
@@ -606,8 +637,7 @@ function App() {
                   <StoreOpenPO />
                 </NavDrawerDefaultStore>
               </CustomLayoutLoop>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
         <Route
@@ -619,8 +649,7 @@ function App() {
                   <StoreOpenPODetails />
                 </NavDrawerDefaultStore>
               </CustomLayoutLoop>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
         <Route
@@ -632,63 +661,70 @@ function App() {
                   <StoreUserPage />
                 </NavDrawerDefaultStore>
               </CustomLayoutLoop>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
         <Route
           path="/summary"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <SummaryPage />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/gateentry"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <GateEntry />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/history"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <History />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/historypage"
           element={
-            <ProtectedRoute allowedRoles={["invoice manager"]} userRole={userRole}>
+            <ProtectedRoute
+              allowedRoles={["invoice manager"]}
+              userRole={userRole}
+            >
               <CustomLayout>
                 <NavDrawerDefault>
                   <HistoryDetails />
                 </NavDrawerDefault>
               </CustomLayout>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
 
@@ -701,8 +737,7 @@ function App() {
                   <StoreHistory />
                 </NavDrawerDefaultStore>
               </CustomLayoutLoop>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
 
@@ -715,10 +750,8 @@ function App() {
                   <StoreHistoryDetails />
                 </NavDrawerDefaultStore>
               </CustomLayoutLoop>
-              </ProtectedRoute>
+            </ProtectedRoute>
           }
-
-   
         />
 
         <Route
@@ -730,16 +763,10 @@ function App() {
                   <StoreTagCounters />
                 </NavDrawerDefaultStore>
               </CustomLayoutLoop>
-              </ProtectedRoute>
-
+            </ProtectedRoute>
           }
         />
-
-
-
       </Routes>
-
-
     </Router>
   );
 }

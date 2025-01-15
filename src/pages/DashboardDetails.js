@@ -1,5 +1,9 @@
 import { message } from "antd";
-import { ArrowSortUpFilled, ArrowSortDownRegular ,ArrowDownload28Regular} from "@fluentui/react-icons";
+import {
+  ArrowSortUpFilled,
+  ArrowSortDownRegular,
+  ArrowDownload28Regular,
+} from "@fluentui/react-icons";
 import {
   makeStyles,
   Button,
@@ -15,14 +19,13 @@ import {
   TableRow,
   TableBody,
   TableHeaderCell,
- 
   tokens,
 } from "@fluentui/react-components";
-import{useLocation } from "react-router-dom";
-import {ArrowClockwise24Regular} from "@fluentui/react-icons";
+import { useLocation } from "react-router-dom";
+import { ArrowClockwise24Regular } from "@fluentui/react-icons";
 import DashboardNav from "../components/DashboardNav";
 import CreatableSelect from "react-select/creatable";
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import axios from "axios";
 import { Popover } from "@mui/material";
@@ -37,7 +40,7 @@ const Checkbox = ({ children, ...props }) => (
     {children}
   </label>
 );
- 
+
 const useStyles = makeStyles({
   contentHeader: {
     marginTop: "0",
@@ -49,7 +52,6 @@ const useStyles = makeStyles({
     textOverflow: "ellipsis",
   },
   root: {
- 
     height: "88vh",
     overflowY: "auto",
     display: "flex",
@@ -126,19 +128,17 @@ const useStyles = makeStyles({
     marginLeft: "10px",
   },
 });
- 
+
 // pop up message for table cell see more
- 
+
 const DashboardDetails = () => {
- 
   const dispatch = useDispatch();
   const styles = useStyles();
   const themestate = false;
- 
- 
+
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortedColumn2, setSortedColumn2] = useState(null);
-  const [sortDirection, setSortDirection] = useState('asc');
+  const [sortDirection, setSortDirection] = useState("asc");
   const [PONumberOPtions, setPONumberOPtions] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedtab, setSelectedTab] = React.useState("tab3");
@@ -158,52 +158,54 @@ const DashboardDetails = () => {
   const navigate = useNavigate();
   console.log(invoiceId);
   // Styles
- 
-const getThemeStyle = (themeState, lightStyle, darkStyle) => (themeState ? darkStyle : lightStyle);
- 
- 
-const cursorStyle = load ? "not-allowed" : "pointer";
-const loadStyle = load ? 0.6 : 1;
-const classStyle = getThemeStyle(themestate, "tab", "tab dark drawer");
-const tabStyle = getThemeStyle(themestate, "", "rgb(245,245,245)");
-const backStyle = getThemeStyle(themestate, "white", "#383838");
-const innerStyle = getThemeStyle(themestate, "black", "white");
-const bodyStyle = getThemeStyle(themestate, {}, { color: "white", borderBottomColor: "#383838" });
-const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
- 
- 
- 
- 
- 
- const fetchData = async (showMessage = false) => {
+
+  const getThemeStyle = (themeState, lightStyle, darkStyle) =>
+    themeState ? darkStyle : lightStyle;
+
+  const cursorStyle = load ? "not-allowed" : "pointer";
+  const loadStyle = load ? 0.6 : 1;
+  const classStyle = getThemeStyle(themestate, "tab", "tab dark drawer");
+  const tabStyle = getThemeStyle(themestate, "", "rgb(245,245,245)");
+  const backStyle = getThemeStyle(themestate, "white", "#383838");
+  const innerStyle = getThemeStyle(themestate, "black", "white");
+  const bodyStyle = getThemeStyle(
+    themestate,
+    {},
+    { color: "white", borderBottomColor: "#383838" },
+  );
+  const tableBodyStyle = getThemeStyle(themestate, {}, { color: "white" });
+
+  const setValue = (value) => {
+    dispatch(toggleDrawerPosition(value));
+  };
+
+  const fetchData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
     }
-}
- 
-const handleRefreshClick = () => {
+  };
+
+  const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
   };
- 
- 
-const renderDetail = (label, value) => (
-  <div>
-    <b>{label}:</b> {value}
-  </div>
-);
- 
- const [username, setUsername] = useState("");
-useEffect(() => {
+
+  const renderDetail = (label, value) => (
+    <div>
+      <b>{label}:</b> {value}
+    </div>
+  );
+
+  const [username, setUsername] = useState("");
+  useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     console.log(storedUsername);
     if (storedUsername) {
       setUsername(storedUsername);
     }
   }, []);
- 
- 
+
   return (
-    <div style={{height:"100%",overflowY:"auto"}}>
+    <div style={{ height: "100%", overflowY: "auto" }}>
       {/* <div className="Approvebreadcrump">
         <Breadcrumb aria-label="Breadcrumb default example">
           <BreadcrumbItem>
@@ -214,24 +216,24 @@ useEffect(() => {
             <BreadcrumbButton href={path1}>Multiple Match Found</BreadcrumbButton>
           </BreadcrumbItem>
           <BreadcrumbDivider />
-         
+
         </Breadcrumb>
       </div> */}
- 
+
       <div className={styles.root}>
         <div className={styles.header}>
-        <div
-              style={{
-                // marginLeft: "3vw",
-                // borderLeft: "5px solid #9a3ca9",
-                // paddingLeft: "10px",
-                marginTop:"-10px",
-                fontWeight: "bold",
-                fontSize:"20px"
-              }}
-            >
-              <p>Hi {username} !</p>
-            </div>
+          <div
+            style={{
+              // marginLeft: "3vw",
+              // borderLeft: "5px solid #9a3ca9",
+              // paddingLeft: "10px",
+              marginTop: "-10px",
+              fontWeight: "bold",
+              fontSize: "20px",
+            }}
+          >
+            <p>Hi {username} !</p>
+          </div>
           <div
             style={{
               display: "flex",
@@ -251,7 +253,6 @@ useEffect(() => {
                 flexDirection: "column",
               }}
             >
-               
               {/* <CreatableSelect
                 className="basic-single"
                 classNamePrefix="select"
@@ -266,32 +267,28 @@ useEffect(() => {
                 placeholder="Select or Enter PO..."
                 isClearable
               /> */}
- 
-             
- 
-             
- 
-                      <button
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          backgroundColor: isHovered ? "#e1e1e2" : "transparent",
-                          border: "1px solid #fff",
-                          padding: "6px 12px",
-                          cursor: "pointer",
-                          gap: "5px",
-                          marginTop:"5px",
-                          marginLeft: "2em",
-                          transition: "background-color 0.2s ease",
-                        }}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                        // onClick={fetchData}
-                        onClick={handleRefreshClick}
-                      >
-                        <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
-                        <span>Refresh</span>
-                      </button>
+
+              <button
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: isHovered ? "#e1e1e2" : "transparent",
+                  border: "1px solid #fff",
+                  padding: "6px 12px",
+                  cursor: "pointer",
+                  gap: "5px",
+                  marginTop: "5px",
+                  marginLeft: "2em",
+                  transition: "background-color 0.2s ease",
+                }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                // onClick={fetchData}
+                onClick={handleRefreshClick}
+              >
+                <ArrowClockwise24Regular style={{ color: "#1281d7" }} />
+                <span>Refresh</span>
+              </button>
             </div>
             <div
               style={{
@@ -315,45 +312,44 @@ useEffect(() => {
                 placeholder="Select or Enter PO..."
                 isClearable
               /> */}
- 
-             
- 
-                        <button
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          backgroundColor: isHovered1? "#e1e1e2" : "transparent",
-                          border: "1px solid #fff",
-                          padding: "6px 12px",
-                          cursor: "pointer",
-                          gap: "8px",
-                          marginLeft: "2em",
-                          marginTop:"5px",
-                          transition: "background-color 0.2s ease",
-                        }}
-                        onClick={()=>{navigate('/summary')}}
-                        onMouseEnter={() => setIsHovered1(true)}
-                        onMouseLeave={() => setIsHovered1(false)}
-                       
-                      >
-                        <FaArrowUpRightFromSquare style={{ color: "#1281d7" }} />
-                        <span>Summary</span>
-                      </button>
+
+              <button
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: isHovered1 ? "#e1e1e2" : "transparent",
+                  border: "1px solid #fff",
+                  padding: "6px 12px",
+                  cursor: "pointer",
+                  gap: "8px",
+                  marginLeft: "2em",
+                  marginTop: "5px",
+                  transition: "background-color 0.2s ease",
+                }}
+                onClick={() => {
+                  setValue("6");
+                  navigate("/summary");
+                  // setValue("6");
+                }}
+                onMouseEnter={() => setIsHovered1(true)}
+                onMouseLeave={() => setIsHovered1(false)}
+              >
+                <FaArrowUpRightFromSquare style={{ color: "#1281d7" }} />
+                <span>Summary</span>
+              </button>
             </div>
           </div>
- 
+
           {/* <h2 style={{ margin: "20px 0 20px 0" }}> */}
-            {/* Invoice No : {invoiceData.invoice_info.InvoiceId} */}
+          {/* Invoice No : {invoiceData.invoice_info.InvoiceId} */}
           {/* </h2> */}
- 
+
           <div style={{ display: "flex", marginBottom: "20px" }}>
-            <div
-            style={{ fontWeight: "bold",marginTop:"-30px" }}
-            >
+            <div style={{ fontWeight: "bold", marginTop: "-30px" }}>
               <p>Dashboard</p>
               {/* <h2>{invoiceData.invoice_info.VendorName}</h2> */}
             </div>
- 
+
             {/* <div
               style={{
                 marginLeft: "3vw",
@@ -375,7 +371,7 @@ useEffect(() => {
               {/* <h2>{invoiceData.invoice_info.created_at}</h2> */}
             {/* </div>  */}
           </div>
- 
+
           <TabList
             defaultSelectedValue="tab3"
             appearance="subtle"
@@ -384,9 +380,9 @@ useEffect(() => {
               marginLeft: "0vw",
               marginTop: "-20px",
               paddingBottom: "0vh",
-             borderTop: "1px solid rgb(200,200,200)",
-            //  display: "flex",
-            //  justifyContent: "flex-end"
+              borderTop: "1px solid rgb(200,200,200)",
+              //  display: "flex",
+              //  justifyContent: "flex-end"
             }}
           >
             {/* <Tab
@@ -407,27 +403,20 @@ useEffect(() => {
             >
               PO
             </Tab> */}
-           
           </TabList>
         </div>
         {selectedtab === "tab3" && (
-          <div style={{display:"flex",flexDirection:"row"}}>
+          <div style={{ display: "flex", flexDirection: "row" }}>
             <div>
-            <DashboardNav/>
+              <DashboardNav />
             </div>
-            
-            
-
-          </div>
-                     )}
- 
-        {selectedtab === "tab4" && (
-          <div>
           </div>
         )}
+
+        {selectedtab === "tab4" && <div></div>}
       </div>
-     </div>
+    </div>
   );
 };
- 
+
 export default DashboardDetails;

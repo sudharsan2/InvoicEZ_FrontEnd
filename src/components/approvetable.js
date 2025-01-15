@@ -1,12 +1,12 @@
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   ArrowClockwise24Regular,
   Delete24Regular,
   TasksApp24Regular,
-  ArrowSortUpFilled, ArrowSortDownRegular, ShareIos24Filled
+  ArrowSortUpFilled,
+  ArrowSortDownRegular,
+  ShareIos24Filled,
 } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import {
@@ -40,7 +40,6 @@ const columns = [
     renderHeaderCell: () => "Supplier name ",
     renderCell: (item) => <TableCellLayout>{item.supplier}</TableCellLayout>,
   }),
-
 
   createTableColumn({
     columnId: "Status",
@@ -83,7 +82,6 @@ const columns = [
               padding: "4px 8px",
               textAlign: "center",
             };
-
         }
       };
 
@@ -110,7 +108,6 @@ const columns = [
     renderHeaderCell: () => "Buyer Name",
     renderCell: (item) => <TableCellLayout>{item.buyer}</TableCellLayout>,
   }),
-
 ];
 
 const SummaryTable = ({
@@ -118,9 +115,7 @@ const SummaryTable = ({
   setMatchCount,
   setTableLength,
   setMultiple_MatchCount,
-
 }) => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -144,21 +139,22 @@ const SummaryTable = ({
   const [RefreshUpload, SetRefreshUpload] = useState(null);
   console.log(RefreshUpload);
 
-
-
   const fetchData = async (showMessage = false) => {
     if (showMessage) {
       message.success("Refreshing...");
     }
     try {
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/invoices", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        "https://invoicezapi.focusrtech.com:57/user/invoices",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems Summary", fetchedItems);
       const tablelength = fetchedItems.length;
@@ -175,8 +171,7 @@ const SummaryTable = ({
         if (item.po_headers.length === 0) {
           Status = "No Match Found";
           fixCount += 1;
-        }
-        else if (item.po_headers.length === 1) {
+        } else if (item.po_headers.length === 1) {
           console.log("wertyuio");
           if (item.storeuser === true) {
             console.log("wertyuio123");
@@ -185,17 +180,11 @@ const SummaryTable = ({
           } else if (item.storeuser === false) {
             MatchCount += 1;
             Status = "Match Found";
-
           }
-        }
-
-        else if (item.po_headers.length > 1) {
+        } else if (item.po_headers.length > 1) {
           Status = "Multiple Match Found";
           multiple_MatchCount += 1;
         }
-
-
-
 
         return {
           id: item.id,
@@ -204,7 +193,7 @@ const SummaryTable = ({
           lines: item.items.length,
           buyer: item.CustomerName,
           Status: Status,
-
+          PO_Headers: item.po_headers,
         };
       });
 
@@ -221,15 +210,13 @@ const SummaryTable = ({
     }
   };
 
-
-
   useEffect(() => {
     SetRefreshUpload(isInvoiceUploadRefreshed);
   }, []);
 
   useEffect(() => {
     setFilteredItems(items);
-  }, [items])
+  }, [items]);
 
   useEffect(() => {
     fetchData();
@@ -238,7 +225,6 @@ const SummaryTable = ({
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
   };
-
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
@@ -272,32 +258,35 @@ const SummaryTable = ({
     );
   });
 
-
-
-
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
       const status = item.Status;
       console.log("Status", status);
 
       if (status === "Match Found") {
-        navigate("/approve", {
-          state: { poNumber: item.po_number, Id: item.Id },
-        });
-
-      }
-      else if (status === "Gate Entry") {
-        navigate("/gateentry", {
-          state: { poNumber: item.po_number, Id: item.Id },
-        });
+        dispatch(toggleDrawerPosition("3"));
+        navigate(
+          `/approvepage?poNumber=${item.PO_Headers[0].po_number}&Id=${item.PO_Headers[0].id}`,
+        );
+      } else if (status === "Gate Entry") {
+        dispatch(toggleDrawerPosition("2"));
+        navigate(
+          `/gateentrydet?poNumber=${item.PO_Headers[0].po_number}&Id=${item.PO_Headers[0].id}`,
+        );
       } else if (status === "No Match Found") {
         dispatch(toggleDrawerPosition("5")); // Set the drawer position to "5"
 
-        navigate("/issuefix", {
-          state: { poNumber: item.po_number, Id: item.Id },
-        });
+        navigate(`/issuefixdetails?invoiceNo=${item.id}`);
+
+        // navigate("/issuefix", {
+        //   state: { poNumber: item.po_number, Id: item.Id },
+        // });
       } else if (status === "Multiple Match Found") {
-        navigate("/ai", { state: { poNumber: item.po_number, Id: item.Id } });
+        // navigate(`/aidetail`, { state: { invoiceNumber: item.Id } });
+
+        dispatch(toggleDrawerPosition("4")); // Set the drawer position to "5"
+
+        navigate(`/aidetail?invoiceNumber=${item.id}`);
       }
     }
   };
@@ -323,7 +312,6 @@ const SummaryTable = ({
         .map((item) => item.supplier_name)
         .join(", ");
 
-
       const token = localStorage.getItem("access_token");
       const deletePromises = selectedItemsArray.map((item) =>
         axios.delete(
@@ -332,8 +320,8 @@ const SummaryTable = ({
             headers: {
               Authorization: `Bearer ${token}`, // Add the authorization header
             },
-          }
-        )
+          },
+        ),
       );
 
       await Promise.all(deletePromises);
@@ -392,11 +380,10 @@ const SummaryTable = ({
               headers: {
                 Authorization: `Bearer ${token}`, // Add the authorization header
               },
-            }
-          )
-        )
+            },
+          ),
+        ),
       );
-
 
       // Remove deleted items from the state
       setItems(items.filter((item) => !selectedItemsArray.includes(item)));
@@ -431,7 +418,6 @@ const SummaryTable = ({
     setNewCandidate(true);
   };
 
-
   const [sortState, setSortState] = useState({
     columnId: "",
     sortDirection: "ascending",
@@ -446,7 +432,6 @@ const SummaryTable = ({
     }
 
     setSortState({ columnId, sortDirection: newSortDirection });
-
 
     const sortedItems = [...filtered].sort((a, b) => {
       const aValue = a[columnId];
@@ -582,7 +567,11 @@ const SummaryTable = ({
               {({ renderHeaderCell, columnId }) => (
                 <DataGridHeaderCell
                   onClick={() => handleSort(columnId)}
-                  style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
                   {renderHeaderCell()}
                   {sortState.columnId === columnId &&

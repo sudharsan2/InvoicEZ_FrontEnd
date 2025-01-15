@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-
 import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
@@ -14,12 +13,15 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
-import Search from "./Search"; 
-import {message } from "antd"; 
-import {useSelector } from "react-redux";
+import Search from "./Search";
+import { message } from "antd";
+import { useSelector } from "react-redux";
 
-import { ArrowSortUpFilled, ArrowSortDownRegular,ArrowClockwise24Regular, } from "@fluentui/react-icons";
-
+import {
+  ArrowSortUpFilled,
+  ArrowSortDownRegular,
+  ArrowClockwise24Regular,
+} from "@fluentui/react-icons";
 
 const columns = [
   createTableColumn({
@@ -87,23 +89,18 @@ const columns = [
   }),
 ];
 
-const GateEntryTable = ({setTableLength}) => {
+const GateEntryTable = ({ setTableLength }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [items, setItems] = useState([]); // State to hold API data
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [filtered, setFilteredItems] = useState([]);
-  
+
   const navigate = useNavigate();
 
- 
   const isInvoiceUploadRefreshed = useSelector(
     (state) => state.refresh.InvoiceUploadRefresh,
   );
-
-  
-
-  
 
   // Fetch data from the API when the component mounts
   const fetchData = async (showMessage = false) => {
@@ -112,39 +109,34 @@ const GateEntryTable = ({setTableLength}) => {
     }
     try {
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/storetrue-invoice", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        "https://invoicezapi.focusrtech.com:57/user/storetrue-invoice",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
-      
+      );
+
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems", fetchedItems);
-      
-      
-      
-      
+
       const mappedItems = fetchedItems.map((item, index) => {
-        
-           
-      
         if (!item.po_headers || item.po_headers.length === 0) {
           console.warn(`No po_headers found for index ${index}`);
           return null; // Skip if no po_headers
         }
-        
-        const val = item.items.map((item)=>({
-              Igst:item.Igst
+
+        const val = item.items.map((item) => ({
+          Igst: item.Igst,
         }));
-       
-        console.log("IGST",val);
-      
+
+        console.log("IGST", val);
+
         return item.po_headers.map((po_header) => ({
-          
-          
-          Id:po_header.id,
+          Id: po_header.id,
           po_number: po_header.po_number,
           po_type: po_header.po_type,
           po_status: po_header.po_status,
@@ -155,34 +147,29 @@ const GateEntryTable = ({setTableLength}) => {
           buyer_name: po_header.buyer_name,
           total_amount: po_header.total_amount,
           status: po_header.status,
-          customer:item.CustomerName,
-          invoice:item.InvoiceFile,
-          Gate:item.gate_entry_no,
-          Igst_val:val.Igst
-          
-          
-
+          customer: item.CustomerName,
+          invoice: item.InvoiceFile,
+          Gate: item.gate_entry_no,
+          Igst_val: val.Igst,
         }));
       });
-      
+
       const flattenedMappedItems = mappedItems
-  .flat() 
-  .filter(Boolean) 
-  .sort((a, b) => a.po_number.localeCompare(b.po_number));
+        .flat()
+        .filter(Boolean)
+        .sort((a, b) => a.po_number.localeCompare(b.po_number));
 
       setItems(flattenedMappedItems);
       setTableLength(flattenedMappedItems.length);
-      console.log("Mapped Items",flattenedMappedItems);
+      console.log("Mapped Items", flattenedMappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    setFilteredItems(items); 
-  }, [items])
-
-  
+    setFilteredItems(items);
+  }, [items]);
 
   useEffect(() => {
     fetchData();
@@ -211,40 +198,12 @@ const GateEntryTable = ({setTableLength}) => {
   //   );
   // });
 
-
-
   const handleSearchChange = (value) => {
     setSearchQuery(value);
-  
+
     const filteredItems = items.filter((item) => {
-        const searchLower = searchQuery?.trim().toLowerCase() || "";
-    
-        return (
-          // item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
-          // item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
-          item.po_number?.toString().toLowerCase().includes(searchLower) ||
-          item.po_type?.toLowerCase().includes(searchLower) ||
-          item.po_status?.toLowerCase().includes(searchLower) ||
-          item.supplier_name?.toLowerCase().includes(searchLower) ||
-          item.location?.toLowerCase().includes(searchLower) ||
-          item.ship_to?.toLowerCase().includes(searchLower) ||
-          item.bill_to?.toLowerCase().includes(searchLower) ||
-          item.buyer_name?.toLowerCase().includes(searchLower) ||
-          item.total_amount?.toString().toLowerCase().includes(searchLower) ||
-          item.status?.toLowerCase().includes(searchLower)||
-          item.Gate?.toLowerCase().includes(searchLower)
-
-        );
-      });
-  
-    setFilteredItems(filteredItems); 
-  };
-
-
-
-  const filteredItems = items.filter((item) => {
       const searchLower = searchQuery?.trim().toLowerCase() || "";
-  
+
       return (
         // item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
         // item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
@@ -257,16 +216,40 @@ const GateEntryTable = ({setTableLength}) => {
         item.bill_to?.toLowerCase().includes(searchLower) ||
         item.buyer_name?.toLowerCase().includes(searchLower) ||
         item.total_amount?.toString().toLowerCase().includes(searchLower) ||
-        item.status?.toLowerCase().includes(searchLower)||
+        item.status?.toLowerCase().includes(searchLower) ||
         item.Gate?.toLowerCase().includes(searchLower)
       );
     });
 
+    setFilteredItems(filteredItems);
+  };
+
+  const filteredItems = items.filter((item) => {
+    const searchLower = searchQuery?.trim().toLowerCase() || "";
+
+    return (
+      // item.InvoiceId?.toString().toLowerCase().includes(searchLower) ||
+      // item.InvoiceNumber?.toString().toLowerCase().includes(searchLower) ||
+      item.po_number?.toString().toLowerCase().includes(searchLower) ||
+      item.po_type?.toLowerCase().includes(searchLower) ||
+      item.po_status?.toLowerCase().includes(searchLower) ||
+      item.supplier_name?.toLowerCase().includes(searchLower) ||
+      item.location?.toLowerCase().includes(searchLower) ||
+      item.ship_to?.toLowerCase().includes(searchLower) ||
+      item.bill_to?.toLowerCase().includes(searchLower) ||
+      item.buyer_name?.toLowerCase().includes(searchLower) ||
+      item.total_amount?.toString().toLowerCase().includes(searchLower) ||
+      item.status?.toLowerCase().includes(searchLower) ||
+      item.Gate?.toLowerCase().includes(searchLower)
+    );
+  });
+
   const handleRowClick = (e, item) => {
     if (e.target.type !== "checkbox") {
-      navigate(`/gate-entry-det`, {
-        state: { poNumber: item.po_number, Id: item.Id },
-      });
+      navigate(`/gateentrydet?poNumber=${item.po_number}&Id=${item.Id}`);
+      // navigate(`/gate-entry-det`, {
+      //   state: { poNumber: item.po_number, Id: item.Id },
+      // });
       console.log("ItemId", item);
     }
   };
@@ -276,15 +259,11 @@ const GateEntryTable = ({setTableLength}) => {
     setSelectedRows(data.selectedItems);
   };
 
-  
-
-  
-
   const [sortState, setSortState] = useState({
     columnId: "",
     sortDirection: "ascending",
   });
-  
+
   const handleSort = (columnId) => {
     let newSortDirection = "ascending";
 
@@ -294,7 +273,6 @@ const GateEntryTable = ({setTableLength}) => {
     }
 
     setSortState({ columnId, sortDirection: newSortDirection });
-    
 
     const sortedItems = [...filteredItems].sort((a, b) => {
       const aValue = a[columnId];
@@ -304,17 +282,16 @@ const GateEntryTable = ({setTableLength}) => {
       if (aValue > bValue) return newSortDirection === "ascending" ? 1 : -1;
       return 0;
     });
-    console.log("SORTED",sortedItems);
-    
-    setFilteredItems(sortedItems); 
+    console.log("SORTED", sortedItems);
+
+    setFilteredItems(sortedItems);
   };
-  
+
   const handleRefreshClick = () => {
     fetchData(true); // Pass `true` to show the message when button is clicked
   };
-  
-  console.log("12345",filtered);
-  
+
+  console.log("12345", filtered);
 
   return (
     <>
@@ -366,16 +343,16 @@ const GateEntryTable = ({setTableLength}) => {
           style={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: isHovered ? "#e1e1e2" : "transparent", 
+            backgroundColor: isHovered ? "#e1e1e2" : "transparent",
             border: "1px solid #fff",
             padding: "6px 12px",
             cursor: "pointer",
             gap: "8px",
             marginLeft: "2em",
-            transition: "background-color 0.2s ease", 
+            transition: "background-color 0.2s ease",
           }}
-          onMouseEnter={() => setIsHovered(true)} 
-          onMouseLeave={() => setIsHovered(false)} 
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           // onClick={fetchData}
           onClick={handleRefreshClick}
         >
@@ -396,55 +373,59 @@ const GateEntryTable = ({setTableLength}) => {
         }}
       >
         <DataGrid
-      items={filtered}
-      columns={columns}
-      sortable
-      selectionMode="multiselect"
-      onSelectionChange={handleSelectionChange}
-      getRowId={(_, index) => index}
-      focusMode="composite"
-      style={{ minWidth: "600px" }}
-    >
-      <DataGridHeader>
-        <DataGridRow>
-          {({ renderHeaderCell, columnId }) => (
-            <DataGridHeaderCell
-              onClick={() => handleSort(columnId)}
-              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-            >
-              {renderHeaderCell()}
-              {sortState.columnId === columnId &&
-                (sortState.sortDirection === "ascending" ? (
-                  <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
-                ) : (
-                  <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
-                ))}
-            </DataGridHeaderCell>
-          )}
-        </DataGridRow>
-      </DataGridHeader>
-      <DataGridBody>
-        {({ item, rowId }) => (
-          <DataGridRow
-            key={rowId}
-            onClick={(e) => handleRowClick(e, item)}
-            selected={selectedRows.has(rowId)}
-          >
-            {({ renderCell }) => (
-              <DataGridCell
-                style={{
-                  wordWrap: "break-word",
-                  whiteSpace: "normal",
-                  overflow: "hidden",
-                }}
+          items={filtered}
+          columns={columns}
+          sortable
+          selectionMode="multiselect"
+          onSelectionChange={handleSelectionChange}
+          getRowId={(_, index) => index}
+          focusMode="composite"
+          style={{ minWidth: "600px" }}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell, columnId }) => (
+                <DataGridHeaderCell
+                  onClick={() => handleSort(columnId)}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  {renderHeaderCell()}
+                  {sortState.columnId === columnId &&
+                    (sortState.sortDirection === "ascending" ? (
+                      <ArrowSortUpFilled style={{ marginLeft: "5px" }} />
+                    ) : (
+                      <ArrowSortDownRegular style={{ marginLeft: "5px" }} />
+                    ))}
+                </DataGridHeaderCell>
+              )}
+            </DataGridRow>
+          </DataGridHeader>
+          <DataGridBody>
+            {({ item, rowId }) => (
+              <DataGridRow
+                key={rowId}
+                onClick={(e) => handleRowClick(e, item)}
+                selected={selectedRows.has(rowId)}
               >
-                {renderCell(item)}
-              </DataGridCell>
+                {({ renderCell }) => (
+                  <DataGridCell
+                    style={{
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {renderCell(item)}
+                  </DataGridCell>
+                )}
+              </DataGridRow>
             )}
-          </DataGridRow>
-        )}
-      </DataGridBody>
-    </DataGrid>
+          </DataGridBody>
+        </DataGrid>
       </div>
     </>
   );

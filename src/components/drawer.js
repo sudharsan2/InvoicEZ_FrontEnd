@@ -4,30 +4,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleDrawerPosition } from "../Store/refreshSlice";
 
 import {
-
   NavDrawer,
   NavDrawerBody,
   NavDrawerFooter,
   NavDrawerHeader,
   NavDrawerHeaderNav,
   NavItem,
-
-
 } from "@fluentui/react-nav-preview";
 import {
   Board24Filled,
   Board24Regular,
   bundleIcon,
-
   Navigation24Filled,
   Navigation24Regular,
-
-
   TargetArrow24Filled,
   TargetArrow24Regular,
   TargetDismiss24Filled,
   TargetDismiss24Regular,
-
   VehicleTruckProfile24Filled,
   VehicleTruckProfile24Regular,
   Form28Regular,
@@ -37,18 +30,15 @@ import {
   History24Regular,
   History24Filled,
   DatabaseSearch24Filled,
-  DatabaseSearch24Regular
+  DatabaseSearch24Regular,
 } from "@fluentui/react-icons";
 
 import {
   Button,
-
   makeStyles,
   shorthands,
   tokens,
-
   Tooltip,
-
 } from "@fluentui/react-components";
 
 import axios from "axios";
@@ -58,7 +48,6 @@ import { jwtDecode } from "jwt-decode";
 const useStyles = makeStyles({
   root: {
     overflow: "hidden",
-
 
     position: "fixed",
     left: 0,
@@ -90,7 +79,6 @@ const useStyles = makeStyles({
     marginInlineStart: "10px",
   },
   hamburger: {
-
     textDecorationLine: "none",
     marginLeft: "5px",
     marginTop: "10px",
@@ -106,7 +94,7 @@ const useStyles = makeStyles({
       backgroundColor: "#007bff", // Active background color
       fontWeight: "bold", // Optional: bold text for active item
       color: "#fff", // Optional: change text color for active item
-    }
+    },
   },
   navItemdark: {
     marginTop: "10px",
@@ -120,7 +108,7 @@ const useStyles = makeStyles({
       backgroundColor: "#007bff", // Active background color
       fontWeight: "bold", // Optional: bold text for active item
       color: "#fff", // Optional: change text color for active item
-    }
+    },
   },
   navbody: {
     backgroundColor: "black",
@@ -161,29 +149,30 @@ const useStyles = makeStyles({
   },
 });
 
-
 const Dashboard = bundleIcon(Board24Filled, Board24Regular);
 const History = bundleIcon(History24Filled, History24Regular);
 
-const OpenPO = bundleIcon(DatabaseSearch24Filled, DatabaseSearch24Regular)
-
-
-
+const OpenPO = bundleIcon(DatabaseSearch24Filled, DatabaseSearch24Regular);
 
 const Navi = bundleIcon(Navigation24Filled, Navigation24Regular);
 const Match = bundleIcon(TargetArrow24Filled, TargetArrow24Regular);
-const Multiple = bundleIcon(DocumentBulletListMultiple24Filled, DocumentBulletListMultiple24Regular)
+const Multiple = bundleIcon(
+  DocumentBulletListMultiple24Filled,
+  DocumentBulletListMultiple24Regular,
+);
 const Fix = bundleIcon(TargetDismiss24Filled, TargetDismiss24Regular);
 const Summary = bundleIcon(Form28Filled, Form28Regular);
 
-const Truck = bundleIcon(VehicleTruckProfile24Filled, VehicleTruckProfile24Regular);
-
+const Truck = bundleIcon(
+  VehicleTruckProfile24Filled,
+  VehicleTruckProfile24Regular,
+);
 
 const NavDrawerDefault = (props) => {
   const [activeNavItem, setActiveNavItem] = useState("");
   const location = useLocation();
   const { cnt } = location.state || {};
-  console.log("dvwdw", cnt?.state?.tableLength)
+  console.log("dvwdw", cnt?.state?.tableLength);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -198,8 +187,6 @@ const NavDrawerDefault = (props) => {
 
   const styles = useStyles();
 
-
-
   const [isOpen, setIsOpen] = useState(true);
   const [username, setUsername] = useState("");
   const [empId, setEmpId] = useState("");
@@ -207,20 +194,18 @@ const NavDrawerDefault = (props) => {
   const [multiple_MatchCount, setmultiple_MatchedCount] = useState("");
   const [nomatch, setNoMatchCount] = useState("");
 
-
   const drawerPosition = useSelector((state) => state.refresh.drawerPosition);
 
   const value = localStorage.getItem("userDrawerPosition");
   console.log("value", { value });
 
-  const tabstyl = collapse ? {
-    width: `75px`,
-    transition: "width 0.5s",
-    borderRightStyle: "none",
-  }
+  const tabstyl = collapse
+    ? {
+        width: `75px`,
+        transition: "width 0.5s",
+        borderRightStyle: "none",
+      }
     : { transition: "width 0.5s", borderRightStyle: "none" };
-
-
 
   const tabstyl7 = themestate
     ? { marginTop: "-20px", color: darktheme.fontcolordark }
@@ -228,25 +213,21 @@ const NavDrawerDefault = (props) => {
 
   const tabstyl2 = themestate
     ? {
-      backgroundColor: darktheme.sidebarcolordark,
-      cursor: "pointer",
-      WebkitTapHighlightColor: "transparent",
-    }
+        backgroundColor: darktheme.sidebarcolordark,
+        cursor: "pointer",
+        WebkitTapHighlightColor: "transparent",
+      }
     : { cursor: "pointer", WebkitTapHighlightColor: "transparent" };
-
 
   const tabstyl3 = themestate
     ? { color: darktheme.fontcolordark }
     : { color: lighttheme.fontcolorlight };
-
-
 
   const tabstyl4 = themestate
     ? { backgroundColor: darktheme.sidebarcolordark, height: "20px" }
     : { height: "20px" };
 
   const tabstyl5 = themestate ? styles.navItemdark : styles.navItemlight;
-
 
   const tabstyl6 = themestate ? { background: darktheme.contentpagedark } : {};
 
@@ -256,24 +237,17 @@ const NavDrawerDefault = (props) => {
     ? { marginBottom: "30px", color: darktheme.fontcolordark }
     : { marginBottom: "30px", color: lighttheme.fontcolorlight };
 
-  const tabstyl9 = themestate ? { backgroundColor: darktheme.sidebarcolordark } : {};
+  const tabstyl9 = themestate
+    ? { backgroundColor: darktheme.sidebarcolordark }
+    : {};
 
   const tabstyl10 = themestate
     ? { marginTop: "2px", color: darktheme.fontcolordark }
     : { marginTop: "2px", color: lighttheme.fontcolorlight };
 
-
-
-
-
-
-
-
   const setValue = (value) => {
     dispatch(toggleDrawerPosition(value));
   };
-
-
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username"); // Fetch username from localStorage
@@ -281,7 +255,6 @@ const NavDrawerDefault = (props) => {
     if (storedUsername) {
       setUsername(storedUsername);
     }
-
   }, []);
 
   const handleNavItemClass = (pathname) => {
@@ -299,13 +272,13 @@ const NavDrawerDefault = (props) => {
         activeClass = ""; // Default empty if no specific case is matched
     }
 
-    return themestate ? 'navItemdark' : 'navItemlight';  // Return navItemClass based on theme state
+    return themestate ? "navItemdark" : "navItemlight"; // Return navItemClass based on theme state
   };
 
   useEffect(() => {
     const activeItem = handleNavItemClass(location.pathname);
     setActiveNavItem(activeItem);
-    console.log("100", location.pathname);// Set the active nav item based on the route
+    console.log("100", location.pathname); // Set the active nav item based on the route
   }, [location.pathname]);
   console.log("101", location.pathname);
 
@@ -319,7 +292,6 @@ const NavDrawerDefault = (props) => {
 
         const empIdFromToken = decodedToken.empId;
 
-
         setEmpId(empIdFromToken);
       } catch (error) {
         console.error("Invalid token:", error);
@@ -327,13 +299,12 @@ const NavDrawerDefault = (props) => {
     }
   }, []);
 
-
-  // Styles 
+  // Styles
 
   const getDrawerStyles = () => ({
     transition: "width 0.5s",
     borderRightStyle: "none",
-    ...(collapse && { width: "75px" }),  // Only apply width if collapse is true
+    ...(collapse && { width: "75px" }), // Only apply width if collapse is true
   });
 
   // ---- NavDrawerHeader ----
@@ -368,7 +339,9 @@ const NavDrawerDefault = (props) => {
   const navItemClass = themestate ? styles.navItemdark : styles.navItemlight;
 
   // ---- Footer Style ----
-  const footerStyle = themestate ? { backgroundColor: darktheme.sidebarcolordark } : {};
+  const footerStyle = themestate
+    ? { backgroundColor: darktheme.sidebarcolordark }
+    : {};
 
   // ---- Body Style ----
   const bodyStyle = {
@@ -386,7 +359,6 @@ const NavDrawerDefault = (props) => {
     color: themestate ? darktheme.fontcolordark : lighttheme.fontcolorlight,
   };
 
-
   // Drawer notification
 
   const fetchDashboard = async (showMessage = false) => {
@@ -395,18 +367,20 @@ const NavDrawerDefault = (props) => {
     }
     try {
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/invoices", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        "https://invoicezapi.focusrtech.com:57/user/invoices",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const fetchedItems = response.data; // Assuming data is in response.data
       console.log("fetchedItems Summary", fetchedItems);
       const tablelength = fetchedItems.length;
       console.log("Table length", tablelength);
-
 
       let MatchCount = 0;
       let multiple_MatchCount = 0;
@@ -415,12 +389,10 @@ const NavDrawerDefault = (props) => {
       const mappedItems = fetchedItems.map((item) => {
         let Status = "";
 
-
         if (item.po_headers.length === 0) {
           Status = "No Match Found";
           fixCount += 1;
-        }
-        else if (item.po_headers.length === 1) {
+        } else if (item.po_headers.length === 1) {
           console.log("wertyuio");
           if (item.storeuser === true) {
             console.log("wertyuio123");
@@ -429,17 +401,11 @@ const NavDrawerDefault = (props) => {
           } else if (item.storeuser === false) {
             MatchCount += 1;
             Status = "Match Found";
-
           }
-        }
-
-        else if (item.po_headers.length > 1) {
+        } else if (item.po_headers.length > 1) {
           Status = "Multiple Match Found";
           multiple_MatchCount += 1;
         }
-
-
-
 
         return {
           id: item.id,
@@ -448,14 +414,12 @@ const NavDrawerDefault = (props) => {
           lines: item.items.length,
           buyer: item.CustomerName,
           Status: Status,
-
         };
       });
       // setGateLength(tablelength);
       setNoMatchCount(fixCount);
       setmultiple_MatchedCount(multiple_MatchCount);
       setMatchedCount(MatchCount);
-
 
       console.log("MAP IN SUMMARY", mappedItems);
     } catch (error) {
@@ -465,14 +429,13 @@ const NavDrawerDefault = (props) => {
 
   useEffect(() => {
     fetchDashboard();
-  }, [])
+  }, []);
 
   return (
     <div className={styles.root} style={{ height: "calc(100vh - 48px)" }}>
-
       <NavDrawer
         defaultSelectedValue={drawerPosition}
-
+        key={drawerPosition}
         open={isOpen}
         type="inline"
         onOpenChange={(_, { open }) => setIsOpen(open)}
@@ -480,11 +443,7 @@ const NavDrawerDefault = (props) => {
         className={useStyles.navdrawer}
         style={getDrawerStyles()}
       >
-
-
-        <NavDrawerHeader
-          style={getNavDrawerHeaderStyle()}
-        >
+        <NavDrawerHeader style={getNavDrawerHeaderStyle()}>
           <NavDrawerHeaderNav
             onClick={() => {
               setCollapse(!collapse);
@@ -492,13 +451,7 @@ const NavDrawerDefault = (props) => {
           >
             <Button
               appearance="transparent"
-              icon={
-                <Navi
-
-                  style={iconStyle}
-
-                />
-              }
+              icon={<Navi style={iconStyle} />}
               className={styles.hamburger}
               onClick={() => {
                 setCollapse(!collapse);
@@ -506,17 +459,9 @@ const NavDrawerDefault = (props) => {
             />
           </NavDrawerHeaderNav>
         </NavDrawerHeader>
-        <div
-          style={
-            divStyle
-          }
-        ></div>
+        <div style={divStyle}></div>
         {collapse ? (
-          <NavDrawerBody
-
-            style={navDrawerBodyStyle}
-
-          >
+          <NavDrawerBody style={navDrawerBodyStyle}>
             <Tooltip
               content={"Home"}
               positioning="after"
@@ -525,24 +470,15 @@ const NavDrawerDefault = (props) => {
             >
               <NavItem
                 target="_blank"
-                icon={
-                  <Dashboard
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<Dashboard style={iconStyle} />}
                 onClick={() => {
                   navigate("/dashboard-detail");
                   setValue("1");
                 }}
                 value="1"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
               ></NavItem>
             </Tooltip>
-
             <Tooltip
               content={"Gate Entry"}
               positioning="after"
@@ -551,24 +487,15 @@ const NavDrawerDefault = (props) => {
             >
               <NavItem
                 target="_blank"
-                icon={
-                  <Truck
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<Truck style={iconStyle} />}
                 onClick={() => {
                   navigate("/gateentry");
                   setValue("2");
                 }}
                 value="2"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
               ></NavItem>
             </Tooltip>
-
             <Tooltip
               content={"Summary"}
               positioning="after"
@@ -577,24 +504,15 @@ const NavDrawerDefault = (props) => {
             >
               <NavItem
                 target="_blank"
-                icon={
-                  <Summary
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<Summary style={iconStyle} />}
                 onClick={() => {
-                  navigate("/summary")
+                  navigate("/summary");
                   setValue("6");
                 }}
                 value="6"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
               ></NavItem>
             </Tooltip>
-
             <Tooltip
               content={"Match Found"}
               positioning="after"
@@ -603,24 +521,15 @@ const NavDrawerDefault = (props) => {
             >
               <NavItem
                 target="_blank"
-                icon={
-                  <Match
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<Match style={iconStyle} />}
                 onClick={() => {
                   navigate("/approve");
                   setValue("3");
                 }}
                 value="3"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
               ></NavItem>
             </Tooltip>
-
             <Tooltip
               content={"Multiple Match Found"}
               positioning="after"
@@ -629,21 +538,15 @@ const NavDrawerDefault = (props) => {
             >
               <NavItem
                 target="_blank"
-                icon={
-                  <Multiple
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<Multiple style={iconStyle} />}
                 onClick={() => {
                   navigate("/ai");
                   setValue("4");
                 }}
                 value="4"
-                className={`${handleNavItemClass(location.pathname)} ${activeNavItem === "ai" ? navItemClass : ""}`}              ></NavItem>
+                className={`${handleNavItemClass(location.pathname)} ${activeNavItem === "ai" ? navItemClass : ""}`}
+              ></NavItem>
             </Tooltip>
-
             c
             <Tooltip
               content={"Open PO"}
@@ -653,24 +556,15 @@ const NavDrawerDefault = (props) => {
             >
               <NavItem
                 target="_blank"
-                icon={
-                  <OpenPO
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<OpenPO style={iconStyle} />}
                 onClick={() => {
                   navigate("/openpo");
                   setValue("8");
                 }}
                 value="8"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
               ></NavItem>
             </Tooltip>
-
             <Tooltip
               content={"History"}
               positioning="after"
@@ -679,34 +573,18 @@ const NavDrawerDefault = (props) => {
             >
               <NavItem
                 target="_blank"
-                icon={
-                  <History
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<History style={iconStyle} />}
                 onClick={() => {
                   navigate("/history");
                   setValue("7");
                 }}
                 value="7"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
               ></NavItem>
             </Tooltip>
-
-
-
-
           </NavDrawerBody>
         ) : (
-          <NavDrawerBody
-            style={
-              navDrawerBodyStyle
-            }
-          >
+          <NavDrawerBody style={navDrawerBodyStyle}>
             {/* DETAILS OF USER  */}
             <div
               style={{
@@ -741,181 +619,106 @@ const NavDrawerDefault = (props) => {
             <div style={{ width: "100%" }}>
               <NavItem
                 target="_blank"
-                icon={
-                  <Dashboard
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
-
+                icon={<Dashboard style={iconStyle} />}
                 value="1"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
                 style={{ marginTop: "10px", fontSize: "17px" }}
                 onClick={() => {
                   navigate("/dashboard-detail");
                   setValue("1");
                 }}
               >
-                <div
-                  style={
-
-                    bodyStyle
-                  }
-                >
-                  Home
-                </div>
+                <div style={bodyStyle}>Home</div>
               </NavItem>
             </div>
             <div style={{ width: "100%" }}>
               <NavItem
                 target="_blank"
-                icon={
-                  <Truck
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<Truck style={iconStyle} />}
                 onClick={() => {
                   navigate("/gateentry");
                   setValue("2");
                 }}
                 value="2"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
-                <div
-                  style={
-                    bodyStyle
-                  }
-                >
-                  Gate Entry
-                </div>
+                <div style={bodyStyle}>Gate Entry</div>
               </NavItem>
             </div>
             <div style={{ width: "100%" }}>
               <NavItem
                 target="_blank"
-                icon={
-                  <Summary
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<Summary style={iconStyle} />}
                 onClick={() => {
                   navigate("/summary");
                   setValue("6");
                 }}
                 value="6"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
-                <div
-                  style={
-                    bodyStyle
-                  }
-                >
-                  Summary
-                </div>
+                <div style={bodyStyle}>Summary</div>
               </NavItem>
             </div>
             {/* 2 */}
             <div style={{ width: "100%" }}>
               <NavItem
                 target="_blank"
-                icon={
-                  <Match
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<Match style={iconStyle} />}
                 onClick={() => {
                   navigate("/approve");
                   setValue("3");
                 }}
                 value="3"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
-                <div
-                  style={
-
-                    bodyStyle
-                  }
-                >
+                <div style={bodyStyle}>
                   <span>Match Found</span>
-                  <span style={{ color: "#5A9BD4",marginLeft: "auto"}}>{matchCount}</span>                
-                  </div>
+                  <span style={{ color: "#5A9BD4", marginLeft: "auto" }}>
+                    {matchCount}
+                  </span>
+                </div>
               </NavItem>
             </div>
             <div style={{ width: "100%" }}>
               <NavItem
                 target="_blank"
-                icon={
-                  <Multiple
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<Multiple style={iconStyle} />}
                 onClick={() => {
                   navigate("/ai");
                   setValue("4");
                 }}
                 value="4"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
-                <div
-                  style={
-                    bodyStyle
-                  }
-                >
+                <div style={bodyStyle}>
                   <span>Multiple Match Found</span>
-                  <span style={{ color: "#5A9BD4",marginLeft: "auto" }}>{multiple_MatchCount}</span>                </div>
+                  <span style={{ color: "#5A9BD4", marginLeft: "auto" }}>
+                    {multiple_MatchCount}
+                  </span>{" "}
+                </div>
               </NavItem>
             </div>
             <div style={{ width: "100%" }}>
               <NavItem
                 target="_blank"
-                icon={
-                  <Fix
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<Fix style={iconStyle} />}
                 onClick={() => {
                   navigate("/issuefix");
                   setValue("5");
-
                 }}
                 value="5"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
-                <div
-                  style={
-                    bodyStyle
-                  }
-                >
+                <div style={bodyStyle}>
                   <span>No Match Found</span>
-                  <span style={{ color: "#5A9BD4",marginLeft: "auto" }}>{nomatch}</span>
+                  <span style={{ color: "#5A9BD4", marginLeft: "auto" }}>
+                    {nomatch}
+                  </span>
                 </div>
               </NavItem>
             </div>
@@ -924,30 +727,16 @@ const NavDrawerDefault = (props) => {
             <div style={{ width: "100%" }}>
               <NavItem
                 target="_blank"
-                icon={
-                  <OpenPO
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<OpenPO style={iconStyle} />}
                 onClick={() => {
                   navigate("/openpo");
                   setValue("8");
                 }}
                 value="8"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
-                <div
-                  style={
-                    bodyStyle
-                  }
-                >
-                  Open PO
-                </div>
+                <div style={bodyStyle}>Open PO</div>
               </NavItem>
             </div>
 
@@ -956,46 +745,23 @@ const NavDrawerDefault = (props) => {
             <div style={{ width: "100%" }}>
               <NavItem
                 target="_blank"
-                icon={
-                  <History
-                    style={
-                      iconStyle
-                    }
-                  />
-                }
+                icon={<History style={iconStyle} />}
                 onClick={() => {
                   navigate("/history");
                   setValue("7");
                 }}
                 value="7"
-                className={
-                  navItemClass
-                }
+                className={navItemClass}
                 style={{ marginTop: "10px", fontSize: "17px" }}
               >
-                <div
-                  style={
-                    bodyStyle
-                  }
-                >
-                  History
-                </div>
+                <div style={bodyStyle}>History</div>
               </NavItem>
             </div>
-
-
-
-
           </NavDrawerBody>
         )}
 
-        <NavDrawerFooter
-          style={
-            footerStyle
-          }
-        >
+        <NavDrawerFooter style={footerStyle}>
           {!collapse && (
-
             <div
               style={{
                 width: "100%",
@@ -1004,39 +770,24 @@ const NavDrawerDefault = (props) => {
                 alignItems: "center",
               }}
             >
-              <p
-                style={{ marginBottom: "20px" }}
-              >
-                by FocusR AI
-              </p>
+              <p style={{ marginBottom: "20px" }}>by FocusR AI</p>
               <p
                 style={{
-                  marginTop: "-1rem"
-                }
-
-                }
+                  marginTop: "-1rem",
+                }}
               >
                 V 0.0.1
               </p>
             </div>
-
           )}
-
         </NavDrawerFooter>
-
       </NavDrawer>
 
-
-      <div
-        className={styles.content}
-        style={tabstyl6}
-      >
-
+      <div className={styles.content} style={tabstyl6}>
         {props.children}
       </div>
     </div>
   );
-}
-
+};
 
 export default NavDrawerDefault;
