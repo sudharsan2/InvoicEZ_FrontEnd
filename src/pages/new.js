@@ -4,13 +4,11 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { EyeOutlined } from "@ant-design/icons";
 import axios from "axios";
-import {notification} from "antd";
+import { notification } from "antd";
 import "./login.css";
-
 
 import { jwtDecode } from "jwt-decode";
 import logo from "../media/logo1000.png";
-
 
 const LoginPage = ({ setRoleFromChild }) => {
   const navigate = useNavigate();
@@ -22,10 +20,10 @@ const LoginPage = ({ setRoleFromChild }) => {
   });
   const [role, setRole] = useState("");
 
-  console.log(role)
+  console.log(role);
   useEffect(() => {
     const token = localStorage.getItem("access_token");
-   
+
     console.log(typeof token);
     if (token) {
       try {
@@ -39,8 +37,6 @@ const LoginPage = ({ setRoleFromChild }) => {
       }
     }
   }, []);
-  
-
 
   const formik = useFormik({
     initialValues: {
@@ -56,7 +52,7 @@ const LoginPage = ({ setRoleFromChild }) => {
           {
             username: values.username,
             password: values.password,
-          }
+          },
         );
 
         const tokens = response.data.tokens;
@@ -88,7 +84,7 @@ const LoginPage = ({ setRoleFromChild }) => {
             navigate("/supplier");
             break;
           case "storeuser":
-            navigate("/storeuser");
+            navigate("/storedashboard");
             break;
           default:
             navigate("/unauthorized");
@@ -98,8 +94,8 @@ const LoginPage = ({ setRoleFromChild }) => {
         });
       } catch (error) {
         notification.error({
-          message:"Login Failed😢"
-        })
+          message: "Login Failed😢",
+        });
         console.error("Login failed:", error);
 
         notification.error({
@@ -119,18 +115,14 @@ const LoginPage = ({ setRoleFromChild }) => {
       }
     },
   });
-  
+
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
-  
-
   return (
-    <div className="Login"
->
-  
-    {/* <div
+    <div className="Login">
+      {/* <div
   style={{
     position: "fixed",
     top: "480px",
@@ -141,173 +133,177 @@ const LoginPage = ({ setRoleFromChild }) => {
         <img src={logo} alt="Description" style={{ display:"flex",width: "9vw", height: "50px", position:"absolute" }} />
         </div>
          */}
-         <div
-  style={{
-    position: "fixed", // Fixes the position relative to the viewport
-    bottom: "20px", // Anchors the div to the bottom of the viewport
-    right: "20px", // Anchors the div to the right of the viewport
-    height: "50px", // Height of the container
-    width: "auto", // Allow the width to adjust based on content
-    display: "flex", // Align items properly if needed
-    alignItems: "center", // Center items vertically
-    justifyContent: "center", // Center items horizontally
-  }}
->
-  <img
-    src={logo}
-    alt="Description"
-    style={{
-      width: "9vw", // Responsive width
-      height: "auto", // Maintain aspect ratio
-      objectFit: "contain", // Ensures the image scales properly
-    }}
-  />
-</div>
-
-
-
-  {/* Right Side - Login Section */}
-  <div
-    style={{
-      flex: 1,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "2rem",
-    }}
-  >
-    <div
-      style={{
-        width: "100%",
-        maxWidth: "30rem",
-        backgroundColor: "white",
-        borderRadius: "0.5rem",
-        boxShadow:
-          "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-        padding: "2rem",
-      }}
-    >
-      <div style={{ marginBottom: "1rem",display:"flex"}}>
-        {/* <div>
-        <img src={logo} alt="Description" style={{ width: "9vw", height: "50px" }} />
-        </div> */}
-        <div style={{display:"flex",justifyContent:"center",marginLeft:"13em"}}>
-          <h2>InvoiceEZ</h2>
-        </div>
+      <div
+        style={{
+          position: "fixed", // Fixes the position relative to the viewport
+          bottom: "20px", // Anchors the div to the bottom of the viewport
+          right: "20px", // Anchors the div to the right of the viewport
+          height: "50px", // Height of the container
+          width: "auto", // Allow the width to adjust based on content
+          display: "flex", // Align items properly if needed
+          alignItems: "center", // Center items vertically
+          justifyContent: "center", // Center items horizontally
+        }}
+      >
+        <img
+          src={logo}
+          alt="Description"
+          style={{
+            width: "9vw", // Responsive width
+            height: "auto", // Maintain aspect ratio
+            objectFit: "contain", // Ensures the image scales properly
+          }}
+        />
       </div>
 
-      <form
-        onSubmit={formik.handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+      {/* Right Side - Login Section */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem",
+        }}
       >
-        <div style={{ position: "relative", width: "100%" }}>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Enter username"
-            style={{
-              width: "100%",
-              padding: "1em",
-              borderRadius: "0.5rem",
-              border: "1px solid #D1D5DB",
-              outline: "none",
-              transition: "all 0.3s ease",
-              boxSizing: "border-box",
-            }}
-            value={formik.values.username}
-            onChange={formik.handleChange}
-            required
-          />
-          {formik.touched.username && formik.errors.username && (
-            <div className="error">{formik.errors.username}</div>
-          )}
-        </div>
-
-        <div style={{ position: "relative", width: "100%" }}>
-          <input
-            type={showPassword ? "text" : "password"}
-            id="password"
-            name="password"
-            placeholder="Enter password"
-            style={{
-              width: "100%",
-              padding: "1em",
-              paddingRight: "2.5em",
-              borderRadius: "0.5rem",
-              border: "1px solid #D1D5DB",
-              outline: "none",
-              transition: "all 0.3s ease",
-              boxSizing: "border-box",
-            }}
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            required
-          />
-          <EyeOutlined
-            onClick={handleTogglePassword}
-            style={{
-              position: "absolute",
-              right: "0.75rem",
-              top: "50%",
-              transform: "translateY(-50%)",
-              cursor: "pointer",
-              color: "#9CA3AF",
-            }}
-          />
-          {formik.touched.password && formik.errors.password && (
-            <div className="error">{formik.errors.password}</div>
-          )}
-        </div>
-
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <a
-            href="/forgotPassword"
-            style={{
-              fontSize: "0.875rem",
-              color: "black",
-              textDecoration: "none",
-              transition: "color 0.3s ease",
-            }}
-          >
-            Forgot password?
-          </a>
-        </div>
-
-        <button
-          type="submit"
-          style={{
             width: "100%",
-            padding: "1em",
-            backgroundColor: "#8e908f",
-            color: "white",
-            border: "none",
+            maxWidth: "30rem",
+            backgroundColor: "white",
             borderRadius: "0.5rem",
-            cursor: isLoading ? "not-allowed" : "pointer",
-            opacity: isLoading ? 0.75 : 1,
-            transition: "all 0.3s ease",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "0.5rem",
-            fontSize: "1rem",
+            boxShadow:
+              "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+            padding: "2rem",
           }}
-          disabled={isLoading || formik.isSubmitting}
         >
-          <span style={{color:"white"}}>{isLoading ? "Signing in..." : "Sign in"}</span>
-        </button>
-      </form>
-    </div>
-  </div>
-  
-</div>
+          <div style={{ marginBottom: "1rem", display: "flex" }}>
+            {/* <div>
+        <img src={logo} alt="Description" style={{ width: "9vw", height: "50px" }} />
+        </div> */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginLeft: "13em",
+              }}
+            >
+              <h2>InvoiceEZ</h2>
+            </div>
+          </div>
 
+          <form
+            onSubmit={formik.handleSubmit}
+            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+          >
+            <div style={{ position: "relative", width: "100%" }}>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter username"
+                style={{
+                  width: "100%",
+                  padding: "1em",
+                  borderRadius: "0.5rem",
+                  border: "1px solid #D1D5DB",
+                  outline: "none",
+                  transition: "all 0.3s ease",
+                  boxSizing: "border-box",
+                }}
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                required
+              />
+              {formik.touched.username && formik.errors.username && (
+                <div className="error">{formik.errors.username}</div>
+              )}
+            </div>
+
+            <div style={{ position: "relative", width: "100%" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                placeholder="Enter password"
+                style={{
+                  width: "100%",
+                  padding: "1em",
+                  paddingRight: "2.5em",
+                  borderRadius: "0.5rem",
+                  border: "1px solid #D1D5DB",
+                  outline: "none",
+                  transition: "all 0.3s ease",
+                  boxSizing: "border-box",
+                }}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                required
+              />
+              <EyeOutlined
+                onClick={handleTogglePassword}
+                style={{
+                  position: "absolute",
+                  right: "0.75rem",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  cursor: "pointer",
+                  color: "#9CA3AF",
+                }}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <div className="error">{formik.errors.password}</div>
+              )}
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <a
+                href="/forgotPassword"
+                style={{
+                  fontSize: "0.875rem",
+                  color: "black",
+                  textDecoration: "none",
+                  transition: "color 0.3s ease",
+                }}
+              >
+                Forgot password?
+              </a>
+            </div>
+
+            <button
+              type="submit"
+              style={{
+                width: "100%",
+                padding: "1em",
+                backgroundColor: "#8e908f",
+                color: "white",
+                border: "none",
+                borderRadius: "0.5rem",
+                cursor: isLoading ? "not-allowed" : "pointer",
+                opacity: isLoading ? 0.75 : 1,
+                transition: "all 0.3s ease",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.5rem",
+                fontSize: "1rem",
+              }}
+              disabled={isLoading || formik.isSubmitting}
+            >
+              <span style={{ color: "white" }}>
+                {isLoading ? "Signing in..." : "Sign in"}
+              </span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 

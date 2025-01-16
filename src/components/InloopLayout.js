@@ -1,20 +1,22 @@
-
 import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect, useRef } from "react";
 
 import {
-
   PopoverTrigger,
   PopoverSurface,
   Popover,
   Avatar,
-  Link, makeStyles, Text
-
+  Link,
+  makeStyles,
+  Text,
 } from "@fluentui/react-components";
 
 import { AlertBadgeRegular } from "@fluentui/react-icons";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toggleSecondaryDrawerPosition } from "../Store/refreshSlice";
+import { toggleDrawerPosition } from "../Store/refreshSlice";
+
 import "./layout.css";
 
 import axios from "axios";
@@ -39,6 +41,8 @@ const useStyles2 = makeStyles({
 const ExampleContent = () => {
   const styles = useStyles2();
 
+  const dispatch = useDispatch();
+
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
   const navigate = useNavigate();
@@ -46,7 +50,11 @@ const ExampleContent = () => {
   const [email, setEmail] = useState("");
   const [empId, setEmpId] = useState("");
 
-  // Define the table columns and data  
+  const setValue = (value) => {
+    dispatch(toggleDrawerPosition(value));
+  };
+
+  // Define the table columns and data
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -102,6 +110,7 @@ const ExampleContent = () => {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
             localStorage.removeItem("username");
+            setValue("1");
 
             // Navigate to the login page
             navigate("/");
@@ -109,16 +118,16 @@ const ExampleContent = () => {
           style={
             themestate
               ? {
-                width: "25%",
-                textAlign: "right",
-                color: darktheme.fontcolordark,
-                WebkitTapHighlightColor: "transparent",
-              }
+                  width: "25%",
+                  textAlign: "right",
+                  color: darktheme.fontcolordark,
+                  WebkitTapHighlightColor: "transparent",
+                }
               : {
-                width: "25%",
-                textAlign: "right",
-                WebkitTapHighlightColor: "transparent",
-              }
+                  width: "25%",
+                  textAlign: "right",
+                  WebkitTapHighlightColor: "transparent",
+                }
           }
         >
           Sign out
@@ -148,11 +157,11 @@ const ExampleContent = () => {
             style={
               themestate
                 ? {
-                  fontSize: "20px",
-                  width: "100%",
-                  marginBottom: "10px",
-                  color: darktheme.fontcolordark,
-                }
+                    fontSize: "20px",
+                    width: "100%",
+                    marginBottom: "10px",
+                    color: darktheme.fontcolordark,
+                  }
                 : { fontSize: "1.5 em", width: "100%", marginBottom: "10px" }
             }
           >
@@ -164,17 +173,17 @@ const ExampleContent = () => {
             style={
               themestate
                 ? {
-                  fontSize: "14px",
-                  width: "100%",
-                  marginBottom: "10px",
-                  color: darktheme.fontcolordark,
-                }
+                    fontSize: "14px",
+                    width: "100%",
+                    marginBottom: "10px",
+                    color: darktheme.fontcolordark,
+                  }
                 : {
-                  fontSize: "14px",
-                  width: "100%",
-                  marginBottom: "10px",
-                  color: "#424242",
-                }
+                    fontSize: "14px",
+                    width: "100%",
+                    marginBottom: "10px",
+                    color: "#424242",
+                  }
             }
           >
             {email} {/* Dynamically generate email based on username */}
@@ -186,10 +195,10 @@ const ExampleContent = () => {
             style={
               themestate
                 ? {
-                  fontSize: "14px",
-                  width: "100%",
-                  color: darktheme.fontcolordark,
-                }
+                    fontSize: "14px",
+                    width: "100%",
+                    color: darktheme.fontcolordark,
+                  }
                 : { fontSize: "14px", width: "100%" }
             }
           >
@@ -202,19 +211,15 @@ const ExampleContent = () => {
   );
 };
 
-
 const CustomLayoutLoop = ({ children }) => {
-
-
   const [username, setUsername] = useState("");
   const [notificationsVisible, setNotificationsVisible] = useState(false);
 
   const themestate = useSelector((state) => state.theme.theme);
   const [data, setData] = useState([]);
-  const [lengt, setLengt] = useState('');
+  const [lengt, setLengt] = useState("");
 
   const notificationRef = useRef(null);
-
 
   const handleNotificationClick = () => {
     setNotificationsVisible((prevState) => !prevState);
@@ -222,12 +227,10 @@ const CustomLayoutLoop = ({ children }) => {
 
   useEffect(() => {
     GetData();
-
-  }, [lengt])
+  }, [lengt]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-
       if (
         notificationRef.current &&
         !notificationRef.current.contains(event.target)
@@ -245,19 +248,19 @@ const CustomLayoutLoop = ({ children }) => {
   const GetData = async (showMessage = false) => {
     try {
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("https://invoicezapi.focusrtech.com:57/user/storetrue-invoice", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        "https://invoicezapi.focusrtech.com:57/user/storetrue-invoice",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const fetchedItems = response.data;
-      setLengt(fetchedItems.length)
+      setLengt(fetchedItems.length);
       console.log("fetchedItems...", fetchedItems);
-
-
-
 
       const mappedItems = fetchedItems.map((item, index) => {
         return {
@@ -265,17 +268,16 @@ const CustomLayoutLoop = ({ children }) => {
           supplier_name: item.po_headers[0].supplier_name,
           po_number: item.po_headers[0].po_number,
           amount: item.po_headers[0].total_amount,
-          date: item.InvoiceDate
+          date: item.InvoiceDate,
         };
       });
 
       setData(mappedItems);
-      console.log("mappedItems", mappedItems)
+      console.log("mappedItems", mappedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -284,18 +286,9 @@ const CustomLayoutLoop = ({ children }) => {
     }
   }, []);
 
-
-
-
-
-
   return (
     <div>
       {/* Navbar */}
-
-
-
-
       <div className={themestate ? "navbardark" : "navbarlight"}>
         {/* Left Part */}
         <div className="left-part">
@@ -314,11 +307,11 @@ const CustomLayoutLoop = ({ children }) => {
             onClick={handleNotificationClick}
             style={{
               position: "relative",
-              display:"flex", 
-              justifyContent:"space-between",
+              display: "flex",
+              justifyContent: "space-between",
               cursor: "pointer",
               marginRight: "20px",
-              marginBottom: "10px"// Add spacing between elements
+              marginBottom: "10px", // Add spacing between elements
             }}
           >
             <AlertBadgeRegular
@@ -326,7 +319,7 @@ const CustomLayoutLoop = ({ children }) => {
                 color: "#fff",
                 height: "30px",
                 width: "55px",
-                marginTop: "-2px"
+                marginTop: "-2px",
               }}
             />
             <span style={{ color: "#fff", margintop: "-5px" }}>{lengt}</span>
@@ -346,7 +339,6 @@ const CustomLayoutLoop = ({ children }) => {
                   zIndex: 1000,
                 }}
                 onclick={handleNotificationClick}
-
               >
                 <Text
                   weight="bold"
@@ -359,8 +351,6 @@ const CustomLayoutLoop = ({ children }) => {
                     paddingBottom: "10px",
                     marginBottom: "20px",
                     gap: "20px",
-
-
                   }}
                 >
                   New Gate Entry
@@ -437,40 +427,50 @@ const CustomLayoutLoop = ({ children }) => {
                     <tbody>
                       {data.map((item, index) => (
                         <tr key={index}>
-                          <td style={{
-                            padding: "5px",
-                            borderBottom: "1px solid #ddd",
-                            color: "#333",
-                          }}>
+                          <td
+                            style={{
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#333",
+                            }}
+                          >
                             {item.Id}
                           </td>
 
-                          <td style={{
-                            padding: "5px",
-                            borderBottom: "1px solid #ddd",
-                            color: "#333",
-                          }}>
+                          <td
+                            style={{
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#333",
+                            }}
+                          >
                             {item.supplier_name}
                           </td>
-                          <td style={{
-                            padding: "5px",
-                            borderBottom: "1px solid #ddd",
-                            color: "#333",
-                          }}>
+                          <td
+                            style={{
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#333",
+                            }}
+                          >
                             {item.po_number}
                           </td>
-                          <td style={{
-                            padding: "5px",
-                            borderBottom: "1px solid #ddd",
-                            color: "#333",
-                          }}>
+                          <td
+                            style={{
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#333",
+                            }}
+                          >
                             {item.amount}
                           </td>
-                          <td style={{
-                            padding: "5px",
-                            borderBottom: "1px solid #ddd",
-                            color: "#333",
-                          }}>
+                          <td
+                            style={{
+                              padding: "5px",
+                              borderBottom: "1px solid #ddd",
+                              color: "#333",
+                            }}
+                          >
                             {item.date}
                           </td>
                         </tr>
@@ -506,7 +506,6 @@ const CustomLayoutLoop = ({ children }) => {
                 </div>
               </div>
             )}
-
           </div>
 
           <Popover appearance={themestate ? "inverted" : ""}>
@@ -530,15 +529,12 @@ const CustomLayoutLoop = ({ children }) => {
               <ExampleContent />
             </PopoverSurface>
           </Popover>
-
         </div>
       </div>
-
       Children Components
-      < div style={{ marginTop: "15px" }}> {children}</div >
-    </div >
+      <div style={{ marginTop: "15px" }}> {children}</div>
+    </div>
   );
 };
 
 export default CustomLayoutLoop;
-

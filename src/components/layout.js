@@ -672,7 +672,7 @@ const CustomLayout = ({ children }) => {
                                     row.Status?.trim().toLowerCase(); // Normalize the status
                                   if (status === "match found") {
                                     dispatch(toggleDrawerPosition("3"));
-                                    console.log("ROWData", row);
+
                                     navigate(
                                       `/approvepage?poNumber=${row.PO_Headers[0].po_number}&Id=${row.PO_Headers[0].id}`,
                                     );
