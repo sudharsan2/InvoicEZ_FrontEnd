@@ -547,7 +547,6 @@ const NavDrawerDefault = (props) => {
                 className={`${handleNavItemClass(location.pathname)} ${activeNavItem === "ai" ? navItemClass : ""}`}
               ></NavItem>
             </Tooltip>
-            c
             <Tooltip
               content={"Open PO"}
               positioning="after"
